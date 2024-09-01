@@ -4,12 +4,39 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-    
+    public Status status;
+    public GameObject enemyObject;
+
+    void Awake()
+    {
+        StartCoroutine(AttackEnemy());
+        
+    }
+
+    IEnumerator AttackEnemy()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(0.5f);
+            if (enemyObject)
+            {
+                Debug.Log("ê³µê²© -> ");
+            }
+        }
+    }
+
+    void SetEnemy(GameObject targetObject)
+    {
+        if (targetObject)
+        {
+            enemyObject = targetObject;
+        }
+    }
 }
 
 //Character -> Cat / Enemy
-//    Cat ³»ºÎ -> StatusManager::GetPlayerStatus;
-//                StatusManager ³»¿¡ °èÁ¤ ½ºÅÈµµ °°ÀÌ º¸À¯ÇÏ°Ô ,,
+//    Cat ë‚´ë¶€ -> StatusManager::GetPlayerStatus;
+//                StatusManager ë‚´ì— ê³„ì • ìŠ¤íƒ¯ë„ ê°™ì´ ë³´ìœ í•˜ê²Œ ,,
 //Player
 
 
