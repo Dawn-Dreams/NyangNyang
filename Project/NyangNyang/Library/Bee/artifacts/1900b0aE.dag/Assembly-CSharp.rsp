@@ -383,6 +383,9 @@
 "Assets/Script/Character.cs"
 "Assets/Script/Enemy.cs"
 "Assets/Script/GameManager.cs"
+"Assets/Script/NetworkManager.cs"
+"Assets/Script/Player.cs"
+"Assets/Script/StatusManager.cs"
 -langversion:9.0
 /deterministic
 /optimize+
