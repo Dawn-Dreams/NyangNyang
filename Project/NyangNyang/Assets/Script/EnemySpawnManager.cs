@@ -12,18 +12,17 @@ public class EnemySpawnManager : MonoBehaviour
     public GameObject enemyPrefab;
     public Transform enemySpawnPosition;
 
-    // °í¾çÀÌ ½Î¿ò ³¡ -> Àû »ı¼º(Àû ¿¬°á) -> Àû Ãâ¹ß -> ÀûµµÂø -> ÀüÅõ
-    // StageManager³»¿¡¼­ È£Ãâ (°í¾çÀÌ°¡ ÀÔÀå or ÀÌÀü ÀüÅõ ½Â¸® ½Ã)
+    // ê³ ì–‘ì´ ì‹¸ì›€ ë -> ì  ìƒì„±(ì  ì—°ê²°) -> ì  ì¶œë°œ -> ì ë„ì°© -> ì „íˆ¬
+    // StageManagerë‚´ì—ì„œ í˜¸ì¶œ (ê³ ì–‘ì´ê°€ ì…ì¥ or ì´ì „ ì „íˆ¬ ìŠ¹ë¦¬ ì‹œ)
     void SpawnEnemy()
     {
         Cat cat = GameManager.GetInstance().catObject;
 
-        Debug.Log("Àû±º »ı¼º");
-        // Àû ½ºÆù
+        // ì  ìŠ¤í°
         Enemy enemy = Instantiate(enemyPrefab, enemySpawnPosition).GetComponent<Enemy>();
 
-        // Àû°ú °í¾çÀÌÀÇ Àû±º ¿ÀºêÁ§Æ® ¿¬°á
-        enemy.enemyObject = cat.gameObject;
-        cat.enemyObject = enemy.gameObject;
+        // ì ê³¼ ê³ ì–‘ì´ì˜ ì êµ° ì˜¤ë¸Œì íŠ¸ ì—°ê²°
+        enemy.SetEnemy(cat);
+        cat.SetEnemy(enemy);
     }
 }

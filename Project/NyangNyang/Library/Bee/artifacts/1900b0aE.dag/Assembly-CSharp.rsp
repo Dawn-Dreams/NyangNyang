@@ -384,7 +384,7 @@
 "Assets/Script/GameManager.cs"
 "Assets/Script/NetworkManager.cs"
 "Assets/Script/Player.cs"
-"Assets/Script/StatusManager.cs"
+"Assets/Script/Status.cs"
 -langversion:9.0
 /deterministic
 /optimize+

@@ -8,6 +8,10 @@ public class Cat : Character
     {
         
     }
+    void Awake()
+    {
+        
+    }
 
     void Update()
     {

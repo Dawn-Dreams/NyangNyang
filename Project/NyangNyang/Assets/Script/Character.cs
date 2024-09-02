@@ -1,16 +1,38 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Character : MonoBehaviour
 {
     public Status status;
-    public GameObject enemyObject;
+    public Character enemyObject;
+
+    protected int currentHP;
+    protected int currentMP;
+    public Character()
+    {
+    }
 
     void Awake()
     {
+        InitialSettings();
         StartCoroutine(AttackEnemy());
-        
+    }
+
+    public void InitialSettings()
+    {
+        if (status == null)
+            status = new Status();
+
+        // status 초기화 (서버로부터 받기)
+        status.attackPower = 5;
+        status.hp = 12;
+
+        // 초기화
+        currentHP = status.hp;
+        currentMP = status.mp;
     }
 
     IEnumerator AttackEnemy()
@@ -20,12 +42,28 @@ public class Character : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             if (enemyObject)
             {
-                Debug.Log("공격 -> ");
+                Debug.Log(gameObject.name + "->" + enemyObject.gameObject+ currentHP);
+                enemyObject.TakeDamage(status.CalculateDamage());
             }
         }
     }
 
-    void SetEnemy(GameObject targetObject)
+    void TakeDamage(int damage)
+    {
+        // TODO: 이 식도 추후 status 에서 적용
+        int applyDamage = damage - status.defence;
+        currentHP = Math.Max(0, currentHP - applyDamage);
+
+        Debug.Log(gameObject.name + currentHP);
+        if (currentHP <= 0)
+        {
+            // 사망 처리
+            gameObject.SetActive(false);
+            
+        }
+    }
+
+    public void SetEnemy(Character targetObject)
     {
         if (targetObject)
         {
