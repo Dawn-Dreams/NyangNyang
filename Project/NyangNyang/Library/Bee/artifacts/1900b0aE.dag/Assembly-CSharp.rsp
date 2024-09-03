@@ -377,13 +377,16 @@
 -analyzer:"C:/Users/Administrator/Desktop/Unity/2022.3.44f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 "Assets/MyAsset/2D Simple Cave Parallax Background/Demo/Script/BackgroundControl_Cave.cs"
 "Assets/MyAsset/2D Simple Cave Parallax Background/Demo/Script/ParallaxBackground_Cave.cs"
+"Assets/Script/BackgroundControl.cs"
 "Assets/Script/Cat.cs"
 "Assets/Script/Character.cs"
 "Assets/Script/Enemy.cs"
 "Assets/Script/EnemySpawnManager.cs"
 "Assets/Script/GameManager.cs"
 "Assets/Script/NetworkManager.cs"
+"Assets/Script/ParallaxBackground.cs"
 "Assets/Script/Player.cs"
+"Assets/Script/StageManager.cs"
 "Assets/Script/Status.cs"
 -langversion:9.0
 /deterministic

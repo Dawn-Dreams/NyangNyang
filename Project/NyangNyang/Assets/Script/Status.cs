@@ -9,7 +9,7 @@ public class Status
     public int id;             // 고유 아이디
     public int hp;             // 체력
     public int mp;             // 마나
-    public int attackPower;          // 공격력
+    public int attackPower;    // 공격력
     public int defence;        // 방어력
     public int healHPPerSec;   // 초당 체력 회복량   
     public int healMPPerSec;   // 초당 마나 회복량

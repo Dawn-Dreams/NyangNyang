@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class ParallaxBackground_Cave : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class ParallaxBackground_Cave : MonoBehaviour
     void Start()
     {
         _camera = Camera.main.transform;
+            //GameObject.Find("Cat").transform;
+        
         sizeX = Layer_Objects[0].transform.localScale.x;
         boundSizeX = Layer_Objects[0].GetComponent<SpriteRenderer>().sprite.bounds.size.x;
         for (int i=0;i<Layer_Objects.Length;i++){
@@ -29,6 +32,7 @@ public class ParallaxBackground_Cave : MonoBehaviour
         //Moving camera
         if (Camera_Move){
         _camera.position += Vector3.right * Time.deltaTime * Camera_MoveSpeed;
+        
         }
         for (int i=0;i<Layer_Objects.Length;i++){
             float temp = (_camera.position.x * (1-Layer_Speed[i]) );
