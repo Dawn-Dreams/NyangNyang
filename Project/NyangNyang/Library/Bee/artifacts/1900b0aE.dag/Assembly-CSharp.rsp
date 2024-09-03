@@ -377,6 +377,7 @@
 -analyzer:"C:/Users/Administrator/Desktop/Unity/2022.3.44f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 "Assets/MyAsset/2D Simple Cave Parallax Background/Demo/Script/BackgroundControl_Cave.cs"
 "Assets/MyAsset/2D Simple Cave Parallax Background/Demo/Script/ParallaxBackground_Cave.cs"
+"Assets/Script/Background/ParallaxScrollingManager.cs"
 "Assets/Script/BackgroundControl.cs"
 "Assets/Script/Cat.cs"
 "Assets/Script/Character.cs"
