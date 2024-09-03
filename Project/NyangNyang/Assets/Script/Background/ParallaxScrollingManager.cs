@@ -55,6 +55,8 @@ public class ParallaxScrollingManager : MonoBehaviour
     // 전방 레이어로 갈수록 감소되는 속도 비율
     public float IncreaseSpeed = 1.2f;
 
+    public bool shouldMove = false;
+
     void Start()
     {
         _backgroundObjects = new List<BackgroundSprites>();
@@ -62,7 +64,7 @@ public class ParallaxScrollingManager : MonoBehaviour
         // 배경 오브젝트 씬에서 읽기
         for (int i = 0; i < layerCount; ++i)
         {
-            float layerMoveSpeed = initialMoveSpeed * Mathf.Pow(decreaseSpeed, i);
+            float layerMoveSpeed = initialMoveSpeed * Mathf.Pow(IncreaseSpeed, i);
             _backgroundObjects.Add(new BackgroundSprites(i, layerMoveSpeed));
         }
     }
@@ -74,6 +76,8 @@ public class ParallaxScrollingManager : MonoBehaviour
 
     void MoveSprites()
     {
+        if (!shouldMove) return;
+
         for (int i = 0; i < layerCount; ++i)
         {
             _backgroundObjects[i].MoveLayerImageObjects();
