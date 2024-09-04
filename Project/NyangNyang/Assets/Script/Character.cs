@@ -29,6 +29,7 @@ public class Character : MonoBehaviour
         // status 초기화 (서버로부터 받기)
         status.attackPower = 5;
         status.hp = 12;
+        status.defence = 1;
 
         // 초기화
         currentHP = status.hp;
@@ -42,7 +43,6 @@ public class Character : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
             if (enemyObject)
             {
-                Debug.Log(gameObject.name + "->" + enemyObject.gameObject+ currentHP);
                 enemyObject.TakeDamage(status.CalculateDamage());
             }
         }

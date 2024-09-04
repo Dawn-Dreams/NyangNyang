@@ -4,17 +4,5 @@ using UnityEngine;
 
 public class Cat : Character
 {
-    void Start()
-    {
-        
-    }
-    void Awake()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
+   
 }
