@@ -43,6 +43,21 @@ class BackgroundSprites
             
         }
     }
+
+    // 각 레이어의 3개 스프라이트 교체
+    public void SetNewSprite(Sprite middleSprite, Sprite leftSprite, Sprite rightSprite)
+    {
+        if (spriteObjects.Count >= 3)
+        {
+            var middleRenderer = spriteObjects[0].GetComponent<SpriteRenderer>();
+            var leftRenderer = spriteObjects[1].GetComponent<SpriteRenderer>();
+            var rightRenderer = spriteObjects[2].GetComponent<SpriteRenderer>();
+
+            if (middleRenderer != null) middleRenderer.sprite = middleSprite;
+            if (leftRenderer != null) leftRenderer.sprite = leftSprite;
+            if (rightRenderer != null) rightRenderer.sprite = rightSprite;
+        }
+    }
 }
 
 public class ParallaxScrollingManager : MonoBehaviour
@@ -56,6 +71,9 @@ public class ParallaxScrollingManager : MonoBehaviour
     public float IncreaseSpeed = 1.2f;
 
     public bool shouldMove = false;
+
+    // 프리팹을 통해 스프라이트를 교체할 때 사용할 프리팹
+    public GameObject spritePrefab;
 
     void Start()
     {
@@ -71,7 +89,13 @@ public class ParallaxScrollingManager : MonoBehaviour
 
     void Update()
     {
-        MoveSprites(); 
+        MoveSprites();
+
+        // 스페이스바를 눌렀을 때 배경을 프리팹으로 변경
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            ChangeBackgroundImageFromPrefab();
+        }
     }
 
     void MoveSprites()
@@ -82,5 +106,45 @@ public class ParallaxScrollingManager : MonoBehaviour
         {
             _backgroundObjects[i].MoveLayerImageObjects();
         }
+    }
+
+    // 프리팹에서 각 레이어에 맞는 스프라이트들을 가져와 배경을 교체하는 함수
+    void ChangeBackgroundImageFromPrefab()
+    {
+        if (spritePrefab == null)
+        {
+            Debug.LogError("Sprite Prefab이 NULL 입니다.");
+            return;
+        }
+
+        // 각 레이어마다 3개의 스프라이트가 존재
+        for (int layerIndex = 0; layerIndex < layerCount; layerIndex++)
+        {
+            string layerName = "Layer_" + layerIndex;
+
+            // 프리팹 내부의 각 레이어의 스프라이트 오브젝트 찾기
+            Transform layerTransform = spritePrefab.transform.Find(layerName);
+            if (layerTransform == null)
+            {
+                Debug.LogError(layerName + "이 프리팹에서 발견되지 않았습니다.");
+                continue;
+            }
+
+            // 해당 레이어의 "_M", "_L", "_R" 스프라이트 찾기
+            SpriteRenderer middleSprite = layerTransform.Find(layerName + "_M")?.GetComponent<SpriteRenderer>();
+            SpriteRenderer leftSprite = layerTransform.Find(layerName + "_L")?.GetComponent<SpriteRenderer>();
+            SpriteRenderer rightSprite = layerTransform.Find(layerName + "_R")?.GetComponent<SpriteRenderer>();
+
+            if (middleSprite == null || leftSprite == null || rightSprite == null)
+            {
+                Debug.LogError(layerName + "의 일부 스프라이트를 찾을 수 없습니다.");
+                continue;
+            }
+
+            // 각 레이어에 새로운 스프라이트 적용
+            _backgroundObjects[layerIndex].SetNewSprite(middleSprite.sprite, leftSprite.sprite, rightSprite.sprite);
+        }
+
+        Debug.Log("배경 이미지 변경");
     }
 }
