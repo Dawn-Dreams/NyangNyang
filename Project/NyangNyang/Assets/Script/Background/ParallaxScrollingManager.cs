@@ -73,7 +73,11 @@ public class ParallaxScrollingManager : MonoBehaviour
     public bool shouldMove = false;
 
     // 프리팹을 통해 스프라이트를 교체할 때 사용할 프리팹
-    public GameObject spritePrefab;
+    // 프리팹 리스트로 관리
+    public List<GameObject> spritePrefabs;
+
+    // 현재 배경 프리팹 번호
+    private int currentPrefabIndex = 1; // 처음 지정된 기본 배경 인덱스가 1
 
     void Start()
     {
@@ -111,22 +115,23 @@ public class ParallaxScrollingManager : MonoBehaviour
     // 프리팹에서 각 레이어에 맞는 스프라이트들을 가져와 배경을 교체하는 함수
     void ChangeBackgroundImageFromPrefab()
     {
-        if (spritePrefab == null)
+        if (spritePrefabs == null || spritePrefabs.Count == 0)
         {
             Debug.LogError("Sprite Prefab이 NULL 입니다.");
             return;
         }
+        
+        GameObject currentPrefab = spritePrefabs[currentPrefabIndex];
 
-        // 각 레이어마다 3개의 스프라이트가 존재
         for (int layerIndex = 0; layerIndex < layerCount; layerIndex++)
         {
             string layerName = "Layer_" + layerIndex;
 
             // 프리팹 내부의 각 레이어의 스프라이트 오브젝트 찾기
-            Transform layerTransform = spritePrefab.transform.Find(layerName);
+            Transform layerTransform = currentPrefab.transform.Find(layerName);
             if (layerTransform == null)
             {
-                Debug.LogError(layerName + "이 프리팹에서 발견되지 않았습니다.");
+                Debug.LogError(layerName + "이 프리팹에 존재하지 않습니다.");
                 continue;
             }
 
@@ -146,5 +151,8 @@ public class ParallaxScrollingManager : MonoBehaviour
         }
 
         Debug.Log("배경 이미지 변경");
+
+        // 프리팹 인덱스를 증가시켜 순환
+        currentPrefabIndex = (currentPrefabIndex + 1) % spritePrefabs.Count;
     }
 }

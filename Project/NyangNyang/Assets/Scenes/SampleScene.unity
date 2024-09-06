@@ -332,7 +332,15 @@ MonoBehaviour:
   layerCount: 6
   IncreaseSpeed: 1.2
   shouldMove: 0
-  spritePrefab: {fileID: 8703252732340365229, guid: 171e92b52c3121f4aa606a7b9ef15682, type: 3}
+  spritePrefabs:
+  - {fileID: 1159209929261260555, guid: 48277a5a877ce08438b7b20d5f9fe971, type: 3}
+  - {fileID: 8703252732340365229, guid: 2bea2275a99ec224bb2821f70c024ca2, type: 3}
+  - {fileID: 8703252732340365229, guid: 171e92b52c3121f4aa606a7b9ef15682, type: 3}
+  - {fileID: 8703252732340365229, guid: e604049380cb44946b723c737597eaeb, type: 3}
+  - {fileID: 8703252732340365229, guid: ad31704cedbdfb94db9fd5df4c53f3a8, type: 3}
+  - {fileID: 8703252732340365229, guid: 9435d803aa03497429a1e28c2925b8cc, type: 3}
+  - {fileID: 8703252732340365229, guid: 360a5469b0fbb994eb5231fe24da530e, type: 3}
+  - {fileID: 8703252732340365229, guid: ca2c14e269e89ee4e94a8e26a050fdec, type: 3}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
