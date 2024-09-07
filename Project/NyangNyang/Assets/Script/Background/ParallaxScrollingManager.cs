@@ -70,7 +70,8 @@ public class ParallaxScrollingManager : MonoBehaviour
     // 전방 레이어로 갈수록 감소되는 속도 비율
     public float IncreaseSpeed = 1.2f;
 
-    public bool shouldMove = false;
+    [SerializeField]
+    private bool shouldMove = false;
 
     // 프리팹을 통해 스프라이트를 교체할 때 사용할 프리팹
     // 프리팹 리스트로 관리
@@ -94,12 +95,6 @@ public class ParallaxScrollingManager : MonoBehaviour
     void Update()
     {
         MoveSprites();
-
-        // 스페이스바를 눌렀을 때 배경을 프리팹으로 변경
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            ChangeBackgroundImageFromPrefab();
-        }
     }
 
     void MoveSprites()
@@ -113,7 +108,7 @@ public class ParallaxScrollingManager : MonoBehaviour
     }
 
     // 프리팹에서 각 레이어에 맞는 스프라이트들을 가져와 배경을 교체하는 함수
-    void ChangeBackgroundImageFromPrefab()
+    public void ChangeBackgroundImageFromPrefab()
     {
         if (spritePrefabs == null || spritePrefabs.Count == 0)
         {
@@ -154,5 +149,10 @@ public class ParallaxScrollingManager : MonoBehaviour
 
         // 프리팹 인덱스를 증가시켜 순환
         currentPrefabIndex = (currentPrefabIndex + 1) % spritePrefabs.Count;
+    }
+
+    public void MoveBackgroundSprites(bool moveBackground)
+    {
+        shouldMove = moveBackground;
     }
 }

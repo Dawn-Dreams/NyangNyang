@@ -54,7 +54,6 @@ public class Character : MonoBehaviour
         int applyDamage = damage - status.defence;
         currentHP = Math.Max(0, currentHP - applyDamage);
 
-        Debug.Log(gameObject.name + currentHP);
         if (currentHP <= 0)
         {
             // 사망 처리
