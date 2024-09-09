@@ -49,8 +49,10 @@ public class Character : MonoBehaviour
         }
     }
 
-    protected virtual void TakeDamage(int damage)
+    protected virtual bool TakeDamage(int damage)
     {
+        if (currentHP <= 0) return false;
+
         // TODO: 이 식도 추후 status 에서 적용
         int applyDamage = damage - status.defence;
         currentHP = Math.Max(0, currentHP - applyDamage);
@@ -59,8 +61,9 @@ public class Character : MonoBehaviour
         {
             // 사망 처리
             gameObject.SetActive(false);
-            
         }
+
+        return true;
     }
 
     public void SetEnemy(Character targetObject)

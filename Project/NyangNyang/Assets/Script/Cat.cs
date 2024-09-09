@@ -29,12 +29,14 @@ public class Cat : Character
 
     }
 
-    protected override void TakeDamage(int damage)
+    protected override bool TakeDamage(int damage)
     {
-        base.TakeDamage(damage);
+        bool getDamaged = base.TakeDamage(damage);
 
         _healthBarSlider.value = currentHP;
         SetHealthBarText();
+
+        return getDamaged;
     }
 
     private void SetHealthBarText()
