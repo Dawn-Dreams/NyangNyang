@@ -15,14 +15,15 @@ public class Character : MonoBehaviour
     {
     }
 
-    void Awake()
+    protected virtual void Awake()
     {
         InitialSettings();
         StartCoroutine(AttackEnemy());
     }
 
-    public void InitialSettings()
+    public virtual void InitialSettings()
     {
+        Debug.Log("캐릭터 awake");
         if (status == null)
             status = new Status();
 
@@ -48,7 +49,7 @@ public class Character : MonoBehaviour
         }
     }
 
-    void TakeDamage(int damage)
+    protected virtual void TakeDamage(int damage)
     {
         // TODO: 이 식도 추후 status 에서 적용
         int applyDamage = damage - status.defence;
