@@ -1,11 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class StageManager : MonoBehaviour
 {
     [SerializeField] 
     private ParallaxScrollingManager parallaxScrollingManager;
+
+    [SerializeField]
+    private Text ThemeUI;
+
+    [SerializeField]
+    private Text StageUI;
+
+    [SerializeField]
+    private Text GateUI;
 
     // TODO: 초기값 설정은 추후 NetworkManager에서 각 유저별 스테이지 로 받아오는 것으로 설정
     private int currentTheme = 1;
@@ -26,9 +36,17 @@ public class StageManager : MonoBehaviour
         
     }
 
+    private void SetStageUI()
+    {
+        ThemeUI.text = "THEME " + currentTheme.ToString();
+        StageUI.text = "STAGE " + currentStage.ToString();
+        GateUI.text = "GATE " + currentGate.ToString();
+    }
+
     private void GateClear() 
     {
-        Debug.Log("관문 (" + currentTheme + " - " + currentStage + " - " + currentGate + ") 클리어");
+        // Debug.Log("관문 (" + currentTheme + " - " + currentStage + " - " + currentGate + ") 클리어");
+        
         if (currentGate >= maxGateCount)
         {
             // 관문을 모두 클리어했으면 스테이지 클리어 처리
@@ -45,7 +63,6 @@ public class StageManager : MonoBehaviour
     {
         Debug.Log("다음 관문으로 이동 시작");
         
-
         parallaxScrollingManager.MoveBackgroundSprites(true);
         // TODO: 고양이 걷기 애니메이션
 
@@ -59,9 +76,13 @@ public class StageManager : MonoBehaviour
         // 관문 index 1, 2, ..., maxGateCount 순환
         currentGate++;
 
+        SetStageUI();
         Debug.Log("관문 도착");
+
         parallaxScrollingManager.MoveBackgroundSprites(false);
         // TODO : 적군이 생성 되도록
+
+        yield break;
     }
 
     private void StageClear() 
@@ -84,7 +105,8 @@ public class StageManager : MonoBehaviour
         currentGate = 1;
         currentStage++;
 
-        Debug.Log("새 스테이지 (" + currentTheme + " - " + currentStage + " - " + currentGate + ") 도착");
+        SetStageUI();
+        // Debug.Log("새 스테이지 (" + currentTheme + " - " + currentStage + " - " + currentGate + ") 도착");
     }
 
     private void ChangeTheme()
@@ -95,7 +117,8 @@ public class StageManager : MonoBehaviour
         currentStage = 1;
         currentGate = 1;
 
-        Debug.Log("새 스테이지테마 (" + currentTheme + " - " + currentStage + " - " + currentGate + ") 도착");
+        SetStageUI();
+        // Debug.Log("새 스테이지테마 (" + currentTheme + " - " + currentStage + " - " + currentGate + ") 도착");
     }
    
 }
