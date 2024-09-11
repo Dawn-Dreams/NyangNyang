@@ -165,13 +165,13 @@ MonoBehaviour:
     m_FontSize: 64
     m_FontStyle: 1
     m_BestFit: 1
-    m_MinSize: 6
-    m_MaxSize: 64
+    m_MinSize: 1
+    m_MaxSize: 256
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: GATE 1
 --- !u!222 &9501239
@@ -198,7 +198,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 347, y: 145.6}
+  m_AnchoredPosition: {x: 260, y: 611}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &31172529
@@ -1047,7 +1047,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 347, y: 213}
+  m_AnchoredPosition: {x: 260, y: 741}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1045715678
@@ -1083,13 +1083,13 @@ MonoBehaviour:
     m_FontSize: 64
     m_FontStyle: 1
     m_BestFit: 1
-    m_MinSize: 6
-    m_MaxSize: 64
+    m_MinSize: 1
+    m_MaxSize: 256
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: THEME 1
 --- !u!1 &1081058043
@@ -1201,7 +1201,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 347, y: 177.9}
+  m_AnchoredPosition: {x: 259, y: 677}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1152713301
@@ -1237,13 +1237,13 @@ MonoBehaviour:
     m_FontSize: 64
     m_FontStyle: 1
     m_BestFit: 1
-    m_MinSize: 6
-    m_MaxSize: 64
+    m_MinSize: 1
+    m_MaxSize: 256
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: STAGE 1
 --- !u!1 &1306062409
