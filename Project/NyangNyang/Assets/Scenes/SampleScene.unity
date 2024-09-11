@@ -423,7 +423,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8d21e3672fbe9e64db9a94485d8f6ff7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b98cd3558b6cb534a8c9ce036e776d4a, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -453,8 +453,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9c6d6b6d093ad941977b20adb0726c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _activeSprite: {fileID: 21300000, guid: a99b03775035e5f4d8f94273934ef66d, type: 3}
-  _inactiveSprite: {fileID: 21300000, guid: 8d21e3672fbe9e64db9a94485d8f6ff7, type: 3}
+  _activeSprite: {fileID: 21300000, guid: b51e54c76bb541a47b1e854b35c10781, type: 3}
+  _inactiveSprite: {fileID: 21300000, guid: b98cd3558b6cb534a8c9ce036e776d4a, type: 3}
   isActive: 0
 --- !u!114 &124459629
 MonoBehaviour:
@@ -908,7 +908,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8d21e3672fbe9e64db9a94485d8f6ff7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7dfdaa359d38e534ba8ccfce2c0a327e, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -938,8 +938,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9c6d6b6d093ad941977b20adb0726c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _activeSprite: {fileID: 21300000, guid: a99b03775035e5f4d8f94273934ef66d, type: 3}
-  _inactiveSprite: {fileID: 21300000, guid: 8d21e3672fbe9e64db9a94485d8f6ff7, type: 3}
+  _activeSprite: {fileID: 21300000, guid: eac1b4ed75f329b4a8375e59b6f7a65c, type: 3}
+  _inactiveSprite: {fileID: 21300000, guid: 7dfdaa359d38e534ba8ccfce2c0a327e, type: 3}
   isActive: 0
 --- !u!114 &367684012
 MonoBehaviour:
@@ -1273,7 +1273,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &519254787
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1786,7 +1786,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _activeSprite: {fileID: 21300000, guid: a99b03775035e5f4d8f94273934ef66d, type: 3}
   _inactiveSprite: {fileID: 21300000, guid: 8d21e3672fbe9e64db9a94485d8f6ff7, type: 3}
-  isActive: 1
+  isActive: 0
 --- !u!114 &689620083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2117,7 +2117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b20f9a7a9f9511c44bac05adfc9c8a47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startActiveIndex: 0
+  startActiveIndex: -1
 --- !u!1 &1045715676
 GameObject:
   m_ObjectHideFlags: 0
@@ -2554,7 +2554,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8d21e3672fbe9e64db9a94485d8f6ff7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c2f99430e5793c348864956bb7dfedae, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2584,8 +2584,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9c6d6b6d093ad941977b20adb0726c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _activeSprite: {fileID: 21300000, guid: a99b03775035e5f4d8f94273934ef66d, type: 3}
-  _inactiveSprite: {fileID: 21300000, guid: 8d21e3672fbe9e64db9a94485d8f6ff7, type: 3}
+  _activeSprite: {fileID: 21300000, guid: bb83302b2be6bdf429a8bef7c863d103, type: 3}
+  _inactiveSprite: {fileID: 21300000, guid: c2f99430e5793c348864956bb7dfedae, type: 3}
   isActive: 0
 --- !u!114 &1134768247
 MonoBehaviour:
@@ -3385,7 +3385,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8d21e3672fbe9e64db9a94485d8f6ff7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2a6a24d0a9ae1754fae8f52fa87f7048, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3415,8 +3415,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9c6d6b6d093ad941977b20adb0726c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _activeSprite: {fileID: 21300000, guid: a99b03775035e5f4d8f94273934ef66d, type: 3}
-  _inactiveSprite: {fileID: 21300000, guid: 8d21e3672fbe9e64db9a94485d8f6ff7, type: 3}
+  _activeSprite: {fileID: 21300000, guid: b3f37dc7fd74c904ab42a5b69a1d2fc9, type: 3}
+  _inactiveSprite: {fileID: 21300000, guid: 2a6a24d0a9ae1754fae8f52fa87f7048, type: 3}
   isActive: 0
 --- !u!114 &2000165150
 MonoBehaviour:
