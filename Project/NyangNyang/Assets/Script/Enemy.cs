@@ -7,6 +7,13 @@ public class Enemy : Character
 {
     public GameObject floatingDamage;
 
+
+    protected override void Awake()
+    {
+        characterID = 1;
+        base.Awake();
+    }
+
     protected override bool TakeDamage(int damage)
     {
         bool getDamaged = base.TakeDamage(damage);

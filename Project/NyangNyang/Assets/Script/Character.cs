@@ -8,6 +8,7 @@ public class Character : MonoBehaviour
 {
     public Status status;
     public Character enemyObject;
+    public int characterID;
 
     protected int currentHP;
     protected int currentMP;
@@ -24,12 +25,7 @@ public class Character : MonoBehaviour
     public virtual void InitialSettings()
     {
         if (status == null)
-            status = new Status();
-
-        // status 초기화 (서버로부터 받기)
-        status.attackPower = 5;
-        status.hp = 12;
-        status.defence = 1;
+            status = new Status(characterID);
 
         // 초기화
         currentHP = status.hp;

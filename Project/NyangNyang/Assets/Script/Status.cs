@@ -10,14 +10,14 @@ public enum StatusLevelType
 
 public class StatusLevelData
 {
-    public int hp = 1;
-    public int mp = 1;
-    public int strength = 1;
-    public int defence = 1;
-    public int healHP = 1;
-    public int healMP = 1;
-    public int crit = 1;
-    public int attackSpeed = 1;
+    public int hpLevel = 0;
+    public int mpLevel = 0;
+    public int strLevel = 0;
+    public int defenceLevel = 0;
+    public int healHPLevel = 0;
+    public int healMPLevel = 0;
+    public int critLevel = 0;
+    public int attackSpeedLevel = 0;
 
     private static int HP_DEFAULT_VALUE = 10;
     private static int MP_DEFAULT_VALUE = 10;
@@ -26,6 +26,25 @@ public class StatusLevelData
     public int goldAcquisition = 1;
     public int expAcquisition = 1;
 
+    // 09.13. Temp Constructor 
+    public StatusLevelData()
+    {
+
+    }
+    // TODO : Using in DummyServerData, Delete constructor later.
+    public StatusLevelData(int hpLevel, int mpLevel, int strLevel, int defenceLevel = 0, int healHpLevel = 0, int healMpLevel = 0, int critLevel = 0, int attackSpeedLevel = 0, int goldAcquisition = 0, int expAcquisition = 0)
+    {
+        this.hpLevel = hpLevel;
+        this.mpLevel = mpLevel;
+        this.strLevel = strLevel;
+        this.defenceLevel = defenceLevel;
+        this.healHPLevel = healHpLevel;
+        this.healMPLevel = healMpLevel;
+        this.critLevel = critLevel;
+        this.attackSpeedLevel = attackSpeedLevel;
+        this.goldAcquisition = goldAcquisition;
+        this.expAcquisition = expAcquisition;
+    }
 
     public float CalculateValueFromLevel(StatusLevelType type)
     {
@@ -36,52 +55,47 @@ public class StatusLevelData
         {
             case StatusLevelType.HP:
                 // 기본 10, 레벨당 1
-                value = HP_DEFAULT_VALUE + hp;
+                value = HP_DEFAULT_VALUE + hpLevel;
                 break;
             case StatusLevelType.MP:
                 // 기본 10, 레벨당 1
-                value = MP_DEFAULT_VALUE + mp;
+                value = MP_DEFAULT_VALUE + mpLevel;
                 break;
             case StatusLevelType.STR:
-                value = strength;
+                value = 1 + strLevel;
                 break;
             case StatusLevelType.DEF:
-                value = defence;
+                value = defenceLevel;
                 break;
             case StatusLevelType.HEAL_HP:
-                value = healHP;
+                value = healHPLevel;
                 break;
             case StatusLevelType.HEAL_MP:
-                value = healMP;
+                value = healMPLevel;
                 break;
             case StatusLevelType.CRIT:
-                value = (float)crit / 100;      // 1 레벨 당 0.1%
+                value = (float)critLevel / 100;      // 1 레벨 당 0.1%
                 break;
             case StatusLevelType.ATTACK_SPEED:
                 // TODO <- 회의 필요 // 0 ~ 10000 레벨을 마스터로 1 ~ 0.25
-                value = 0.25f + Mathf.Lerp(1.0f, MAX_ATTACK_SPEED, MAX_ATTACK_SPEED - attackSpeed) * 0.75f; 
+                value = 0.25f + Mathf.Lerp(1.0f, MAX_ATTACK_SPEED, MAX_ATTACK_SPEED - attackSpeedLevel) * 0.75f; 
                 break;
             case StatusLevelType.GOLD:
                 // 기본 1%, 레벨당 0.1% 추가
-                value = 1.0f + 0.1f * goldAcquisition;     
+                value = 1.0f + 0.1f * goldAcquisition;
                 break;
-
             case StatusLevelType.EXP:
                 // 기본 1%, 레벨당 0.1% 추가
                 value = 1.0f + 0.1f * expAcquisition;
                 break;
-
             default:
                 Debug.Log("ERROR TYPE INPUT");
                 break;
         }
-
         return value;
     }
-
-
-    
 }
+
 public class Status
 {
     private StatusLevelData levelData;
@@ -101,10 +115,10 @@ public class Status
     float expAcquisitionPercent;     // 경험치 획득량(가중치) (초기 1, value%로 적용)
     int userTouchDamage;    // 터치 당 공격력 <- TODO: 터치 말고 다른 좋은 아이디어 있는지 회의
 
-    public Status()
+    public Status(int id)
     {
         // TODO : 서버에서 StatusLevelData 받아오기 // UserID 추후 더미서버에 추가
-        levelData = DummyServerData.GetUserStatusLevelData(0);
+        levelData = DummyServerData.GetUserStatusLevelData(id);
 
         hp = (int)levelData.CalculateValueFromLevel(StatusLevelType.HP);
         mp = (int)levelData.CalculateValueFromLevel(StatusLevelType.MP);

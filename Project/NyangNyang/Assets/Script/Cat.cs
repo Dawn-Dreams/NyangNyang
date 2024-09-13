@@ -11,8 +11,11 @@ public class Cat : Character
     [SerializeField]
     private TextMeshProUGUI _textMeshPro;
 
+
     protected override void Awake()
     {
+        characterID = 0;
+
         base.Awake();
 
         _healthBarSlider.maxValue = status.hp;
