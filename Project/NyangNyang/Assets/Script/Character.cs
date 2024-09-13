@@ -23,7 +23,6 @@ public class Character : MonoBehaviour
 
     public virtual void InitialSettings()
     {
-        Debug.Log("캐릭터 awake");
         if (status == null)
             status = new Status();
 
