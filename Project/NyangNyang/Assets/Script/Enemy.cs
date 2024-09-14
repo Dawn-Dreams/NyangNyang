@@ -44,6 +44,12 @@ public class Enemy : Character
         return getDamaged;
     }
 
+    // 적군이 사망했는지 여부를 반환
+    public bool IsDead()
+    {
+        return currentHP <= 0;
+    }
+
     private void SetHealthBarText()
     {
         if (_healthText== null) return;

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class StageManager : MonoBehaviour
 {
-    [SerializeField] 
+    [SerializeField]
     private ParallaxScrollingManager parallaxScrollingManager;
 
     [SerializeField]
@@ -17,6 +17,8 @@ public class StageManager : MonoBehaviour
     [SerializeField]
     private Text GateUI;
 
+    private EnemySpawnManager enemySpawnManager;  // 적 스폰 매니저 변수
+
     // TODO: 초기값 설정은 추후 NetworkManager에서 각 유저별 스테이지 로 받아오는 것으로 설정
     private int currentTheme = 1;
     private int currentStage = 1;
@@ -26,6 +28,18 @@ public class StageManager : MonoBehaviour
     public int maxGateCount = 3;
     public int maxStageCount = 5;
 
+    void Start()
+    {
+        enemySpawnManager = FindObjectOfType<EnemySpawnManager>();
+
+        if (enemySpawnManager == null)
+        {
+            Debug.LogError("EnemySpawnManager를 찾을 수 없습니다.");
+        }
+
+        SetStageUI();
+    }
+
     void Update()
     {
         // TODO: 임시 테스트 코드, 추후 조정 필요
@@ -33,7 +47,7 @@ public class StageManager : MonoBehaviour
         {
             GateClear();
         }
-        
+
     }
 
     private void SetStageUI()
@@ -43,26 +57,26 @@ public class StageManager : MonoBehaviour
         GateUI.text = "GATE " + currentGate.ToString();
     }
 
-    private void GateClear() 
+    private void GateClear()
     {
         // Debug.Log("관문 (" + currentTheme + " - " + currentStage + " - " + currentGate + ") 클리어");
         
         if (currentGate >= maxGateCount)
         {
             // 관문을 모두 클리어했으면 스테이지 클리어 처리
-            StageClear();  
+            StageClear();
         }
         else
         {
             // 다음 관문으로 이동
-            GoToNextGate();    
+            GoToNextGate();
         }
     }
 
     private void GoToNextGate()
     {
         Debug.Log("다음 관문으로 이동 시작");
-        
+
         parallaxScrollingManager.MoveBackgroundSprites(true);
         // TODO: 고양이 걷기 애니메이션
 
@@ -80,12 +94,21 @@ public class StageManager : MonoBehaviour
         Debug.Log("관문 도착");
 
         parallaxScrollingManager.MoveBackgroundSprites(false);
-        // TODO : 적군이 생성 되도록
+
+        // 적군 생성
+        if (enemySpawnManager != null)
+        {
+            enemySpawnManager.OnGatePassed(); // 적을 스폰하도록 적 스폰 매니저 호출
+        }
+        else
+        {
+            Debug.LogError("EnemySpawnManager null. 적을 스폰할 수 없습니다.");
+        }
 
         yield break;
     }
 
-    private void StageClear() 
+    private void StageClear()
     {
         Debug.Log("최고 단계 관문 클리어, 스테이지 이동");
         if (currentStage >= maxStageCount)
@@ -94,12 +117,12 @@ public class StageManager : MonoBehaviour
         }
         else
         {
-           ChangeStage();
+            ChangeStage();
         }
 
     }
 
-    private void ChangeStage() 
+    private void ChangeStage()
     {
         // TODO : 추후 페이드 기법을 통해 변하게 진행, 현재는 그냥 바로 화면이 변경되도록
         currentGate = 1;
