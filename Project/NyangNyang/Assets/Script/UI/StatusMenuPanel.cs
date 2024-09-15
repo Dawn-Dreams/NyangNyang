@@ -16,6 +16,9 @@ public class StatusMenuPanel : MenuPanel
     private Button[] levelUpMultipleButtons;
     private Button currentActiveLevelUpMultipleButton;
 
+    //private StatusLevelupPanel[] statusLevelUpPanels;
+    
+
     void Start()
     {
         levelUpMultipleButtons[(int)LevelUpButtonType.X1].onClick.AddListener(
@@ -43,6 +46,8 @@ public class StatusMenuPanel : MenuPanel
     {
         foreach (Button button in levelUpMultipleButtons)
         {
+            if (button == targetButton) continue;
+
             ColorBlock tempColorBlock = button.colors;
             tempColorBlock.normalColor = new Color(1, 1, 1);
             button.colors = tempColorBlock;
@@ -51,6 +56,5 @@ public class StatusMenuPanel : MenuPanel
         ColorBlock tempCB = targetButton.colors;
         tempCB.normalColor = new Color(0.5f,0.5f,0.5f);
         targetButton.colors = tempCB;
-        
     }
 }
