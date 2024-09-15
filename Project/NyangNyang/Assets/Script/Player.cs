@@ -4,9 +4,16 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private Status status;
+    private static int userID = 0;
+
     void Start()
     {
-        // ¼­¹ö·ÎºÎÅÍ °èÁ¤ ½ºÅÈ Recv
+        // ì„œë²„ë¡œë¶€í„° user id ë°›ê¸°
+        userID = 0;
+    }
+
+    public static int GetUserID()
+    {
+        return userID;
     }
 }

@@ -22,13 +22,13 @@ public class DummyServerData : MonoBehaviour
         new StatusLevelData(),
     };
 
-    private static int statusLevelupStartGold = 100;
+    private static int statusStartGoldCost = 100;
 
-    private static float[] statusLevelupGoldMultiplyValue = new float[]
+    private static float[] statusGoldCostMultiplyValue = new float[]
     {
         // StatusLevelType enum
         // HP, MP, STR, DEF, HEAL_HP, HEAL_MP, CRIT, ATTACK_SPEED, GOLD, EXP
-        1.01f, 1.01f, 1.01f, 1.01f, 1.01f, 1.01f, 5.0f, 3.0f, 1.1f, 1.1f
+        1.05f, 1.05f, 1.05f, 1.05f, 1.05f, 1.05f, 5.0f, 3.0f, 1.1f, 1.1f
     };
 
     void Start()
@@ -45,6 +45,37 @@ public class DummyServerData : MonoBehaviour
         }
 
         return usersStatusLevelData[userID];
+    }
+
+    public static int GetUserStatusLevelFromType(int userID, StatusLevelType type)
+    {
+        StatusLevelData statusLevelData = GetUserStatusLevelData(userID);
+        if (statusLevelData != null)
+        {
+            return statusLevelData.GetLevelFromType(type);
+        }
+
+        return -1;
+    }
+
+    public static int GetStartGoldCost()
+    {
+        return statusStartGoldCost;
+    }
+
+    public static float GetGoldCostMultipleValueFromType(StatusLevelType type)
+    {
+        return statusGoldCostMultiplyValue[(int)type];
+    }
+
+    public static bool UserStatusLevelUp(int userID,StatusLevelType type, int value)
+    {
+        // TODO : 서버 내에서라면 검증하는 시스템 추가
+        GetUserStatusLevelData(userID).AddLevel(type,value);
+
+        return true;
+
+        // TODO: 클라의 패킷이 정상적이지 않은 데이터를 담을 경우 false 리턴 or false 되는 패킷 전송
     }
 
     

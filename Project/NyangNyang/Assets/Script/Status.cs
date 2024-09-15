@@ -1,30 +1,24 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+[Serializable]
 public enum StatusLevelType
 {
-    HP = 0, MP, STR, DEF, HEAL_HP, HEAL_MP, CRIT, ATTACK_SPEED, GOLD, EXP
+    HP = 0, MP, STR, DEF, HEAL_HP, HEAL_MP, CRIT, ATTACK_SPEED, GOLD, EXP, COUNT
 }
 
 public class StatusLevelData
 {
-    public int hpLevel = 0;
-    public int mpLevel = 0;
-    public int strLevel = 0;
-    public int defenceLevel = 0;
-    public int healHPLevel = 0;
-    public int healMPLevel = 0;
-    public int critLevel = 0;
-    public int attackSpeedLevel = 0;
+    public int[] statusLevels = new int[(int)StatusLevelType.COUNT];
+
 
     private static int HP_DEFAULT_VALUE = 10;
     private static int MP_DEFAULT_VALUE = 10;
     private static int MAX_ATTACK_SPEED = 10000;
     
-    public int goldAcquisition = 1;
-    public int expAcquisition = 1;
 
     // 09.13. Temp Constructor 
     public StatusLevelData()
@@ -34,16 +28,16 @@ public class StatusLevelData
     // TODO : Using in DummyServerData, Delete constructor later.
     public StatusLevelData(int hpLevel, int mpLevel, int strLevel, int defenceLevel = 0, int healHpLevel = 0, int healMpLevel = 0, int critLevel = 0, int attackSpeedLevel = 0, int goldAcquisition = 0, int expAcquisition = 0)
     {
-        this.hpLevel = hpLevel;
-        this.mpLevel = mpLevel;
-        this.strLevel = strLevel;
-        this.defenceLevel = defenceLevel;
-        this.healHPLevel = healHpLevel;
-        this.healMPLevel = healMpLevel;
-        this.critLevel = critLevel;
-        this.attackSpeedLevel = attackSpeedLevel;
-        this.goldAcquisition = goldAcquisition;
-        this.expAcquisition = expAcquisition;
+        statusLevels[(int)StatusLevelType.HP]= hpLevel;
+        statusLevels[(int)StatusLevelType.MP]= mpLevel;
+        statusLevels[(int)StatusLevelType.STR]= strLevel;
+        statusLevels[(int)StatusLevelType.DEF]= defenceLevel;
+        statusLevels[(int)StatusLevelType.HEAL_HP]= healHpLevel;
+        statusLevels[(int)StatusLevelType.HEAL_MP]= healMpLevel;
+        statusLevels[(int)StatusLevelType.CRIT]= critLevel;
+        statusLevels[(int)StatusLevelType.ATTACK_SPEED]= attackSpeedLevel;
+        statusLevels[(int)StatusLevelType.GOLD]= goldAcquisition;
+        statusLevels[(int)StatusLevelType.EXP]= expAcquisition;
     }
 
     public float CalculateValueFromLevel(StatusLevelType type)
@@ -55,44 +49,54 @@ public class StatusLevelData
         {
             case StatusLevelType.HP:
                 // 기본 10, 레벨당 1
-                value = HP_DEFAULT_VALUE + hpLevel;
+                value = HP_DEFAULT_VALUE + statusLevels[(int)StatusLevelType.HP];
                 break;
             case StatusLevelType.MP:
                 // 기본 10, 레벨당 1
-                value = MP_DEFAULT_VALUE + mpLevel;
+                value = MP_DEFAULT_VALUE + statusLevels[(int)StatusLevelType.MP];
                 break;
             case StatusLevelType.STR:
-                value = 1 + strLevel;
+                value = 1 + statusLevels[(int)StatusLevelType.STR];
                 break;
             case StatusLevelType.DEF:
-                value = defenceLevel;
+                value = statusLevels[(int)StatusLevelType.DEF];
                 break;
             case StatusLevelType.HEAL_HP:
-                value = healHPLevel;
+                value = statusLevels[(int)StatusLevelType.HEAL_HP];
                 break;
             case StatusLevelType.HEAL_MP:
-                value = healMPLevel;
+                value = statusLevels[(int)StatusLevelType.HEAL_MP];
                 break;
             case StatusLevelType.CRIT:
-                value = (float)critLevel / 100;      // 1 레벨 당 0.1%
+                value = (float)statusLevels[(int)StatusLevelType.CRIT] / 100;      // 1 레벨 당 0.1%
                 break;
             case StatusLevelType.ATTACK_SPEED:
                 // TODO <- 회의 필요 // 0 ~ 10000 레벨을 마스터로 1 ~ 0.25
-                value = 0.25f + Mathf.Lerp(1.0f, MAX_ATTACK_SPEED, MAX_ATTACK_SPEED - attackSpeedLevel) * 0.75f; 
+                value = 0.25f + Mathf.Lerp(1.0f, MAX_ATTACK_SPEED, MAX_ATTACK_SPEED - statusLevels[(int)StatusLevelType.ATTACK_SPEED]) * 0.75f; 
                 break;
             case StatusLevelType.GOLD:
                 // 기본 1%, 레벨당 0.1% 추가
-                value = 1.0f + 0.1f * goldAcquisition;
+                value = 1.0f + 0.1f * statusLevels[(int)StatusLevelType.GOLD];
                 break;
             case StatusLevelType.EXP:
                 // 기본 1%, 레벨당 0.1% 추가
-                value = 1.0f + 0.1f * expAcquisition;
+                value = 1.0f + 0.1f * statusLevels[(int)StatusLevelType.EXP];
                 break;
             default:
                 Debug.Log("ERROR TYPE INPUT");
                 break;
         }
         return value;
+    }
+
+    public int GetLevelFromType(StatusLevelType type)
+    {
+        return statusLevels[(int)type];
+    }
+
+    public void AddLevel(StatusLevelType type, int value)
+    {
+        statusLevels[(int)type] += value;
     }
 }
 

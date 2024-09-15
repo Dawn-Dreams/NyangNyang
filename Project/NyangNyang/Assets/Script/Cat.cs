@@ -14,7 +14,8 @@ public class Cat : Character
 
     protected override void Awake()
     {
-        characterID = 0;
+        //characterID = 0;
+        characterID = Player.GetUserID();
 
         base.Awake();
 

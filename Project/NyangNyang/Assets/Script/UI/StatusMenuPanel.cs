@@ -18,7 +18,6 @@ public class StatusMenuPanel : MenuPanel
 
     //private StatusLevelupPanel[] statusLevelUpPanels;
     
-
     void Start()
     {
         levelUpMultipleButtons[(int)LevelUpButtonType.X1].onClick.AddListener(
@@ -37,8 +36,6 @@ public class StatusMenuPanel : MenuPanel
     void OnClickEventLevelUpButton(int buttonValue, Button targetButton)
     {
         SetButtonActiveColor(targetButton);
-
-
     }
 
     // 선택된 버튼 색상만 하이라이트 기능
