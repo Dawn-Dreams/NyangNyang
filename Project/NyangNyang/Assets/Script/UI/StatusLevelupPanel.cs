@@ -27,6 +27,8 @@ public class StatusLevelupPanel : MonoBehaviour
     private int startGoldCost;
     private float goldCostMultiplyValue;
 
+    public int levelUpMultiplyValue = 1;
+
     public void Start()
     {
         // 서버로부터 비용 정보 받기
@@ -56,7 +58,9 @@ public class StatusLevelupPanel : MonoBehaviour
 
     int CalculateGoldCost(int startCost, float multiplyValue, int currentLevel)
     {
-        float goldCost =  startCost * Mathf.Pow(multiplyValue, currentLevel - 1);
+        float currentGoldCost = startCost * Mathf.Pow(multiplyValue, currentLevel - 1);
+        float goldCost = currentGoldCost * (1 - Mathf.Pow(multiplyValue, levelUpMultiplyValue)) / (1 - multiplyValue);
+        //float goldCost =  startCost * Mathf.Pow(multiplyValue, currentLevel - 1);
         
         return (int)goldCost;
     }
@@ -80,7 +84,7 @@ public class StatusLevelupPanel : MonoBehaviour
     void LevelUpStatus()
     {
         // TODO: 서버에서 작동되도록 구현하기
-        if (DummyServerData.UserStatusLevelUp(Player.GetUserID(), statusLevelType, 1))
+        if (DummyServerData.UserStatusLevelUp(Player.GetUserID(), statusLevelType, levelUpMultiplyValue))
         {
             // TODO: 서버에서 성공 패킷을 받을 경우 실행하기
             LevelUpSuccess();
@@ -96,6 +100,11 @@ public class StatusLevelupPanel : MonoBehaviour
         SetStatusValueText();
     }
 
+    public void ChangeMultiplyValue(int newValue)
+    {
+        levelUpMultiplyValue = newValue;
+        SetGoldCostText();
+    }
 
     void OnValidate()
     {
