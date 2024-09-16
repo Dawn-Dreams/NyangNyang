@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StageManager : MonoBehaviour
 {
@@ -18,6 +18,9 @@ public class StageManager : MonoBehaviour
     private Text GateUI;
 
     private EnemySpawnManager enemySpawnManager;  // 적 스폰 매니저 변수
+
+    public bool isSpecial = false;  // 스페셜 스테이지 여부를 저장하는 변수
+    private int originalTheme;  // 원래 테마를 저장할 변수
 
     // TODO: 초기값 설정은 추후 NetworkManager에서 각 유저별 스테이지 로 받아오는 것으로 설정
     private int currentTheme = 1;
@@ -48,6 +51,11 @@ public class StageManager : MonoBehaviour
             GateClear();
         }
 
+        if (isSpecial)
+        {
+            // 스페셜 스테이지일 경우, cat이 계속 앞으로 이동
+            MoveCatForward();
+        }
     }
 
     private void SetStageUI()
@@ -59,8 +67,12 @@ public class StageManager : MonoBehaviour
 
     private void GateClear()
     {
-        // Debug.Log("관문 (" + currentTheme + " - " + currentStage + " - " + currentGate + ") 클리어");
-        
+        if (isSpecial)
+        {
+            Debug.Log("스페셜 스테이지에서는 관문을 통과하지 않습니다.");
+            return;  // 스페셜 스테이지일 경우, 관문 통과 시스템 비활성화
+        }
+
         if (currentGate >= maxGateCount)
         {
             // 관문을 모두 클리어했으면 스테이지 클리어 처리
@@ -129,7 +141,6 @@ public class StageManager : MonoBehaviour
         currentStage++;
 
         SetStageUI();
-        // Debug.Log("새 스테이지 (" + currentTheme + " - " + currentStage + " - " + currentGate + ") 도착");
     }
 
     private void ChangeTheme()
@@ -141,7 +152,52 @@ public class StageManager : MonoBehaviour
         currentGate = 1;
 
         SetStageUI();
-        // Debug.Log("새 스테이지테마 (" + currentTheme + " - " + currentStage + " - " + currentGate + ") 도착");
     }
-   
+
+    // 스페셜 스테이지에서 고양이가 계속 앞으로 이동하는 함수
+    private void MoveCatForward()
+    {
+        Cat cat = GameManager.GetInstance().catObject;
+        if (cat != null)
+        {
+            Debug.Log("고양이 전진중");
+            //cat.MoveForward();  // 고양이가 계속 앞으로 이동
+        }
+    }
+
+    // 현재 테마를 반환하는 함수
+    public int GetCurrentTheme()
+    {
+        return currentTheme;
+    }
+
+    // 스페셜 스테이지로 배경 테마 변경
+    public void ChangeBackgroundToSpecialStage(int theme)
+    {
+        currentTheme = theme;
+        parallaxScrollingManager.ChangeBackgroundImageFromPrefab(); // 배경 이미지를 스페셜 테마로 변경
+        SetStageUI();  // UI 업데이트
+    }
+
+    public void StartSpecialStage()
+    {
+        isSpecial = true;
+        originalTheme = currentTheme;  // 현재 테마 저장
+
+        // 스페셜 스테이지 배경으로 변경
+        //parallaxScrollingManager.ChangeToSpecialStageBackground();
+
+        // 일정 시간 후 스페셜 스테이지 종료
+        StartCoroutine(EndSpecialStage());
+    }
+
+    IEnumerator EndSpecialStage()
+    {
+        yield return new WaitForSeconds(10f);  // 10초 후 스페셜 스테이지 종료
+
+        isSpecial = false;
+
+        // 원래 배경으로 복구
+        //parallaxScrollingManager.RestoreNormalBackground();
+    }
 }
