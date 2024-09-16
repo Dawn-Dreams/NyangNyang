@@ -16,6 +16,9 @@ public class StatusLevelupPanel : MonoBehaviour
     private TextMeshProUGUI currentLevelText;
 
     [SerializeField] 
+    private TextMeshProUGUI statusValueText;
+
+    [SerializeField] 
     private Button levelUpButton;
     [SerializeField] 
     private TextMeshProUGUI goldCostText;
@@ -24,7 +27,7 @@ public class StatusLevelupPanel : MonoBehaviour
     private int startGoldCost;
     private float goldCostMultiplyValue;
 
-    public void Awake()
+    public void Start()
     {
         // 서버로부터 비용 정보 받기
         startGoldCost = DummyServerData.GetStartGoldCost();
@@ -34,9 +37,21 @@ public class StatusLevelupPanel : MonoBehaviour
 
         SetStatusLevelText();
         SetGoldCostText();
+        
+        SetStatusValueText();
+        
+        
 
 
         levelUpButton.onClick.AddListener(OnClickLevelUpButton);
+    }
+
+    // currentStatusLevel로부터 결과 값 적용시키는 함수
+    private void SetStatusValueText()
+    {
+        int value = Player.playerStatus.GetStatusLevelData().GetLevelFromType(statusLevelType);
+
+        statusValueText.text = value.ToString();
     }
 
     int CalculateGoldCost(int startCost, float multiplyValue, int currentLevel)
@@ -78,6 +93,7 @@ public class StatusLevelupPanel : MonoBehaviour
         currentStatusLevel = DummyServerData.GetUserStatusLevelFromType(Player.GetUserID(), statusLevelType);
         SetStatusLevelText();
         SetGoldCostText();
+        SetStatusValueText();
     }
 
 

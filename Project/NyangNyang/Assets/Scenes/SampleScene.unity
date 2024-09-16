@@ -538,6 +538,7 @@ GameObject:
   - component: {fileID: 107570236}
   - component: {fileID: 107570235}
   - component: {fileID: 107570237}
+  - component: {fileID: 107570238}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -587,6 +588,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 5253159051668752718, guid: 11916ba930a443a44a30ff338fa5b016, type: 3}
   enemySpawnPosition: {fileID: 1989012105}
+--- !u!114 &107570238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 107570234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b4ec57587f1b864ca999d421c397c25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &119797832
 GameObject:
   m_ObjectHideFlags: 0
@@ -1215,6 +1228,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 905786389}
     m_Modifications:
+    - target: {fileID: 886165597502029571, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
+      propertyPath: m_text
+      value: "\uCCB4\uB825"
+      objectReference: {fileID: 0}
     - target: {fileID: 3420429332834710934, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1307,6 +1324,10 @@ PrefabInstance:
       propertyPath: m_Text
       value: MP
       objectReference: {fileID: 0}
+    - target: {fileID: 8265710776093488661, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 44ed3c6a7e910534897fe9517e1d791e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3599,6 +3620,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 905786389}
     m_Modifications:
+    - target: {fileID: 886165597502029571, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
+      propertyPath: m_text
+      value: "\uBC29\uC5B4\uB825"
+      objectReference: {fileID: 0}
     - target: {fileID: 3420429332834710934, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3687,6 +3712,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StatusLevelupPanel_Def
       objectReference: {fileID: 0}
+    - target: {fileID: 8265710776093488661, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 652730cb9d0d0c24e87eb7802d5a8025, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3945,6 +3974,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 905786389}
     m_Modifications:
+    - target: {fileID: 886165597502029571, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
+      propertyPath: m_text
+      value: "\uB9C8\uB825 \uC7AC\uC0DD"
+      objectReference: {fileID: 0}
     - target: {fileID: 3420429332834710934, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4033,6 +4066,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StatusLevelupPanel_HEAL_MP
       objectReference: {fileID: 0}
+    - target: {fileID: 8265710776093488661, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: a63522a4b6cdfb14fa6fcf272a6596d8, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5745,6 +5782,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 905786389}
     m_Modifications:
+    - target: {fileID: 886165597502029571, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
+      propertyPath: m_text
+      value: "\uACF5\uACA9\uC18D\uB3C4"
+      objectReference: {fileID: 0}
     - target: {fileID: 3420429332834710934, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -5833,6 +5874,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StatusLevelupPanel_ATTACK_SPEED
       objectReference: {fileID: 0}
+    - target: {fileID: 8265710776093488661, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: f1805d0709f963a42ae6f875366b244f, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6154,6 +6199,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 905786389}
     m_Modifications:
+    - target: {fileID: 886165597502029571, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
+      propertyPath: m_text
+      value: "\uACE8\uB4DC \uD68D\uB4DD\uB7C9(%)"
+      objectReference: {fileID: 0}
     - target: {fileID: 3420429332834710934, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -6242,6 +6291,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StatusLevelupPanel_GOLD
       objectReference: {fileID: 0}
+    - target: {fileID: 8265710776093488661, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 52152cf61dabea04881ed1b19877aa9b, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6255,6 +6308,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 905786389}
     m_Modifications:
+    - target: {fileID: 886165597502029571, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
+      propertyPath: m_text
+      value: "\uACBD\uD5D8\uCE58 \uD68D\uB4DD\uB7C9(%)"
+      objectReference: {fileID: 0}
     - target: {fileID: 3420429332834710934, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -6343,6 +6400,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StatusLevelupPanel_EXP
       objectReference: {fileID: 0}
+    - target: {fileID: 8265710776093488661, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 504ba666b97347d4aa908c175c7f2171, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6356,6 +6417,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 905786389}
     m_Modifications:
+    - target: {fileID: 886165597502029571, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
+      propertyPath: m_text
+      value: "\uB9C8\uB825 \uC7AC\uC0DD"
+      objectReference: {fileID: 0}
     - target: {fileID: 3420429332834710934, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -6444,6 +6509,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StatusLevelupPanel_CRIT
       objectReference: {fileID: 0}
+    - target: {fileID: 8265710776093488661, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 7d35e911518b5c448b4eb6bc4e12640e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8087,6 +8156,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 905786389}
     m_Modifications:
+    - target: {fileID: 886165597502029571, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
+      propertyPath: m_text
+      value: "\uCCB4\uB825 \uC7AC\uC0DD"
+      objectReference: {fileID: 0}
     - target: {fileID: 3420429332834710934, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -8175,6 +8248,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StatusLevelupPanel_HEAL_HP
       objectReference: {fileID: 0}
+    - target: {fileID: 8265710776093488661, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5b78684315e51a040aa0689cd9f2e826, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8188,6 +8265,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 905786389}
     m_Modifications:
+    - target: {fileID: 886165597502029571, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
+      propertyPath: m_text
+      value: "\uB9C8\uB825"
+      objectReference: {fileID: 0}
     - target: {fileID: 3420429332834710934, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -8276,6 +8357,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StatusLevelupPanel_MP
       objectReference: {fileID: 0}
+    - target: {fileID: 8265710776093488661, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 81871fae60893e54c910632ffd2b4ebe, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -98,6 +98,8 @@ public class StatusLevelData
     {
         statusLevels[(int)type] += value;
     }
+    
+
 }
 
 public class Status
@@ -145,4 +147,8 @@ public class Status
         return damage;
     }
 
+    public StatusLevelData GetStatusLevelData()
+    {
+        return levelData;
+    }
 }
