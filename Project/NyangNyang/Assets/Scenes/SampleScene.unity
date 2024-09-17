@@ -4075,7 +4075,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8d21e3672fbe9e64db9a94485d8f6ff7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a99b03775035e5f4d8f94273934ef66d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5810,6 +5810,7 @@ GameObject:
   - component: {fileID: 1048212818}
   - component: {fileID: 1048212817}
   - component: {fileID: 1048212819}
+  - component: {fileID: 1048212820}
   m_Layer: 5
   m_Name: PlayerBarPanel
   m_TagString: Untagged
@@ -5890,6 +5891,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccc9fb9e95977524fb3fef24a4390cc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  goldText: {fileID: 0}
+  expSlider: {fileID: 0}
+  playerLevelText: {fileID: 0}
+--- !u!114 &1048212820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1048212815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccc9fb9e95977524fb3fef24a4390cc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  goldText: {fileID: 2134612003}
+  expSlider: {fileID: 445369260}
+  playerLevelText: {fileID: 1597444793}
 --- !u!1 &1049985228
 GameObject:
   m_ObjectHideFlags: 0
@@ -12552,6 +12571,22 @@ PrefabInstance:
     - target: {fileID: 6967969025201897547, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
       propertyPath: m_Text
       value: STR
+      objectReference: {fileID: 0}
+    - target: {fileID: 8256051154420185563, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8256051154420185563, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8256051154420185563, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8256051154420185563, guid: c63e33a75f340ff4e82ad1b2c2300ece, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294901760
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

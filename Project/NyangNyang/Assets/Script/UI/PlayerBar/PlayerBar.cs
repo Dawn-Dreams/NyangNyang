@@ -14,7 +14,15 @@ public class PlayerBar : MonoBehaviour
 
     void Start()
     {
-        string text = CurrencyData.GetAbbreviationFromBigInteger(Player.playerCurrency.gold);
+        GoldTextChangeHandler(Player.Gold);
+
+        Player.OnGoldChange += GoldTextChangeHandler;
+
+    }
+
+    private void GoldTextChangeHandler(BigInteger goldValue)
+    {
+        string text = CurrencyData.GetAbbreviationFromBigInteger(Player.Gold);
         if (goldText != null)
         {
             goldText.text = text;
