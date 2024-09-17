@@ -22,6 +22,15 @@ public class DummyServerData : MonoBehaviour
         new StatusLevelData(),
     };
 
+    private static CurrencyData[] usersCurrencyData = new CurrencyData[]
+    {
+        ScriptableObject.CreateInstance<CurrencyData>().SetCurrencyData(150_000,3),
+        ScriptableObject.CreateInstance<CurrencyData>(),
+        ScriptableObject.CreateInstance<CurrencyData>(),
+        ScriptableObject.CreateInstance<CurrencyData>(),
+        ScriptableObject.CreateInstance<CurrencyData>(),
+    };
+
     private static int statusStartGoldCost = 100;
 
     private static float[] statusGoldCostMultiplyValue = new float[]
@@ -78,5 +87,15 @@ public class DummyServerData : MonoBehaviour
         // TODO: 클라의 패킷이 정상적이지 않은 데이터를 담을 경우 false 리턴 or false 되는 패킷 전송
     }
 
-    
+    public static CurrencyData GetUserCurrencyData(int userID)
+    {
+        if (!(0 <= userID && userID < usersStatusLevelData.Length))
+        {
+            Debug.Log("INVALID USERID");
+            return null;
+        }
+
+        return usersCurrencyData[userID];
+    }
+
 }

@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     private static int userID = 0;
     public static Status playerStatus;
+    public static CurrencyData playerCurrency;
 
     void Awake()
     {
@@ -14,6 +15,10 @@ public class Player : MonoBehaviour
 
         if (playerStatus == null)
             playerStatus = new Status(userID);
+        if (playerCurrency == null)
+            playerCurrency = DummyServerData.GetUserCurrencyData(userID);
+
+
     }
 
     public static int GetUserID()
