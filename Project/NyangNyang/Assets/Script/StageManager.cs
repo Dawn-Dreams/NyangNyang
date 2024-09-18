@@ -1,5 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -160,9 +160,13 @@ public class StageManager : MonoBehaviour
         Cat cat = GameManager.GetInstance().catObject;
         if (cat != null)
         {
-            Debug.Log("고양이 전진중");
-            //cat.MoveForward();  // 고양이가 계속 앞으로 이동
+            parallaxScrollingManager.MoveBackgroundSprites(true);
         }
+    }
+
+    public void StopSpecialStage()
+    {
+        parallaxScrollingManager.MoveBackgroundSprites(false);
     }
 
     // 현재 테마를 반환하는 함수
@@ -179,25 +183,4 @@ public class StageManager : MonoBehaviour
         SetStageUI();  // UI 업데이트
     }
 
-    public void StartSpecialStage()
-    {
-        isSpecial = true;
-        originalTheme = currentTheme;  // 현재 테마 저장
-
-        // 스페셜 스테이지 배경으로 변경
-        //parallaxScrollingManager.ChangeToSpecialStageBackground();
-
-        // 일정 시간 후 스페셜 스테이지 종료
-        StartCoroutine(EndSpecialStage());
-    }
-
-    IEnumerator EndSpecialStage()
-    {
-        yield return new WaitForSeconds(10f);  // 10초 후 스페셜 스테이지 종료
-
-        isSpecial = false;
-
-        // 원래 배경으로 복구
-        //parallaxScrollingManager.RestoreNormalBackground();
-    }
 }

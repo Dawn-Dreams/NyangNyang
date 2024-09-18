@@ -31,6 +31,7 @@ public class SpecialStageManager : MonoBehaviour
     // 스페셜 스테이지 시작
     public void StartSpecialStage()
     {
+        Debug.Log("스페셜 스테이지 시작");
         if (isSpecialStageActive)
         {
             Debug.LogWarning("스페셜 스테이지가 이미 활성화되어 있습니다.");
@@ -63,6 +64,7 @@ public class SpecialStageManager : MonoBehaviour
         if (stageManager != null)
         {
             stageManager.ChangeBackgroundToSpecialStage(originalBackground); // 원래 배경으로 복구
+            stageManager.StopSpecialStage();    
         }
 
         Debug.Log("스페셜 스테이지 종료");
