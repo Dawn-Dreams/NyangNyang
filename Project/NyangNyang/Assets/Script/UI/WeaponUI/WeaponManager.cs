@@ -9,6 +9,11 @@ public class WeaponManager : MonoBehaviour
     public void InitializedWeapons()
     {
         // TODO: 서버에서 데이터 받아오기
+
+        for (int i = 0; i < 32; ++i)
+        {
+            weapons[i] = new Weapon(i.ToString(), i, i, 1, 4);
+        }
     }
 
     public Weapon GetWeapon(int id)
