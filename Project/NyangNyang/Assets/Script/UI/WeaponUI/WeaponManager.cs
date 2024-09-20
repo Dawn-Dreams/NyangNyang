@@ -24,7 +24,7 @@ public class WeaponManager : MonoBehaviour
 
         for (int i = 0; i < 32; ++i)
         {
-            weapons[i] = new Weapon(i.ToString(), i, i, 1, 4);
+            weapons[i] = new Weapon(i, i.ToString(), i, i, 1, 10);
             weaponLookUp[i.ToString()] = i;
         }
     }
@@ -66,4 +66,24 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
+    public bool CombineWeapon(int id)
+    {
+        if ( id >= 0 && id < weapons.Length - 1 )
+        {
+            Weapon weapon = GetWeapon(id);
+            if ( weapon != null )
+            {
+                weapon.AddWeapon(-5);
+
+                weapon = GetWeapon(id + 1);
+
+                if(weapon != null)
+                {
+                    weapon.AddWeapon(1);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 }

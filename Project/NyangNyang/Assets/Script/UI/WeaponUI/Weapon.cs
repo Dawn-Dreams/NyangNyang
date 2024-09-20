@@ -10,8 +10,9 @@ public class Weapon
     int level;          // 장비 레벨
 
 
-    public Weapon(string _name, int _grade, int _subGrade, int _level, int _possession)
+    public Weapon(int _id, string _name, int _grade, int _subGrade, int _level, int _possession)
     {
+        id = _id;
         name = _name;
         possession = _possession;
         grade = _grade;
@@ -27,6 +28,7 @@ public class Weapon
         subGrade = _subGrade;
         level = _level;
     }
+    public int GetID() {  return id; }
     public string GetName()
     {
         return name;
