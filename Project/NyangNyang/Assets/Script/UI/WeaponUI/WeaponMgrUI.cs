@@ -9,13 +9,8 @@ public class WeaponMgrUI : MonoBehaviour
     public Slider[] sliders;
     public Text[] texts;
 
-    private WeaponManager weaponManager;
-
     private void OnEnable()
     {
-        weaponManager = gameObject.AddComponent<WeaponManager>();
-        weaponManager.InitializedWeapons();
-
         UpdateAllPossession();
     }
 
@@ -23,7 +18,7 @@ public class WeaponMgrUI : MonoBehaviour
     {
         for (int i = 0; i < sliders.Length; i++)
         {
-            Weapon weapon = weaponManager.GetWeapon(i);
+            Weapon weapon = WeaponManager.GetInstance().GetWeapon(i);
             if ( weapon != null )
             {
                 sliders[i].value = (float)weapon.GetWeaponCount() / 5 >= 1 ? 1 : (float)weapon.GetWeaponCount() / 5;

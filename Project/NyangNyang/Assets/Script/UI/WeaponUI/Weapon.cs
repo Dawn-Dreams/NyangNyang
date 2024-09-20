@@ -27,7 +27,10 @@ public class Weapon
         subGrade = _subGrade;
         level = _level;
     }
-
+    public string GetName()
+    {
+        return name;
+    }
     public void LevelUP()
     {
         // TODO: 레벨업 로직 만들기

@@ -4,7 +4,19 @@ using UnityEngine;
 
 public class WeaponManager : MonoBehaviour
 {
+    private static WeaponManager Instance;
+    public static WeaponManager GetInstance() { return Instance; }
+
     private Weapon[] weapons = new Weapon[32];
+    private Dictionary<string, int> weaponLookUp = new Dictionary<string, int>();
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+
+        InitializedWeapons();
+    }
 
     public void InitializedWeapons()
     {
@@ -13,6 +25,7 @@ public class WeaponManager : MonoBehaviour
         for (int i = 0; i < 32; ++i)
         {
             weapons[i] = new Weapon(i.ToString(), i, i, 1, 4);
+            weaponLookUp[i.ToString()] = i;
         }
     }
 
@@ -23,6 +36,16 @@ public class WeaponManager : MonoBehaviour
             return null;
         }
         return weapons[id];
+    }
+
+    public Weapon GetWeapon(string name)
+    {
+        int id;
+        if(weaponLookUp.TryGetValue(name, out id))
+        {
+            return weapons[id];
+        }
+        return null;
     }
 
     public void LevelUpWeapon(int id)
