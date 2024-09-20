@@ -16,7 +16,6 @@ public class Cat : Character
     {
         //characterID = 0;
         characterID = Player.GetUserID();
-        status = Player.playerStatus;
 
         base.Awake();
 

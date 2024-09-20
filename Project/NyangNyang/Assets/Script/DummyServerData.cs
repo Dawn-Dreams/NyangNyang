@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Numerics;
 using UnityEngine;
 
 
@@ -22,15 +20,6 @@ public class DummyServerData : MonoBehaviour
         new StatusLevelData(),
         new StatusLevelData(),
         new StatusLevelData(),
-    };
-
-    private static CurrencyData[] usersCurrencyData = new CurrencyData[]
-    {
-        ScriptableObject.CreateInstance<CurrencyData>().SetCurrencyData(150_000,3),
-        ScriptableObject.CreateInstance<CurrencyData>(),
-        ScriptableObject.CreateInstance<CurrencyData>(),
-        ScriptableObject.CreateInstance<CurrencyData>(),
-        ScriptableObject.CreateInstance<CurrencyData>(),
     };
 
     private static int statusStartGoldCost = 100;
@@ -79,57 +68,15 @@ public class DummyServerData : MonoBehaviour
         return statusGoldCostMultiplyValue[(int)type];
     }
 
-    public static bool UserStatusLevelUp(int userID,StatusLevelType type, BigInteger currentLevel,  int value)
+    public static bool UserStatusLevelUp(int userID,StatusLevelType type, int value)
     {
-        // 소지한 골드가 정상적인지 체크
-        BigInteger goldCost = CalculateGoldCost(type, currentLevel, value);
-        if (GetUserCurrencyData(userID).gold >= goldCost)
-        {
-            GetUserStatusLevelData(userID).AddLevel(type, value);
-            GetUserCurrencyData(userID).gold -= goldCost;
+        // TODO : 서버 내에서라면 검증하는 시스템 추가
+        GetUserStatusLevelData(userID).AddLevel(type,value);
 
-            return true;
-        }
+        return true;
 
         // TODO: 클라의 패킷이 정상적이지 않은 데이터를 담을 경우 false 리턴 or false 되는 패킷 전송
-        return false;
-
-        
     }
 
-    public static CurrencyData GetUserCurrencyData(int userID)
-    {
-        if (!(0 <= userID && userID < usersStatusLevelData.Length))
-        {
-            Debug.Log("INVALID USERID");
-            return null;
-        }
-
-        return usersCurrencyData[userID];
-    }
-
-    public static BigInteger GetUserGoldData(int userId)
-    {
-        CurrencyData userData = GetUserCurrencyData(userId);
-        if (userData == null)
-        {
-            Debug.Log("Error - DummyServerData.GetUserGoldData");
-        }
-        
-        return userData.gold;
-        
-    }
-
-    // 서버 내 골드 계산 검증 함수
-    public static BigInteger CalculateGoldCost(StatusLevelType type, BigInteger currentLevel, int levelUpMultiplyValue)
-    {
-        float currentGoldCost = statusStartGoldCost * Mathf.Pow(statusGoldCostMultiplyValue[(int)type], (int)currentLevel - 1);
-        float goldCost = currentGoldCost * (1 - Mathf.Pow(statusGoldCostMultiplyValue[(int)type], levelUpMultiplyValue)) / (1 - statusGoldCostMultiplyValue[(int)type]);
-        
-
-        return new BigInteger(goldCost);
-    }
-
-
-
+    
 }
