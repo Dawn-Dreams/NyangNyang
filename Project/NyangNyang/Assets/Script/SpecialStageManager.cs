@@ -13,6 +13,8 @@ public class SpecialStageManager : MonoBehaviour
     private StageManager stageManager;          // StageManager 참조
     private int originalBackground;             // 원래 배경 테마 저장
 
+    public float playSec = 10.0f;
+
     void Start()
     {
         stageManager = FindObjectOfType<StageManager>();  // StageManager 찾기
@@ -49,8 +51,8 @@ public class SpecialStageManager : MonoBehaviour
             stageManager.ChangeBackgroundToSpecialStage(6); // 배경을 스페셜 스테이지 배경(6)으로 변경
         }
 
-        // 10초 뒤에 스페셜 스테이지 종료
-        Invoke("EndSpecialStage", 10f);
+        // playSec 뒤 스페셜 스테이지 종료
+        Invoke("EndSpecialStage", playSec);
     }
 
     // 스페셜 스테이지 종료

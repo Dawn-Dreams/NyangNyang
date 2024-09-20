@@ -1224,6 +1224,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   specialStageButton: {fileID: 367684012}
   specialStageUI: {fileID: 714097088}
+  playSec: 3
 --- !u!1001 &213997137
 PrefabInstance:
   m_ObjectHideFlags: 0

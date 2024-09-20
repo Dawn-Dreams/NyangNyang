@@ -146,7 +146,7 @@ public class StageManager : MonoBehaviour
     private void ChangeTheme()
     {
         // TODO : 추후 페이드 기법을 통해 변하게 진행, 현재는 그냥 바로 화면이 변경되도록
-        parallaxScrollingManager.ChangeBackgroundImageFromPrefab();
+        parallaxScrollingManager.ChangeBackgroundImageFromPrefab(currentTheme);
         currentTheme++;
         currentStage = 1;
         currentGate = 1;
@@ -178,8 +178,7 @@ public class StageManager : MonoBehaviour
     // 스페셜 스테이지로 배경 테마 변경
     public void ChangeBackgroundToSpecialStage(int theme)
     {
-        currentTheme = theme;
-        parallaxScrollingManager.ChangeBackgroundImageFromPrefab(); // 배경 이미지를 스페셜 테마로 변경
+        parallaxScrollingManager.ChangeBackgroundImageFromPrefab(theme); // 배경 이미지를 스페셜 테마로 변경
         SetStageUI();  // UI 업데이트
     }
 
