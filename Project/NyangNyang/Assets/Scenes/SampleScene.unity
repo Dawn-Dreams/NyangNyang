@@ -5905,7 +5905,6 @@ GameObject:
   - component: {fileID: 1048212816}
   - component: {fileID: 1048212818}
   - component: {fileID: 1048212817}
-  - component: {fileID: 1048212819}
   - component: {fileID: 1048212820}
   m_Layer: 5
   m_Name: PlayerBarPanel
@@ -5975,21 +5974,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1048212815}
   m_CullTransparentMesh: 1
---- !u!114 &1048212819
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1048212815}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ccc9fb9e95977524fb3fef24a4390cc6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  goldText: {fileID: 0}
-  expSlider: {fileID: 0}
-  playerLevelText: {fileID: 0}
 --- !u!114 &1048212820
 MonoBehaviour:
   m_ObjectHideFlags: 0

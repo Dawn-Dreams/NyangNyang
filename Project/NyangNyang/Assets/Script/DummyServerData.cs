@@ -33,6 +33,15 @@ public class DummyServerData : MonoBehaviour
         ScriptableObject.CreateInstance<CurrencyData>(),
     };
 
+    private static UserLevelData[] usersLevelData = new UserLevelData[]
+    {
+        ScriptableObject.CreateInstance<UserLevelData>().SetUserLevelData(5, 100),
+        ScriptableObject.CreateInstance<UserLevelData>(),
+        ScriptableObject.CreateInstance<UserLevelData>(),
+        ScriptableObject.CreateInstance<UserLevelData>(),
+        ScriptableObject.CreateInstance<UserLevelData>(),
+    };
+
     private static int statusStartGoldCost = 100;
 
     private static int[] statusGoldCostAddValue = new int[]
@@ -107,6 +116,16 @@ public class DummyServerData : MonoBehaviour
 
         return usersCurrencyData[userID];
     }
+    public static UserLevelData GetUserLevelData(int userID)
+    {
+        if (!(0 <= userID && userID < usersStatusLevelData.Length))
+        {
+            Debug.Log("INVALID USERID");
+            return null;
+        }
+
+        return usersLevelData[userID];
+    }
 
     public static BigInteger GetUserGoldData(int userId)
     {
@@ -117,8 +136,8 @@ public class DummyServerData : MonoBehaviour
         }
         
         return userData.gold;
-        
     }
+
 
     // 서버 내 골드 계산 검증 함수
     public static BigInteger CalculateGoldCost(StatusLevelType type, BigInteger currentLevel, int levelUpMultiplyValue)
