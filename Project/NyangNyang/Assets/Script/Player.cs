@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
+using Vector3 = System.Numerics.Vector3;
 
 public class Player : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class Player : MonoBehaviour
     // 경험치 변화 델리게이트 이벤트
     public delegate void OnExpChangeDelegate(UserLevelData newLevelData);
     public static event OnExpChangeDelegate OnExpChange;
+
+    [SerializeField] private GameObject levelUpIconObject;
 
     public static BigInteger Gold
     {
@@ -100,5 +103,16 @@ public class Player : MonoBehaviour
     public static void AddExp(BigInteger addExpValue)
     {
         playerLevelData.AddExp(addExpValue);
+    }
+
+
+    // TODO: 임시 함수
+    public void ShowLevelUpIcon()
+    {
+        // 대미지 출력
+        UnityEngine.Vector3 spawnTransform = GameManager.GetInstance().catObject.transform.position;
+        spawnTransform.z = -5;
+        GameObject textObject = Instantiate(levelUpIconObject, spawnTransform ,UnityEngine.Quaternion.identity);
+        Destroy(textObject, 3.0f);
     }
 }

@@ -12,6 +12,7 @@ public class UserLevelData : ScriptableObject
     public BigInteger currentExp = 0;
 
     private static int addExpPerLevel = 500;
+    [SerializeField] private static GameObject _levelUpIconObject;
 
     public static BigInteger CalculateExp(int userCurrentLevel)
     {
@@ -36,6 +37,13 @@ public class UserLevelData : ScriptableObject
 
         // TODO: 후에 서버에서 확인하는 코드 생성해야함
         DummyServerData.UserLevelUp(Player.GetUserID(), levelUpCount, currentUserExp - currentExp);
+
+        // TODO: 임시 레벨업 아이콘 코드
+        if (levelUpCount > 0)
+        {
+            GameObject.Find("Manager").GetComponent<Player>().ShowLevelUpIcon();
+            
+        }
     }
 
     public UserLevelData SetUserLevelData(int getCurrentLevel, BigInteger getExp = default(BigInteger))
