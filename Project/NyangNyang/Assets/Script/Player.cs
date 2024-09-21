@@ -9,16 +9,17 @@ public class Player : MonoBehaviour
     private static int userID = 0;
     public static Status playerStatus;
     private static CurrencyData playerCurrency;
+    private static UserLevelData playerLevelData;
 
+    // 골드 변화 델리게이트 이벤트
     public delegate void OnGoldChangeDelegate(BigInteger newGoldVal);
     public static event OnGoldChangeDelegate OnGoldChange;
 
-    private static UserLevelData playerLevelData;
 
+    // 경험치 변화 델리게이트 이벤트
     public delegate void OnExpChangeDelegate(UserLevelData newLevelData);
     public static event OnExpChangeDelegate OnExpChange;
 
-    
     public static BigInteger Gold
     {
         get { return playerCurrency.gold; }
@@ -48,6 +49,7 @@ public class Player : MonoBehaviour
                 OnExpChange(playerLevelData);
         }
     }
+
 
     void Awake()
     {

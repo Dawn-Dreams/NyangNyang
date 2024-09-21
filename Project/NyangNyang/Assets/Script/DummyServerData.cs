@@ -33,6 +33,15 @@ public class DummyServerData : MonoBehaviour
         ScriptableObject.CreateInstance<CurrencyData>(),
     };
 
+    private static UserLevelData[] usersLevelData = new UserLevelData[]
+    {
+        ScriptableObject.CreateInstance<UserLevelData>().SetUserLevelData(5, 100),
+        ScriptableObject.CreateInstance<UserLevelData>(),
+        ScriptableObject.CreateInstance<UserLevelData>(),
+        ScriptableObject.CreateInstance<UserLevelData>(),
+        ScriptableObject.CreateInstance<UserLevelData>(),
+    };
+
     private static int statusStartGoldCost = 100;
 
     private static int[] statusGoldCostAddValue = new int[]
@@ -43,15 +52,6 @@ public class DummyServerData : MonoBehaviour
     };
 
     private static int addExpPerLevel = 500;
-
-    private static UserLevelData[] usersLevelData = new UserLevelData[]
-    {
-        ScriptableObject.CreateInstance<UserLevelData>().SetUserLevelData(5,300),
-        ScriptableObject.CreateInstance<UserLevelData>(),
-        ScriptableObject.CreateInstance<UserLevelData>(),
-        ScriptableObject.CreateInstance<UserLevelData>(),
-        ScriptableObject.CreateInstance<UserLevelData>(),
-    };
 
     void Start()
     {

@@ -7,7 +7,7 @@ using UnityEngine;
 public class CurrencyData : ScriptableObject
 {
     public BigInteger gold;
-    public BigInteger exp;
+    public BigInteger diamond;
 
     public static string GetAbbreviationFromBigInteger(BigInteger value)
     {
@@ -29,10 +29,10 @@ public class CurrencyData : ScriptableObject
         return retStr;
     }
 
-    public CurrencyData SetCurrencyData(BigInteger getGold, BigInteger getExp)
+    public CurrencyData SetCurrencyData(BigInteger getGold, BigInteger getDiamond)
     {
         gold = getGold;
-        exp = getExp;
+        diamond = getDiamond;
         return this;
     }
 }
