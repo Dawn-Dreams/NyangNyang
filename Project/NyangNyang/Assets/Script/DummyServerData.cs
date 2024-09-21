@@ -42,6 +42,17 @@ public class DummyServerData : MonoBehaviour
         100, 100, 100, 100, 300, 300, 50000, 10000, 100000,100000
     };
 
+    private static int addExpPerLevel = 500;
+
+    private static UserLevelData[] usersLevelData = new UserLevelData[]
+    {
+        ScriptableObject.CreateInstance<UserLevelData>().SetUserLevelData(5,300),
+        ScriptableObject.CreateInstance<UserLevelData>(),
+        ScriptableObject.CreateInstance<UserLevelData>(),
+        ScriptableObject.CreateInstance<UserLevelData>(),
+        ScriptableObject.CreateInstance<UserLevelData>(),
+    };
+
     void Start()
     {
         
@@ -108,6 +119,19 @@ public class DummyServerData : MonoBehaviour
         return usersCurrencyData[userID];
     }
 
+    public static UserLevelData GetUserLevelData(int userID)
+    {
+        if (!(0 <= userID && userID < usersLevelData.Length))
+        {
+            Debug.Log("INVALID USERID");
+            return null;
+        }
+
+        return usersLevelData[userID];
+    }
+
+
+
     public static BigInteger GetUserGoldData(int userId)
     {
         CurrencyData userData = GetUserCurrencyData(userId);
@@ -117,8 +141,8 @@ public class DummyServerData : MonoBehaviour
         }
         
         return userData.gold;
-        
     }
+
 
     // 서버 내 골드 계산 검증 함수
     public static BigInteger CalculateGoldCost(StatusLevelType type, BigInteger currentLevel, int levelUpMultiplyValue)
@@ -131,6 +155,18 @@ public class DummyServerData : MonoBehaviour
         return goldCost;
     }
 
+    public static int GetAddExpPerLevelValue()
+    {
+        return addExpPerLevel;
 
+    }
 
+    public static void UserLevelUp(int userID, int levelUpCount, BigInteger addExp)
+    {
+        GetUserLevelData(userID).currentExp += addExp;
+        GetUserLevelData(userID).currentLevel += levelUpCount;
+
+        // 서버로부터 정보를 받도록 패킷 전송
+        Player.GetExpDataFromServer();
+    }
 }

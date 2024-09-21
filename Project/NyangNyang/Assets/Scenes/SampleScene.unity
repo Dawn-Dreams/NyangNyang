@@ -1251,6 +1251,7 @@ MonoBehaviour:
   ThemeUI: {fileID: 1045715679}
   StageUI: {fileID: 1152713302}
   GateUI: {fileID: 9501238}
+  isSpecial: 0
   maxGateCount: 3
   maxStageCount: 5
 --- !u!4 &213762224
@@ -4134,7 +4135,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a99b03775035e5f4d8f94273934ef66d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8d21e3672fbe9e64db9a94485d8f6ff7, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6003,8 +6004,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goldText: {fileID: 2134612003}
-  expSlider: {fileID: 445369260}
   playerLevelText: {fileID: 1597444793}
+  currentLevelText: {fileID: 1597444793}
+  expSlider: {fileID: 445369260}
 --- !u!1 &1049985228
 GameObject:
   m_ObjectHideFlags: 0

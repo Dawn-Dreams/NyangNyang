@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
@@ -11,6 +12,12 @@ public class Player : MonoBehaviour
 
     public delegate void OnGoldChangeDelegate(BigInteger newGoldVal);
     public static event OnGoldChangeDelegate OnGoldChange;
+
+    private static UserLevelData playerLevelData;
+
+    public delegate void OnExpChangeDelegate(UserLevelData newLevelData);
+    public static event OnExpChangeDelegate OnExpChange;
+
     
     public static BigInteger Gold
     {
@@ -25,6 +32,22 @@ public class Player : MonoBehaviour
 
         }
     }
+    public static UserLevelData UserLevel
+    {
+        get
+        {
+            return playerLevelData;
+        }
+        set
+        {
+            if (playerLevelData.currentExp == value.currentExp 
+                && playerLevelData.currentLevel == value.currentLevel) return;
+            playerLevelData = value;
+
+            if (OnExpChange != null)
+                OnExpChange(playerLevelData);
+        }
+    }
 
     void Awake()
     {
@@ -35,6 +58,17 @@ public class Player : MonoBehaviour
             playerStatus = new Status(userID);
         if (playerCurrency == null)
             playerCurrency = DummyServerData.GetUserCurrencyData(userID);
+        if (playerLevelData == null)
+            GetExpDataFromServer();
+    }
+
+    void Update()
+    {
+        //TODO: Test, Delete Later
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            Player.AddExp(1000);
+        }
     }
 
     public static int GetUserID()
@@ -46,5 +80,23 @@ public class Player : MonoBehaviour
     {
         Gold = DummyServerData.GetUserGoldData(userID);
         OnGoldChange(Gold);
+        if(OnGoldChange != null)
+            OnGoldChange(Gold);
+    }
+
+    public static void GetExpDataFromServer()
+    {
+        // 해당 방식으로 저장될 경우 래퍼런스 타입을 가짐
+        //playerLevelData = DummyServerData.GetUserLevelData(userID);
+        playerLevelData = UserLevelData.GetNewDataFromSource(DummyServerData.GetUserLevelData(userID));
+        
+
+        if (OnExpChange != null)
+            OnExpChange(playerLevelData);
+    }
+
+    public static void AddExp(BigInteger addExpValue)
+    {
+        playerLevelData.AddExp(addExpValue);
     }
 }
