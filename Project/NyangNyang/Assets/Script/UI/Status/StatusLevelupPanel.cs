@@ -26,7 +26,7 @@ public class StatusLevelupPanel : MonoBehaviour
 
     private int currentStatusLevel = 1;
     private int startGoldCost;
-    private float goldCostMultiplyValue;
+    private int goldCostAddValue;
 
     // 레벨업 배수 버튼
     public int levelUpMultiplyValue = 1;
@@ -35,7 +35,7 @@ public class StatusLevelupPanel : MonoBehaviour
     {
         // 서버로부터 비용 정보 받기
         startGoldCost = DummyServerData.GetStartGoldCost();
-        goldCostMultiplyValue = DummyServerData.GetGoldCostMultipleValueFromType(statusLevelType);
+        goldCostAddValue = DummyServerData.GetGoldCostAddValueFromType(statusLevelType);
 
         currentStatusLevel = DummyServerData.GetUserStatusLevelFromType(Player.GetUserID(), statusLevelType);
 
@@ -61,11 +61,11 @@ public class StatusLevelupPanel : MonoBehaviour
 
     BigInteger CalculateGoldCost(int startCost, float multiplyValue, int currentLevel)
     {
-        float currentGoldCost = startCost * Mathf.Pow(multiplyValue, currentLevel - 1);
-        float goldCost = currentGoldCost * (1 - Mathf.Pow(multiplyValue, levelUpMultiplyValue)) / (1 - multiplyValue);
-        //float goldCost =  startCost * Mathf.Pow(multiplyValue, currentLevel - 1);
-        
-        return (int)goldCost;
+        // n ~ m 레벨 계산 ((n부터 m까지의 갯수) * (n+m) / 2 )
+        BigInteger levelUpValue = (levelUpMultiplyValue) * (currentLevel + (currentLevel + levelUpMultiplyValue)) / 2;
+        BigInteger goldCost = goldCostAddValue * (levelUpValue);
+
+        return goldCost;
     }
 
     void SetStatusLevelText()
@@ -75,7 +75,7 @@ public class StatusLevelupPanel : MonoBehaviour
 
     void SetGoldCostText(BigInteger currentPlayerGold)
     {
-        BigInteger goldCost = CalculateGoldCost(startGoldCost,goldCostMultiplyValue,currentStatusLevel);
+        BigInteger goldCost = CalculateGoldCost(startGoldCost,goldCostAddValue,currentStatusLevel);
         if (currentPlayerGold >= goldCost)
         {
             goldCostText.color = new Color(0, 0, 255);

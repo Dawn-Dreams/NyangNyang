@@ -35,11 +35,11 @@ public class DummyServerData : MonoBehaviour
 
     private static int statusStartGoldCost = 100;
 
-    private static float[] statusGoldCostMultiplyValue = new float[]
+    private static int[] statusGoldCostAddValue = new int[]
     {
         // StatusLevelType enum
         // HP, MP, STR, DEF, HEAL_HP, HEAL_MP, CRIT, ATTACK_SPEED, GOLD, EXP
-        1.05f, 1.05f, 1.05f, 1.05f, 1.05f, 1.05f, 5.0f, 3.0f, 1.1f, 1.1f
+        100, 100, 100, 100, 300, 300, 50000, 10000, 100000,100000
     };
 
     void Start()
@@ -74,9 +74,9 @@ public class DummyServerData : MonoBehaviour
         return statusStartGoldCost;
     }
 
-    public static float GetGoldCostMultipleValueFromType(StatusLevelType type)
+    public static int GetGoldCostAddValueFromType(StatusLevelType type)
     {
-        return statusGoldCostMultiplyValue[(int)type];
+        return statusGoldCostAddValue[(int)type];
     }
 
     public static bool UserStatusLevelUp(int userID,StatusLevelType type, BigInteger currentLevel,  int value)
@@ -123,11 +123,12 @@ public class DummyServerData : MonoBehaviour
     // 서버 내 골드 계산 검증 함수
     public static BigInteger CalculateGoldCost(StatusLevelType type, BigInteger currentLevel, int levelUpMultiplyValue)
     {
-        float currentGoldCost = statusStartGoldCost * Mathf.Pow(statusGoldCostMultiplyValue[(int)type], (int)currentLevel - 1);
-        float goldCost = currentGoldCost * (1 - Mathf.Pow(statusGoldCostMultiplyValue[(int)type], levelUpMultiplyValue)) / (1 - statusGoldCostMultiplyValue[(int)type]);
-        
+        int goldAddValue = statusGoldCostAddValue[(int)type];
+        // n ~ m 레벨 계산 ((n부터 m까지의 갯수) * (n+m) / 2 )
+        BigInteger levelUpValue = (levelUpMultiplyValue) * (currentLevel + (currentLevel + levelUpMultiplyValue)) / 2;
+        BigInteger goldCost = goldAddValue * (levelUpValue);
 
-        return new BigInteger(goldCost);
+        return goldCost;
     }
 
 
