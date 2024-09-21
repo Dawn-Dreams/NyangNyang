@@ -70,9 +70,13 @@ public class Player : MonoBehaviour
     void Update()
     {
         //TODO: Test, Delete Later
-        if (Input.GetKeyDown(KeyCode.Alpha0))
+        if (Input.GetKey(KeyCode.Alpha0))
         {
-            Player.AddExp(1000);
+            Player.AddExp(0_333_333);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            Player.AddExp(0_888_888);
         }
     }
 

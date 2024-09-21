@@ -25,13 +25,14 @@ public class MyBigIntegerMath : MonoBehaviour
         float placeValue = (int)BigInteger.Divide(value, digitBase);
         if (logValue > 0)
         {
-            if (placeValue < 10 * 100)
+            placeValue /= 100;
+            if (placeValue >= 100)
             {
-                placeValue /= 100;
+                placeValue = Mathf.Floor(placeValue);
             }
-            else if (placeValue < 100 * 100)
+            else if (placeValue >= 10)
             {
-                placeValue /= 10;
+                placeValue = Mathf.Floor(placeValue * 10.0f) / 10.0f;
             }
         }
         retStr = placeValue.ToString() + unit.ToString();
