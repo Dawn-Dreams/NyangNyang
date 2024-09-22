@@ -48,13 +48,14 @@ public class WeaponManager : MonoBehaviour
         return null;
     }
 
-    public void LevelUpWeapon(int id)
+    public int LevelUpWeapon(int id)
     {
         Weapon weapon = GetWeapon(id);
-        if ( weapon != null && weapon.HasWeapon() )
+        if ( weapon != null && weapon.HasWeapon() && weapon.GetLevel() < 100 )
         {
-            weapon.LevelUP();
+            return weapon.LevelUP();
         }
+        return 1000;
     }
 
     public void AddWeaponCount(int id, int count)
