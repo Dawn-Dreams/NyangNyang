@@ -97,8 +97,9 @@ public class Character : MonoBehaviour
     void ChangeHealthBar()
     {
         if (healthBarSlider)
-        { 
-            healthBarSlider.value = (float)CurrentHP / status.hp ;
+        {
+            float healthPercent = MyBigIntegerMath.DivideToFloat(CurrentHP, status.hp, 5);
+            healthBarSlider.value = healthPercent;
         }
         if (textMeshPro)
         {

@@ -45,12 +45,7 @@ public class PlayerBar : MonoBehaviour
         {
             // ※ BigInteger는 divide 시 정수형 divide 만 지원
             //   따라서 두 값의 앞 4자리수만 비교하는 방식으로 진행
-
-            // TODO : 새로운 계산식으로 변경 예정(임시코드)
-            int approxCurrentExp = (int)userLevelData.currentExp;
-            int approxRequireExp = (int)currentRequireExp;
-
-            expSlider.value = (float)approxCurrentExp / approxRequireExp;
+            expSlider.value = MyBigIntegerMath.DivideToFloat(userLevelData.currentExp, currentRequireExp, 4);
         }
 
         if (expText)

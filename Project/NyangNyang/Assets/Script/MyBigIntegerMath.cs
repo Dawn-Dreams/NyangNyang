@@ -44,4 +44,48 @@ public class MyBigIntegerMath : MonoBehaviour
         return retStr;
     }
 
+    public static float DivideToFloat(BigInteger dividend, BigInteger divisor, int precisionDigit)
+    {
+        // BigInteger.Divide 는 BigInteger만 반환하므로,
+        // slider 등에서 사용하기 위해 float를 반환하는 함수 제작
+        // dividend와 divisor 의 앞 {precisionDigit} 자리 만큼의 숫자들 끼리만 연산을 진행
+        if (precisionDigit <= 0) precisionDigit = 1;
+        if (precisionDigit >= 6) precisionDigit = 6;
+
+        string dividendStr = dividend.ToString();
+        string divisorStr = divisor.ToString();
+
+        // 자릿수 맞추기
+        int lengthMax = Mathf.Max(dividendStr.Length, divisorStr.Length);
+        precisionDigit = Mathf.Min(lengthMax, precisionDigit);
+        if (dividendStr.Length < lengthMax)
+        {
+            int count = lengthMax - dividendStr.Length;
+            for (int index = 0; index < count; ++index)
+            {
+                dividendStr = "0" + dividendStr;
+            }
+        }
+
+        if (divisorStr.Length < lengthMax)
+        {
+            int count = lengthMax - divisorStr.Length;
+            for (int index = 0; index < count; ++index)
+            {
+                Debug.Log(index + "- "+divisorStr);
+                divisorStr = "0" + divisorStr;
+            }
+        }
+
+        int dividendInt = int.Parse(dividendStr.Substring(0, precisionDigit));
+        int divisorInt = int.Parse(divisorStr.Substring(0, precisionDigit));
+
+        if (divisorInt == 0)
+        {
+            return 0.0f;
+        }
+
+        return (float)dividendInt / divisorInt;
+    }
+
 }
