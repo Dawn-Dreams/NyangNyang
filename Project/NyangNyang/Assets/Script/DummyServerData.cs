@@ -42,6 +42,9 @@ public class DummyServerData : MonoBehaviour
         ScriptableObject.CreateInstance<UserLevelData>(),
     };
 
+    // 소탕권 개수를 저장하는 배열 (각 유저의 소탕권 수량 관리)
+    private static int[] sweepTickets = new int[] { 5, 2, 0, 3, 1 };
+
     private static int statusStartGoldCost = 100;
 
     private static int[] statusGoldCostAddValue = new int[]
@@ -55,7 +58,6 @@ public class DummyServerData : MonoBehaviour
 
     void Start()
     {
-        
     }
 
     public static StatusLevelData GetUserStatusLevelData(int userID)
@@ -139,7 +141,6 @@ public class DummyServerData : MonoBehaviour
         {
             Debug.Log("Error - DummyServerData.GetUserGoldData");
         }
-        
         return userData.gold;
     }
 
@@ -168,5 +169,42 @@ public class DummyServerData : MonoBehaviour
 
         // 서버로부터 정보를 받도록 패킷 전송
         Player.GetExpDataFromServer();
+    }
+    // 소탕권이 있는지 확인하는 함수
+    public static bool HasSweepTicket(int userID)
+    {
+        if (userID < 0 || userID >= sweepTickets.Length)
+        {
+            Debug.Log("INVALID USERID");
+            return false;
+        }
+
+        return sweepTickets[userID] > 0;
+    }
+
+    // 소탕권을 사용하는 함수
+    public static bool UseSweepTicket(int userID)
+    {
+        if (HasSweepTicket(userID))
+        {
+            sweepTickets[userID]--;
+            Debug.Log($"소탕권 사용: 남은 소탕권 수량 {sweepTickets[userID]}");
+            return true;
+        }
+
+        Debug.Log("소탕권이 부족합니다.");
+        return false;
+    }
+
+    // 소탕권 수량을 가져오는 함수
+    public static int GetSweepTicketCount(int userID)
+    {
+        if (userID < 0 || userID >= sweepTickets.Length)
+        {
+            Debug.Log("INVALID USERID");
+            return 0;
+        }
+
+        return sweepTickets[userID];
     }
 }
