@@ -54,9 +54,9 @@ public class StatusLevelupPanel : MonoBehaviour
     // currentStatusLevel로부터 결과 값 적용시키는 함수
     private void SetStatusValueText()
     {
-        int value = Player.playerStatus.GetStatusLevelData().GetLevelFromType(statusLevelType);
+        // int value = Player.playerStatus.GetStatusLevelData().GetLevelFromType(statusLevelType);
 
-        statusValueText.text = value.ToString();
+       // statusValueText.text = value.ToString();
     }
 
     BigInteger CalculateGoldCost(int startCost, float multiplyValue, int currentLevel)
