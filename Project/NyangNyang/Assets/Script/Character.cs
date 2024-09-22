@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Character : MonoBehaviour
 {
@@ -13,6 +15,12 @@ public class Character : MonoBehaviour
 
     protected int currentHP;
     protected int currentMP;
+
+    [SerializeField]
+    protected Slider healthBarSlider;
+    [SerializeField]
+    protected TextMeshProUGUI textMeshPro;
+
     public Character()
     {
     }
@@ -31,6 +39,10 @@ public class Character : MonoBehaviour
         // 초기화
         currentHP = status.hp;
         currentMP = status.mp;
+
+        healthBarSlider.maxValue = status.hp;
+        healthBarSlider.minValue = 0;
+        healthBarSlider.value = currentHP;
     }
 
     IEnumerator AttackEnemy()
@@ -53,12 +65,23 @@ public class Character : MonoBehaviour
         int applyDamage = damage - status.defence;
         currentHP = Math.Max(0, currentHP - applyDamage);
 
+        healthBarSlider.value = currentHP;
+        SetHealthBarText();
+
         if (currentHP <= 0)
         {
             Death();
         }
 
         return true;
+    }
+    private void SetHealthBarText()
+    {
+        if (textMeshPro)
+        {
+            textMeshPro.SetText(healthBarSlider.value + " / " + healthBarSlider.maxValue);
+        }
+        
     }
 
     public void SetEnemy(Character targetObject)

@@ -10,9 +10,6 @@ public class Enemy : Character
 
     protected EnemyDropData DropData = null;
 
-    private Slider _healthSlider;
-    private TextMeshProUGUI _healthText;
-
     protected override void Awake()
     {
         Debug.Log("enemy 생성");
@@ -21,15 +18,6 @@ public class Enemy : Character
         IsEnemy = true;
 
         base.Awake();
-
-        _healthSlider = gameObject.GetComponentInChildren<Slider>();
-        _healthText = _healthSlider.GetComponentInChildren<TextMeshProUGUI>();
-
-        _healthSlider.maxValue = status.hp;
-        _healthSlider.minValue = 0;
-        _healthSlider.value = currentHP;
-
-        SetHealthBarText();
 
         // enemy drop data 받기
         if (DropData == null)
@@ -50,9 +38,6 @@ public class Enemy : Character
             Destroy(textObject,2.0f);
         }
 
-        _healthSlider.value = currentHP;
-        SetHealthBarText();
-
         return getDamaged;
     }
 
@@ -60,12 +45,6 @@ public class Enemy : Character
     public bool IsDead()
     {
         return currentHP <= 0;
-    }
-
-    private void SetHealthBarText()
-    {
-        if (_healthText== null) return;
-        _healthText.SetText(_healthSlider.value + " / " + _healthSlider.maxValue);
     }
 
     protected override void Death()

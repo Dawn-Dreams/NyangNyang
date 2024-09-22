@@ -6,12 +6,6 @@ using UnityEngine.UI;
 
 public class Cat : Character
 {
-    [SerializeField] 
-    private Slider _healthBarSlider;
-    [SerializeField]
-    private TextMeshProUGUI _textMeshPro;
-
-
     protected override void Awake()
     {
         //characterID = 0;
@@ -19,12 +13,6 @@ public class Cat : Character
         status = Player.playerStatus;
 
         base.Awake();
-
-        _healthBarSlider.maxValue = status.hp;
-        _healthBarSlider.minValue = 0;
-        _healthBarSlider.value = currentHP;
-
-       SetHealthBarText();
     }
 
     public override void InitialSettings()
@@ -38,15 +26,9 @@ public class Cat : Character
     {
         bool getDamaged = base.TakeDamage(damage);
 
-        _healthBarSlider.value = currentHP;
-        SetHealthBarText();
 
         return getDamaged;
     }
 
-    private void SetHealthBarText()
-    {
-        if (_textMeshPro == null) return;
-        _textMeshPro.SetText(_healthBarSlider.value + " / " + _healthBarSlider.maxValue);
-    }
+    
 }

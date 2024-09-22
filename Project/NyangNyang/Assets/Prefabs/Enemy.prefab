@@ -531,6 +531,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyObject: {fileID: 0}
   characterID: 0
+  healthBarSlider: {fileID: 7903136923074104692}
+  textMeshPro: {fileID: 8301503081218602998}
   floatingDamage: {fileID: 7879524771843587551, guid: c7a8b9ff931773049afa48b1c5a5c770, type: 3}
 --- !u!1 &6651520966340062735
 GameObject:
