@@ -7,6 +7,10 @@ public class MyBigIntegerMath : MonoBehaviour
 {
     public static string GetAbbreviationFromBigInteger(BigInteger value)
     {
+        if (value == 0)
+        {
+            return "0";
+        }
         string retStr = "";
 
         // 단위 (a, b, c, ...)

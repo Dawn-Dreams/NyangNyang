@@ -14413,8 +14413,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyObject: {fileID: 0}
   characterID: 0
-  _healthBarSlider: {fileID: 164398590}
-  _textMeshPro: {fileID: 540502522}
+  healthBarSlider: {fileID: 164398590}
+  textMeshPro: {fileID: 540502522}
 --- !u!1 &2041391406
 GameObject:
   m_ObjectHideFlags: 0

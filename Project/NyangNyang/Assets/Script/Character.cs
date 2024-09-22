@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
@@ -21,8 +22,27 @@ public class Character : MonoBehaviour
     [SerializeField]
     protected TextMeshProUGUI textMeshPro;
 
-    public Character()
+    // 체력 변화 델리게이트 이벤트
+    public delegate void OnHealthChangeDelegate();
+    public event OnHealthChangeDelegate OnHealthChange;
+
+    public int CurrentHP
     {
+        get { return currentHP; }
+        set
+        {
+            if (value == currentHP)
+            {
+                return;
+            }
+
+            currentHP = value;
+
+            if (OnHealthChange != null)
+            {
+                OnHealthChange();
+            }
+        }
     }
 
     protected virtual void Awake()
@@ -36,13 +56,15 @@ public class Character : MonoBehaviour
         if (status == null)
             status = new Status(characterID, IsEnemy);
 
-        // 초기화
-        currentHP = status.hp;
-        currentMP = status.mp;
+        // 델리게이트 연결
+        OnHealthChange += ChangeHealthBar;
 
-        healthBarSlider.maxValue = status.hp;
-        healthBarSlider.minValue = 0;
-        healthBarSlider.value = currentHP;
+        // 초기화
+        CurrentHP = status.hp;
+        currentMP = status.mp;
+        healthBarSlider.value = 1;
+
+
     }
 
     IEnumerator AttackEnemy()
@@ -59,29 +81,29 @@ public class Character : MonoBehaviour
 
     protected virtual bool TakeDamage(int damage)
     {
-        if (currentHP <= 0) return false;
+        if (CurrentHP <= 0) return false;
 
         // TODO: 이 식도 추후 status 에서 적용
         int applyDamage = damage - status.defence;
-        currentHP = Math.Max(0, currentHP - applyDamage);
+        CurrentHP = Math.Max(0, currentHP - applyDamage);
 
-        healthBarSlider.value = currentHP;
-        SetHealthBarText();
-
-        if (currentHP <= 0)
+        if (CurrentHP <= 0)
         {
             Death();
         }
 
         return true;
     }
-    private void SetHealthBarText()
+    void ChangeHealthBar()
     {
+        if (healthBarSlider)
+        { 
+            healthBarSlider.value = (float)CurrentHP / status.hp ;
+        }
         if (textMeshPro)
         {
-            textMeshPro.SetText(healthBarSlider.value + " / " + healthBarSlider.maxValue);
+            textMeshPro.SetText(MyBigIntegerMath.GetAbbreviationFromBigInteger(currentHP) + " / " + MyBigIntegerMath.GetAbbreviationFromBigInteger(status.hp));
         }
-        
     }
 
     public void SetEnemy(Character targetObject)
@@ -97,6 +119,8 @@ public class Character : MonoBehaviour
         // 사망 처리
         gameObject.SetActive(false);
     }
+
+    
 }
 
 //Character -> Cat / Enemy
