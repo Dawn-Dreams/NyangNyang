@@ -7,6 +7,7 @@ using UnityEngine;
 public class Character : MonoBehaviour
 {
     public Status status;
+    protected bool IsEnemy = false;
     public Character enemyObject;
     public int characterID;
 
@@ -25,7 +26,7 @@ public class Character : MonoBehaviour
     public virtual void InitialSettings()
     {
         if (status == null)
-            status = new Status(characterID);
+            status = new Status(characterID, IsEnemy);
 
         // 초기화
         currentHP = status.hp;

@@ -8,12 +8,17 @@ public class Enemy : Character
 {
     public GameObject floatingDamage;
 
+
+
     private Slider _healthSlider;
     private TextMeshProUGUI _healthText;
 
     protected override void Awake()
     {
-        characterID = 1;
+        // 09.23 - EnemyID 별개로 관리하도록 변경
+        characterID = 0;
+        IsEnemy = true;
+
         base.Awake();
 
         _healthSlider = gameObject.GetComponentInChildren<Slider>();

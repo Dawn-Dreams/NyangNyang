@@ -10,11 +10,12 @@ using UnityEngine;
 
 public class DummyServerData : MonoBehaviour
 {
-    // 임시 더미 데이터, 서버(+DB)라 가정하고 제작 진행중
-    // 09.13 임시 ID
-    // ID 0 -> Cat
-    // ID 1 -> Enemy
+    // 임시 더미 데이터, 서버(+DB)라 가정하고 제작 진행
 
+    // ===============
+    // 데이터 시작
+
+    // 유저 스탯 레벨 데이터
     private static StatusLevelData[] usersStatusLevelData = new StatusLevelData[]
     {
         new StatusLevelData(50,0,5),
@@ -24,6 +25,13 @@ public class DummyServerData : MonoBehaviour
         new StatusLevelData(),
     };
 
+    private static StatusLevelData[] enemyStatusLevelData = new StatusLevelData[]
+    {
+        new StatusLevelData(10, 0, 5, 2),
+        new StatusLevelData(10, 0, 5, 2),
+    };
+
+    // 유저 재화(골드+보석) 데이터
     private static CurrencyData[] usersCurrencyData = new CurrencyData[]
     {
         ScriptableObject.CreateInstance<CurrencyData>().SetCurrencyData(150_000,3),
@@ -33,6 +41,7 @@ public class DummyServerData : MonoBehaviour
         ScriptableObject.CreateInstance<CurrencyData>(),
     };
 
+    // 유저 레벨+경험치 데이터
     private static UserLevelData[] usersLevelData = new UserLevelData[]
     {
         ScriptableObject.CreateInstance<UserLevelData>().SetUserLevelData(5, 100),
@@ -45,20 +54,23 @@ public class DummyServerData : MonoBehaviour
     // 소탕권 개수를 저장하는 배열 (각 유저의 소탕권 수량 관리)
     private static int[] sweepTickets = new int[] { 5, 2, 0, 3, 1 };
 
+    // 스텟 레벨업 계산식 데이터
     private static int statusStartGoldCost = 100;
-
     private static int[] statusGoldCostAddValue = new int[]
     {
         // StatusLevelType enum
         // HP, MP, STR, DEF, HEAL_HP, HEAL_MP, CRIT, ATTACK_SPEED, GOLD, EXP
         100, 100, 100, 100, 300, 300, 50000, 10000, 100000,100000
     };
-
+    // 경험치 레벨업 계산식 데이터
     private static int addExpPerLevel = 500;
 
-    void Start()
-    {
-    }
+
+
+    // 데이터 종료
+    // ================== 
+    // 함수 시작
+
 
     public static StatusLevelData GetUserStatusLevelData(int userID)
     {
@@ -69,6 +81,17 @@ public class DummyServerData : MonoBehaviour
         }
 
         return usersStatusLevelData[userID];
+    }
+
+    public static StatusLevelData GetEnemyStatusLevelData(int characterID)
+    {
+        if (!(0 <= characterID && characterID < enemyStatusLevelData.Length))
+        {
+            Debug.Log("INVALID CHARACTER_ID");
+            return null;
+        }
+
+        return enemyStatusLevelData[characterID];
     }
 
     public static int GetUserStatusLevelFromType(int userID, StatusLevelType type)
@@ -207,4 +230,6 @@ public class DummyServerData : MonoBehaviour
 
         return sweepTickets[userID];
     }
+    // 함수 종료
+    // ================
 }

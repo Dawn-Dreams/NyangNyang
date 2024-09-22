@@ -121,10 +121,18 @@ public class Status
     float expAcquisitionPercent;     // 경험치 획득량(가중치) (초기 1, value%로 적용)
     int userTouchDamage;    // 터치 당 공격력 <- TODO: 터치 말고 다른 좋은 아이디어 있는지 회의
 
-    public Status(int id)
+    public Status(int id, bool isEnemy = false)
     {
         // TODO : 서버에서 StatusLevelData 받아오기 // UserID 추후 더미서버에 추가
-        levelData = DummyServerData.GetUserStatusLevelData(id);
+        if (!isEnemy)
+        {
+            levelData = DummyServerData.GetUserStatusLevelData(id);
+        }
+        else
+        {
+            levelData = DummyServerData.GetEnemyStatusLevelData(id);
+        }
+        
 
         hp = (int)levelData.CalculateValueFromLevel(StatusLevelType.HP);
         mp = (int)levelData.CalculateValueFromLevel(StatusLevelType.MP);
