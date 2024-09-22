@@ -109,6 +109,10 @@ public class Player : MonoBehaviour
         playerLevelData.AddExp(addExpValue);
     }
 
+    public static void AddGold(BigInteger addGoldValue)
+    {
+        Gold += addGoldValue;
+    }
 
     // TODO: 임시 함수
     public void ShowLevelUpIcon()

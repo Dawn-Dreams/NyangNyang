@@ -65,7 +65,12 @@ public class DummyServerData : MonoBehaviour
     // 경험치 레벨업 계산식 데이터
     private static int addExpPerLevel = 500;
 
-
+    private static EnemyDropData[] enemyDropData = new EnemyDropData[]
+    {
+        ScriptableObject.CreateInstance<EnemyDropData>().SetEnemyDropData(1_000_000, 777_777),
+        ScriptableObject.CreateInstance<EnemyDropData>(),
+        ScriptableObject.CreateInstance<EnemyDropData>()
+    };
 
     // 데이터 종료
     // ================== 
@@ -229,6 +234,17 @@ public class DummyServerData : MonoBehaviour
         }
 
         return sweepTickets[userID];
+    }
+
+    public static EnemyDropData GetEnemyDropData(int characterID)
+    {
+        if (characterID < 0 || characterID >= enemyDropData.Length)
+        {
+            Debug.Log("INVALID CHARACTER_ID");
+            return null;
+        }
+
+        return enemyDropData[characterID];
     }
     // 함수 종료
     // ================

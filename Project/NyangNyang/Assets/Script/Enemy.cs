@@ -8,13 +8,14 @@ public class Enemy : Character
 {
     public GameObject floatingDamage;
 
-
+    protected EnemyDropData DropData = null;
 
     private Slider _healthSlider;
     private TextMeshProUGUI _healthText;
 
     protected override void Awake()
     {
+        Debug.Log("enemy 생성");
         // 09.23 - EnemyID 별개로 관리하도록 변경
         characterID = 0;
         IsEnemy = true;
@@ -29,6 +30,12 @@ public class Enemy : Character
         _healthSlider.value = currentHP;
 
         SetHealthBarText();
+
+        // enemy drop data 받기
+        if (DropData == null)
+        {
+            DropData = ScriptableObject.CreateInstance<EnemyDropData>().SetEnemyDropData(DummyServerData.GetEnemyDropData(characterID));
+        }
     }
 
     protected override bool TakeDamage(int damage)
@@ -59,6 +66,17 @@ public class Enemy : Character
     {
         if (_healthText== null) return;
         _healthText.SetText(_healthSlider.value + " / " + _healthSlider.maxValue);
+    }
+
+    protected override void Death()
+    {
+        if (DropData)
+        {
+            DropData.GiveItemToPlayer();
+        }
+
+        base.Death();
+
     }
 }
 

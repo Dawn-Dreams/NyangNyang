@@ -814,7 +814,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b4ec57587f1b864ca999d421c397c25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelUpIconObject: {fileID: 0}
+  levelUpIconObject: {fileID: 7879524771843587551, guid: 8d0b150d1e07992488a436f5507688c3, type: 3}
 --- !u!1 &119797832
 GameObject:
   m_ObjectHideFlags: 0

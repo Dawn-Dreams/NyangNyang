@@ -55,8 +55,7 @@ public class Character : MonoBehaviour
 
         if (currentHP <= 0)
         {
-            // 사망 처리
-            gameObject.SetActive(false);
+            Death();
         }
 
         return true;
@@ -68,6 +67,12 @@ public class Character : MonoBehaviour
         {
             enemyObject = targetObject;
         }
+    }
+
+    protected virtual void Death()
+    {
+        // 사망 처리
+        gameObject.SetActive(false);
     }
 }
 
