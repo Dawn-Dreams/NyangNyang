@@ -8,16 +8,21 @@ public class WeaponDetailUI : MonoBehaviour
     private Weapon choosedWeapon;
     private WeaponMgrUI weaponMgrUI;
     
-    // TODO: 나중에 detailPanel도 private으로 받아오기
+    // TODO: 나중에 detailPanel도 private으로 받아오기s
     public GameObject detailPanel;
+    public GameObject weaponInfo;
+    public GameObject coinInfo;
+
     private Text dWeaponNameText;
     private Text dWeaponPossessionText;
+    private Slider dWeaponPossessionSlider;
 
     private void Start()
     {
         weaponMgrUI = gameObject.GetComponent<WeaponMgrUI>();
-        dWeaponNameText = detailPanel.transform.Find("name").GetComponent<Text>();
-        dWeaponPossessionText = detailPanel.transform.Find("possession").GetComponent<Text>();
+        dWeaponNameText = weaponInfo.transform.Find("name_txt").GetComponent<Text>();
+        dWeaponPossessionText = weaponInfo.transform.Find("possession_txt").GetComponent<Text>();
+        dWeaponPossessionSlider = weaponInfo.transform.Find("possession_slider").GetComponent<Slider>();
     }
 
     private void OnEnable()
@@ -32,7 +37,9 @@ public class WeaponDetailUI : MonoBehaviour
             choosedWeapon = WeaponManager.GetInstance().GetWeapon(_obj.name);
             detailPanel.SetActive(true);
             dWeaponNameText.text = choosedWeapon.GetName();
-            dWeaponPossessionText.text = choosedWeapon.GetWeaponCount() + "/5";
+            int count = choosedWeapon.GetWeaponCount();
+            dWeaponPossessionText.text = count + "/5";
+            dWeaponPossessionSlider.value = (float)count / 5 >= 1 ? 1 : (float)count / 5;
         }
     }
 
@@ -77,6 +84,8 @@ public class WeaponDetailUI : MonoBehaviour
         weaponMgrUI.UpdatePossession(choosedWeapon.GetID() + 1);
 
         dWeaponNameText.text = choosedWeapon.GetName();
-        dWeaponPossessionText.text = choosedWeapon.GetWeaponCount() + "/5";
+        int count = choosedWeapon.GetWeaponCount();
+        dWeaponPossessionText.text = count + "/5";
+        dWeaponPossessionSlider.value = (float)count / 5 >= 1 ? 1 : (float)count / 5;
     }
 }

@@ -5,9 +5,20 @@ using UnityEngine.UI;
 
 public class WeaponMgrUI : MonoBehaviour
 {
+    public GameObject[] weapons;
+    WeaponUnlock[] weaponList = new WeaponUnlock[32];
+    Slider[] sliders = new Slider[32];
+    Text[] texts = new Text[32];
 
-    public Slider[] sliders;
-    public Text[] texts;
+    public void Awake()
+    {
+        for ( int i = 0; i < weapons.Length; i++)
+        {
+            weaponList[i] = weapons[i].GetComponent<WeaponUnlock>();
+            sliders[i] = weapons[i].transform.Find("Slider").GetComponent<Slider>();
+            texts[i] = weapons[i].transform.Find("possession").GetComponent<Text>();
+        }
+    }
 
     private void OnEnable()
     {
@@ -32,6 +43,7 @@ public class WeaponMgrUI : MonoBehaviour
         Weapon weapon = WeaponManager.GetInstance().GetWeapon(id);
         if (weapon != null)
         {
+            weaponList[id].Unlock();
             sliders[id].value = (float)weapon.GetWeaponCount() / 5 >= 1 ? 1 : (float)weapon.GetWeaponCount() / 5;
             texts[id].text = weapon.GetWeaponCount().ToString() + "/5";
         }
