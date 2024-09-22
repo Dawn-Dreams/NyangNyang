@@ -27,4 +27,14 @@ public class WeaponMgrUI : MonoBehaviour
         }
     }
 
+    public void UpdatePossession(int id)
+    {
+        Weapon weapon = WeaponManager.GetInstance().GetWeapon(id);
+        if (weapon != null)
+        {
+            sliders[id].value = (float)weapon.GetWeaponCount() / 5 >= 1 ? 1 : (float)weapon.GetWeaponCount() / 5;
+            texts[id].text = weapon.GetWeaponCount().ToString() + "/5";
+        }
+    }
+
 }
