@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using TMPro;
 using UnityEditor.TerrainTools;
 using UnityEngine;
@@ -16,34 +17,55 @@ public class StatusLevelupPanel : MonoBehaviour
     private TextMeshProUGUI currentLevelText;
 
     [SerializeField] 
+    private TextMeshProUGUI statusValueText;
+
+    [SerializeField] 
     private Button levelUpButton;
     [SerializeField] 
     private TextMeshProUGUI goldCostText;
 
     private int currentStatusLevel = 1;
     private int startGoldCost;
-    private float goldCostMultiplyValue;
+    private int goldCostAddValue;
 
-    public void Awake()
+    // 레벨업 배수 버튼
+    public int levelUpMultiplyValue = 1;
+
+    public void Start()
     {
         // 서버로부터 비용 정보 받기
         startGoldCost = DummyServerData.GetStartGoldCost();
-        goldCostMultiplyValue = DummyServerData.GetGoldCostMultipleValueFromType(statusLevelType);
+        goldCostAddValue = DummyServerData.GetGoldCostAddValueFromType(statusLevelType);
 
         currentStatusLevel = DummyServerData.GetUserStatusLevelFromType(Player.GetUserID(), statusLevelType);
 
         SetStatusLevelText();
-        SetGoldCostText();
+        Player.OnGoldChange += SetGoldCostText;
+        SetGoldCostText(Player.Gold);
+        //SetGoldCostText();
+        SetStatusValueText();
+        
+        
 
 
         levelUpButton.onClick.AddListener(OnClickLevelUpButton);
     }
 
-    int CalculateGoldCost(int startCost, float multiplyValue, int currentLevel)
+    // currentStatusLevel로부터 결과 값 적용시키는 함수
+    private void SetStatusValueText()
     {
-        float goldCost =  startCost * Mathf.Pow(multiplyValue, currentLevel - 1);
-        
-        return (int)goldCost;
+        int value = Player.playerStatus.GetStatusLevelData().GetLevelFromType(statusLevelType);
+
+        statusValueText.text = value.ToString();
+    }
+
+    BigInteger CalculateGoldCost(int startCost, float multiplyValue, int currentLevel)
+    {
+        // n ~ m 레벨 계산 ((n부터 m까지의 갯수) * (n+m) / 2 )
+        BigInteger levelUpValue = (levelUpMultiplyValue) * (currentLevel + (currentLevel + levelUpMultiplyValue)) / 2;
+        BigInteger goldCost = goldCostAddValue * (levelUpValue);
+
+        return goldCost;
     }
 
     void SetStatusLevelText()
@@ -51,9 +73,17 @@ public class StatusLevelupPanel : MonoBehaviour
         currentLevelText.text = currentStatusLevel.ToString();
     }
 
-    void SetGoldCostText()
+    void SetGoldCostText(BigInteger currentPlayerGold)
     {
-        int goldCost = CalculateGoldCost(startGoldCost,goldCostMultiplyValue,currentStatusLevel);
+        BigInteger goldCost = CalculateGoldCost(startGoldCost,goldCostAddValue,currentStatusLevel);
+        if (currentPlayerGold >= goldCost)
+        {
+            goldCostText.color = new Color(0, 0, 255);
+        }
+        else
+        {
+            goldCostText.color = new Color(255, 0, 0);
+        }
         goldCostText.text = goldCost.ToString();
     }
 
@@ -65,10 +95,11 @@ public class StatusLevelupPanel : MonoBehaviour
     void LevelUpStatus()
     {
         // TODO: 서버에서 작동되도록 구현하기
-        if (DummyServerData.UserStatusLevelUp(Player.GetUserID(), statusLevelType, 1))
+        if (DummyServerData.UserStatusLevelUp(Player.GetUserID(), statusLevelType, currentStatusLevel, levelUpMultiplyValue))
         {
             // TODO: 서버에서 성공 패킷을 받을 경우 실행하기
             LevelUpSuccess();
+            Player.GetGoldDataFromServer();
         }
     }
 
@@ -77,9 +108,14 @@ public class StatusLevelupPanel : MonoBehaviour
     {
         currentStatusLevel = DummyServerData.GetUserStatusLevelFromType(Player.GetUserID(), statusLevelType);
         SetStatusLevelText();
-        SetGoldCostText();
+        SetStatusValueText();
     }
 
+    public void ChangeMultiplyValue(int newValue)
+    {
+        levelUpMultiplyValue = newValue;
+        SetGoldCostText(Player.Gold);
+    }
 
     void OnValidate()
     {
