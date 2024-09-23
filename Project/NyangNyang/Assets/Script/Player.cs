@@ -69,7 +69,7 @@ public class Player : MonoBehaviour
         if (playerStatus == null)
             playerStatus = new Status(userID);
         if (playerCurrency == null)
-            playerCurrency = DummyServerData.GetUserCurrencyData(userID);
+            playerCurrency = ScriptableObject.CreateInstance<CurrencyData>().SetCurrencyData(DummyServerData.GetUserCurrencyData(userID));
         if (playerLevelData == null)
             GetExpDataFromServer();
     }
@@ -118,7 +118,8 @@ public class Player : MonoBehaviour
 
     public static void AddGold(BigInteger addGoldValue)
     {
-        Gold += addGoldValue;
+        playerCurrency.RequestAddGold(addGoldValue);
+        //Gold += addGoldValue;
     }
 
     // TODO: 임시 함수

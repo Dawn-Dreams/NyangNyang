@@ -275,7 +275,21 @@ public class DummyServerData : MonoBehaviour
         Debug.Log($"유저 {userID}에게 소탕권 {index+1}번을 {amount}개 추가했습니다. 현재 소탕권 수량: {sweepTickets[userID, index]}개");
     }
 
-   
+    public static bool AddGoldOnServer(int userID, BigInteger addGoldValue)
+    {
+        CurrencyData userCurrencyData = GetUserCurrencyData(userID);
+        if (userCurrencyData)
+        {
+            userCurrencyData.gold += addGoldValue;
+
+            
+            Player.GetGoldDataFromServer();
+            return true;
+        }
+
+        return false;
+    }
+
     // 함수 종료
     // ================
 }

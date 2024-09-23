@@ -42,7 +42,6 @@ public class UserLevelData : ScriptableObject
         if (levelUpCount > 0)
         {
             GameObject.Find("Manager").GetComponent<Player>().ShowLevelUpIcon();
-            
         }
     }
 

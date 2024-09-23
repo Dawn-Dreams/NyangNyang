@@ -15,4 +15,16 @@ public class CurrencyData : ScriptableObject
         diamond = getDiamond;
         return this;
     }
+
+    public CurrencyData SetCurrencyData(CurrencyData otherData)
+    {
+        gold = otherData.gold;
+        diamond = otherData.diamond;
+        return this;
+    }
+
+    public void RequestAddGold(BigInteger addGoldValue)
+    {
+        DummyServerData.AddGoldOnServer(Player.GetUserID(), addGoldValue);
+    }
 }
