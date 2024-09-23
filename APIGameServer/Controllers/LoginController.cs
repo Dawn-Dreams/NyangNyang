@@ -10,6 +10,7 @@ namespace APIGameServer.Controllers;
 public class LoginController : ControllerBase
 {
     //레디스 참조해야한다
+    
 
     public LoginController()
     {
@@ -17,7 +18,7 @@ public class LoginController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ResponseLogin> UserLogin([FromBody] RequestLogin req)
+    public async Task<ResponseLogin> Create([FromBody] RequestLogin req)
     {
         ResponseLogin response = new();
 

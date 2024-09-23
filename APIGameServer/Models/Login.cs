@@ -10,7 +10,6 @@ public class RequestRegist
 }
 public class RequestLogin
 {
-
     [Required]
     public int Uid { get; set; }
 }
