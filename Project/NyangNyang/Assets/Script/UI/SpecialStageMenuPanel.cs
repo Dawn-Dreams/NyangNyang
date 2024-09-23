@@ -26,9 +26,15 @@ public class SpecialStageMenuPanel : MenuPanel
     private TextMeshProUGUI[] sweepTicketTexts; // 소탕권 수량 표시 텍스트
 
     private SpecialStageManager specialStageManager;
+
+    private MiniGame1 miniGame1;
+
     void Start()
     {
-        // SpecialStageManager 참조 초기화 및 null 확인
+        miniGame1 = FindObjectOfType<MiniGame1>();
+
+        if (miniGame1 == null) Debug.LogError("MiniGame1 객체를 찾을 수 없습니다.");
+
         specialStageManager = FindObjectOfType<SpecialStageManager>();
         if (specialStageManager == null)
         {
@@ -97,13 +103,23 @@ public class SpecialStageMenuPanel : MenuPanel
     // 미니게임 시작 버튼 클릭 시 실행
     void OnClickStartButton(int index)
     {
-        // Special Stage 실행 로직
-        Debug.Log($"Special Stage {index + 1} 시작!");
-       
+        // 미니게임 시작
+        switch (index)
+        {
+            case 0:
+                FindObjectOfType<MiniGame1>().StartGame();
+                break;
+            case 1:
+                //FindObjectOfType<MiniGame2>().StartGame();
+                break;
+            case 2:
+                //FindObjectOfType<MiniGame3>().StartGame();
+                break;
+            default:
+                Debug.LogWarning("올바르지 않은 인덱스입니다.");
+                break;
+        }
 
-        // 기존 소탕권으로 미니게임 입장하게 했지만,
-        // 반대로 미니게임에서 소탕권 획득 후 각 스페셜 스테이지 소탕할 수 있도록 함
-       
     }
 
     // 소탕 버튼 클릭 시 실행
@@ -115,7 +131,7 @@ public class SpecialStageMenuPanel : MenuPanel
             DummyServerData.UseSweepTicket(Player.GetUserID(), index);
             UpdateSweepTicketText(index);
             specialStageManager.StartSpecialStage(index + 1);
-            Debug.Log($"소탕 버튼 {index + 1} 클릭됨, 소탕권 사용 완료.");
+            //Debug.Log($"소탕 버튼 {index + 1} 클릭됨, 소탕권 사용 완료.");
         }
         else
         {
@@ -127,6 +143,6 @@ public class SpecialStageMenuPanel : MenuPanel
     void UpdateSweepTicketText(int index)
     {
         int sweepTicketCount = DummyServerData.GetSweepTicketCount(Player.GetUserID(), index);
-        sweepTicketTexts[index].text = $"소탕권: {sweepTicketCount}";
+        sweepTicketTexts[index].text = $"{index + 1}번 소탕권 개수: {sweepTicketCount}";
     }
 }

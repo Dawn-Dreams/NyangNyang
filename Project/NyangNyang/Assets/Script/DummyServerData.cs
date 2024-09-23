@@ -51,8 +51,15 @@ public class DummyServerData : MonoBehaviour
         ScriptableObject.CreateInstance<UserLevelData>(),
     };
 
-    // 소탕권 개수를 저장하는 배열 (각 유저의 소탕권 수량 관리)
-    private static int[] sweepTickets = new int[] { 5, 2, 0, 3, 1 };
+    // 소탕권 개수를 저장하는 배열 (각 유저의 소탕권 수량 관리) ...일단 가정
+    private static int[,] sweepTickets = new int[,]
+    {
+        { 5, 3, 2 }, // 유저 0의 소탕권 인덱스별 수량
+        { 2, 1, 0 }, // 유저 1의 소탕권 인덱스별 수량
+        { 0, 0, 0 }, // 유저 2의 소탕권 인덱스별 수량
+        { 3, 2, 1 }, // 유저 3의 소탕권 인덱스별 수량
+        { 1, 0, 1 }  // 유저 4의 소탕권 인덱스별 수량
+    };
 
     // 스텟 레벨업 계산식 데이터
     private static int statusStartGoldCost = 100;
@@ -198,6 +205,18 @@ public class DummyServerData : MonoBehaviour
         // 서버로부터 정보를 받도록 패킷 전송
         Player.GetExpDataFromServer();
     }
+
+    public static EnemyDropData GetEnemyDropData(int characterID)
+    {
+        if (characterID < 0 || characterID >= enemyDropData.Length)
+        {
+            Debug.Log("INVALID CHARACTER_ID");
+            return null;
+        }
+
+        return enemyDropData[characterID];
+    }
+
     // 소탕권이 있는지 확인하는 함수 (유저 ID, 소탕권 종류)
     public static bool HasSweepTicket(int userID, int index)
     {
@@ -207,7 +226,7 @@ public class DummyServerData : MonoBehaviour
             return false;
         }
 
-        return sweepTickets[userID] > 0;
+        return sweepTickets[userID,index] > 0;
     }
 
     // 소탕권을 사용하는 함수
@@ -215,8 +234,8 @@ public class DummyServerData : MonoBehaviour
     {
         if (HasSweepTicket(userID, index))
         {
-            sweepTickets[userID]--;
-            Debug.Log($"소탕권 사용: 남은 소탕권 수량 {sweepTickets[userID]}");
+            sweepTickets[userID,index]--;
+            Debug.Log($"소탕권 사용: 남은 소탕권 수량 {sweepTickets[userID,index]}");
             return true;
         }
 
@@ -233,19 +252,29 @@ public class DummyServerData : MonoBehaviour
             return 0;
         }
 
-        return sweepTickets[userID];
+        return sweepTickets[userID,index];
     }
 
-    public static EnemyDropData GetEnemyDropData(int characterID)
+    // 소탕권을 추가하는 함수
+    public static void AddSweepTicket(int userID, int index, int amount)
     {
-        if (characterID < 0 || characterID >= enemyDropData.Length)
+        if (userID < 0 || userID >= sweepTickets.GetLength(0))
         {
-            Debug.Log("INVALID CHARACTER_ID");
-            return null;
+            Debug.Log("INVALID USERID");
+            return;
         }
 
-        return enemyDropData[characterID];
+        if (index < 0 || index >= sweepTickets.GetLength(1))
+        {
+            Debug.Log("INVALID INDEX");
+            return;
+        }
+
+        sweepTickets[userID, index] += amount;
+        Debug.Log($"유저 {userID}에게 소탕권 {index+1}번을 {amount}개 추가했습니다. 현재 소탕권 수량: {sweepTickets[userID, index]}개");
     }
+
+   
     // 함수 종료
     // ================
 }
