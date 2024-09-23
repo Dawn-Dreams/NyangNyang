@@ -14,8 +14,9 @@ public class Character : MonoBehaviour
     public Character enemyObject;
     public int characterID;
 
-    protected int currentHP;
-    protected int currentMP;
+    protected BigInteger currentHP;
+    protected BigInteger maxHP;
+    protected BigInteger currentMP;
 
     [SerializeField]
     protected Slider healthBarSlider;
@@ -26,7 +27,7 @@ public class Character : MonoBehaviour
     public delegate void OnHealthChangeDelegate();
     public event OnHealthChangeDelegate OnHealthChange;
 
-    public int CurrentHP
+    public BigInteger CurrentHP
     {
         get { return currentHP; }
         set
@@ -45,6 +46,7 @@ public class Character : MonoBehaviour
         }
     }
 
+
     protected virtual void Awake()
     {
         InitialSettings();
@@ -60,7 +62,8 @@ public class Character : MonoBehaviour
         OnHealthChange += ChangeHealthBar;
 
         // 초기화
-        CurrentHP = status.hp;
+        maxHP = status.hp;
+        CurrentHP = maxHP;
         currentMP = status.mp;
         healthBarSlider.value = 1;
 
@@ -85,7 +88,8 @@ public class Character : MonoBehaviour
 
         // TODO: 이 식도 추후 status 에서 적용
         int applyDamage = damage - status.defence;
-        CurrentHP = Math.Max(0, currentHP - applyDamage);
+        
+        CurrentHP = BigInteger.Max(0, currentHP - applyDamage);
 
         if (CurrentHP <= 0)
         {
@@ -103,7 +107,7 @@ public class Character : MonoBehaviour
         }
         if (textMeshPro)
         {
-            textMeshPro.SetText(MyBigIntegerMath.GetAbbreviationFromBigInteger(currentHP) + " / " + MyBigIntegerMath.GetAbbreviationFromBigInteger(status.hp));
+            textMeshPro.SetText(MyBigIntegerMath.GetAbbreviationFromBigInteger(currentHP) + " / " + MyBigIntegerMath.GetAbbreviationFromBigInteger(maxHP));
         }
     }
 

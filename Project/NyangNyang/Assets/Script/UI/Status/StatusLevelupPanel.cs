@@ -24,7 +24,6 @@ public class StatusLevelupPanel : MonoBehaviour
     [SerializeField] 
     private TextMeshProUGUI goldCostText;
 
-    private int currentStatusLevel = 1;
     private int startGoldCost;
     private int goldCostAddValue;
 
@@ -37,29 +36,35 @@ public class StatusLevelupPanel : MonoBehaviour
         startGoldCost = DummyServerData.GetStartGoldCost();
         goldCostAddValue = DummyServerData.GetGoldCostAddValueFromType(statusLevelType);
 
-        currentStatusLevel = DummyServerData.GetUserStatusLevelFromType(Player.GetUserID(), statusLevelType);
-
-        SetStatusLevelText();
         Player.OnGoldChange += SetGoldCostText;
-        SetGoldCostText(Player.Gold);
-        //SetGoldCostText();
-        SetStatusValueText();
-        
+        Player.OnStatusLevelChange += Initialize;
+        Initialize(statusLevelType);
         
 
 
         levelUpButton.onClick.AddListener(OnClickLevelUpButton);
     }
 
+    void Initialize(StatusLevelType type)
+    {
+        if (type != statusLevelType)
+        {
+            return;
+        }
+
+        SetGoldCostText(Player.Gold);
+        SetStatusLevelText();
+        SetStatusValueText();
+    }
+
     // currentStatusLevel로부터 결과 값 적용시키는 함수
     private void SetStatusValueText()
     {
-        int value = Player.playerStatus.GetStatusLevelData().GetLevelFromType(statusLevelType);
-
+        BigInteger value = Player.playerStatus.GetStatusLevelData().GetLevelFromType(statusLevelType);
         statusValueText.text = value.ToString();
     }
 
-    BigInteger CalculateGoldCost(int startCost, float multiplyValue, int currentLevel)
+    BigInteger CalculateGoldCost(int startCost, float multiplyValue, BigInteger currentLevel)
     {
         // n ~ m 레벨 계산 ((n부터 m까지의 갯수) * (n+m) / 2 )
         BigInteger levelUpValue = (levelUpMultiplyValue) * (currentLevel + (currentLevel + levelUpMultiplyValue)) / 2;
@@ -70,13 +75,14 @@ public class StatusLevelupPanel : MonoBehaviour
 
     void SetStatusLevelText()
     {
-        currentLevelText.text = currentStatusLevel.ToString();
+        currentLevelText.text = Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType].ToString();
     }
 
-    void SetGoldCostText(BigInteger currentPlayerGold)
+    void SetGoldCostText(BigInteger playerGold)
     {
+        BigInteger currentStatusLevel = Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType];
         BigInteger goldCost = CalculateGoldCost(startGoldCost,goldCostAddValue,currentStatusLevel);
-        if (currentPlayerGold >= goldCost)
+        if (playerGold >= goldCost)
         {
             goldCostText.color = new Color(0, 0, 255);
         }
@@ -94,21 +100,22 @@ public class StatusLevelupPanel : MonoBehaviour
 
     void LevelUpStatus()
     {
+        BigInteger currentStatusLevel = Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType];
         // TODO: 서버에서 작동되도록 구현하기
         if (DummyServerData.UserStatusLevelUp(Player.GetUserID(), statusLevelType, currentStatusLevel, levelUpMultiplyValue))
         {
             // TODO: 서버에서 성공 패킷을 받을 경우 실행하기
             LevelUpSuccess();
-            Player.GetGoldDataFromServer();
         }
     }
 
     // TODO: 서버에서 레벨업 성공 했을 때 받은 패킷에서 실행시킬 함수
     void LevelUpSuccess()
     {
-        currentStatusLevel = DummyServerData.GetUserStatusLevelFromType(Player.GetUserID(), statusLevelType);
-        SetStatusLevelText();
-        SetStatusValueText();
+        Player.GetGoldDataFromServer();
+
+        BigInteger newLevelValue = DummyServerData.GetUserStatusLevelFromType(Player.GetUserID(), statusLevelType);
+        Player.UpdatePlayerStatusLevelByType(statusLevelType, newLevelValue);
     }
 
     public void ChangeMultiplyValue(int newValue)
@@ -125,7 +132,7 @@ public class StatusLevelupPanel : MonoBehaviour
         TextMeshProUGUI statusText = transform.Find("StatusTypeText").GetComponent<TextMeshProUGUI>();
         statusText.text = statusData.GetStringFromType(statusLevelType);
 
-        currentLevelText.text = currentStatusLevel.ToString();
+        currentLevelText.text = 5.ToString();
 
         goldCostText.text = DummyServerData.GetStartGoldCost().ToString();
     }

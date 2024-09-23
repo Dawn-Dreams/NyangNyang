@@ -16,12 +16,19 @@ public class Player : MonoBehaviour
     public delegate void OnGoldChangeDelegate(BigInteger newGoldVal);
     public static event OnGoldChangeDelegate OnGoldChange;
 
-
     // 경험치 변화 델리게이트 이벤트
     public delegate void OnExpChangeDelegate(UserLevelData newLevelData);
     public static event OnExpChangeDelegate OnExpChange;
 
     [SerializeField] private GameObject levelUpIconObject;
+
+    // 스테이터스 레벨 변화 델리게이트
+    public delegate void OnStatusLevelChangeDelegate(StatusLevelType type);
+    public static event OnStatusLevelChangeDelegate OnStatusLevelChange;
+
+    // 스테이터스중 체력 변화 시 실행될 델리게이트 (캐릭터 체력 변경, 체력바 UI 기능 등)
+    public delegate void OnHPStatusLevelChangeDelegate();
+    public static event OnHPStatusLevelChangeDelegate OnHPLevelChange;
 
     public static BigInteger Gold
     {
@@ -122,5 +129,19 @@ public class Player : MonoBehaviour
         spawnTransform.z = -5;
         GameObject textObject = Instantiate(levelUpIconObject, spawnTransform ,UnityEngine.Quaternion.identity);
         Destroy(textObject, 3.0f);
+    }
+
+    public static void UpdatePlayerStatusLevelByType(StatusLevelType type, BigInteger newValue)
+    {
+        playerStatus.UpdateStatusLevelByType(type, newValue);
+        if (OnStatusLevelChange != null)
+        {
+            OnStatusLevelChange(type);
+        }
+
+        if (type == StatusLevelType.HP && OnHPLevelChange != null)
+        {
+            OnHPLevelChange();
+        }
     }
 }

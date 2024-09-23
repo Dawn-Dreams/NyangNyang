@@ -103,10 +103,11 @@ public class DummyServerData : MonoBehaviour
             return null;
         }
 
+        
         return enemyStatusLevelData[characterID];
     }
 
-    public static int GetUserStatusLevelFromType(int userID, StatusLevelType type)
+    public static BigInteger GetUserStatusLevelFromType(int userID, StatusLevelType type)
     {
         StatusLevelData statusLevelData = GetUserStatusLevelData(userID);
         if (statusLevelData != null)
@@ -135,7 +136,7 @@ public class DummyServerData : MonoBehaviour
         {
             GetUserStatusLevelData(userID).AddLevel(type, value);
             GetUserCurrencyData(userID).gold -= goldCost;
-
+            
             return true;
         }
 
