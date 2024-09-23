@@ -198,8 +198,8 @@ public class DummyServerData : MonoBehaviour
         // 서버로부터 정보를 받도록 패킷 전송
         Player.GetExpDataFromServer();
     }
-    // 소탕권이 있는지 확인하는 함수
-    public static bool HasSweepTicket(int userID)
+    // 소탕권이 있는지 확인하는 함수 (유저 ID, 소탕권 종류)
+    public static bool HasSweepTicket(int userID, int index)
     {
         if (userID < 0 || userID >= sweepTickets.Length)
         {
@@ -211,9 +211,9 @@ public class DummyServerData : MonoBehaviour
     }
 
     // 소탕권을 사용하는 함수
-    public static bool UseSweepTicket(int userID)
+    public static bool UseSweepTicket(int userID, int index)
     {
-        if (HasSweepTicket(userID))
+        if (HasSweepTicket(userID, index))
         {
             sweepTickets[userID]--;
             Debug.Log($"소탕권 사용: 남은 소탕권 수량 {sweepTickets[userID]}");
@@ -225,7 +225,7 @@ public class DummyServerData : MonoBehaviour
     }
 
     // 소탕권 수량을 가져오는 함수
-    public static int GetSweepTicketCount(int userID)
+    public static int GetSweepTicketCount(int userID, int index)
     {
         if (userID < 0 || userID >= sweepTickets.Length)
         {

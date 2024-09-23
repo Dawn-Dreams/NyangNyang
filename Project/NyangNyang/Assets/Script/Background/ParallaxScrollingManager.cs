@@ -165,8 +165,8 @@ public class ParallaxScrollingManager : MonoBehaviour
             _backgroundObjects[layerIndex].SetNewSprite(middleSprite.sprite, leftSprite.sprite, rightSprite.sprite);
         }
 
-        Debug.Log(index + "번으로 배경 이미지 변경");
-        Debug.Log(currentPrefab.name + " 이름");
+        //Debug.Log(index + "번으로 배경 이미지 변경");
+        //Debug.Log(currentPrefab.name + " 이름");
     }
 
     public void MoveBackgroundSprites(bool moveBackground)

@@ -2085,7 +2085,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 574e6fdb459784c4994a4bc788e14e9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  specialStageButton: {fileID: 170436640}
   specialStageUI: {fileID: 244107864}
   playSec: 3
 --- !u!1001 &213997137
@@ -14600,10 +14599,16 @@ MonoBehaviour:
   - {fileID: 1669713403}
   - {fileID: 1734832543}
   startButtons:
-  - {fileID: 170436640}
-  sweepButtons:
   - {fileID: 1416346069}
+  - {fileID: 552720448}
+  - {fileID: 323562492}
+  sweepButtons:
+  - {fileID: 170436640}
+  - {fileID: 489684405}
+  - {fileID: 1293821621}
   sweepTicketTexts:
+  - {fileID: 1524958976}
+  - {fileID: 1524958976}
   - {fileID: 1524958976}
 --- !u!114 &1679700739
 MonoBehaviour:

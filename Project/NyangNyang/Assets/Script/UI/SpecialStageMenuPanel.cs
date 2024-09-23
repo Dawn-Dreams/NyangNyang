@@ -25,8 +25,18 @@ public class SpecialStageMenuPanel : MenuPanel
     [SerializeField]
     private TextMeshProUGUI[] sweepTicketTexts; // 소탕권 수량 표시 텍스트
 
+    private SpecialStageManager specialStageManager;
     void Start()
     {
+        // SpecialStageManager 참조 초기화 및 null 확인
+        specialStageManager = FindObjectOfType<SpecialStageManager>();
+        if (specialStageManager == null)
+        {
+            Debug.LogError("SpecialStageManager를 찾을 수 없습니다. SpecialStageManager가 씬에 추가되었는지 확인하세요.");
+            return;
+        }
+
+
         for (int i = 0; i < stageButtons.Length; i++)
         {
             int index = i; // 클로저 문제 해결을 위해 인덱스를 로컬 변수로 저장
@@ -89,13 +99,23 @@ public class SpecialStageMenuPanel : MenuPanel
     {
         // Special Stage 실행 로직
         Debug.Log($"Special Stage {index + 1} 시작!");
+       
 
-        // 서버에서 소탕권 확인 후 스테이지 시작
-        if (DummyServerData.HasSweepTicket(Player.GetUserID()))
+        // 기존 소탕권으로 미니게임 입장하게 했지만,
+        // 반대로 미니게임에서 소탕권 획득 후 각 스페셜 스테이지 소탕할 수 있도록 함
+       
+    }
+
+    // 소탕 버튼 클릭 시 실행
+    void OnClickSweepButton(int index)
+    {
+        // 현재 스테이지에 맞는 소탕권 사용
+        if (DummyServerData.HasSweepTicket(Player.GetUserID(), index))
         {
-            DummyServerData.UseSweepTicket(Player.GetUserID());
+            DummyServerData.UseSweepTicket(Player.GetUserID(), index);
             UpdateSweepTicketText(index);
-            Debug.Log("스페셜 스테이지를 시작합니다. 소탕권이 하나 감소했습니다.");
+            specialStageManager.StartSpecialStage(index + 1);
+            Debug.Log($"소탕 버튼 {index + 1} 클릭됨, 소탕권 사용 완료.");
         }
         else
         {
@@ -103,17 +123,10 @@ public class SpecialStageMenuPanel : MenuPanel
         }
     }
 
-    // 소탕 버튼 클릭 시 실행
-    void OnClickSweepButton(int index)
-    {
-        // 소탕 기능 실행 로직 (구현에 따라 추가)
-        Debug.Log($"소탕 버튼 {index + 1} 클릭됨.");
-    }
-
     // 소탕권 수량 업데이트
     void UpdateSweepTicketText(int index)
     {
-        int sweepTicketCount = DummyServerData.GetSweepTicketCount(Player.GetUserID());
+        int sweepTicketCount = DummyServerData.GetSweepTicketCount(Player.GetUserID(), index);
         sweepTicketTexts[index].text = $"소탕권: {sweepTicketCount}";
     }
 }

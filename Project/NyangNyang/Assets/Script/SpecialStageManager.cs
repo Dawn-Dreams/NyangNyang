@@ -3,9 +3,7 @@ using UnityEngine.UI;
 
 public class SpecialStageManager : MonoBehaviour
 {
-    [SerializeField]
-    private Button specialStageButton;  // 스페셜 스테이지로 이동하는 버튼
-
+    
     [SerializeField]
     private GameObject specialStageUI;  // 스페셜 스테이지에서 나타날 UI
 
@@ -23,15 +21,10 @@ public class SpecialStageManager : MonoBehaviour
         {
             Debug.LogError("StageManager를 찾을 수 없습니다.");
         }
-
-        if (specialStageButton != null)
-        {
-            specialStageButton.onClick.AddListener(StartSpecialStage); // 버튼 클릭 시 스페셜 스테이지 시작
-        }
     }
 
     // 스페셜 스테이지 시작
-    public void StartSpecialStage()
+    public void StartSpecialStage(int index)
     {
         Debug.Log("스페셜 스테이지 시작");
         if (isSpecialStageActive)
@@ -48,7 +41,7 @@ public class SpecialStageManager : MonoBehaviour
         if (stageManager != null)
         {
             originalBackground = stageManager.GetCurrentTheme(); // 원래 배경 테마 저장
-            stageManager.ChangeBackgroundToSpecialStage(6); // 배경을 스페셜 스테이지 배경(6)으로 변경
+            stageManager.ChangeBackgroundToSpecialStage(index+5); // 배경을 스페셜 스테이지 배경(6)으로 변경
         }
 
         // playSec 뒤 스페셜 스테이지 종료
