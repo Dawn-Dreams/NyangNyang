@@ -58,6 +58,15 @@ public class WeaponManager : MonoBehaviour
         return 1000;
     }
 
+    public void EnhanceEffectWeapon(int id)
+    {
+        Weapon weapon = GetWeapon(id);
+        if ( weapon != null && weapon.HasWeapon() && weapon.GetLevel() < 100)
+        {
+            weapon.StatusUpgrade();
+        }
+    }
+
     public void AddWeaponCount(int id, int count)
     {
         Weapon weapon = GetWeapon(id);

@@ -7,6 +7,7 @@ public class Weapon
     int subGrade;       // 세부 등급
 
     int status;          // 장비 세부 능력치
+    int nextStatus = 10;     // 다음 장비의 세부 능력치
     int level;          // 장비 레벨
     int coin = 1;           // 장비 레벨 업 시 필요한 코인 수
 
@@ -30,16 +31,25 @@ public class Weapon
         level = _level;
     }
     public int GetID() {  return id; }
+
     public string GetName()
     {
         return name;
     }
+
     public int LevelUP()
     {
         // TODO: 레벨업 및 필요 코인 로직 만들기
         level++;
         coin++;
         return coin;
+    }
+
+    public int StatusUpgrade()
+    {
+        status = nextStatus;
+        nextStatus += 10;
+        return nextStatus;
     }
 
     public void AddWeapon(int count)
@@ -65,5 +75,15 @@ public class Weapon
     public int GetNeedCoin()
     {
         return coin;
+    }
+
+    public int GetCurStatus()
+    {
+        return status;
+    }
+
+    public int GetNextStatus()
+    {
+        return nextStatus;
     }
 }
