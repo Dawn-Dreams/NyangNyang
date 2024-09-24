@@ -1,4 +1,4 @@
-﻿using APIGameServer.Models;
+﻿using APIGameServer.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.PortableExecutable;

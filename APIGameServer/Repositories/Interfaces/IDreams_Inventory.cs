@@ -1,5 +1,5 @@
 ﻿namespace APIGameServer.Repositories.Interfaces;
 
-public interface ISqlDatabase : IDisposable
+public interface IDreams_Inventory : IDisposable
 {
 }

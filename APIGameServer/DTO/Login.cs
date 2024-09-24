@@ -1,5 +1,6 @@
-﻿namespace APIGameServer.Models;
+﻿namespace APIGameServer.DTO;
 
+using APIGameServer.Models;
 using Microsoft.AspNetCore.Connections.Features;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -19,9 +20,10 @@ public class ResponseRegist
 
     [Required]
     public ErrorCode Result { get; set; } = 0;
-
+//
     [Required]
-    public long Uid { get; set; } 
+     public long Uid { get; set; } 
+    //클라도 자신의 uid를 알고 클라측에서 저정해야함
 }
 
 public class ResponseLogin
