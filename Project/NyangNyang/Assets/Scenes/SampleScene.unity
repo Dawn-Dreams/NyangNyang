@@ -2509,6 +2509,7 @@ MonoBehaviour:
   ThemeUI: {fileID: 1045715679}
   StageUI: {fileID: 1152713302}
   GateUI: {fileID: 9501238}
+  enemySpawnManager: {fileID: 107570237}
   isSpecial: 0
   maxGateCount: 3
   maxStageCount: 5

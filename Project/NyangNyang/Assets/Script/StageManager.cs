@@ -17,6 +17,7 @@ public class StageManager : MonoBehaviour
     [SerializeField]
     private Text GateUI;
 
+    [SerializeField]
     private EnemySpawnManager enemySpawnManager;  // 적 스폰 매니저 변수
 
     public bool isSpecial = false;  // 스페셜 스테이지 여부를 저장하는 변수
@@ -33,23 +34,16 @@ public class StageManager : MonoBehaviour
 
     void Start()
     {
-        enemySpawnManager = FindObjectOfType<EnemySpawnManager>();
-
-        if (enemySpawnManager == null)
-        {
-            Debug.LogError("EnemySpawnManager를 찾을 수 없습니다.");
-        }
-
         SetStageUI();
     }
 
     void Update()
     {
         // TODO: 임시 테스트 코드, 추후 조정 필요
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            GateClear();
-        }
+        //if (Input.GetKeyDown(KeyCode.Tab))
+        //{
+        //    GateClear();
+        //}
 
         if (isSpecial)
         {
@@ -65,12 +59,13 @@ public class StageManager : MonoBehaviour
         GateUI.text = "GATE " + currentGate.ToString();
     }
 
-    private void GateClear()
+    private IEnumerator GateClear(float waitTime)
     {
+        yield return new WaitForSeconds(waitTime);
         if (isSpecial)
         {
             Debug.Log("스페셜 스테이지에서는 관문을 통과하지 않습니다.");
-            return;  // 스페셜 스테이지일 경우, 관문 통과 시스템 비활성화
+            yield break; // 스페셜 스테이지일 경우, 관문 통과 시스템 비활성화
         }
 
         if (currentGate >= maxGateCount)
@@ -85,10 +80,13 @@ public class StageManager : MonoBehaviour
         }
     }
 
+    public void GateClearAfterEnemyDeath(float waitTime)
+    {
+        StartCoroutine(GateClear(waitTime));
+    }
+
     private void GoToNextGate()
     {
-        Debug.Log("다음 관문으로 이동 시작");
-
         parallaxScrollingManager.MoveBackgroundSprites(true);
         // TODO: 고양이 걷기 애니메이션
 
@@ -97,13 +95,12 @@ public class StageManager : MonoBehaviour
 
     IEnumerator ArriveGate()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.0f);
 
         // 관문 index 1, 2, ..., maxGateCount 순환
         currentGate++;
 
         SetStageUI();
-        Debug.Log("관문 도착");
 
         parallaxScrollingManager.MoveBackgroundSprites(false);
 

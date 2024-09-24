@@ -8,16 +8,23 @@ public class Enemy : Character
 {
     public GameObject floatingDamage;
 
+    [SerializeField] private StageManager stageManager;
+
     protected EnemyDropData DropData = null;
 
     protected override void Awake()
     {
-        Debug.Log("enemy 생성");
         // 09.23 - EnemyID 별개로 관리하도록 변경
         characterID = 0;
         IsEnemy = true;
 
         base.Awake();
+
+        // stage manager 
+        if (stageManager == null)
+        {
+            stageManager = FindObjectOfType<StageManager>();
+        }
 
         // enemy drop data 받기
         if (DropData == null)
@@ -54,8 +61,12 @@ public class Enemy : Character
             DropData.GiveItemToPlayer();
         }
 
-        base.Death();
+        if (stageManager)
+        {
+            stageManager.GateClearAfterEnemyDeath(0.5f);
+        }
 
+        base.Death();
     }
 }
 
