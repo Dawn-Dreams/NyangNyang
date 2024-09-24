@@ -31,10 +31,10 @@ public class DummyServerData : MonoBehaviour
         new StatusLevelData(10, 0, 5, 2),
     };
 
-    // 유저 재화(골드+보석) 데이터
+    // 유저 재화(골드+보석+티켓) 데이터
     private static CurrencyData[] usersCurrencyData = new CurrencyData[]
     {
-        ScriptableObject.CreateInstance<CurrencyData>().SetCurrencyData(150_000,3),
+        ScriptableObject.CreateInstance<CurrencyData>().SetCurrencyData(150_000,3,new int[] {1,1,1}),
         ScriptableObject.CreateInstance<CurrencyData>(),
         ScriptableObject.CreateInstance<CurrencyData>(),
         ScriptableObject.CreateInstance<CurrencyData>(),
@@ -218,63 +218,6 @@ public class DummyServerData : MonoBehaviour
         return enemyDropData[characterID];
     }
 
-    // 소탕권이 있는지 확인하는 함수 (유저 ID, 소탕권 종류)
-    public static bool HasSweepTicket(int userID, int index)
-    {
-        if (userID < 0 || userID >= sweepTickets.Length)
-        {
-            Debug.Log("INVALID USERID");
-            return false;
-        }
-
-        return sweepTickets[userID,index] > 0;
-    }
-
-    // 소탕권을 사용하는 함수
-    public static bool UseSweepTicket(int userID, int index)
-    {
-        if (HasSweepTicket(userID, index))
-        {
-            sweepTickets[userID,index]--;
-            Debug.Log($"소탕권 사용: 남은 소탕권 수량 {sweepTickets[userID,index]}");
-            return true;
-        }
-
-        Debug.Log("소탕권이 부족합니다.");
-        return false;
-    }
-
-    // 소탕권 수량을 가져오는 함수
-    public static int GetSweepTicketCount(int userID, int index)
-    {
-        if (userID < 0 || userID >= sweepTickets.Length)
-        {
-            Debug.Log("INVALID USERID");
-            return 0;
-        }
-
-        return sweepTickets[userID,index];
-    }
-
-    // 소탕권을 추가하는 함수
-    public static void AddSweepTicket(int userID, int index, int amount)
-    {
-        if (userID < 0 || userID >= sweepTickets.GetLength(0))
-        {
-            Debug.Log("INVALID USERID");
-            return;
-        }
-
-        if (index < 0 || index >= sweepTickets.GetLength(1))
-        {
-            Debug.Log("INVALID INDEX");
-            return;
-        }
-
-        sweepTickets[userID, index] += amount;
-        Debug.Log($"유저 {userID}에게 소탕권 {index+1}번을 {amount}개 추가했습니다. 현재 소탕권 수량: {sweepTickets[userID, index]}개");
-    }
-
     public static bool AddGoldOnServer(int userID, BigInteger addGoldValue)
     {
         CurrencyData userCurrencyData = GetUserCurrencyData(userID);
@@ -289,6 +232,70 @@ public class DummyServerData : MonoBehaviour
 
         return false;
     }
+
+    // 티켓이 있는지 확인하는 함수 (유저 ID, 티켓 종류)
+    public static bool HasTicket(int userID, int index)
+    {
+        if (!IsValidUser(userID) || !IsValidTicketIndex(index))
+        {
+            Debug.Log("INVALID USERID OR INDEX");
+            return false;
+        }
+
+        return usersCurrencyData[userID].ticket[index] > 0;
+    }
+
+    // 티켓을 사용하는 함수
+    public static bool UseTicket(int userID, int index)
+    {
+        if (HasTicket(userID, index))
+        {
+            usersCurrencyData[userID].ticket[index]--;
+            Debug.Log($"티켓 사용: 남은 티켓 수량 {usersCurrencyData[userID].ticket[index]}");
+            return true;
+        }
+
+        Debug.Log("티켓이 부족합니다.");
+        return false;
+    }
+
+    // 티켓 수량을 가져오는 함수
+    public static int GetTicketCount(int userID, int index)
+    {
+        if (!IsValidUser(userID) || !IsValidTicketIndex(index))
+        {
+            Debug.Log("INVALID USERID OR INDEX");
+            return 0;
+        }
+
+        return usersCurrencyData[userID].ticket[index];
+    }
+
+    // 티켓을 추가하는 함수
+    public static void AddTicket(int userID, int index, int amount)
+    {
+        if (!IsValidUser(userID) || !IsValidTicketIndex(index))
+        {
+            Debug.Log("INVALID USERID OR INDEX");
+            return;
+        }
+
+        usersCurrencyData[userID].ticket[index] += amount;
+        Debug.Log($"유저 {userID}에게 티켓 {index + 1}번을 {amount}개 추가했습니다. 현재 티켓 수량: {usersCurrencyData[userID].ticket[index]}개");
+    }
+
+    // 유저 ID의 유효성을 확인하는 함수
+    private static bool IsValidUser(int userID)
+    {
+        return userID >= 0 && userID < usersCurrencyData.Length;
+    }
+
+    // 티켓 인덱스의 유효성을 확인하는 함수
+    private static bool IsValidTicketIndex(int index)
+    {
+        return index >= 0 && index < 3; // 티켓 배열 크기와 동일
+    }
+
 
     // 함수 종료
     // ================

@@ -20,6 +20,10 @@ public class Player : MonoBehaviour
     public delegate void OnExpChangeDelegate(UserLevelData newLevelData);
     public static event OnExpChangeDelegate OnExpChange;
 
+    // 티켓 변화 델리게이트 이벤트
+    public delegate void OnTicketChangeDelegate(int[] newTicketVal);
+    public static event OnTicketChangeDelegate OnTicketChange;
+
     [SerializeField] private GameObject levelUpIconObject;
 
     // 스테이터스 레벨 변화 델리게이트
@@ -40,9 +44,37 @@ public class Player : MonoBehaviour
 
             if(OnGoldChange != null)
                 OnGoldChange(playerCurrency.gold);
-
         }
     }
+
+    public static int[] Ticket
+    {
+        get { return playerCurrency.ticket; }
+        set
+        {
+            // 배열 비교를 위해 참조 대신 값 비교를 해야 함
+            if (playerCurrency.ticket.Length == value.Length)
+            {
+                bool isEqual = true;
+                for (int i = 0; i < playerCurrency.ticket.Length; i++)
+                {
+                    if (playerCurrency.ticket[i] != value[i])
+                    {
+                        isEqual = false;
+                        break;
+                    }
+                }
+
+                if (isEqual) return;
+            }
+
+            playerCurrency.ticket = (int[])value.Clone();
+
+            if (OnTicketChange != null)
+                OnTicketChange(playerCurrency.ticket);
+        }
+    }
+
     public static UserLevelData UserLevel
     {
         get
@@ -51,7 +83,7 @@ public class Player : MonoBehaviour
         }
         set
         {
-            if (playerLevelData.currentExp == value.currentExp 
+            if (playerLevelData.currentExp == value.currentExp
                 && playerLevelData.currentLevel == value.currentLevel) return;
             playerLevelData = value;
 
@@ -60,12 +92,11 @@ public class Player : MonoBehaviour
         }
     }
 
-
     void Awake()
     {
         // 서버로부터 user id 받기
         userID = 0;
-        
+
         if (playerStatus == null)
             playerStatus = new Status(userID);
         if (playerCurrency == null)
@@ -105,7 +136,7 @@ public class Player : MonoBehaviour
         // 해당 방식으로 저장될 경우 래퍼런스 타입을 가짐
         //playerLevelData = DummyServerData.GetUserLevelData(userID);
         playerLevelData = UserLevelData.GetNewDataFromSource(DummyServerData.GetUserLevelData(userID));
-        
+
 
         if (OnExpChange != null)
             OnExpChange(playerLevelData);
@@ -119,7 +150,22 @@ public class Player : MonoBehaviour
     public static void AddGold(BigInteger addGoldValue)
     {
         playerCurrency.RequestAddGold(addGoldValue);
-        //Gold += addGoldValue;
+        // Gold += addGoldValue;
+    }
+
+    public static void AddTickets(int[] addTicketValues)
+    {
+        // 서버에 티켓 추가 요청이 있을 경우 처리
+        // DummyServerData.AddTicketsOnServer(userID, addTicketValues);
+
+        // 티켓 값 업데이트 (예시로 티켓의 각 값을 더하는 로직 사용)
+        for (int i = 0; i < playerCurrency.ticket.Length && i < addTicketValues.Length; i++)
+        {
+            playerCurrency.ticket[i] += addTicketValues[i];
+        }
+
+        if (OnTicketChange != null)
+            OnTicketChange(playerCurrency.ticket);
     }
 
     // TODO: 임시 함수

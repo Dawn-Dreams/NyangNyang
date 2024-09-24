@@ -126,9 +126,9 @@ public class SpecialStageMenuPanel : MenuPanel
     void OnClickSweepButton(int index)
     {
         // 현재 스테이지에 맞는 소탕권 사용
-        if (DummyServerData.HasSweepTicket(Player.GetUserID(), index))
+        if (DummyServerData.HasTicket(Player.GetUserID(), index))
         {
-            DummyServerData.UseSweepTicket(Player.GetUserID(), index);
+            DummyServerData.UseTicket(Player.GetUserID(), index);
             UpdateSweepTicketText(index);
             specialStageManager.StartSpecialStage(index + 1);
             //Debug.Log($"소탕 버튼 {index + 1} 클릭됨, 소탕권 사용 완료.");
@@ -142,7 +142,7 @@ public class SpecialStageMenuPanel : MenuPanel
     // 소탕권 수량 업데이트
     void UpdateSweepTicketText(int index)
     {
-        int sweepTicketCount = DummyServerData.GetSweepTicketCount(Player.GetUserID(), index);
+        int sweepTicketCount = DummyServerData.GetTicketCount(Player.GetUserID(), index);
         sweepTicketTexts[index].text = $"{index + 1}번 소탕권 개수: {sweepTicketCount}";
     }
 }

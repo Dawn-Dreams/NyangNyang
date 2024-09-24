@@ -8,11 +8,13 @@ public class CurrencyData : ScriptableObject
 {
     public BigInteger gold;
     public BigInteger diamond;
+    public int[] ticket = {0,0,0};
 
-    public CurrencyData SetCurrencyData(BigInteger getGold, BigInteger getDiamond)
+    public CurrencyData SetCurrencyData(BigInteger getGold, BigInteger getDiamond, int[] getTicket)
     {
         gold = getGold;
         diamond = getDiamond;
+        ticket = (int[])getTicket.Clone();
         return this;
     }
 
@@ -20,6 +22,7 @@ public class CurrencyData : ScriptableObject
     {
         gold = otherData.gold;
         diamond = otherData.diamond;
+        ticket = otherData.ticket; 
         return this;
     }
 

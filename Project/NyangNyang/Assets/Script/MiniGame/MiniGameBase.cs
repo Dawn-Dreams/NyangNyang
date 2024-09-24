@@ -3,17 +3,17 @@ using UnityEngine;
 public abstract class MiniGameBase : MonoBehaviour
 {
     protected string gameName;
-    protected int rewardSweepTicketIndex; // 보상으로 받을 소탕권 인덱스
+    protected int rewardTicketIndex; // 보상으로 받을 소탕권 인덱스
     protected bool isGameCleared;         // 게임 클리어 여부
 
     // 미니게임 초기화
-    protected void Initialize(string gameName, int rewardSweepTicketIndex)
+    protected void Initialize(string gameName, int rewardTicketIndex)
     {
         this.gameName = gameName;
-        this.rewardSweepTicketIndex = rewardSweepTicketIndex;
+        this.rewardTicketIndex = rewardTicketIndex;
         isGameCleared = false;
 
-        Debug.Log($"{gameName} 초기화 완료. 보상 소탕권 인덱스: {rewardSweepTicketIndex}");
+        Debug.Log($"{gameName} 초기화 완료. 보상 소탕권 인덱스: {rewardTicketIndex}");
     }
 
     // 미니게임 시작
@@ -33,8 +33,8 @@ public abstract class MiniGameBase : MonoBehaviour
     // 클리어 시 소탕권 보상 지급
     private void RewardSweepTicket()
     {
-        DummyServerData.AddSweepTicket(Player.GetUserID(), rewardSweepTicketIndex, 1);
-        Debug.Log($"미니게임 클리어! 소탕권 {rewardSweepTicketIndex}번을 1개 획득했습니다.");
+        DummyServerData.AddTicket(Player.GetUserID(), rewardTicketIndex, 1);
+        Debug.Log($"미니게임 클리어! 소탕권 {rewardTicketIndex}번을 1개 획득했습니다.");
     }
 
     // 미니게임 시작 로직 (각 미니게임에서 구현)
