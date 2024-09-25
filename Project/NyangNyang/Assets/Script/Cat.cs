@@ -24,13 +24,6 @@ public class Cat : Character
 
     }
 
-    protected override bool TakeDamage(int damage)
-    {
-        bool getDamaged = base.TakeDamage(damage);
-
-
-        return getDamaged;
-    }
 
     void HPLevelChanged()
     {

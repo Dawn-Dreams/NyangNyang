@@ -82,12 +82,12 @@ public class Character : MonoBehaviour
         }
     }
 
-    protected virtual bool TakeDamage(int damage)
+    protected virtual BigInteger TakeDamage(BigInteger damage)
     {
-        if (CurrentHP <= 0) return false;
+        if (CurrentHP <= 0) return -1;
 
         // TODO: 이 식도 추후 status 에서 적용
-        int applyDamage = damage - status.defence;
+        BigInteger applyDamage = damage - status.defence;
         
         CurrentHP = BigInteger.Max(0, currentHP - applyDamage);
 
@@ -96,7 +96,7 @@ public class Character : MonoBehaviour
             Death();
         }
 
-        return true;
+        return applyDamage;
     }
     void ChangeHealthBar()
     {

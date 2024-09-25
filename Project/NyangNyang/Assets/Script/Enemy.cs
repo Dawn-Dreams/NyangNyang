@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Quaternion = UnityEngine.Quaternion;
 
 public class Enemy : Character
 {
@@ -33,19 +35,19 @@ public class Enemy : Character
         }
     }
 
-    protected override bool TakeDamage(int damage)
+    protected override BigInteger TakeDamage(BigInteger damage)
     {
-        bool getDamaged = base.TakeDamage(damage);
+        BigInteger applyDamage = base.TakeDamage(damage);
 
-        if (getDamaged)
+        if (applyDamage > 0)
         {
             // 대미지 출력
             GameObject textObject = Instantiate(floatingDamage, transform.position, Quaternion.identity);
-            textObject.GetComponentInChildren<TextMesh>().text = " " + damage + " ";
+            textObject.GetComponentInChildren<TextMesh>().text = " " + applyDamage + " ";
             Destroy(textObject,2.0f);
         }
 
-        return getDamaged;
+        return applyDamage;
     }
 
     // 적군이 사망했는지 여부를 반환
