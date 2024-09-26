@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class SpecialStageMenuPanel : MenuPanel
 {
@@ -42,23 +43,54 @@ public class SpecialStageMenuPanel : MenuPanel
             return;
         }
 
-
         for (int i = 0; i < stageButtons.Length; i++)
         {
             int index = i; // 클로저 문제 해결을 위해 인덱스를 로컬 변수로 저장
             stageButtons[i].onClick.AddListener(() => OnClickStageButton(index));
         }
 
-        // 각 탭의 버튼에 클릭 이벤트 등록
         for (int i = 0; i < startButtons.Length; i++)
         {
             int index = i;
             startButtons[i].onClick.AddListener(() => OnClickStartButton(index));
             sweepButtons[i].onClick.AddListener(() => OnClickSweepButton(index));
+
+            // 마우스 오버 이벤트 추가
+            AddEventTrigger(sweepButtons[i], EventTriggerType.PointerEnter, () => OnHoverSweepButton(index));
+            AddEventTrigger(sweepButtons[i], EventTriggerType.PointerExit, () => OnExitSweepButton(index));
         }
 
         // 첫 번째 탭 활성화
         OnClickStageButton(0);
+    }
+
+    // EventTrigger에 이벤트 추가 함수
+    private void AddEventTrigger(Button button, EventTriggerType eventType, UnityEngine.Events.UnityAction action)
+    {
+        EventTrigger trigger = button.gameObject.GetComponent<EventTrigger>();
+        if (trigger == null)
+        {
+            trigger = button.gameObject.AddComponent<EventTrigger>();
+        }
+
+        EventTrigger.Entry entry = new EventTrigger.Entry
+        {
+            eventID = eventType
+        };
+        entry.callback.AddListener((eventData) => action());
+        trigger.triggers.Add(entry);
+    }
+
+    // 마우스가 소탕 버튼 위에 있을 때 실행
+    void OnHoverSweepButton(int index)
+    {
+        UpdateTicketText(index);
+    }
+
+    // 마우스가 소탕 버튼에서 나갔을 때 실행
+    void OnExitSweepButton(int index)
+    {
+        sweepTicketTexts[index].text = "";
     }
 
     void OnClickStageButton(int index)
@@ -75,6 +107,9 @@ public class SpecialStageMenuPanel : MenuPanel
         currentActiveTabIndex = index;
 
         SetButtonActiveColor(stageButtons[index]);
+
+        // 선택된 탭에 맞는 소탕권 수량 업데이트
+        UpdateTicketText(index);
     }
 
     // 선택된 버튼 색상만 하이라이트 기능 ... 메뉴 패널클래스로 옮겨서 상속받아 사용할 수 있게 추후 변경
@@ -128,10 +163,13 @@ public class SpecialStageMenuPanel : MenuPanel
         // 현재 스테이지에 맞는 소탕권 사용
         if (DummyServerData.HasTicket(Player.GetUserID(), index))
         {
+            if (index < 0 || index >= 3)
+            {
+                Debug.LogError($"잘못된 스페셜 스테이지 인덱스: {index}");
+                return;
+            }
             DummyServerData.UseTicket(Player.GetUserID(), index);
-            UpdateSweepTicketText(index);
-            specialStageManager.StartSpecialStage(index + 1);
-            //Debug.Log($"소탕 버튼 {index + 1} 클릭됨, 소탕권 사용 완료.");
+            specialStageManager.StartSpecialStage(index);
         }
         else
         {
@@ -139,8 +177,8 @@ public class SpecialStageMenuPanel : MenuPanel
         }
     }
 
-    // 소탕권 수량 업데이트
-    void UpdateSweepTicketText(int index)
+    // 소탕권 수량 텍스트 업데이트
+    void UpdateTicketText(int index)
     {
         int sweepTicketCount = DummyServerData.GetTicketCount(Player.GetUserID(), index);
         sweepTicketTexts[index].text = $"{index + 1}번 소탕권 개수: {sweepTicketCount}";

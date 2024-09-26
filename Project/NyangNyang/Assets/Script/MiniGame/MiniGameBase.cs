@@ -34,7 +34,7 @@ public abstract class MiniGameBase : MonoBehaviour
     private void RewardSweepTicket()
     {
         DummyServerData.AddTicket(Player.GetUserID(), rewardTicketIndex, 1);
-        Debug.Log($"미니게임 클리어! 소탕권 {rewardTicketIndex}번을 1개 획득했습니다.");
+        DummyServerData.GetTicketCount(Player.GetUserID(),rewardTicketIndex);
     }
 
     // 미니게임 시작 로직 (각 미니게임에서 구현)
