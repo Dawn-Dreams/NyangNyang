@@ -15,6 +15,8 @@ public class PlayerBar : MonoBehaviour
     [SerializeField] private Slider expSlider;
     [SerializeField] private TextMeshProUGUI expText;
 
+    [SerializeField] private Button menuButton;
+
     void Start()
     {
         GoldTextChangeHandler(Player.Gold);
@@ -22,6 +24,8 @@ public class PlayerBar : MonoBehaviour
 
         ExpChangeHandler(Player.UserLevel);
         Player.OnExpChange += ExpChangeHandler;
+
+        menuButton.onClick.AddListener(OnClickMenuButton);
     }
 
     private void GoldTextChangeHandler(BigInteger goldValue)
@@ -55,5 +59,19 @@ public class PlayerBar : MonoBehaviour
 
             expText.text = curExpString + " / " + curReqString;
         }
+    }
+
+    void OnClickMenuButton()
+    {
+        Debug.Log("Menu Button Click");
+        //NetworkManager.GetInstance().TestFunc();
+
+        /*
+         * * GetInstance는 NetworkManager 내에
+         public static NetworkManager GetInstnace(){
+            return instance;
+        }
+        입니다!
+         */
     }
 }
