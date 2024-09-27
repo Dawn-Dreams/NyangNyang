@@ -11,7 +11,6 @@ public class Cat : Character
     {
         //characterID = 0;
         characterID = Player.GetUserID();
-        status = Player.playerStatus;
 
         Player.OnHPLevelChange += HPLevelChanged;
         base.Awake();
