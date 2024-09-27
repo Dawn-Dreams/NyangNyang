@@ -18,11 +18,11 @@ public class RedisDatabase : IRedisDatabase
         _redisDb = _redisCon.GetConnection().GetDatabase();
     }
 
-    public async Task<long> GetNewUserUid()
+    public async Task<int> GetNewUserUid()
     {
         var UID = await _redisDb.StringIncrementAsync("uid",1);
         if(UID == 0) { return -1; }
-        return UID;
+        return (int)UID;
 
     }
     public void Dispose()

@@ -18,12 +18,12 @@ public class ChangeNicknameController : ControllerBase
         _userInfo = userInfo;
     }
 
-    [HttpPost]
-    public async Task<ResponsChangeNick> Create([FromBody] RequestChangeNick req)
-    {
-        ResponsChangeNick res = new ResponsChangeNick();
+ //   [HttpPost]
+    //public async Task<ResponsChangeNick> Create([FromBody] RequestChangeNick req)
+    //{
+    //    ResponsChangeNick res = new ResponsChangeNick();
 
 
 
-    }
+    //}
 }

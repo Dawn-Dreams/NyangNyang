@@ -3,6 +3,6 @@
 
 public interface IRedisDatabase : IDisposable
 {
-    public Task<long> GetNewUserUid();
+    public Task<int> GetNewUserUid();
 
 }

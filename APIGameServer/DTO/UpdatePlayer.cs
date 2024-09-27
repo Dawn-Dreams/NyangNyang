@@ -3,10 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace APIGameServer.DTO;
 
-public class RequestUpdateStat
+using ErrorCode = ServerClientShare.ErrorCode;
+public class RequestUpdateStatLevel
 {
     [Required]
-    public PlayerStatData StatData { get; set; }
+    public PlayerStatusLevelData StatData { get; set; }
 
 }
 

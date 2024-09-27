@@ -9,19 +9,23 @@ namespace APIGameServer.Controllers;
 [ApiController]
 public class UpdatePlayerStatController : ControllerBase
 {
-    readonly IDreams_PlayerStat _playerStat;
+    readonly IDreams_Player _playerStat;
 
-    public UpdatePlayerStatController(IDreams_PlayerStat playerStat)
+    public UpdatePlayerStatController(IDreams_Player playerStat)
     {
         _playerStat = playerStat;
     }
 
     [HttpPost]
-    public async Task<ResponseUpdateStat> Create([FromBody] RequestUpdateStat req)
+    public async Task<ResponseUpdateStat> Create([FromBody] RequestUpdateStatLevel req)
     {
         ResponseUpdateStat res = new ResponseUpdateStat();
 
-        res.Result = await _playerStat.UpdatePlayerStat(req.StatData);
+        var temp = await _playerStat.UpdatePlayerStatusLevel(req.StatData);
+        if(temp == 0)
+        {
+            res.Result = ServerClientShare.ErrorCode.FailUpdatePlayerTable;
+        }
 
         return res;
 

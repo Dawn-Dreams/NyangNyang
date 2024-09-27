@@ -1,6 +1,9 @@
 ﻿using APIGameServer.DTO;
 using APIGameServer.Repositories.Interfaces;
 using APIGameServer.Repository.Interfaces;
+using APIGameServer.Services.Interface;
+
+using APIGameServer.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,52 +15,53 @@ public class RegistController : ControllerBase
 {
     readonly IRedisDatabase _redis;
     readonly IDreams_UserInfo _userInfo;
-    public RegistController(IRedisDatabase redis, IDreams_UserInfo userInfo)
+
+    readonly IPlayerService _playerServiece;
+
+    public RegistController(IRedisDatabase redis, IDreams_UserInfo userInfo, IPlayerService playerService)
     {  
         _redis = redis;
         _userInfo = userInfo;
+        _playerServiece = playerService;
 
     }
 
     [HttpPost]
     public async Task<ResponseRegist> Create([FromBody] RequestRegist req)
     {
-        ResponseRegist res = new ResponseRegist();
+        ResponseRegist response = new ResponseRegist();
 
         var uid = await _redis.GetNewUserUid();
         if (uid < 0)
         {
-            res.Result = ErrorCode.FailRegistByUid;
-            //uid 발급 실패
-            return res;
+            response.Result = ServerClientShare.ErrorCode.FailRegistByUid;
+            return response;
         }
-       
-        //DB에 계정정보 생성할까-> DB연동하고 해결하자.
-        //user_info에 db정보 생성해야한다.
+
+        response.Uid = uid;
+
         var nickname = "nyang" + uid;
-        var cnt = await _userInfo.CreateUserInfo(uid, nickname);
+        var res = await _userInfo.CreateUserInfo(uid, nickname);
         
-        if(cnt == 0)
+        if(res == 0)
         {
-            //db에 저장이 안된거임 오류를 리턴해야한다.
-            //오류코드를 추가해야한다.
-            res.Result = ErrorCode.FailRegistByUid;
-            return res;
-
+            response.Result = ServerClientShare.ErrorCode.FailSaveUserInfoTable;
+            return response;
         }
 
-        Console.WriteLine(nickname);
-
-        //cnt리턴값이 과연 무엇일가 성공한 쿼리cnt?
-        Console.WriteLine(cnt);
+        var temp = await _playerServiece.CreatePlayerTables(uid);
+        if (temp == 0)
+        {
+            response.Result = ServerClientShare.ErrorCode.FailSavePlayerTable;
+            return response;
+        }
 
 
         //닉네임도 보내야하나...?흠냐리~~ 
         //초기닉네임은 uid만 붙힌거라 uid만 보내도된다고 판단하긴했눈데 쩝
-        res.Uid = uid;
-        res.Result = ErrorCode.None;
+        response.Result = ServerClientShare.ErrorCode.None;
 
-        return res;
+        return response;
 
     }
 }
