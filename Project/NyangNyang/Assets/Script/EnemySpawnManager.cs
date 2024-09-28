@@ -34,6 +34,7 @@ public class EnemySpawnManager : MonoBehaviour
 
         // 적 스폰
         currentEnemy = Instantiate(enemyPrefab, enemySpawnPosition).GetComponent<Enemy>();
+        currentEnemy.SetNumberOfEnemyInGroup(3);
 
         // 적과 고양이의 적군 오브젝트 연결
         currentEnemy.SetEnemy(cat);

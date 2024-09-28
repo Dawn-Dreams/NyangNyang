@@ -27,7 +27,7 @@ public class DummyServerData : MonoBehaviour
 
     private static StatusLevelData[] enemyStatusLevelData = new StatusLevelData[]
     {
-        new StatusLevelData(10, 0, 5, 2),
+        new StatusLevelData(50, 0, 5, 2),
         new StatusLevelData(10, 0, 5, 2),
     };
 

@@ -102,6 +102,13 @@ public class StageManager : MonoBehaviour
 
         SetStageUI();
 
+        RequestEnemySpawn();
+
+        yield break;
+    }
+
+    void RequestEnemySpawn()
+    {
         parallaxScrollingManager.MoveBackgroundSprites(false);
 
         // 적군 생성
@@ -113,8 +120,6 @@ public class StageManager : MonoBehaviour
         {
             Debug.LogError("EnemySpawnManager null. 적을 스폰할 수 없습니다.");
         }
-
-        yield break;
     }
 
     private void StageClear()
@@ -138,6 +143,7 @@ public class StageManager : MonoBehaviour
         currentStage++;
 
         SetStageUI();
+        RequestEnemySpawn();
     }
 
     private void ChangeTheme()
@@ -149,6 +155,7 @@ public class StageManager : MonoBehaviour
         currentGate = 1;
 
         SetStageUI();
+        RequestEnemySpawn();
     }
 
     // 스페셜 스테이지에서 고양이가 계속 앞으로 이동하는 함수

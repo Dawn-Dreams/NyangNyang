@@ -6,13 +6,28 @@ using UnityEngine;
 using UnityEngine.UI;
 using Quaternion = UnityEngine.Quaternion;
 
+public class DummyEnemy
+{
+    private GameObject dummyGameObject;
+    private BigInteger currentHP;
+    private BigInteger maxHP;
+
+    public DummyEnemy(GameObject dummyObject, BigInteger currentHP, BigInteger maxHP)
+    {
+        this.dummyGameObject = dummyObject;
+        this.currentHP = currentHP;
+        this.maxHP = maxHP;
+    }
+}
+
 public class Enemy : Character
 {
     public GameObject floatingDamage;
-
     [SerializeField] private StageManager stageManager;
-
     protected EnemyDropData DropData = null;
+
+    [SerializeField] private GameObject[] dummyEnemyImages;
+    private DummyEnemy[] dummyEnemies;
 
     protected override void Awake()
     {
@@ -33,6 +48,14 @@ public class Enemy : Character
         {
             DropData = ScriptableObject.CreateInstance<EnemyDropData>().SetEnemyDropData(DummyServerData.GetEnemyDropData(characterID));
         }
+    }
+
+    public void SetNumberOfEnemyInGroup(int numOfEnemy = 1)
+    {
+        // 적 개체는 최소 1마리에서 최대 5마리
+        numOfEnemy = (int)Mathf.Clamp(numOfEnemy, 1.0f, 5.0f);
+
+
     }
 
     protected override BigInteger TakeDamage(BigInteger damage)
