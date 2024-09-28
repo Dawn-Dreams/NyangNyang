@@ -11,12 +11,20 @@ public class DummyEnemy
     private GameObject dummyGameObject;
     private BigInteger currentHP;
     private BigInteger maxHP;
+    private TextMesh hpText;
 
-    public DummyEnemy(GameObject dummyObject, BigInteger currentHP, BigInteger maxHP)
+    public DummyEnemy(GameObject dummyObject, BigInteger maxHP)
     {
         this.dummyGameObject = dummyObject;
-        this.currentHP = currentHP;
-        this.maxHP = maxHP;
+        this.currentHP = this.maxHP = maxHP;
+
+        hpText = dummyObject.GetComponentInChildren<TextMesh>();
+        hpText.text = currentHP + " / " + maxHP;
+    }
+
+    public void TakeDamage(BigInteger getDamage)
+    {
+
     }
 }
 
@@ -55,7 +63,20 @@ public class Enemy : Character
         // 적 개체는 최소 1마리에서 최대 5마리
         numOfEnemy = (int)Mathf.Clamp(numOfEnemy, 1.0f, 5.0f);
 
-
+        dummyEnemies = new DummyEnemy[numOfEnemy];
+        BigInteger dummyMaxHp = BigInteger.Divide(maxHP, numOfEnemy);
+        for (int i = 0; i < 5; ++i)
+        {
+            // active dummy enemy
+            if (i < numOfEnemy)
+            {
+                dummyEnemies[i] = new DummyEnemy(dummyEnemyImages[i], dummyMaxHp);
+            }
+            else
+            {
+                dummyEnemyImages[i].SetActive(false);
+            }
+        }
     }
 
     protected override BigInteger TakeDamage(BigInteger damage)
