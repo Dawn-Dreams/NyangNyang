@@ -116,6 +116,17 @@ public class Player : MonoBehaviour
         {
             Player.AddExp(0_888_888);
         }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            // 임시 모든 적군 공격 
+            GameObject enemyObject = GameObject.Find("Enemy(Clone)");
+            if (enemyObject)
+            {
+                enemyObject.GetComponentInChildren<Enemy>().TakeDamage(10, true);
+            }
+            
+        }
     }
 
     public static int GetUserID()

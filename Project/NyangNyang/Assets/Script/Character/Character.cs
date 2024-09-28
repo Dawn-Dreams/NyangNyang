@@ -86,7 +86,8 @@ public class Character : MonoBehaviour
         return status.CalculateDamage();
     }
 
-    protected virtual BigInteger TakeDamage(BigInteger damage, bool isAOESkill = false)
+    // 스킬 등 외부 클래스에서 대미지 적용 시킬 가능성이 존재하여 public 으로 변경
+    public virtual BigInteger TakeDamage(BigInteger damage, bool isAOESkill = false)
     {
         if (CurrentHP <= 0) return -1;
 

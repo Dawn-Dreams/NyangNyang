@@ -132,7 +132,7 @@ public class Enemy : Character
         return damage;
     }
 
-    protected override BigInteger TakeDamage(BigInteger damage, bool isAOESkill = false)
+    public override BigInteger TakeDamage(BigInteger damage, bool isAOESkill = false)
     {
         if (_dummyEnemies.Count == 0)
         {
