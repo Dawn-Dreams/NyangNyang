@@ -72,7 +72,6 @@ public class MyBigIntegerMath : MonoBehaviour
             int count = lengthMax - divisorStr.Length;
             for (int index = 0; index < count; ++index)
             {
-                Debug.Log(index + "- "+divisorStr);
                 divisorStr = "0" + divisorStr;
             }
         }
@@ -88,4 +87,34 @@ public class MyBigIntegerMath : MonoBehaviour
         return (float)dividendInt / divisorInt;
     }
 
+    public static BigInteger MultiplyWithFloat(BigInteger left, float right, int precisionDigit)
+    {
+        
+        // BigInteger.Multiply는 큰 수 * float로 인해 float에 대한 곱셈은 존재하지않음
+        // 따라서 근삿값을 구할 수 있도록 left 의 앞 {precisionDigit} 자리 만큼의 숫자를 float와 곱셈 후
+        // 다시 자릿수를 맞추어 반환하여 float 연산이 가능하도록 진행
+
+        precisionDigit = Mathf.Clamp(precisionDigit, 1, 10);
+
+        string leftStr = left.ToString();
+        int initialBigIntegerDigit = leftStr.Length;
+
+        if (precisionDigit > leftStr.Length)
+        {
+            precisionDigit = leftStr.Length;
+            initialBigIntegerDigit = 0;
+        }
+        else
+        {
+            initialBigIntegerDigit -= precisionDigit;
+        }
+
+        int leftInt = int.Parse(leftStr.Substring(0, precisionDigit));
+
+        leftInt = (int)(leftInt * right);
+
+        BigInteger returnValue = leftInt * BigInteger.Pow(10, initialBigIntegerDigit);
+
+        return returnValue;
+    }
 }

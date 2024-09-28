@@ -4,15 +4,17 @@ using System.Numerics;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 using Quaternion = UnityEngine.Quaternion;
 
 public class DummyEnemy
 {
+    static GameObject floatingDamage;
     private GameObject dummyGameObject;
     private BigInteger currentHP;
     private BigInteger maxHP;
     private TextMesh hpText;
-
+    
     public DummyEnemy(GameObject dummyObject, BigInteger maxHP)
     {
         this.dummyGameObject = dummyObject;
@@ -22,9 +24,44 @@ public class DummyEnemy
         hpText.text = currentHP + " / " + maxHP;
     }
 
-    public void TakeDamage(BigInteger getDamage)
+    public BigInteger TakeDamage(BigInteger getDamage)
     {
+        BigInteger returnApplyDamage = getDamage;
+        if (getDamage > currentHP)
+        {
+            returnApplyDamage = currentHP;
+        }
+        currentHP = currentHP - getDamage;
 
+        hpText.text = currentHP + " / " + maxHP;
+
+        // 대미지 출력
+        GameObject textObject = (GameObject)GameObject.Instantiate(floatingDamage,
+            dummyGameObject.transform.position, Quaternion.identity);
+        textObject.GetComponentInChildren<TextMesh>().text = " " + getDamage + " ";
+        GameObject.Destroy(textObject, 2.0f);
+
+        return returnApplyDamage;
+    }
+
+    public bool IsDead()
+    {
+        return currentHP <= 0;
+    }
+
+    public void DestroyDummyEnemy()
+    {
+        // TODO : 임시 사망 코드 추후 애니메이션으로 변경 및 ...
+        dummyGameObject.GetComponent<SpriteRenderer>().color = new Color(0.25f, 0.25f, 0.25f);
+        hpText.gameObject.SetActive(false);
+    }
+
+    public static void SetFloatingDamage(GameObject getFloatingDamage)
+    {
+        if (floatingDamage == null)
+        {
+            floatingDamage = getFloatingDamage;
+        }
     }
 }
 
@@ -35,16 +72,21 @@ public class Enemy : Character
     protected EnemyDropData DropData = null;
 
     [SerializeField] private GameObject[] dummyEnemyImages;
-    private DummyEnemy[] dummyEnemies;
+    private List<DummyEnemy> _dummyEnemies;
+
+    private int initialNumOfDummyEnemy = 0;
 
     protected override void Awake()
     {
+        DummyEnemy.SetFloatingDamage(floatingDamage);
+        _dummyEnemies = new List<DummyEnemy>();
+
         // 09.23 - EnemyID 별개로 관리하도록 변경
         characterID = 0;
         IsEnemy = true;
-
+        
         base.Awake();
-
+        
         // stage manager 
         if (stageManager == null)
         {
@@ -61,43 +103,75 @@ public class Enemy : Character
     public void SetNumberOfEnemyInGroup(int numOfEnemy = 1)
     {
         // 적 개체는 최소 1마리에서 최대 5마리
-        numOfEnemy = (int)Mathf.Clamp(numOfEnemy, 1.0f, 5.0f);
+        initialNumOfDummyEnemy = numOfEnemy = (int)Mathf.Clamp(numOfEnemy, 1.0f, 5.0f);
 
-        dummyEnemies = new DummyEnemy[numOfEnemy];
         BigInteger dummyMaxHp = BigInteger.Divide(maxHP, numOfEnemy);
         for (int i = 0; i < 5; ++i)
         {
             // active dummy enemy
             if (i < numOfEnemy)
             {
-                dummyEnemies[i] = new DummyEnemy(dummyEnemyImages[i], dummyMaxHp);
+                _dummyEnemies.Add(new DummyEnemy(dummyEnemyImages[i], dummyMaxHp));
             }
             else
             {
                 dummyEnemyImages[i].SetActive(false);
             }
         }
+
+        currentHP = maxHP = dummyMaxHp * numOfEnemy;
+        ChangeHealthBar();
     }
 
-    protected override BigInteger TakeDamage(BigInteger damage)
+    protected override BigInteger CalculateDamage()
     {
-        BigInteger applyDamage = base.TakeDamage(damage);
+        BigInteger damage = base.CalculateDamage();
+        BigInteger initialDamage = damage;
+        float divideValue = ((float)_dummyEnemies.Count / initialNumOfDummyEnemy);
+        damage = MyBigIntegerMath.MultiplyWithFloat(damage,divideValue,5);
+        return damage;
+    }
 
-        if (applyDamage > 0)
+    protected override BigInteger TakeDamage(BigInteger damage, bool isAOESkill = false)
+    {
+        if (_dummyEnemies.Count == 0)
         {
-            // 대미지 출력
-            GameObject textObject = Instantiate(floatingDamage, transform.position, Quaternion.identity);
-            textObject.GetComponentInChildren<TextMesh>().text = " " + applyDamage + " ";
-            Destroy(textObject,2.0f);
+            Debug.Log("이미 적군이 사망함");
+            return 0;
         }
+
+        BigInteger amountOfDamage = 0;
+        BigInteger applyDamage = damage - status.defence;
+
+        int maxApplyDamageCount = 1;
+        if (isAOESkill)
+        {
+            maxApplyDamageCount = _dummyEnemies.Count;
+        }
+
+        // apply damage
+        for(int i = 0; i < maxApplyDamageCount; ++i)
+        {
+            amountOfDamage += _dummyEnemies[i].TakeDamage(applyDamage);
+             
+            if (_dummyEnemies[i].IsDead())
+            {
+                _dummyEnemies[i].DestroyDummyEnemy();
+                _dummyEnemies.RemoveAt(i);
+                --i;
+                --maxApplyDamageCount;
+            }
+        }
+
+        DecreaseHp(amountOfDamage);
 
         return applyDamage;
     }
 
     // 적군이 사망했는지 여부를 반환
-    public bool IsDead()
+    public override bool IsDead()
     {
-        return currentHP <= 0;
+        return _dummyEnemies.Count == 0;
     }
 
     protected override void Death()

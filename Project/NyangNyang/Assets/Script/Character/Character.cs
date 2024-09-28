@@ -67,48 +67,62 @@ public class Character : MonoBehaviour
         currentMP = status.mp;
         healthBarSlider.value = 1;
 
-
     }
 
-    IEnumerator AttackEnemy()
+    protected IEnumerator AttackEnemy()
     {
         while (true)
         {
             yield return new WaitForSeconds(0.5f);
             if (enemyObject)
             {
-                enemyObject.TakeDamage(status.CalculateDamage());
+                enemyObject.TakeDamage(CalculateDamage());
             }
         }
     }
 
-    protected virtual BigInteger TakeDamage(BigInteger damage)
+    protected virtual BigInteger CalculateDamage()
+    {
+        return status.CalculateDamage();
+    }
+
+    protected virtual BigInteger TakeDamage(BigInteger damage, bool isAOESkill = false)
     {
         if (CurrentHP <= 0) return -1;
 
         // TODO: 이 식도 추후 status 에서 적용
         BigInteger applyDamage = damage - status.defence;
         
-        CurrentHP = BigInteger.Max(0, currentHP - applyDamage);
+        DecreaseHp(applyDamage);
+       
+        return applyDamage;
+    }
 
-        if (CurrentHP <= 0)
+    protected void DecreaseHp(BigInteger applyDamage)
+    {
+        CurrentHP = BigInteger.Max(0, currentHP - applyDamage);
+        if (IsDead())
         {
             Death();
         }
-
-        return applyDamage;
     }
-    void ChangeHealthBar()
+
+    protected void ChangeHealthBar()
     {
         if (healthBarSlider)
         {
-            float healthPercent = MyBigIntegerMath.DivideToFloat(CurrentHP, status.hp, 5);
+            float healthPercent = MyBigIntegerMath.DivideToFloat(currentHP,maxHP,5);
             healthBarSlider.value = healthPercent;
         }
         if (textMeshPro)
         {
             textMeshPro.SetText(MyBigIntegerMath.GetAbbreviationFromBigInteger(currentHP) + " / " + MyBigIntegerMath.GetAbbreviationFromBigInteger(maxHP));
         }
+    }
+
+    public virtual bool IsDead()
+    {
+        return currentHP <= 0;
     }
 
     public void SetEnemy(Character targetObject)
