@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,9 +11,11 @@ public class StageManager : MonoBehaviour
 
     [SerializeField]
     private Text ThemeUI;
-
     [SerializeField]
     private Text StageUI;
+
+    [SerializeField] 
+    private StageSlider stageSlider;
 
     [SerializeField]
     private Text GateUI;
@@ -61,9 +64,12 @@ public class StageManager : MonoBehaviour
 
     private void SetStageUI()
     {
-        ThemeUI.text = "THEME " + currentTheme.ToString();
-        StageUI.text = "STAGE " + currentStage.ToString();
-        GateUI.text = "GATE " + currentGate.ToString();
+        ThemeUI.text = currentTheme.ToString();
+        StageUI.text = "- " +currentStage.ToString();
+        if (stageSlider)
+        {
+            stageSlider.CreateGateImage(maxGateCount);
+        }
     }
 
     private IEnumerator GateClear(float waitTime)
@@ -94,6 +100,10 @@ public class StageManager : MonoBehaviour
 
     private void GoToNextGate()
     {
+        if (stageSlider)
+        {
+            stageSlider.MoveToNextGate(currentGate,maxGateCount,1.0f);
+        }
         parallaxScrollingManager.MoveBackgroundSprites(true);
         // TODO: 고양이 걷기 애니메이션
 
@@ -110,7 +120,6 @@ public class StageManager : MonoBehaviour
         SetStageUI();
 
         RequestEnemySpawn();
-
         yield break;
     }
 
@@ -121,7 +130,7 @@ public class StageManager : MonoBehaviour
         // 적군 생성
         if (enemySpawnManager != null)
         {
-            enemySpawnManager.OnGatePassed(); // 적을 스폰하도록 적 스폰 매니저 호출
+            enemySpawnManager.OnGatePassed(currentGate == maxGateCount); // 적을 스폰하도록 적 스폰 매니저 호출
         }
         else
         {
@@ -133,15 +142,6 @@ public class StageManager : MonoBehaviour
     {
         Debug.Log("최고 단계 관문 클리어, 스테이지 이동");
         ChangeStage();
-        //if (currentStage >= maxStageCount)
-        //{
-        //    ChangeTheme();
-        //}
-        //else
-        //{
-        //    ChangeStage();
-        //}
-
     }
 
     private IEnumerator StartFade()
@@ -159,6 +159,7 @@ public class StageManager : MonoBehaviour
             {
                 AddStage();
                 StopCoroutine(fadeCoroutine);
+                
                 fadeCoroutine = StartCoroutine(EndFade());
             }
 
@@ -189,6 +190,11 @@ public class StageManager : MonoBehaviour
 
     void AddStage()
     {
+        if (stageSlider)
+        {
+            stageSlider.ClearGateImages();
+        }
+
         currentGate = 1;
         currentStage += 1;
         if (currentStage > maxStageCount)
@@ -234,4 +240,10 @@ public class StageManager : MonoBehaviour
         SetStageUI();  // UI 업데이트
     }
 
+    public void SetContinuousCombat()
+    {
+        Player.continuousCombat = true;
+        currentGate = 1;
+
+    }
 }

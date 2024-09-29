@@ -113,10 +113,10 @@ public class Enemy : Character
     public void SetNumberOfEnemyInGroup(int numOfEnemy = 1)
     {
         // 적 개체는 최소 1마리에서 최대 5마리
-        initialNumOfDummyEnemy = numOfEnemy = (int)Mathf.Clamp(numOfEnemy, 1.0f, 5.0f);
+        initialNumOfDummyEnemy = numOfEnemy = (int)Mathf.Clamp(numOfEnemy, 1.0f, dummyEnemyImages.Length);
 
         BigInteger dummyMaxHp = BigInteger.Divide(maxHP, numOfEnemy);
-        for (int i = 0; i < 5; ++i)
+        for (int i = 0; i < dummyEnemyImages.Length; ++i)
         {
             // active dummy enemy
             if (i < numOfEnemy)

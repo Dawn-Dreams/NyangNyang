@@ -34,6 +34,9 @@ public class Player : MonoBehaviour
     public delegate void OnHPStatusLevelChangeDelegate();
     public static event OnHPStatusLevelChangeDelegate OnHPLevelChange;
 
+    // 한 스테이지 내에서 반복 전투를 진행하는 것에 대한 변수
+    public static bool continuousCombat = true;
+
     public static BigInteger Gold
     {
         get { return playerCurrency.gold; }
@@ -120,10 +123,10 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             // 임시 모든 적군 공격 
-            GameObject enemyObject = GameObject.Find("Enemy(Clone)");
-            if (enemyObject)
+            Character enemy = GameManager.GetInstance().catObject.enemyObject;
+            if (enemy)
             {
-                enemyObject.GetComponentInChildren<Enemy>().TakeDamage(100000, true);
+                enemy.TakeDamage(100000, true);
             }
             
         }
