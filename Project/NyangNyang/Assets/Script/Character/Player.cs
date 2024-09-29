@@ -123,7 +123,7 @@ public class Player : MonoBehaviour
             GameObject enemyObject = GameObject.Find("Enemy(Clone)");
             if (enemyObject)
             {
-                enemyObject.GetComponentInChildren<Enemy>().TakeDamage(10, true);
+                enemyObject.GetComponentInChildren<Enemy>().TakeDamage(100000, true);
             }
             
         }
