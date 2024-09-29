@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class WeaponGachaMgr : MonoBehaviour
@@ -18,21 +19,43 @@ public class WeaponGachaMgr : MonoBehaviour
     {
         board = BeforePanel.transform.Find("Board").gameObject;
     }
+
     private void OnEnable()
     {
         isRotate = false;
     }
 
+    private void OnDisable()
+    {
+        BeforePanel.SetActive(true);
+        AfterPanel.SetActive(false);
+    }
+
     public void OnClickedDrawButton()
     {
+        // ÇÏ³ª¸¸ »Ì±â
         if ( !isRotate )
         {
-            StartCoroutine(RotateOverTime(1f));
+            BeforePanel.SetActive(true);
+            AfterPanel.SetActive(false);
+            StartCoroutine(RotateOverTime(1f, 1));
             isRotate = true;
         }
     }
 
-    IEnumerator RotateOverTime(float duration)
+    public void OnClickedDrawAllButton()
+    {
+        // ÀÏ°ý »Ì±â
+        if (!isRotate)
+        {
+            BeforePanel.SetActive(true);
+            AfterPanel.SetActive(false);
+            StartCoroutine(RotateOverTime(1f, 10));
+            isRotate = true;
+        }
+    }
+
+    IEnumerator RotateOverTime(float duration, int n)
     {
         float elapsedTime = 0f;
 
@@ -49,5 +72,8 @@ public class WeaponGachaMgr : MonoBehaviour
         isRotate = false;
         BeforePanel.SetActive(false);
         AfterPanel.SetActive(true);
+
+
+        AfterPanel.GetComponent<PickUpWeapon>().ShowPickUpWeapon(5);
     }
 }
