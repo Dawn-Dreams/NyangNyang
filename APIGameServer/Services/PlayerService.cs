@@ -2,6 +2,7 @@
 using APIGameServer.Services.Interface;
 
 namespace APIGameServer.Services;
+using ErrorCode = ServerClientShare.ErrorCode;
 
 public class PlayerService : IPlayerService
 {

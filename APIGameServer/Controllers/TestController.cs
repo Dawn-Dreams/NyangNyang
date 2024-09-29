@@ -15,6 +15,7 @@ public class TestController : ControllerBase
 
         res.message = "server connect success!";
 
+       // Console.WriteLine("Recv Data {}",req.uid);
         return res;
     }
 

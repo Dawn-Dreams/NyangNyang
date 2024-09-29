@@ -2,34 +2,47 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Networking;
 
 
+[System.Serializable]
 public class RequestTest 
 {
-    public int uid {  get; set; }
+    public int uid;
 }
 
+[System.Serializable]
 public class ResponseTest
 {
-    public string? message { get; set; }
+    public string message;
 }
 
 
 public class NetworkManager : MonoBehaviour
 {
     private static NetworkManager instance;
-    NetworkManager GetStatusManager() { return instance; }
+     //uwr;
+    public static NetworkManager GetStatusManager() { return instance; }
     string _baseUrl = "http://127.0.0.1:11500";
 
-
-    void TestFunc()
+    private void Start()
     {
+        Debug.Log("networkd instatnce  초기화..");
+        TestFunc();
+
+    }
+  
+
+    public void TestFunc()
+    {
+        Debug.Log("Test Func TEST...");
+
         RequestTest t = new RequestTest { uid = 1 };
 
-        
-        StartCoroutine(CoSendNetRequest(_baseUrl, t, TestWithServer));
+
+        StartCoroutine(CoSendNetRequest("Test", t, TestWithServer));
     }
 
     IEnumerator CoSendNetRequest(string url, object obj, Action<UnityWebRequest> callback)
@@ -46,7 +59,7 @@ public class NetworkManager : MonoBehaviour
 
         }
 
-        var uwr = new UnityWebRequest(sendUrl, "POST");
+        UnityWebRequest uwr = new UnityWebRequest(sendUrl, "POST");
         uwr.uploadHandler = new UploadHandlerRaw(jsonByte);
 
         uwr.downloadHandler = new DownloadHandlerBuffer();
@@ -54,21 +67,23 @@ public class NetworkManager : MonoBehaviour
         yield return uwr.SendWebRequest();    //보내는거임
 
 
-        if (uwr.isNetworkError || uwr.isHttpError)
+        if (uwr.result != UnityWebRequest.Result.Success)
         {
             Debug.Log(uwr.error);
         }
         else
         {
-            Debug.Log("Success Recv Data from Server");
-
             callback.Invoke(uwr);
+
+
         }
     }
 
 
     void TestWithServer(UnityWebRequest uwr)
     {
+        Debug.Log(uwr.downloadHandler.text);
+       
         var ReqTest = JsonUtility.FromJson<ResponseTest>(uwr.downloadHandler.text);
         Debug.Log(ReqTest.message);
 

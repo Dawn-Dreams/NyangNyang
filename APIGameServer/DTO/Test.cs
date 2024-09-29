@@ -7,7 +7,7 @@ public class RequestTest
 
 public class ResponseTest
 { 
-    public string? message { get; set; };
+    public string? message { get; set; }
 
 
 
