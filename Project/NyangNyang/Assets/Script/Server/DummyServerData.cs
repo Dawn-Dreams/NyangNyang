@@ -18,7 +18,7 @@ public class DummyServerData : MonoBehaviour
     // 유저 스탯 레벨 데이터
     private static StatusLevelData[] usersStatusLevelData = new StatusLevelData[]
     {
-        new StatusLevelData(100000,0,100,0,0),
+        new StatusLevelData(100,0,100,0,0),
         new StatusLevelData(10,0,5,0),
         new StatusLevelData(),
         new StatusLevelData(),
@@ -27,7 +27,7 @@ public class DummyServerData : MonoBehaviour
 
     private static StatusLevelData[] enemyStatusLevelData = new StatusLevelData[]
     {
-        new StatusLevelData(1000, 0, 1000, 2),
+        new StatusLevelData(1000, 0, 30, 2),
         new StatusLevelData(10, 0, 5, 2),
     };
 
@@ -77,6 +77,13 @@ public class DummyServerData : MonoBehaviour
         ScriptableObject.CreateInstance<EnemyDropData>().SetEnemyDropData(1_000_000, 777_777),
         ScriptableObject.CreateInstance<EnemyDropData>(),
         ScriptableObject.CreateInstance<EnemyDropData>()
+    };
+
+    // 스테이지 테마와 스테이지 정보만 관리
+    private static int[,] playerClearStageData = new int[,]
+    {
+        { 10,5 },
+        {20,3}
     };
 
     // 데이터 종료
@@ -294,6 +301,20 @@ public class DummyServerData : MonoBehaviour
     private static bool IsValidTicketIndex(int index)
     {
         return index >= 0 && index < 3; // 티켓 배열 크기와 동일
+    }
+
+    public static void GetUserClearStageData(int userID, out int clearStageTheme, out int clearStage)
+    {
+        if (!(0 <= userID && userID < playerClearStageData.Length))
+        {
+            Debug.Log("INVALID USERID");
+            clearStageTheme = 1;
+            clearStage = 1;
+            return;
+        }
+
+        clearStageTheme = playerClearStageData[userID, 0];
+        clearStage = playerClearStageData[userID, 1];
     }
 
 

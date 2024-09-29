@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 
 
     public Cat catObject;
+    public StageManager stageManager;
     private void Awake()
     {
         if (Instance == null)

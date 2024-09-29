@@ -35,7 +35,7 @@ public class Player : MonoBehaviour
     public static event OnHPStatusLevelChangeDelegate OnHPLevelChange;
 
     // 한 스테이지 내에서 반복 전투를 진행하는 것에 대한 변수
-    public static bool continuousCombat = true;
+    public static bool continuousCombat = false;
 
     public static BigInteger Gold
     {
@@ -128,7 +128,12 @@ public class Player : MonoBehaviour
             {
                 enemy.TakeDamage(100000, true);
             }
-            
+        }
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            continuousCombat = !continuousCombat;
+            GameManager.GetInstance().stageManager.SetContinuousCombat(continuousCombat);
         }
     }
 

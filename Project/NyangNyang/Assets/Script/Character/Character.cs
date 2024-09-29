@@ -139,8 +139,12 @@ public class Character : MonoBehaviour
             
             return;
         }
-
+        
         enemyObject = targetObject;
+        if (enemyObject == null)
+        {
+            Debug.Log("???");
+        }
         attackCoroutine = StartCoroutine(AttackEnemy());
     }
 

@@ -30,7 +30,18 @@ public class Cat : Character
         BigInteger hpDifference = Player.playerStatus.hp - maxHP;
         maxHP = Player.playerStatus.hp;
         CurrentHP += hpDifference;
-        
     }
-    
+
+    public void CatRespawn()
+    {
+        currentHP = maxHP;
+        gameObject.SetActive(true);
+    }
+
+    protected override void Death()
+    {
+        base.Death();
+
+        GameManager.GetInstance().stageManager.PlayerDie();
+    }
 }

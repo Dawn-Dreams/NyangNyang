@@ -48,4 +48,16 @@ public class EnemySpawnManager : MonoBehaviour
         currentEnemy.SetNumberOfEnemyInGroup(3);
         currentEnemy.GoToCombatArea(cat, enemyCombatPosition.position);
     }
+
+    public void DestroyEnemy()
+    {
+        GameManager.GetInstance().catObject.SetEnemy(null);
+        if (currentEnemy != null)
+        {
+            currentEnemy.gameObject.SetActive(false);
+            DestroyImmediate(currentEnemy);
+        }
+        
+        
+    }
 }
