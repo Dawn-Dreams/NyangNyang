@@ -291,8 +291,13 @@ public class StageManager : MonoBehaviour
         if (currentStage <= 0)
         {
             currentTheme -= 1;
-            parallaxScrollingManager.ChangeBackgroundImageFromPrefab(currentTheme);
             currentStage = maxStageCount;
+            if (currentTheme <= 0)
+            {
+                currentTheme = 1;
+                currentStage = 1;
+            }
+            parallaxScrollingManager.ChangeBackgroundImageFromPrefab(currentTheme);
         }
         SetStageUI();
 
