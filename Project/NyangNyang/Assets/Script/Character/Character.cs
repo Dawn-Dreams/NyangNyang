@@ -27,6 +27,9 @@ public class Character : MonoBehaviour
     public delegate void OnHealthChangeDelegate();
     public event OnHealthChangeDelegate OnHealthChange;
 
+    // 공격 코루틴
+    private Coroutine attackCoroutine;
+
     public BigInteger CurrentHP
     {
         get { return currentHP; }
@@ -50,7 +53,6 @@ public class Character : MonoBehaviour
     protected virtual void Awake()
     {
         InitialSettings();
-        StartCoroutine(AttackEnemy());
     }
 
     public virtual void InitialSettings()
@@ -73,11 +75,11 @@ public class Character : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(0.5f);
             if (enemyObject)
             {
                 enemyObject.TakeDamage(CalculateDamage());
             }
+            yield return new WaitForSeconds(0.5f);
         }
     }
 
@@ -128,17 +130,31 @@ public class Character : MonoBehaviour
 
     public void SetEnemy(Character targetObject)
     {
-        if (targetObject)
+        if (targetObject == null)
         {
-            enemyObject = targetObject;
+            if (attackCoroutine != null)
+            {
+                StopCoroutine(attackCoroutine);
+            }
+            
+            return;
         }
+
+        enemyObject = targetObject;
+        attackCoroutine = StartCoroutine(AttackEnemy());
     }
 
     protected virtual void Death()
     {
-        // 사망 처리
+        if (enemyObject)
+        {
+            enemyObject.SetEnemy(null);
+        }
+
+        // TODO: 임시 사망 처리
         gameObject.SetActive(false);
     }
+
 
     
 }

@@ -17,6 +17,13 @@ public class StageManager : MonoBehaviour
     [SerializeField]
     private Text GateUI;
 
+    [SerializeField] 
+    private Image fadeImage;
+    [SerializeField] 
+    private float fadeTime = 0.5f;
+    private float currentFadeTime = 0.0f;
+    private Coroutine fadeCoroutine;
+
     [SerializeField]
     private EnemySpawnManager enemySpawnManager;  // 적 스폰 매니저 변수
 
@@ -24,8 +31,8 @@ public class StageManager : MonoBehaviour
     private int originalTheme;  // 원래 테마를 저장할 변수
 
     // TODO: 초기값 설정은 추후 NetworkManager에서 각 유저별 스테이지 로 받아오는 것으로 설정
-    private int currentTheme = 1;
-    private int currentStage = 1;
+    private int currentTheme = 5;
+    private int currentStage = 5;
     private int currentGate = 1;
 
     // 특정 컨텐츠의 경우(보스 레이드 등) 관문이 하나만 있을 수 있으니 조정 가능한 변수로
@@ -125,37 +132,78 @@ public class StageManager : MonoBehaviour
     private void StageClear()
     {
         Debug.Log("최고 단계 관문 클리어, 스테이지 이동");
-        if (currentStage >= maxStageCount)
+        ChangeStage();
+        //if (currentStage >= maxStageCount)
+        //{
+        //    ChangeTheme();
+        //}
+        //else
+        //{
+        //    ChangeStage();
+        //}
+
+    }
+
+    private IEnumerator StartFade()
+    {
+        currentFadeTime = 0.0f;
+        fadeImage.gameObject.SetActive(true);
+        while (true)
         {
-            ChangeTheme();
+            currentFadeTime += Time.deltaTime;
+            Color tempColor = fadeImage.color;
+            tempColor.a = currentFadeTime / fadeTime;
+            fadeImage.color = tempColor;
+
+            if (currentFadeTime >= fadeTime)
+            {
+                AddStage();
+                StopCoroutine(fadeCoroutine);
+                fadeCoroutine = StartCoroutine(EndFade());
+            }
+
+            yield return null;
         }
-        else
+    }
+
+    private IEnumerator EndFade()
+    {
+        yield return new WaitForSeconds(fadeTime);
+        currentFadeTime = 0.0f;
+        while (true)
         {
-            ChangeStage();
+            currentFadeTime += Time.deltaTime;
+            Color tempColor = fadeImage.color;
+            tempColor.a = 1 - currentFadeTime / fadeTime;
+            fadeImage.color = tempColor;
+
+            if (currentFadeTime >= fadeTime)
+            {
+                RequestEnemySpawn();
+                StopCoroutine(fadeCoroutine);
+            }
+
+            yield return null;
+        }
+    }
+
+    void AddStage()
+    {
+        currentGate = 1;
+        currentStage += 1;
+        if (currentStage > maxStageCount)
+        {
+            parallaxScrollingManager.ChangeBackgroundImageFromPrefab(currentTheme);
+            currentStage = 1;
+            currentTheme += 1;
         }
 
+        SetStageUI();
     }
 
     private void ChangeStage()
     {
-        // TODO : 추후 페이드 기법을 통해 변하게 진행, 현재는 그냥 바로 화면이 변경되도록
-        currentGate = 1;
-        currentStage++;
-
-        SetStageUI();
-        RequestEnemySpawn();
-    }
-
-    private void ChangeTheme()
-    {
-        // TODO : 추후 페이드 기법을 통해 변하게 진행, 현재는 그냥 바로 화면이 변경되도록
-        parallaxScrollingManager.ChangeBackgroundImageFromPrefab(currentTheme);
-        currentTheme++;
-        currentStage = 1;
-        currentGate = 1;
-
-        SetStageUI();
-        RequestEnemySpawn();
+        fadeCoroutine = StartCoroutine(StartFade());
     }
 
     // 스페셜 스테이지에서 고양이가 계속 앞으로 이동하는 함수

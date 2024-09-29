@@ -6,6 +6,7 @@ public class EnemySpawnManager : MonoBehaviour
 {
     public GameObject enemyPrefab;
     public Transform enemySpawnPosition;
+    public Transform enemyCombatPosition;
 
     private Enemy currentEnemy; // 현재 적을 저장하는 변수
 
@@ -35,9 +36,9 @@ public class EnemySpawnManager : MonoBehaviour
         // 적 스폰
         currentEnemy = Instantiate(enemyPrefab, enemySpawnPosition).GetComponent<Enemy>();
         currentEnemy.SetNumberOfEnemyInGroup(3);
-
-        // 적과 고양이의 적군 오브젝트 연결
-        currentEnemy.SetEnemy(cat);
-        cat.SetEnemy(currentEnemy);
+        currentEnemy.GoToCombatArea(cat, enemyCombatPosition.position);
+        // 적과 고양이의 적군 오브젝트 연결 -> 적군이 다 이동 한 뒤 오브젝트가 연결되도록 변경
+        //currentEnemy.SetEnemy(cat);
+        //cat.SetEnemy(currentEnemy);
     }
 }
