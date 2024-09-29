@@ -6,6 +6,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 using Quaternion = UnityEngine.Quaternion;
+using Transform = UnityEngine.Transform;
+using Vector3 = UnityEngine.Vector3;
 
 public class DummyEnemy
 {
@@ -76,6 +78,14 @@ public class Enemy : Character
 
     private int initialNumOfDummyEnemy = 0;
 
+    // 전투 위치와 관련된 변수들
+    private Vector3 spawnPosition;
+    private Vector3 combatPosition;
+    private Coroutine moveToCombatAreaCoroutine;
+    private static float moveToCombatAreaRequiredTime = 0.5f;
+    private float currentMoveTime = 0.0f;
+    private Character catObject;
+
     protected override void Awake()
     {
         DummyEnemy.SetFloatingDamage(floatingDamage);
@@ -122,6 +132,47 @@ public class Enemy : Character
         currentHP = maxHP = dummyMaxHp * numOfEnemy;
         ChangeHealthBar();
     }
+
+    public void GoToCombatArea(Character enemyCat, Vector3 combatTransform)
+    {
+        spawnPosition = transform.position;
+        combatPosition = combatTransform;
+        catObject = enemyCat;
+        currentMoveTime = 0.0f;
+        moveToCombatAreaCoroutine = StartCoroutine(MoveToCombatArea());
+    }
+
+    IEnumerator MoveToCombatArea()
+    {
+        while (true)
+        {
+            currentMoveTime = Mathf.Min(currentMoveTime+Time.deltaTime, moveToCombatAreaRequiredTime);
+            if (currentMoveTime >= moveToCombatAreaRequiredTime)
+            {
+                ArriveCombatArea();
+            }
+
+            transform.position = Vector3.Lerp(spawnPosition, combatPosition, currentMoveTime / moveToCombatAreaRequiredTime);
+            yield return null;
+        }
+        
+    }
+
+    void ArriveCombatArea()
+    {
+        if (moveToCombatAreaCoroutine != null)
+        {
+            StopCoroutine(moveToCombatAreaCoroutine);
+            moveToCombatAreaCoroutine = null;
+        }
+
+        if (catObject)
+        {
+            SetEnemy(catObject);
+            catObject.SetEnemy(this);
+        }
+    }
+
 
     protected override BigInteger CalculateDamage()
     {
