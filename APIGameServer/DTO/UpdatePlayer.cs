@@ -11,7 +11,14 @@ public class RequestUpdateStatLevel
 
 }
 
+
 public class ResponseUpdateStat
 {
     public ErrorCode Result { get; set; }    
+}
+
+//
+public class ResUpdateStatusData
+{
+    public ErrorCode Result {  get; set; }
 }

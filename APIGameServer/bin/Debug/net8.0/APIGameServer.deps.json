@@ -10,11 +10,11 @@
         "dependencies": {
           "CloudStructures": "3.3.0",
           "MySqlConnector": "2.3.7",
+          "ServerClientShare": "1.0.0",
           "SqlKata": "2.4.0",
           "SqlKata.Execution": "2.4.0",
           "Swashbuckle.AspNetCore": "6.4.0",
-          "ZLogger": "2.5.7",
-          "ServerClientShare": "1.0.0.0"
+          "ZLogger": "2.5.7"
         },
         "runtime": {
           "APIGameServer.dll": {}
@@ -320,12 +320,9 @@
           }
         }
       },
-      "ServerClientShare/1.0.0.0": {
+      "ServerClientShare/1.0.0": {
         "runtime": {
-          "ServerClientShare.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "ServerClientShare.dll": {}
         }
       }
     }
@@ -623,8 +620,8 @@
       "path": "zlogger/2.5.7",
       "hashPath": "zlogger.2.5.7.nupkg.sha512"
     },
-    "ServerClientShare/1.0.0.0": {
-      "type": "reference",
+    "ServerClientShare/1.0.0": {
+      "type": "project",
       "serviceable": false,
       "sha512": ""
     }

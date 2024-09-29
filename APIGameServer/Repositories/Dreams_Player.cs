@@ -1,4 +1,5 @@
-﻿using APIGameServer.Models;
+﻿using APIGameServer.DTO;
+using APIGameServer.Models;
 using APIGameServer.Repositories.Interfaces;
 using Microsoft.Extensions.Options;
 using MySqlConnector;

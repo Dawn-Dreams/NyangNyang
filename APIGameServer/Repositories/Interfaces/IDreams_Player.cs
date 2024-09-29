@@ -1,4 +1,5 @@
-﻿using APIGameServer.Models;
+﻿using APIGameServer.DTO;
+using APIGameServer.Models;
 
 namespace APIGameServer.Repositories.Interfaces;
 

@@ -15,7 +15,6 @@ public class RegistController : ControllerBase
 {
     readonly IRedisDatabase _redis;
     readonly IDreams_UserInfo _userInfo;
-
     readonly IPlayerService _playerServiece;
 
     public RegistController(IRedisDatabase redis, IDreams_UserInfo userInfo, IPlayerService playerService)

@@ -17,11 +17,11 @@ public class UpdatePlayerStatController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ResponseUpdateStat> Create([FromBody] RequestUpdateStatLevel req)
+    public async Task<ResponseUpdateStat> Create([FromBody] PlayerStatusData req)
     {
         ResponseUpdateStat res = new ResponseUpdateStat();
 
-        var temp = await _playerStat.UpdatePlayerStatusLevel(req.StatData);
+        var temp = await _playerStat.UpdatePlayerStatus(req);
         if(temp == 0)
         {
             res.Result = ServerClientShare.ErrorCode.FailUpdatePlayerTable;

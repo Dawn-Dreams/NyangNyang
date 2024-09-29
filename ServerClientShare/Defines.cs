@@ -26,3 +26,16 @@ public enum ErrorCode
 
 }
 
+//패캣
+
+[System.Serializable]
+public class RequestTest
+{
+    public int uid;
+}
+
+[System.Serializable]
+public class ResponseTest
+{
+    public string message;
+}
