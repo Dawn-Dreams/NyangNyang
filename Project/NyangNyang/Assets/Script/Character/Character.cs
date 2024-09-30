@@ -75,7 +75,7 @@ public class Character : MonoBehaviour
     {
         while (true)
         {
-            if (enemyObject)
+            if (enemyObject && enemyObject.gameObject.activeSelf)
             {
                 enemyObject.TakeDamage(CalculateDamage());
             }
@@ -141,10 +141,6 @@ public class Character : MonoBehaviour
         }
         
         enemyObject = targetObject;
-        if (enemyObject == null)
-        {
-            Debug.Log("???");
-        }
         attackCoroutine = StartCoroutine(AttackEnemy());
     }
 

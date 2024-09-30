@@ -10,10 +10,14 @@ public class StageSlider : MonoBehaviour
     [SerializeField] private GameObject gateImageObject;
     [SerializeField] private GameObject gateParentObject;
     private List<GameObject> _gateImages = new List<GameObject>();
+    private float parentWidth = 0.0f;
+
 
     void Awake()
     {
         slider = GetComponent<Slider>();
+        parentWidth = GetComponent<RectTransform>().sizeDelta.x;
+        Debug.Log(parentWidth);
     }
 
     public void CreateGateImage(int maxGateCount)
@@ -24,12 +28,11 @@ public class StageSlider : MonoBehaviour
         }
 
         ClearGateImages();
-        float parentWidth = 180.0f;
         for (int i = 0; i < maxGateCount; ++i)
         {
             GameObject gateImageObj = Instantiate(gateImageObject,gateParentObject.transform);
             gateImageObj.transform.localPosition = new Vector3(
-                Mathf.Lerp(0, parentWidth, (float)i / (maxGateCount - 1)), 0
+                Mathf.Lerp(0, parentWidth, (float)i / (maxGateCount - 1)) - 10 * i, 0
             );
             _gateImages.Add(gateImageObj);
         }
@@ -47,6 +50,7 @@ public class StageSlider : MonoBehaviour
 
     public void WinCombatInGate(int gateNumber)
     {
+        gateNumber -= 1;
         if (_gateImages[gateNumber])
         {
             Image image = _gateImages[gateNumber].GetComponent<Image>();
@@ -55,6 +59,7 @@ public class StageSlider : MonoBehaviour
     }
     public void MoveToNextGate(int currentGateNum, int nextGateNum, float moveTime)
     {
+        WinCombatInGate(currentGateNum);
         StartCoroutine(SliderMoveToNextGate(currentGateNum, nextGateNum, moveTime));
     }
 
