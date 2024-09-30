@@ -166,7 +166,7 @@ public class Enemy : Character
             moveToCombatAreaCoroutine = null;
         }
 
-        if (catObject)
+        if (catObject && catObject.gameObject.activeSelf)
         {
             SetEnemy(catObject);
             catObject.SetEnemy(this);

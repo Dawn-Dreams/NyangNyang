@@ -17,7 +17,6 @@ public class StageSlider : MonoBehaviour
     {
         slider = GetComponent<Slider>();
         parentWidth = GetComponent<RectTransform>().sizeDelta.x;
-        Debug.Log(parentWidth);
     }
 
     public void CreateGateImage(int maxGateCount)

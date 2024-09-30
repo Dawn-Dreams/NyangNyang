@@ -73,6 +73,7 @@ public class Character : MonoBehaviour
 
     protected IEnumerator AttackEnemy()
     {
+        yield return new WaitForSeconds(0.25f);
         while (true)
         {
             if (enemyObject && enemyObject.gameObject.activeSelf)
@@ -130,7 +131,7 @@ public class Character : MonoBehaviour
 
     public void SetEnemy(Character targetObject)
     {
-        if (targetObject == null)
+        if (targetObject == null || !targetObject.gameObject.activeSelf)
         {
             if (attackCoroutine != null)
             {
@@ -139,7 +140,6 @@ public class Character : MonoBehaviour
             
             return;
         }
-        
         enemyObject = targetObject;
         attackCoroutine = StartCoroutine(AttackEnemy());
     }

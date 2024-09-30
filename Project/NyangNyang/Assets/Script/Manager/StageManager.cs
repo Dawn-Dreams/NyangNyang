@@ -191,11 +191,11 @@ public class StageManager : MonoBehaviour
         }
     }
 
-    void FadeStartFuncWhileStageChange()
+    void FadeStartFuncWhileStageChange(bool addStage)
     {
-        AddStage();
+        SetNewStage(addStage);
+        
         StopCoroutine(fadeCoroutine);
-
         fadeCoroutine = StartCoroutine(EndFade(FadeEndFuncWhileStageChange));
     }
 
@@ -205,28 +205,34 @@ public class StageManager : MonoBehaviour
         StopCoroutine(fadeCoroutine);
     }
 
-    void AddStage()
+    void SetNewStage(bool addStage)
     {
         if (stageSlider)
         {
             stageSlider.ClearGateImages();
         }
 
-        currentGate = 1;
-        currentStage += 1;
-        if (currentStage > maxStageCount)
+        if (addStage)
         {
-            parallaxScrollingManager.ChangeBackgroundImageFromPrefab(currentTheme);
-            currentStage = 1;
-            currentTheme += 1;
+            currentGate = 1;
+            currentStage += 1;
+            if (currentStage > maxStageCount)
+            {
+                parallaxScrollingManager.ChangeBackgroundImageFromPrefab(currentTheme);
+                currentStage = 1;
+                currentTheme += 1;
+            }
         }
+
+        GameManager.GetInstance().catObject.CatRespawn();
+        
 
         SetStageUI();
     }
 
     private void ChangeStage()
     {
-        fadeCoroutine = StartCoroutine(StartFade(FadeStartFuncWhileStageChange));
+        fadeCoroutine = StartCoroutine(StartFade(() => FadeStartFuncWhileStageChange(true)));
     }
 
     // 스페셜 스테이지에서 고양이가 계속 앞으로 이동하는 함수
@@ -278,6 +284,28 @@ public class StageManager : MonoBehaviour
         currentTheme = clearStageTheme;
         currentStage = clearStage;
         StageClear();
+    }
+
+    public void GoToSpecificStage(int stageThemeNum, int stageNum)
+    {
+        // TODO: 처음 실행 시 한번만 받고 적용되도록
+        int clearStageTheme = 1;
+        int clearStage = 1;
+        DummyServerData.GetUserClearStageData(Player.GetUserID(), out clearStageTheme, out clearStage);
+
+        if (stageThemeNum <= clearStageTheme && stageNum <= clearStage)
+        {
+            SetContinuousCombat(true);
+        }
+        else
+        {
+            SetContinuousCombat(false);
+        }
+        enemySpawnManager.DestroyEnemy();
+        currentTheme = clearStageTheme;
+        currentStage = clearStage;
+
+        fadeCoroutine = StartCoroutine(StartFade(() => FadeStartFuncWhileStageChange(false)));
     }
 
 

@@ -34,7 +34,7 @@ public class Cat : Character
 
     public void CatRespawn()
     {
-        currentHP = maxHP;
+        CurrentHP = maxHP;
         gameObject.SetActive(true);
     }
 

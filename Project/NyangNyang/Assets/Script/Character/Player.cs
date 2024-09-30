@@ -135,6 +135,11 @@ public class Player : MonoBehaviour
             continuousCombat = !continuousCombat;
             GameManager.GetInstance().stageManager.SetContinuousCombat(continuousCombat);
         }
+
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            GameManager.GetInstance().stageManager.GoToSpecificStage(20,3);
+        }
     }
 
     public static int GetUserID()

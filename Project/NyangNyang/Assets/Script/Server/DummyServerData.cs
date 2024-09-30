@@ -18,7 +18,7 @@ public class DummyServerData : MonoBehaviour
     // 유저 스탯 레벨 데이터
     private static StatusLevelData[] usersStatusLevelData = new StatusLevelData[]
     {
-        new StatusLevelData(100,0,100,0,0),
+        new StatusLevelData(1000000,0,100,0,0),
         new StatusLevelData(10,0,5,0),
         new StatusLevelData(),
         new StatusLevelData(),
