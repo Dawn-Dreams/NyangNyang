@@ -51,13 +51,17 @@ public class EnemySpawnManager : MonoBehaviour
 
     public void DestroyEnemy()
     {
-        GameManager.GetInstance().catObject.SetEnemy(null);
-        if (currentEnemy != null)
+        Cat cat = GameManager.GetInstance().catObject;
+
+        if (currentEnemy)
         {
-            currentEnemy.gameObject.SetActive(false);
-            DestroyImmediate(currentEnemy);
+            Destroy(currentEnemy.gameObject);
         }
-        
-        
+
+        currentEnemy = null;
+        cat.SetEnemy(null);
+
+
+
     }
 }
