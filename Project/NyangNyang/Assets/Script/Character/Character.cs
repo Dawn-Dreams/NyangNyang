@@ -67,7 +67,11 @@ public class Character : MonoBehaviour
         maxHP = status.hp;
         CurrentHP = maxHP;
         currentMP = status.mp;
-        healthBarSlider.value = 1;
+        if (healthBarSlider)
+        {
+            healthBarSlider.value = 1;
+        }
+        
 
     }
 
