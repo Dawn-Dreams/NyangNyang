@@ -37,6 +37,8 @@ public class Player : MonoBehaviour
     // 한 스테이지 내에서 반복 전투를 진행하는 것에 대한 변수
     public static bool continuousCombat = false;
 
+    public static int[] playerHighestClearStageData = new int[2];
+
     public static BigInteger Gold
     {
         get { return playerCurrency.gold; }
@@ -214,5 +216,16 @@ public class Player : MonoBehaviour
         {
             OnHPLevelChange();
         }
+    }
+
+    public static void GetPlayerHighestClearStageData(out int themeData, out int stageData)
+    {
+        if (playerHighestClearStageData[0] == 0)
+        {
+            DummyServerData.GetUserClearStageData(Player.GetUserID(), out playerHighestClearStageData[0], out playerHighestClearStageData[1]);
+        }
+
+        themeData = playerHighestClearStageData[0];
+        stageData = playerHighestClearStageData[1];
     }
 }

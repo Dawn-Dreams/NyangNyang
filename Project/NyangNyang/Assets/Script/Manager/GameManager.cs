@@ -7,7 +7,6 @@ public class GameManager : MonoBehaviour
     private static GameManager Instance;
     public static GameManager GetInstance() { return Instance; }
 
-
     public Cat catObject;
     public StageManager stageManager;
     private void Awake()
@@ -15,6 +14,8 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
             Instance = this;
     }
+
+    
 
     
 }

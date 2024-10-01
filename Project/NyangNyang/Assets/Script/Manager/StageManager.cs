@@ -256,6 +256,11 @@ public class StageManager : MonoBehaviour
         return currentTheme;
     }
 
+    public int GetCurrentStage()
+    {
+        return currentStage;
+    }
+
     // 스페셜 스테이지로 배경 테마 변경
     public void ChangeBackgroundToSpecialStage(int theme)
     {
@@ -277,7 +282,7 @@ public class StageManager : MonoBehaviour
     {
         int clearStageTheme = 1;
         int clearStage = 1;
-        DummyServerData.GetUserClearStageData(Player.GetUserID(), out clearStageTheme, out clearStage);
+        Player.GetPlayerHighestClearStageData(out clearStageTheme, out clearStage);
         SetContinuousCombat(false);
 
         enemySpawnManager.DestroyEnemy();
@@ -291,8 +296,8 @@ public class StageManager : MonoBehaviour
         // TODO: 처음 실행 시 한번만 받고 적용되도록
         int clearStageTheme = 1;
         int clearStage = 1;
-        DummyServerData.GetUserClearStageData(Player.GetUserID(), out clearStageTheme, out clearStage);
-
+        Player.GetPlayerHighestClearStageData(out clearStageTheme, out clearStage);
+        
         if (stageThemeNum <= clearStageTheme && stageNum <= clearStage)
         {
             SetContinuousCombat(true);
@@ -302,8 +307,8 @@ public class StageManager : MonoBehaviour
             SetContinuousCombat(false);
         }
         enemySpawnManager.DestroyEnemy();
-        currentTheme = clearStageTheme;
-        currentStage = clearStage;
+        currentTheme = stageThemeNum;
+        currentStage = stageNum;
 
         fadeCoroutine = StartCoroutine(StartFade(() => FadeStartFuncWhileStageChange(false)));
     }
