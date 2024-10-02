@@ -8,9 +8,6 @@ public class WeaponDetailUI : MonoBehaviour
     private Weapon choosedWeapon;
     private WeaponMgrUI weaponMgrUI;
 
-    // 세부 창에 띄울 이미지 배열
-    public Sprite[] sprites;
-
     // 패널
     public GameObject detailPanel;          // 디테일 패널 자체 set active를 위함
     public GameObject weaponPanel;          // weapon 이름, 이미지, 레벨, 보유량
@@ -58,7 +55,7 @@ public class WeaponDetailUI : MonoBehaviour
 
             wNameTxt.text = choosedWeapon.GetName();
             wLevelTxt.text = choosedWeapon.GetLevel() + "/100";
-            wImage.sprite = sprites[choosedWeapon.GetID()];
+            wImage.sprite = WeaponManager.GetInstance().GetSprite(choosedWeapon.GetID());
 
             int count = choosedWeapon.GetWeaponCount();
             weaponCoinTxt.text = choosedWeapon.GetNeedCoin().ToString();

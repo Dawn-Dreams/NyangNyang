@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WeaponManager : MonoBehaviour
 {
@@ -8,7 +9,8 @@ public class WeaponManager : MonoBehaviour
     public static WeaponManager GetInstance() { return Instance; }
 
     private Weapon[] weapons = new Weapon[32];
-    private Dictionary<string, int> weaponLookUp = new Dictionary<string, int>();
+    private Dictionary<string, int> weaponDic = new Dictionary<string, int>();
+    public Sprite[] sprites;
 
     private void Awake()
     {
@@ -25,8 +27,18 @@ public class WeaponManager : MonoBehaviour
         for (int i = 0; i < 32; ++i)
         {
             weapons[i] = new Weapon(i, i.ToString(), i, i, 1, 10);
-            weaponLookUp[i.ToString()] = i;
+            weaponDic[i.ToString()] = i;
         }
+    }
+
+
+    public Sprite GetSprite(int id)
+    {
+        if ( id >= 0 && id < sprites.Length)
+        {
+            return sprites[id];
+        }
+        return null;
     }
 
     public Weapon GetWeapon(int id)
@@ -41,7 +53,7 @@ public class WeaponManager : MonoBehaviour
     public Weapon GetWeapon(string name)
     {
         int id;
-        if(weaponLookUp.TryGetValue(name, out id))
+        if(weaponDic.TryGetValue(name, out id))
         {
             return weapons[id];
         }

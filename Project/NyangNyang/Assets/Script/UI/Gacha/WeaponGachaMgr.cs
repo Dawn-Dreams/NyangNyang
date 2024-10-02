@@ -73,7 +73,13 @@ public class WeaponGachaMgr : MonoBehaviour
         BeforePanel.SetActive(false);
         AfterPanel.SetActive(true);
 
-
-        AfterPanel.GetComponent<PickUpWeapon>().ShowPickUpWeapon(5);
+        if ( n == 1)
+        {
+            AfterPanel.GetComponent<PickUpWeapon>().ShowPickUpWeapon();
+        }
+        else
+        {
+            AfterPanel.GetComponent<PickUpWeapon>().ShowPickUpWeapons();
+        }
     }
 }
