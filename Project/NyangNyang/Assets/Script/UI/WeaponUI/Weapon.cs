@@ -37,6 +37,16 @@ public class Weapon
         return name;
     }
 
+    public void AddWeapon(int count)
+    {
+        possession += count;
+    }
+
+    public bool HasWeapon()
+    {
+        return possession > 0;
+    }
+
     public int LevelUP()
     {
         // TODO: 레벨업 및 필요 코인 로직 만들기
@@ -50,16 +60,6 @@ public class Weapon
         status = nextStatus;
         nextStatus += 10;
         return nextStatus;
-    }
-
-    public void AddWeapon(int count)
-    {
-        possession += count;
-    }
-
-    public bool HasWeapon()
-    {
-        return possession > 0;
     }
 
     public int GetWeaponCount()
