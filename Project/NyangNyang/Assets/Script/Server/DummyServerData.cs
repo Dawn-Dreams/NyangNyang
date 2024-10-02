@@ -34,7 +34,7 @@ public class DummyServerData : MonoBehaviour
     // 유저 재화(골드+보석+티켓) 데이터
     private static CurrencyData[] usersCurrencyData = new CurrencyData[]
     {
-        ScriptableObject.CreateInstance<CurrencyData>().SetCurrencyData(150_000,3,new int[] {1,1,1}),
+        ScriptableObject.CreateInstance<CurrencyData>().SetCurrencyData(150_000,3,new int[] {5,5,5}),
         ScriptableObject.CreateInstance<CurrencyData>(),
         ScriptableObject.CreateInstance<CurrencyData>(),
         ScriptableObject.CreateInstance<CurrencyData>(),
@@ -49,16 +49,6 @@ public class DummyServerData : MonoBehaviour
         ScriptableObject.CreateInstance<UserLevelData>(),
         ScriptableObject.CreateInstance<UserLevelData>(),
         ScriptableObject.CreateInstance<UserLevelData>(),
-    };
-
-    // 소탕권 개수를 저장하는 배열 (각 유저의 소탕권 수량 관리) ...일단 가정
-    private static int[,] sweepTickets = new int[,]
-    {
-        { 5, 3, 2 }, // 유저 0의 소탕권 인덱스별 수량
-        { 2, 1, 0 }, // 유저 1의 소탕권 인덱스별 수량
-        { 0, 0, 0 }, // 유저 2의 소탕권 인덱스별 수량
-        { 3, 2, 1 }, // 유저 3의 소탕권 인덱스별 수량
-        { 1, 0, 1 }  // 유저 4의 소탕권 인덱스별 수량
     };
 
     // 스텟 레벨업 계산식 데이터
