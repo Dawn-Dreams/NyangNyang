@@ -12,8 +12,8 @@ public class SkillDetailUI : MonoBehaviour
     public GameObject skillPanel;
     public GameObject effectPanel;
 
-    public Text playerCoinTxt;              //  
-    public Text weaponCoinTxt;
+    public Text playerCoinTxt;              
+    public Text skillCoinTxt;
 
     private Text wNameTxt;
     private Text wPossessionTxt;
@@ -53,13 +53,14 @@ public class SkillDetailUI : MonoBehaviour
             choosedSkill = SkillManager.GetInstance().GetSkill(_obj.name);
 
             wNameTxt.text = choosedSkill.GetName();
-            wLevelTxt.text = choosedSkill.GetLevel() + "/100";
+            wLevelTxt.text = choosedSkill.GetLevel() + "/10";
             wImage.sprite = SkillManager.GetInstance().GetSprite(choosedSkill.GetID());
 
             int count = choosedSkill.GetPossession();
-            // weaponCoinTxt.text = choosedSkill.GetNeedCoin().ToString();
-            wPossessionTxt.text = count + "/5";
-            wPossessionSlider.value = (float)count / 5 >= 1 ? 1 : (float)count / 5;
+            skillCoinTxt.text = choosedSkill.GetLevelUpCost().ToString();
+            int num = SkillManager.GetInstance().GetLevelUpCostPerLevel(choosedSkill.GetLevel() - 1);
+            wPossessionTxt.text = count + "/" + num;
+            wPossessionSlider.value = (float)count / num >= 1 ? 1 : (float)count / num;
 
             // eCurStatusTxt.text = choosedSkill.GetCurStatus().ToString();
             // eNextStatusTxt.text = choosedSkill.GetNextStatus().ToString();
@@ -75,4 +76,22 @@ public class SkillDetailUI : MonoBehaviour
         }
     }
 
+    public void OnClickedLevelUP()
+    {
+        if ( choosedSkill != null )
+        {
+            if (SkillManager.GetInstance().LevelUpSkill(choosedSkill.GetID())) {
+                wLevelTxt.text = choosedSkill.GetLevel() + "/10";
+                int count = choosedSkill.GetPossession();
+                skillCoinTxt.text = choosedSkill.GetLevelUpCost().ToString();
+                int num = SkillManager.GetInstance().GetLevelUpCostPerLevel(choosedSkill.GetLevel() - 1);
+                wPossessionTxt.text = count + "/" + num;
+                wPossessionSlider.value = (float)count / num >= 1 ? 1 : (float)count / num;
+            }
+            else
+            {
+                // ½ÇÆÐ
+            }
+        }
+    }
 }
