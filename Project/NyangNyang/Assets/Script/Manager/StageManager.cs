@@ -31,7 +31,6 @@ public class StageManager : MonoBehaviour
     [SerializeField]
     private EnemySpawnManager enemySpawnManager;  // 적 스폰 매니저 변수
 
-    public bool isSpecial = false;  // 스페셜 스테이지 여부를 저장하는 변수
     private int originalTheme;  // 원래 테마를 저장할 변수
 
     // TODO: 초기값 설정은 추후 NetworkManager에서 각 유저별 스테이지 로 받아오는 것으로 설정
@@ -50,21 +49,6 @@ public class StageManager : MonoBehaviour
         continuousCombatButton.onClick.AddListener(GoToLastClearStageNextStage);
     }
 
-    void Update()
-    {
-        // TODO: 임시 테스트 코드, 추후 조정 필요
-        //if (Input.GetKeyDown(KeyCode.Tab))
-        //{
-        //    GateClear();
-        //}
-
-        if (isSpecial)
-        {
-            // 스페셜 스테이지일 경우, cat이 계속 앞으로 이동
-            MoveCatForward();
-        }
-    }
-
     private void SetStageUI()
     {
         ThemeUI.text = currentTheme.ToString();
@@ -78,11 +62,7 @@ public class StageManager : MonoBehaviour
     private IEnumerator GateClear(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
-        if (isSpecial)
-        {
-            Debug.Log("스페셜 스테이지에서는 관문을 통과하지 않습니다.");
-            yield break; // 스페셜 스테이지일 경우, 관문 통과 시스템 비활성화
-        }
+
 
         if (currentGate >= maxGateCount)
         {
@@ -235,21 +215,6 @@ public class StageManager : MonoBehaviour
         fadeCoroutine = StartCoroutine(StartFade(() => FadeStartFuncWhileStageChange(true)));
     }
 
-    // 스페셜 스테이지에서 고양이가 계속 앞으로 이동하는 함수
-    private void MoveCatForward()
-    {
-        Cat cat = GameManager.GetInstance().catObject;
-        if (cat != null)
-        {
-            parallaxScrollingManager.MoveBackgroundSprites(true);
-        }
-    }
-
-    public void StopSpecialStage()
-    {
-        parallaxScrollingManager.MoveBackgroundSprites(false);
-    }
-
     // 현재 테마를 반환하는 함수
     public int GetCurrentTheme()
     {
@@ -259,13 +224,6 @@ public class StageManager : MonoBehaviour
     public int GetCurrentStage()
     {
         return currentStage;
-    }
-
-    // 스페셜 스테이지로 배경 테마 변경
-    public void ChangeBackgroundToSpecialStage(int theme)
-    {
-        parallaxScrollingManager.ChangeBackgroundImageFromPrefab(theme); // 배경 이미지를 스페셜 테마로 변경
-        SetStageUI();  // UI 업데이트
     }
 
     public void SetContinuousCombat(bool activeContinuousCombat)

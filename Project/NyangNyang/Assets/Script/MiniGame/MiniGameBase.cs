@@ -11,14 +11,14 @@ public abstract class MiniGameBase : MonoBehaviour
     {
         this.gameName = gameName;
         this.rewardTicketIndex = rewardTicketIndex;
+        GameManager.isMiniGameActive = false;
         isGameCleared = false;
-
-        Debug.Log($"{gameName} 초기화 완료. 보상 소탕권 인덱스: {rewardTicketIndex}");
     }
 
     // 미니게임 시작
     public void StartGame()
     {
+        GameManager.isMiniGameActive = true;
         StartGameLogic();
     }
 
@@ -26,6 +26,7 @@ public abstract class MiniGameBase : MonoBehaviour
     protected void ClearGame()
     {
         isGameCleared = true;
+        GameManager.isMiniGameActive = false;
         RewardSweepTicket();
         EndGameLogic();
     }

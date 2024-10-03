@@ -61,7 +61,6 @@ public class SpecialStageManager : MonoBehaviour
         }
         // 스페셜 스테이지 시작
         GameManager.isSpecialStageActive = true;
-        stageManager.isSpecial = true;  // 스페셜 스테이지 상태로 전환
         currentSpecialStageIndex = index;  // 현재 스페셜 스테이지 인덱스 저장
 
         specialStageUI.SetActive(true);  // 스페셜 스테이지 UI 활성화
@@ -80,7 +79,7 @@ public class SpecialStageManager : MonoBehaviour
 
         // 티켓 차감 - 스테이지가 정상적으로 시작되었을 때만 티켓을 차감함
         DummyServerData.UseTicket(Player.GetUserID(), index);
-        Debug.Log($"스페셜 스테이지 {index + 1}번 티켓이 차감되었습니다.");
+        //Debug.Log($"스페셜 스테이지 {index + 1}번 티켓이 차감되었습니다.");
     }
 
 
@@ -99,7 +98,6 @@ public class SpecialStageManager : MonoBehaviour
         specialStageUI.SetActive(false);
 
         if (goldCoroutine != null) StopCoroutine(goldCoroutine);
-        stageManager.StopSpecialStage();
 
         // 성공 처리
         if (isSuccess)
