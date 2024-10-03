@@ -1,40 +1,65 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class WeaponGachaMgr : MonoBehaviour
+public class GachaManager : MonoBehaviour
 {
+
+    enum type { weapon, skill, none };
+
+    [SerializeField]
+    private GameObject GachaDetailPanel;
+
     [SerializeField]
     private GameObject BeforePanel;
 
-    [SerializeField] 
+    [SerializeField]
     private GameObject AfterPanel;
 
     GameObject board;
     float rotationSpeed = 360f;
     bool isRotate = false;
 
+    type curType = type.none;
+
     private void Start()
     {
         board = BeforePanel.transform.Find("Board").gameObject;
     }
 
-    private void OnEnable()
+    public void OnClickedWeaponDrawButton()
     {
-        isRotate = false;
+        if ( curType == type.none)
+        {
+            curType = type.weapon;
+            GachaDetailPanel.SetActive(true);
+        }
     }
 
-    private void OnDisable()
+    public void OnClickedSkillDrawButton()
     {
-        BeforePanel.SetActive(true);
-        AfterPanel.SetActive(false);
+        if (curType == type.none)
+        {
+            curType = type.skill;
+            GachaDetailPanel.SetActive(true);
+        }
+    }
+
+    public void OnClickedCancleButton()
+    {
+        if ( curType != type.none)
+        {
+            curType = type.none;
+            BeforePanel.SetActive(false);
+            AfterPanel.SetActive(false);
+            GachaDetailPanel.SetActive(false);
+        }
     }
 
     public void OnClickedDrawButton()
     {
         // ÇÏ³ª¸¸ »Ì±â
-        if ( !isRotate )
+        if (!isRotate)
         {
             BeforePanel.SetActive(true);
             AfterPanel.SetActive(false);
@@ -73,13 +98,21 @@ public class WeaponGachaMgr : MonoBehaviour
         BeforePanel.SetActive(false);
         AfterPanel.SetActive(true);
 
-        if ( n == 1)
+        if (n == 1 && curType == type.weapon)
         {
             AfterPanel.GetComponent<PickUpWeapon>().ShowPickUpWeapon();
         }
-        else
+        else if ( n != 1 && curType == type.weapon)
         {
             AfterPanel.GetComponent<PickUpWeapon>().ShowPickUpWeapons();
+        }
+        else if ( n == 1 && curType == type.skill)
+        {
+            AfterPanel.GetComponent<PickUpSkill>().ShowPickUpWeapon();
+        }
+        else
+        {
+            AfterPanel.GetComponent<PickUpSkill>().ShowPickUpWeapon();
         }
     }
 }
