@@ -55,12 +55,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startThemeNum: 1
-  stageSprites:
-  - {fileID: 21300000, guid: 0746d3fc43c3be4429ea4b28eb117b0a, type: 3}
-  - {fileID: 21300000, guid: bead37cab30b6d347ad995cb67c00185, type: 3}
-  - {fileID: 21300000, guid: 85b60c93839f1a24aa2412beafeb17c2, type: 3}
-  - {fileID: 21300000, guid: 1d21955a72040184fa99bebab930822b, type: 3}
-  - {fileID: 21300000, guid: b2bcd91008add744e8312af1618144e6, type: 3}
+  spriteLabel:
+    m_LabelString: BG
   themeButtonImage: {fileID: 3882210146323830808}
   themeNameText: {fileID: 2351488664760622508}
   themeNumberBundleText: {fileID: 7979094802175173576}

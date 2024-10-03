@@ -3485,10 +3485,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   specialStageUI: {fileID: 1769386830}
+  specialStageLevels: 010000000100000001000000
   playSec: 3
+  playDuration: 10
   goldInterval: 0.5
   baseGoldAmount: 10
-  specialStageLevels: 010000000100000001000000
 --- !u!1001 &213997137
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7162,10 +7163,7 @@ MonoBehaviour:
   - {fileID: 441119876}
   - {fileID: 915104781}
   - {fileID: 1919333782}
-  levelScrollView:
-  - {fileID: 717746680}
-  - {fileID: 849839174}
-  - {fileID: 933899240}
+  levelScrollViews: []
 --- !u!114 &378922443
 MonoBehaviour:
   m_ObjectHideFlags: 0
