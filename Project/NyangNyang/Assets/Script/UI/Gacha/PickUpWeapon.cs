@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,18 +25,7 @@ public class PickUpWeapon : MonoBehaviour
         // TODO: OneContent 속의 내용 작성하기 뽑기에서 나온 결과물로**
         int id = 0;
 
-        Image img = OneContent.transform.Find("Image").GetComponent<Image>();
-        img.sprite = WeaponManager.GetInstance().GetSprite(id);
-        OneContent.GetComponent<WeaponUnlock>().Unlock();
-        WeaponManager.GetInstance().AddWeaponCount(id, 1);
-
-        Weapon weapon = WeaponManager.GetInstance().GetWeapon(id);
-
-        Slider slider = OneContent.transform.Find("Slider").GetComponent<Slider>();
-        slider.value = (float)weapon.GetWeaponCount() / 5 >= 1 ? 1 : (float)weapon.GetWeaponCount() / 5;
-
-        Text text = OneContent.transform.Find("possession").GetComponent<Text>();
-        text.text = weapon.GetWeaponCount().ToString() + "/5";
+        SetPickUPWeapon(id, OneContent);
     }
 
     public void ShowPickUpWeapons()
@@ -50,19 +40,23 @@ public class PickUpWeapon : MonoBehaviour
             // TODO: child 속의 내용 작성하기 뽑기에서 나온 결과물로**
             int id = 0; // return으로 id 알려주기
 
-            Image img = child.transform.Find("Image").GetComponent<Image>();
-            img.sprite = WeaponManager.GetInstance().GetSprite(id);
-            child.GetComponent<WeaponUnlock>().Unlock();
-            WeaponManager.GetInstance().AddWeaponCount(id, 1);
-
-            Weapon weapon = WeaponManager.GetInstance().GetWeapon(id);
-
-            Slider slider = child.transform.Find("Slider").GetComponent<Slider>();
-            slider.value = (float)weapon.GetWeaponCount() / 5 >= 1 ? 1 : (float)weapon.GetWeaponCount() / 5;
-
-            Text text = child.transform.Find("possession").GetComponent<Text>();
-            text.text = weapon.GetWeaponCount().ToString() + "/5";
+            SetPickUPWeapon(id, child.gameObject);
         }
 
+    }
+    public void SetPickUPWeapon(int id, GameObject _obj)
+    {
+        Image img = _obj.transform.Find("Image").GetComponent<Image>();
+        img.sprite = WeaponManager.GetInstance().GetSprite(id);
+        _obj.GetComponent<WeaponUnlock>().Unlock();
+        WeaponManager.GetInstance().AddWeaponCount(id, 1);
+
+        Weapon weapon = WeaponManager.GetInstance().GetWeapon(id);
+
+        Slider slider = _obj.transform.Find("Slider").GetComponent<Slider>();
+        slider.value = (float)weapon.GetWeaponCount() / 5 >= 1 ? 1 : (float)weapon.GetWeaponCount() / 5;
+
+        Text text = _obj.transform.Find("possession").GetComponent<Text>();
+        text.text = weapon.GetWeaponCount().ToString() + "/5";
     }
 }
