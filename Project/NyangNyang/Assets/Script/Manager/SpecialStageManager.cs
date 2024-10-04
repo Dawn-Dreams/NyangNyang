@@ -26,7 +26,7 @@ public class SpecialStageManager : MonoBehaviour
     // 임시 객체로 사용할 cat과 enemy 프리팹
     public Character playerPrefab;
     public Enemy enemyPrefab;
-    private Character playerInstance;
+    private Character catInstance;
     private Enemy enemyInstance;
 
     // 싱글톤 인스턴스
@@ -55,15 +55,15 @@ public class SpecialStageManager : MonoBehaviour
         if (playerWon)
         {
             Debug.Log("클리어!");
+            isSuccess = true;
+            EndSpecialStage();
         }
         else
         {
             Debug.Log("실패");
+            isSuccess = false;
+            EndSpecialStage();
         }
-
-        // 객체 정리 (cat과 enemy 삭제)
-        if (playerInstance != null) Destroy(playerInstance);
-        if (enemyInstance != null) Destroy(enemyInstance);
     }
 
     // 스페셜 스테이지 시작
@@ -103,7 +103,7 @@ public class SpecialStageManager : MonoBehaviour
         GameManager.isSpecialStageActive = true;
 
         // 고양이 프리팹 인스턴스 생성
-        playerInstance = Instantiate(playerPrefab, new Vector3(-2, 0, 0), Quaternion.identity).GetComponent<Character>();
+        catInstance = Instantiate(playerPrefab, new Vector3(-2, 0, 0), Quaternion.identity).GetComponent<Character>();
         Debug.Log("고양이 생성 완료.");
 
         // 적군 프리팹 인스턴스 생성
@@ -114,8 +114,8 @@ public class SpecialStageManager : MonoBehaviour
         enemyInstance.SetNumberOfEnemyInGroup(3); // 여기서 enemyInstance에 대해 메서드를 호출
 
         // 고양이와 적군을 전투 상태로 설정
-        playerInstance.SetEnemy(enemyInstance);
-        enemyInstance.SetEnemy(playerInstance);
+        catInstance.SetEnemy(enemyInstance);
+        enemyInstance.SetEnemy(catInstance);
 
         currentSpecialStageIndex = index;
         specialStageUI.SetActive(true);  // UI 활성화
@@ -157,7 +157,7 @@ public class SpecialStageManager : MonoBehaviour
             }
 
             // 플레이어가 죽으면 실패
-            if (playerInstance != null && playerInstance.IsDead())
+            if (catInstance != null && catInstance.IsDead())
             {
                 EndSpecialStage(false); // 실패 처리
                 yield break;
@@ -176,13 +176,14 @@ public class SpecialStageManager : MonoBehaviour
             EndSpecialStage(false); // 실패 처리
         }
     }
-    // 스페셜 스테이지 종료 메소드
+
     public void EndSpecialStage()
     {
         GameManager.isSpecialStageActive = false;
         specialStageUI.SetActive(false);
 
-        if (goldCoroutine != null) StopCoroutine(goldCoroutine);
+        if (goldCoroutine != null)
+            StopCoroutine(goldCoroutine);
 
         // 성공 처리
         if (isSuccess)
@@ -192,8 +193,8 @@ public class SpecialStageManager : MonoBehaviour
                 specialStageLevels[currentSpecialStageIndex]++;
                 stageDifficulties[currentSpecialStageIndex] *= 2;
                 Debug.Log($"스페셜 스테이지 {currentSpecialStageIndex + 1} 클리어! 다음 레벨이 활성화됩니다.");
-                if (playerInstance != null) Destroy(playerInstance);
-                if (enemyInstance != null) Destroy(enemyInstance);
+
+                // SpecialStageMenuPanel에 클리어된 스테이지 업데이트
                 var specialStageMenuPanel = FindObjectOfType<SpecialStageMenuPanel>();
                 if (specialStageMenuPanel != null)
                 {
@@ -204,12 +205,19 @@ public class SpecialStageManager : MonoBehaviour
         else
         {
             Debug.Log($"스페셜 스테이지 {currentSpecialStageIndex + 1} 실패.");
-            if (playerInstance != null) Destroy(playerInstance);
-            if (enemyInstance != null) Destroy(enemyInstance);
         }
 
         // cat과 enemy 객체 삭제
-        if (playerInstance != null) Destroy(playerInstance);
-        if (enemyInstance != null) Destroy(enemyInstance);
+        if (catInstance != null)
+        {
+            Destroy(catInstance.gameObject);
+            catInstance = null;
+        }
+
+        if (enemyInstance != null)
+        {
+            Destroy(enemyInstance.gameObject);
+            enemyInstance = null;
+        }
     }
 }
