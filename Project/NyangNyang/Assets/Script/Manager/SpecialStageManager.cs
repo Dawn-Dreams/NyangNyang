@@ -71,8 +71,8 @@ public class SpecialStageManager : MonoBehaviour
         GameManager.isSpecialStageActive = true;
 
         // 프리팹 인스턴스 생성
-        catInstance = Instantiate(catPrefab, new Vector3(-2, 0, 0), Quaternion.identity).GetComponent<Character>();
-        enemyInstance = Instantiate(enemyPrefab, new Vector3(2, 0, 0), Quaternion.identity).GetComponent<Enemy>();
+        catInstance = Instantiate(catPrefab, new Vector3(-10, 40, 0), Quaternion.identity).GetComponent<Character>();
+        enemyInstance = Instantiate(enemyPrefab, new Vector3(5, 40, 0), Quaternion.identity).GetComponent<Enemy>();
 
         // 적군의 수
         enemyInstance.SetNumberOfEnemyInGroup(1);

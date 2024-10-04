@@ -13,8 +13,6 @@ public class SpecialStageMenuPanel : MenuPanel
     private GameObject[] stageTabs;
     private Button[] startButtons, sweepButtons;
     private TextMeshProUGUI[] ticketTexts, titleTexts;
-
-    [SerializeField]
     private ScrollRect[] levelScrollViews;
     private Button[][] levelSelectButtons;
 
