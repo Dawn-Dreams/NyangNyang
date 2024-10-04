@@ -158,26 +158,6 @@ public class Character : MonoBehaviour
         // TODO: 임시 사망 처리
         gameObject.SetActive(false);
     }
-
-    protected void OnEnemyDefeated()
-    {
-        // 적군이 죽었을 때의 처리
-        if (enemyObject != null)
-        {
-            enemyObject.SetEnemy(null);
-            enemyObject = null;
-        }
-
-        if (IsEnemy)
-        {
-            SpecialStageManager.Instance.EndSpecialStage(true); // 보스가 죽으면 스테이지 성공
-        }
-        else
-        {
-            SpecialStageManager.Instance.EndSpecialStage(false); // 플레이어가 죽으면 스테이지 실패
-        }
-    }
-
 }
 
 //Character -> Cat / Enemy

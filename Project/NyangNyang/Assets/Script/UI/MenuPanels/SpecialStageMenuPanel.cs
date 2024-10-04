@@ -128,7 +128,6 @@ public class SpecialStageMenuPanel : MenuPanel
     private void OnClickStageButton(int index)
     {
         SetActiveTab(index);
-        //SetButtonActiveColor(stageButtons[index]);
         titleTexts[index].text = $"미니게임 던전 {index + 1}";
         UpdateTicketText(index);
     }
@@ -211,17 +210,4 @@ public class SpecialStageMenuPanel : MenuPanel
             levelSelectButtons[tabIndex][i].interactable = (i + 1) <= highestClearedStage[tabIndex];
         }
     }
-    //private void SetButtonActiveColor(Button targetButton)
-    //{
-    //    foreach (Button button in stageButtons)
-    //    {
-    //        var colors = button.colors;
-    //        // 현재 버튼의 색상을 클릭 시 즉시 변경
-    //        colors.normalColor = button == targetButton ? new Color(0.25f, 0.25f, 0.25f) : Color.white;
-    //        button.colors = colors;
-
-    //        // 버튼의 인터랙션 상태를 리셋하여 색상에 영향을 미치지 않도록 설정
-    //        button.interactable = true; // 버튼을 다시 활성화
-    //    }
-    //}
 }

@@ -239,5 +239,34 @@ public class Enemy : Character
 
         base.Death();
     }
+
+    // 스탯 설정 함수 ... 수정필요
+    public void SetEnemyStatus(int level)
+    {
+        // 임시 지정한 베이스 스탯
+        BigInteger baseHealth = 100;
+        int baseAttackPower =100, baseDefence = 100;
+
+        // 기본 체력, 공격력, 방어력
+        BigInteger totalHealth = baseHealth + (level * 100);         // 레벨당 전체 체력 증가
+        status.attackPower = baseAttackPower + (level * 10);         // 레벨당 공격력 증가
+        status.defence = baseDefence + (level * 5);                  // 레벨당 방어력 증가
+
+        // 적들의 개체 수에 맞춰 체력 분배
+        BigInteger dummyMaxHp = totalHealth / initialNumOfDummyEnemy;
+
+        for (int i = 0; i < _dummyEnemies.Count; ++i)
+        {
+            _dummyEnemies[i] = new DummyEnemy(dummyEnemyImages[i], dummyMaxHp);  // 각 DummyEnemy에 개별 체력 설정
+        }
+
+        // 총 체력 설정
+        maxHP = totalHealth;
+        currentHP = maxHP;
+
+        ChangeHealthBar(); // 체력바 업데이트
+        Debug.Log($"레벨 {level}에 맞춰 적군 스탯 설정 완료: 총 체력 {totalHealth}, 공격력 {status.attackPower}, 방어력 {status.defence}");
+    }
+
 }
 

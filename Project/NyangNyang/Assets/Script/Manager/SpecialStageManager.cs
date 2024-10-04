@@ -7,11 +7,9 @@ public class SpecialStageManager : MonoBehaviour
 {
     [SerializeField]
     private GameObject specialStageUI;
-    private StageManager stageManager;
 
     public int[] specialStageLevels = new int[3] { 1, 1, 1 };
     private int currentSpecialStageIndex;
-    private int originalBackground;             // 원래 배경 테마 저장
 
     public float playSec = 13.0f;               // 스페셜 스테이지 지속 시간
     public float playDuration = 10.0f;
@@ -19,12 +17,9 @@ public class SpecialStageManager : MonoBehaviour
     public int baseGoldAmount = 100000;
     private Coroutine goldCoroutine;
     private bool isSuccess;
-
-    // 난이도 배열
-    private int[] stageDifficulties = new int[3] { 10, 15, 20 };
-
+    private int gainGold = 100000;               // 기본 골드 획득량
     // 임시 객체로 사용할 cat과 enemy 프리팹
-    public Character playerPrefab;
+    public Character catPrefab;
     public Enemy enemyPrefab;
     private Character catInstance;
     private Enemy enemyInstance;
@@ -45,26 +40,6 @@ public class SpecialStageManager : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        stageManager = FindObjectOfType<StageManager>() ?? throw new NullReferenceException("StageManager is missing.");
-    }
-
-    public void EndSpecialStage(bool playerWon)
-    {
-        if (playerWon)
-        {
-            Debug.Log("클리어!");
-            isSuccess = true;
-            EndSpecialStage();
-        }
-        else
-        {
-            Debug.Log("실패");
-            isSuccess = false;
-            EndSpecialStage();
-        }
-    }
 
     // 스페셜 스테이지 시작
     public void StartSpecialStage(int index, int level)
@@ -89,30 +64,20 @@ public class SpecialStageManager : MonoBehaviour
             Debug.Log("소탕권이 부족하여 스페셜 스테이지를 시작할 수 없습니다.");
             return;
         }
-
-        // 난이도 체크: 플레이어의 공격력이 난이도보다 낮으면 실패
-        if (Player.playerStatus.attackPower < stageDifficulties[index])
-        {
-            Debug.Log("플레이어의 공격력이 부족하여 스페셜 스테이지 실패.");
-            isSuccess = false;
-            EndSpecialStage(); // 실패 처리
-            return;
-        }
+        // 이전 Invoke 호출이 있을 경우 취소
+        CancelInvoke("TimeOut");
 
         // 던전 활성화
         GameManager.isSpecialStageActive = true;
 
-        // 고양이 프리팹 인스턴스 생성
-        catInstance = Instantiate(playerPrefab, new Vector3(-2, 0, 0), Quaternion.identity).GetComponent<Character>();
-        Debug.Log("고양이 생성 완료.");
-
-        // 적군 프리팹 인스턴스 생성
+        // 프리팹 인스턴스 생성
+        catInstance = Instantiate(catPrefab, new Vector3(-2, 0, 0), Quaternion.identity).GetComponent<Character>();
         enemyInstance = Instantiate(enemyPrefab, new Vector3(2, 0, 0), Quaternion.identity).GetComponent<Enemy>();
-        Debug.Log("적군 생성 완료.");
 
-        // 적군의 수를 설정 (1마리 또는 여러 마리 가능)
-        enemyInstance.SetNumberOfEnemyInGroup(3); // 여기서 enemyInstance에 대해 메서드를 호출
+        // 적군의 수
+        enemyInstance.SetNumberOfEnemyInGroup(1);
 
+        //enemyInstance.SetEnemyStatus(1);  // 레벨에 따라 적군의 스탯을 증가시킴
         // 고양이와 적군을 전투 상태로 설정
         catInstance.SetEnemy(enemyInstance);
         enemyInstance.SetEnemy(catInstance);
@@ -120,16 +85,11 @@ public class SpecialStageManager : MonoBehaviour
         currentSpecialStageIndex = index;
         specialStageUI.SetActive(true);  // UI 활성화
 
-        if (stageManager != null)
-        {
-            // originalBackground = stageManager.GetCurrentTheme();
-            // stageManager.ChangeBackgroundToSpecialStage(index + 6);
-        }
-
-        goldCoroutine = StartCoroutine(GainGoldOverTime(level));
+        // 일정 시간 동안 골드를 획득하는 코루틴
+        // goldCoroutine = StartCoroutine(GainGoldOverTime(level));
         DummyServerData.UseTicket(Player.GetUserID(), index); // 티켓 차감
 
-        // 전투 결과 감시 시작
+        // 전투 결과 체크 시작
         StartCoroutine(CheckBattleOutcome());
         // 스테이지 제한 시간 설정
         Invoke("TimeOut", playSec);
@@ -152,14 +112,16 @@ public class SpecialStageManager : MonoBehaviour
             // 적군이 죽으면 클리어
             if (enemyInstance != null && enemyInstance.IsDead())
             {
-                EndSpecialStage(true); // 클리어 처리
+                isSuccess = true;
+                EndSpecialStage();
                 yield break;
             }
 
             // 플레이어가 죽으면 실패
             if (catInstance != null && catInstance.IsDead())
             {
-                EndSpecialStage(false); // 실패 처리
+                isSuccess = false;
+                EndSpecialStage();
                 yield break;
             }
 
@@ -173,7 +135,8 @@ public class SpecialStageManager : MonoBehaviour
         if (GameManager.isSpecialStageActive)
         {
             Debug.Log("제한 시간이 초과되었습니다.");
-            EndSpecialStage(false); // 실패 처리
+            isSuccess = false;
+            EndSpecialStage(); // 실패 처리
         }
     }
 
@@ -191,9 +154,8 @@ public class SpecialStageManager : MonoBehaviour
             if (currentSpecialStageIndex >= 0 && currentSpecialStageIndex < specialStageLevels.Length)
             {
                 specialStageLevels[currentSpecialStageIndex]++;
-                stageDifficulties[currentSpecialStageIndex] *= 2;
                 Debug.Log($"스페셜 스테이지 {currentSpecialStageIndex + 1} 클리어! 다음 레벨이 활성화됩니다.");
-
+                Player.AddGold(specialStageLevels[currentSpecialStageIndex]*gainGold);
                 // SpecialStageMenuPanel에 클리어된 스테이지 업데이트
                 var specialStageMenuPanel = FindObjectOfType<SpecialStageMenuPanel>();
                 if (specialStageMenuPanel != null)
