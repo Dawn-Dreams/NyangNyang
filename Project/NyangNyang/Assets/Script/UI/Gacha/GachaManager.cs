@@ -108,11 +108,11 @@ public class GachaManager : MonoBehaviour
         }
         else if ( n == 1 && curType == type.skill)
         {
-            AfterPanel.GetComponent<PickUpSkill>().ShowPickUpWeapon();
+            AfterPanel.GetComponent<PickUpSkill>().ShowPickUpSkill();
         }
         else
         {
-            AfterPanel.GetComponent<PickUpSkill>().ShowPickUpWeapon();
+            AfterPanel.GetComponent<PickUpSkill>().ShowPickUpSkills();
         }
     }
 }

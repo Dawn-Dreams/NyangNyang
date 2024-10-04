@@ -32,6 +32,10 @@ public class SkillMgrUI : MonoBehaviour
             Skill skill = SkillManager.GetInstance().GetSkill(i);
             if (skill != null)
             {
+                if (skill.HasSkill())
+                {
+                    skillList[i].GetComponent<WeaponUnlock>().Unlock();
+                }
                 sliders[i].value = (float)skill.GetPossession() / 5 >= 1 ? 1 : (float)skill.GetPossession() / 5;
                 texts[i].text = skill.GetPossession().ToString() + "/5";
             }

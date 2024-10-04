@@ -32,6 +32,10 @@ public class WeaponMgrUI : MonoBehaviour
             Weapon weapon = WeaponManager.GetInstance().GetWeapon(i);
             if ( weapon != null )
             {
+                if (weapon.HasWeapon())
+                {
+                    weaponList[i].GetComponent<WeaponUnlock>().Unlock();
+                }
                 sliders[i].value = (float)weapon.GetWeaponCount() / 5 >= 1 ? 1 : (float)weapon.GetWeaponCount() / 5;
                 texts[i].text = weapon.GetWeaponCount().ToString() + "/5";
             }
