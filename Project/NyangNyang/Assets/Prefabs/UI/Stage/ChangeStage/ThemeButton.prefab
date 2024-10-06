@@ -54,9 +54,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6387fd94b959ee4d93d2e69a3b55bf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startThemeNum: 1
   spriteLabel:
     m_LabelString: BG
+  text: {fileID: 4900000, guid: a021af5bd37ae3349978928c266d1bd4, type: 3}
+  startThemeNum: 1
   themeButtonImage: {fileID: 3882210146323830808}
   themeNameText: {fileID: 2351488664760622508}
   themeNumberBundleText: {fileID: 7979094802175173576}

@@ -3,17 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 
 public class ChangeStageUI : MonoBehaviour
 {
+    // sprite resource
+    private Dictionary<int, Sprite> _stageSprites = null;
+    private AsyncOperationHandle<IList<Sprite>> _spriteHandle;
+    public AssetLabelReference spriteLabel;
+    private string[] _themeNames;
+
+    // Buttons
     [SerializeField] private Button closeButton;
     [SerializeField] private StageManager stageManager;
     [SerializeField] private Button backImage;
 
+    // Theme Button
     [SerializeField] private GameObject themeButtonPrefab;
     [SerializeField] private GameObject themeButtonScrollViewContentObject;
-
+    // Stage Button
     [SerializeField] private GameObject stageButtonPrefab;
     [SerializeField] private GameObject stageButtonScrollViewContentObject;
 
@@ -24,6 +34,10 @@ public class ChangeStageUI : MonoBehaviour
     [SerializeField] private Sprite themeNumberSelectSprite;
 
     private StageButton[] stageButtons;
+
+    [SerializeField] private Image themeImage;
+    [SerializeField] private TextMeshProUGUI themeNameText;
+    [SerializeField] private TextMeshProUGUI stageLevelText;
 
     private int _curStartThemeNum = 0;
     private int _curSelectThemeNum = 0;
@@ -38,7 +52,7 @@ public class ChangeStageUI : MonoBehaviour
         changeStageButton.onClick.AddListener(ChangeStage);
 
         OnAwakeThemeStepButtonCreate();
-        OnAwakestageButtonCreate();
+        OnAwakeStageButtonCreate();
         OnAwakeThemeNumberButtonAddListener();
 
         SetInitialData();
@@ -47,6 +61,12 @@ public class ChangeStageUI : MonoBehaviour
     void OnEnable()
     {
         SetInitialData();
+        AssetLoad();
+    }
+
+    void OnDisable()
+    {
+        Addressables.Release(_spriteHandle);    
     }
 
     void SetInitialData()
@@ -76,10 +96,17 @@ public class ChangeStageUI : MonoBehaviour
     {
         _curStartThemeNum = themeStepButtonNumber * stageButtons.Length + 1;
 
+        // 테마 선택 버튼 해당 스텝에 맞게 조정
         for (int i = 0; i < themeNumberTexts.Length; ++i)
         {
             themeNumberTexts[i].text = (_curStartThemeNum + i).ToString();
         }
+
+        // 테마 이미지 및 이름 변경
+        themeNameText.text = _themeNames[themeStepButtonNumber % themeNumberObject.Length];
+        themeImage.sprite = _stageSprites[themeStepButtonNumber % themeNumberObject.Length + 1];
+
+        
 
         SelectStageThemeNumberButton(0);
     }
@@ -97,7 +124,6 @@ public class ChangeStageUI : MonoBehaviour
         }
 
         _curSelectThemeNum = buttonNumberID;
-        Debug.Log(_curStartThemeNum + _curSelectThemeNum + "번째 스테이지 정보 출력");
         themeNumberImages[_curSelectThemeNum].sprite = themeNumberSelectSprite;
 
         // 스테이지 버튼은 Theme가 변경될 때 마다 갱신 해줘야함
@@ -133,6 +159,8 @@ public class ChangeStageUI : MonoBehaviour
                 stageButtons[i].GetButton().interactable = false;
             }
         }
+
+        SelectStageNumberButton(1);
     }
 
     void SelectStageNumberButton(int buttonNumberID)
@@ -141,9 +169,12 @@ public class ChangeStageUI : MonoBehaviour
         {
             stageButtons[_curSelectStageNum - 1].UnSelect();
         }
-        Debug.Log((_curStartThemeNum + _curSelectThemeNum) + " - " + buttonNumberID + "스테이지 정보 출력");
         _curSelectStageNum = buttonNumberID;
         stageButtons[_curSelectStageNum - 1].SetButtonType(StageButtonType.Select);
+
+        // 스테이지 레벨 텍스트 출력
+        string currentStageText = _curStartThemeNum + _curSelectThemeNum + " - " + _curSelectStageNum;
+        stageLevelText.text = currentStageText;
     }
 
     void ChangeStage()
@@ -180,7 +211,7 @@ public class ChangeStageUI : MonoBehaviour
         }
     }
 
-    private void OnAwakestageButtonCreate()
+    private void OnAwakeStageButtonCreate()
     {
         if (stageButtonScrollViewContentObject.transform.childCount < 10 && stageButtons == null)
         {
@@ -201,5 +232,25 @@ public class ChangeStageUI : MonoBehaviour
                 stageButtons[i] = stageButton;
             }
         }
+    }
+
+    void AssetLoad()
+    {
+        // Load Sprite
+        _stageSprites = new Dictionary<int, Sprite>();
+
+        _spriteHandle = Addressables.LoadAssetsAsync<Sprite>(spriteLabel, (result) =>
+        {
+            int bgNumber = int.Parse(result.name.Substring(result.name.Length - 1, 1));
+            _stageSprites.Add(bgNumber, result);
+        });
+        _spriteHandle.WaitForCompletion();
+
+
+        // Load Text
+        var textAssetHandle = Addressables.LoadAssetAsync<TextAsset>("ThemeNameText");
+        textAssetHandle.WaitForCompletion();
+        TextAsset themeNameTextAsset = textAssetHandle.Result;
+        _themeNames = themeNameTextAsset.text.Split('\n');
     }
 }
