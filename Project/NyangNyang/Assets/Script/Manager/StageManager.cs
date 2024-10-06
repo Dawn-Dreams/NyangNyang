@@ -44,7 +44,8 @@ public class StageManager : MonoBehaviour
 
     void Start()
     {
-        SetStageUI();
+        //SetStageUI();
+        SetNewStage(false);
 
         continuousCombatButton.onClick.AddListener(GoToLastClearStageNextStage);
     }
@@ -205,6 +206,19 @@ public class StageManager : MonoBehaviour
         }
 
         GameManager.GetInstance().catObject.CatRespawn();
+
+        // 현재 스테이지가 최고 스테이지가 아니라면 반복 사냥 진행
+        int clearThemeData = 0;
+        int clearStageData = 0;
+        Player.GetPlayerHighestClearStageData(out clearThemeData, out clearStageData);
+        if (currentTheme < clearThemeData || ((currentTheme == clearThemeData) && currentStage < clearStageData))
+        {
+            SetContinuousCombat(true);
+        }
+        else
+        {
+            SetContinuousCombat(false);
+        }
         
 
         SetStageUI();
