@@ -50,6 +50,14 @@ public class StageSlider : MonoBehaviour
     public void WinCombatInGate(int gateNumber)
     {
         gateNumber -= 1;
+
+        // 인덱스 범위 체크
+        if (gateNumber < 0 || gateNumber >= _gateImages.Count)
+        {
+            Debug.LogError($"잘못된 gateNumber 값: {gateNumber + 1}. _gateImages 리스트 크기: {_gateImages.Count}");
+            return;
+        }
+
         if (_gateImages[gateNumber])
         {
             Image image = _gateImages[gateNumber].GetComponent<Image>();

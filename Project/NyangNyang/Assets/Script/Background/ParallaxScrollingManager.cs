@@ -10,6 +10,7 @@ class BackgroundSprites
     private float layerMoveSpeed = 0.0f;
     private float objectSize = Mathf.Infinity;
 
+
     public BackgroundSprites(int layerNum, float getLayerMoveSpeed)
     {
         spriteObjects = new List<GameObject>();
@@ -40,7 +41,7 @@ class BackgroundSprites
             }
 
             spriteObjects[i].transform.localPosition = initPosition;
-            
+
         }
     }
 
@@ -66,7 +67,7 @@ public class ParallaxScrollingManager : MonoBehaviour
     // 맨 뒤 레이어 초기 속도
     public float initialMoveSpeed = 1f;
     // background 레이어 갯수
-    public int layerCount = 6; 
+    public int layerCount = 6;
     // 전방 레이어로 갈수록 감소되는 속도 비율
     public float IncreaseSpeed = 1.2f;
 
@@ -107,6 +108,28 @@ public class ParallaxScrollingManager : MonoBehaviour
         }
     }
 
+    // 현재 테마 가져오기 함수
+    public int GetCurrentTheme()
+    {
+        return currentPrefabIndex;
+    }
+
+    // 다음 인덱스 배경으로 변경하는 함수
+    public void ChangeNextBackgroundImage()
+    {
+        ChangeBackgroundImageFromPrefab(GetCurrentTheme() + 1);
+    }
+
+    // 특정 인덱스 배경으로 변경하는 함수
+    public void ChangeIndexNumberBackgroundImage(int index)
+    {
+        // currentPrefabIndex를 index 값으로 갱신하되, 1부터 시작하는 인덱스를 맞추기 위해 아래와 같이 설정
+        currentPrefabIndex = (index - 1) % spritePrefabs.Count;
+
+        // 새 배경 이미지 적용
+        ChangeBackgroundImageFromPrefab(currentPrefabIndex);
+    }
+
     // 프리팹에서 각 레이어에 맞는 스프라이트들을 가져와 배경을 교체하는 함수
     public void ChangeBackgroundImageFromPrefab(int index)
     {
@@ -115,59 +138,68 @@ public class ParallaxScrollingManager : MonoBehaviour
             Debug.LogError("Sprite Prefab이 NULL 입니다.");
             return;
         }
-
-        // index가 6, 7, 8번인 경우 해당 인덱스의 프리팹으로 배경 교체
-        if (index >= 6 && index <= 8)
+        if (index < 0 || index >= spritePrefabs.Count)
         {
-            if (index - 1 < spritePrefabs.Count)
-            {
-                currentPrefabIndex = index - 1;  // 6, 7, 8에 해당하는 프리팹은 리스트 인덱스로 5, 6, 7이 되도록 조정
-            }
-            else
-            {
-                Debug.LogError("유효하지 않은 인덱스입니다.");
-                return;
-            }
+            Debug.LogError($"Index가 범위를 벗어났습니다. (index: {index}, spritePrefabs.Count: {spritePrefabs.Count})");
+            return;
         }
-        else 
-        {
-            // 1 ~ 5번 프리팹 순회
-            currentPrefabIndex = (index - 1) % 5; // 순회는 프리팹 인덱스 0~4만 (즉, 1~5번 프리팹만)
-        }
-       
 
-        GameObject currentPrefab = spritePrefabs[currentPrefabIndex];
+        GameObject currentPrefab = spritePrefabs[index];
+
+        if (currentPrefab == null)
+        {
+            Debug.LogError("현재 Prefab이 NULL 입니다.");
+            return;
+        }
 
         for (int layerIndex = 0; layerIndex < layerCount; layerIndex++)
         {
-            string layerName = "Layer_" + layerIndex;
+            // 레이어마다 스프라이트를 적용
+            ApplySpriteToLayer(currentPrefab, layerIndex);
+        }
+    }
 
-            // 프리팹 내부의 각 레이어의 스프라이트 오브젝트 찾기
-            Transform layerTransform = currentPrefab.transform.Find(layerName);
-            if (layerTransform == null)
-            {
-                Debug.LogError(layerName + "이 프리팹에 존재하지 않습니다.");
-                continue;
-            }
 
-            // 해당 레이어의 "_M", "_L", "_R" 스프라이트 찾기
-            SpriteRenderer middleSprite = layerTransform.Find(layerName + "_M")?.GetComponent<SpriteRenderer>();
-            SpriteRenderer leftSprite = layerTransform.Find(layerName + "_L")?.GetComponent<SpriteRenderer>();
-            SpriteRenderer rightSprite = layerTransform.Find(layerName + "_R")?.GetComponent<SpriteRenderer>();
+    // 프리팹에서 각 레이어에 스프라이트 적용하는 함수
+    private void ApplySpriteToLayer(GameObject prefab, int layerIndex)
+    {
+        // 레이어 이름을 구성
+        string layerName = "Layer_" + layerIndex;
 
-            if (middleSprite == null || leftSprite == null || rightSprite == null)
-            {
-                Debug.LogError(layerName + "의 일부 스프라이트를 찾을 수 없습니다.");
-                continue;
-            }
+        // 해당 레이어가 Prefab에 존재하는지 확인
+        Transform layerTransform = prefab.transform.Find(layerName);
 
-            // 각 레이어에 새로운 스프라이트 적용
-            _backgroundObjects[layerIndex].SetNewSprite(middleSprite.sprite, leftSprite.sprite, rightSprite.sprite);
+        if (layerTransform == null)
+        {
+            Debug.LogError($"{layerName}이 prefab에 존재하지 않습니다. (prefab 이름: {prefab.name})");
+            return;
         }
 
-        //Debug.Log(index + "번으로 배경 이미지 변경");
-        //Debug.Log(currentPrefab.name + " 이름");
+        // 자식 스프라이트 찾기
+        SpriteRenderer middleSprite = layerTransform.Find(layerName + "_M")?.GetComponent<SpriteRenderer>();
+        SpriteRenderer leftSprite = layerTransform.Find(layerName + "_L")?.GetComponent<SpriteRenderer>();
+        SpriteRenderer rightSprite = layerTransform.Find(layerName + "_R")?.GetComponent<SpriteRenderer>();
+
+        // 스프라이트 컴포넌트 존재 여부 체크
+        if (middleSprite == null || leftSprite == null || rightSprite == null)
+        {
+            Debug.LogError($"{layerName}의 스프라이트가 누락되었습니다. (middle: {middleSprite != null}, left: {leftSprite != null}, right: {rightSprite != null})");
+            return;
+        }
+
+        if (_backgroundObjects == null || layerIndex < 0 || layerIndex >= _backgroundObjects.Count || _backgroundObjects[layerIndex] == null)
+        {
+            //Debug.LogError($"_backgroundObjects에서 레이어 {layerIndex}에 대한 객체를 찾을 수 없습니다.");
+            return;
+        }
+        else
+            _backgroundObjects[layerIndex].SetNewSprite(middleSprite.sprite, leftSprite.sprite, rightSprite.sprite);
     }
+
+
+
+
+
 
     public void MoveBackgroundSprites(bool moveBackground)
     {

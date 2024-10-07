@@ -213,11 +213,12 @@ public class StageManager : MonoBehaviour
             currentStage += 1;
             if (currentStage > maxStageCount)
             {
-                parallaxScrollingManager.ChangeBackgroundImageFromPrefab(currentTheme);
                 currentStage = 1;
                 currentTheme += 1;
             }
         }
+
+        parallaxScrollingManager.ChangeIndexNumberBackgroundImage(currentTheme);
 
         GameManager.GetInstance().catObject.CatRespawn();
 
@@ -316,7 +317,7 @@ public class StageManager : MonoBehaviour
                 currentTheme = 1;
                 currentStage = 1;
             }
-            parallaxScrollingManager.ChangeBackgroundImageFromPrefab(currentTheme);
+            parallaxScrollingManager.ChangeIndexNumberBackgroundImage(currentTheme);
         }
         SetStageUI();
 
