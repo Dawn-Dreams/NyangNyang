@@ -12,7 +12,6 @@ public class WeaponDetailUI : MonoBehaviour
     public GameObject detailPanel;          // 디테일 패널 자체 set active를 위함
     public GameObject weaponPanel;          // weapon 이름, 이미지, 레벨, 보유량
     public GameObject effectPanel;
-    public Text playerCoinTxt;              //  
     public Text weaponCoinTxt;
     
     private Text wNameTxt;
@@ -103,9 +102,13 @@ public class WeaponDetailUI : MonoBehaviour
     {
         if ( choosedWeapon != null && choosedWeapon.HasWeapon())
         {
-            // TODO: 코인 사용 & 로직 만들기
+            // TODO: 코인 로직 만들기
+            Player.Gold -= int.Parse(weaponCoinTxt.text);
+            
             // LevelUpWeapon 함수가 int 값으로 다음 단계에 필요한 코인의 양 return 함.
-            weaponCoinTxt.text = WeaponManager.GetInstance().LevelUpWeapon(choosedWeapon.GetID()).ToString();
+            int num = WeaponManager.GetInstance().LevelUpWeapon(choosedWeapon.GetID());
+            weaponCoinTxt.text = num.ToString();
+            
             wLevelTxt.text = choosedWeapon.GetLevel() + "/100";
 
             // TODO: 능력치 증가 로직 만들기

@@ -11,7 +11,8 @@ public class SkillManager : MonoBehaviour
     private Dictionary<string, int> skillDic = new Dictionary<string, int>();
     public Sprite[] sprites;
 
-    private int[] levelUpCosts = new int[10];
+    private int[] levelUpCosts = new int[9] { 5000, 10000, 50000, 100000, 250000, 500000, 1000000, 2500000, 5000000};
+    private int[] levelUpNeeds = new int[9] { 5, 10, 20, 20, 30, 50, 100, 500, 1000 };
 
     private void Awake()
     {
@@ -26,17 +27,11 @@ public class SkillManager : MonoBehaviour
     {
         // TODO: 서버에서 데이터 받아오기
 
-        for ( int i  = 0; i < 25; ++i )
+        for (int i = 0; i < 25; ++i)
         {
-            skills[i] = new Skill(i, i.ToString(), 53, 1, 10);
+            skills[i] = new Skill(i, i.ToString(), 2000, 1, 5000);
             skillDic[i.ToString()] = i;
         }
-
-        for ( int i = 0; i < 10; ++i)
-        {
-            levelUpCosts[i] = (i + 1) * 10;
-        }
-
     }
 
     public Skill GetSkill(int id)
@@ -70,11 +65,11 @@ public class SkillManager : MonoBehaviour
     public bool LevelUpSkill(int id)
     {
         Skill skill = GetSkill(id);
-        if ( skill != null && skill.GetLevel() < 10 && skill.GetPossession() >= levelUpCosts[skill.GetLevel()-1] )
+        if ( skill != null && skill.GetLevel() < 10 && skill.GetPossession() >= levelUpNeeds[skill.GetLevel()-1] )
         {
-            skill.SetPossession(-levelUpCosts[skill.GetLevel() - 1]);
-            skill.SetLevelUpCost(10);
+            skill.SetPossession(-levelUpNeeds[skill.GetLevel() - 1]);
             skill.AddLevel(1);
+            skill.SetLevelUpCost(levelUpCosts[skill.GetLevel() - 1]);
             return true;
         }
         return false;
@@ -93,7 +88,7 @@ public class SkillManager : MonoBehaviour
     {
         if ( level >= 0 && level < levelUpCosts.Length)
         {
-            return levelUpCosts[level];
+            return levelUpNeeds[level];
         }
         return -1;
     }

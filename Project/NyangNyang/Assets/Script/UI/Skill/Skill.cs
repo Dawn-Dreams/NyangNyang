@@ -18,7 +18,7 @@ public class Skill
     public int GetLevel() => level;
     public int AddLevel(int count) => level += count;
 
-    public void SetLevelUpCost(int count) => levelUpCost += count;
+    public void SetLevelUpCost(int count) => levelUpCost = count;
     public int GetLevelUpCost() => levelUpCost;
 
 

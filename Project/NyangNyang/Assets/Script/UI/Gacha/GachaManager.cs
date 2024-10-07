@@ -30,6 +30,8 @@ public class GachaManager : MonoBehaviour
 
     int showGachaLevel = 1;
 
+    int cost = 10000;
+
     Text GachaLevelTxt;
 
     private void Start()
@@ -112,6 +114,7 @@ public class GachaManager : MonoBehaviour
         {
             BeforePanel.SetActive(true);
             AfterPanel.SetActive(false);
+            Player.Gold -= cost;
             StartCoroutine(RotateOverTime(1f, 1));
             isRotate = true;
         }
@@ -124,6 +127,7 @@ public class GachaManager : MonoBehaviour
         {
             BeforePanel.SetActive(true);
             AfterPanel.SetActive(false);
+            Player.Gold -= cost * 10;
             StartCoroutine(RotateOverTime(1f, 10));
             isRotate = true;
         }

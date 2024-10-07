@@ -11,8 +11,7 @@ public class SkillDetailUI : MonoBehaviour
     public GameObject detailPanel;
     public GameObject skillPanel;
     public GameObject effectPanel;
-
-    public Text playerCoinTxt;              
+           
     public Text skillCoinTxt;
 
     private Text wNameTxt;
@@ -62,6 +61,11 @@ public class SkillDetailUI : MonoBehaviour
             wPossessionTxt.text = count + "/" + num;
             wPossessionSlider.value = (float)count / num >= 1 ? 1 : (float)count / num;
 
+
+            if ( choosedSkill.GetLevel() == 10)
+            {
+                MaxLevelOfSKill();
+            }
             // eCurStatusTxt.text = choosedSkill.GetCurStatus().ToString();
             // eNextStatusTxt.text = choosedSkill.GetNextStatus().ToString();
         }
@@ -83,15 +87,28 @@ public class SkillDetailUI : MonoBehaviour
             if (SkillManager.GetInstance().LevelUpSkill(choosedSkill.GetID())) {
                 wLevelTxt.text = choosedSkill.GetLevel() + "/10";
                 int count = choosedSkill.GetPossession();
-                skillCoinTxt.text = choosedSkill.GetLevelUpCost().ToString();
+
+                // TODO: 코인 로직 만들기
+                Player.Gold -= int.Parse(skillCoinTxt.text);
+
+                int coin = choosedSkill.GetLevelUpCost();
+                skillCoinTxt.text = coin.ToString();
+
                 int num = SkillManager.GetInstance().GetLevelUpCostPerLevel(choosedSkill.GetLevel() - 1);
                 wPossessionTxt.text = count + "/" + num;
                 wPossessionSlider.value = (float)count / num >= 1 ? 1 : (float)count / num;
             }
             else
             {
-                // 실패
+                MaxLevelOfSKill();
             }
         }
+    }
+
+    public void MaxLevelOfSKill()
+    {
+        wPossessionSlider.value = 1;
+        wPossessionTxt.text = "max";
+        skillCoinTxt.text = "max";
     }
 }
