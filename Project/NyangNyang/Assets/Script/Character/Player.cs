@@ -101,13 +101,22 @@ public class Player : MonoBehaviour
     {
         // 서버로부터 user id 받기
         userID = 0;
-
         if (playerStatus == null)
-            playerStatus = new Status(userID);
+        {
+            playerStatus = new Status();
+            playerStatus.GetStatusFromServer(userID);
+            // 플레이어는 디폴트 스탯 버프
+            playerStatus.BuffPlayerStatusDefaultValue(5);
+        }
         if (playerCurrency == null)
+        {
             playerCurrency = ScriptableObject.CreateInstance<CurrencyData>().SetCurrencyData(DummyServerData.GetUserCurrencyData(userID));
+        }
         if (playerLevelData == null)
+        {
             GetExpDataFromServer();
+        }
+            
     }
 
     void Update()

@@ -34,8 +34,8 @@ public class StageManager : MonoBehaviour
     private int originalTheme;  // 원래 테마를 저장할 변수
 
     // TODO: 초기값 설정은 추후 NetworkManager에서 각 유저별 스테이지 로 받아오는 것으로 설정
-    private int currentTheme = 5;
-    private int currentStage = 5;
+    private int currentTheme = 1;
+    private int currentStage = 1;
     private int currentGate = 1;
 
     // 특정 컨텐츠의 경우(보스 레이드 등) 관문이 하나만 있을 수 있으니 조정 가능한 변수로

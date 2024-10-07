@@ -94,7 +94,16 @@ public class Enemy : Character
         // 09.23 - EnemyID 별개로 관리하도록 변경
         characterID = 0;
         IsEnemy = true;
-        
+
+        // 몬스터 정보 받기 (임시 코드 & 서버에서 미리 받아서 적용될 수 있도록 or SpawnerManager 에서 할 수 있도록 )
+        int currentTheme= GameManager.GetInstance().stageManager.GetCurrentTheme();
+        int currentStage = GameManager.GetInstance().stageManager.GetCurrentStage();
+        MonsterData monsterData = new MonsterData().SetMonsterData(DummyServerData.GetEnemyData(currentTheme, currentStage,
+            GameManager.GetInstance().stageManager.maxStageCount));
+        DropData = monsterData.enemyDropData;
+        status = new Status();
+        status.SetStatusLevelData(monsterData.monsterStatus);
+
         base.Awake();
         
         // stage manager 
@@ -103,11 +112,11 @@ public class Enemy : Character
             stageManager = FindObjectOfType<StageManager>();
         }
 
-        // enemy drop data 받기
-        if (DropData == null)
-        {
-            DropData = ScriptableObject.CreateInstance<EnemyDropData>().SetEnemyDropData(DummyServerData.GetEnemyDropData(characterID));
-        }
+        // ~~enemy drop data 받기~~  몬스터 정보 받기에서 진행
+        //if (DropData == null)
+        //{
+        //    DropData = ScriptableObject.CreateInstance<EnemyDropData>().SetEnemyDropData(DummyServerData.GetEnemyDropData(characterID));
+        //}
     }
 
     public void SetNumberOfEnemyInGroup(int numOfEnemy = 1)

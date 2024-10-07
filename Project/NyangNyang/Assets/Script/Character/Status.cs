@@ -16,8 +16,9 @@ public class StatusLevelData
     public BigInteger[] statusLevels = new BigInteger[(int)StatusLevelType.COUNT];
 
 
-    private static int HP_DEFAULT_VALUE = 10;
-    private static int MP_DEFAULT_VALUE = 10;
+    private int HP_DEFAULT_VALUE = 10;
+    private int MP_DEFAULT_VALUE = 10;
+    private int STR_DEFAULT_VALUE = 1;
     //private static int MAX_ATTACK_SPEED = 10000;
 
 
@@ -72,7 +73,7 @@ public class StatusLevelData
                 value = MP_DEFAULT_VALUE + statusLevels[(int)StatusLevelType.MP];
                 break;
             case StatusLevelType.STR:
-                value = 1 + statusLevels[(int)StatusLevelType.STR];
+                value = STR_DEFAULT_VALUE + statusLevels[(int)StatusLevelType.STR];
                 break;
             case StatusLevelType.DEF:
                 value = statusLevels[(int)StatusLevelType.DEF];
@@ -119,7 +120,20 @@ public class StatusLevelData
         statusLevels[(int)type] += value;
     }
 
+    public void MultipleLevel(float mulValue)
+    {
+        for (int i = 0; i < (int)StatusLevelType.COUNT; ++i)
+        {
+            statusLevels[i] = MyBigIntegerMath.MultiplyWithFloat(statusLevels[i], mulValue, 5);
+        }
+    }
 
+    public void BuffDefaultValue(int buffValue)
+    {
+        HP_DEFAULT_VALUE *= buffValue;
+        MP_DEFAULT_VALUE *= buffValue;
+        STR_DEFAULT_VALUE *= buffValue;
+    }
 }
 
 public class Status
@@ -141,18 +155,15 @@ public class Status
     float expAcquisitionPercent;     // 경험치 획득량(가중치) (초기 1, value%로 적용)
     int userTouchDamage;    // 터치 당 공격력 <- TODO: 터치 말고 다른 좋은 아이디어 있는지 회의
 
-    public Status(int id, bool isEnemy = false)
+    public Status()
+    {
+
+    }
+
+    public void GetStatusFromServer(int id)
     {
         // TODO : 서버에서 StatusLevelData 받아오기 // UserID 추후 더미서버에 추가
-        if (!isEnemy)
-        {
-            levelData = new StatusLevelData(DummyServerData.GetUserStatusLevelData(id));
-        }
-        else
-        {
-            levelData = new StatusLevelData(DummyServerData.GetEnemyStatusLevelData(id));
-        }
-
+        levelData = new StatusLevelData(DummyServerData.GetUserStatusLevelData(id));
         UpdateStatus();
     }
 
@@ -170,6 +181,18 @@ public class Status
     public StatusLevelData GetStatusLevelData()
     {
         return levelData;
+    }
+
+    public void SetStatusLevelData(StatusLevelData newData)
+    {
+        levelData = newData;
+        UpdateStatus();
+    }
+
+    public void BuffPlayerStatusDefaultValue(int buffMulValue = 5)
+    {
+        levelData.BuffDefaultValue(buffMulValue);
+        UpdateStatus();
     }
 
     public void UpdateStatusLevelByType(StatusLevelType type, BigInteger newLevel)

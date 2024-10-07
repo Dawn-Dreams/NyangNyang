@@ -57,9 +57,7 @@ public class Character : MonoBehaviour
 
     public virtual void InitialSettings()
     {
-        if (status == null)
-            status = new Status(characterID, IsEnemy);
-
+        // Status 정보 Enemy/Cat 각자에서 정보를 받은 후 Character.Awake() 실행
         // 델리게이트 연결
         OnHealthChange += ChangeHealthBar;
 

@@ -17,12 +17,6 @@ public class Cat : Character
         base.Awake();
     }
 
-    public override void InitialSettings()
-    {
-        base.InitialSettings();
-
-
-    }
 
 
     void HPLevelChanged()
