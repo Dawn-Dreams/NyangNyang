@@ -11,6 +11,7 @@ public class SkillManager : MonoBehaviour
     private Dictionary<string, int> skillDic = new Dictionary<string, int>();
     public Sprite[] sprites;
 
+    // 밸런스 패치 필요
     private int[] levelUpCosts = new int[9] { 5000, 10000, 50000, 100000, 250000, 500000, 1000000, 2500000, 5000000};
     private int[] levelUpNeeds = new int[9] { 5, 10, 20, 20, 30, 50, 100, 500, 1000 };
 
@@ -62,17 +63,17 @@ public class SkillManager : MonoBehaviour
         return null;
     }
 
-    public bool LevelUpSkill(int id)
+    public int LevelUpSkill(int id)
     {
         Skill skill = GetSkill(id);
         if ( skill != null && skill.GetLevel() < 10 && skill.GetPossession() >= levelUpNeeds[skill.GetLevel()-1] )
         {
             skill.SetPossession(-levelUpNeeds[skill.GetLevel() - 1]);
-            skill.AddLevel(1);
             skill.SetLevelUpCost(levelUpCosts[skill.GetLevel() - 1]);
-            return true;
+            skill.AddLevel(1);
+            return skill.GetLevel();
         }
-        return false;
+        return -1;
     }
 
     public void AddSkillPossession(int id, int count)

@@ -46,7 +46,7 @@ public class WeaponDetailUI : MonoBehaviour
 
     public void OnClickedWeapon(GameObject _obj)
     {
-        if ( choosedWeapon == null)
+        if ( choosedWeapon == null )
         {
             detailPanel.SetActive(true);
             

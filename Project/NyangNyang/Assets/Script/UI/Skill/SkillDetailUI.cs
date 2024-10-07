@@ -52,20 +52,22 @@ public class SkillDetailUI : MonoBehaviour
             choosedSkill = SkillManager.GetInstance().GetSkill(_obj.name);
 
             wNameTxt.text = choosedSkill.GetName();
-            wLevelTxt.text = choosedSkill.GetLevel() + "/10";
             wImage.sprite = SkillManager.GetInstance().GetSprite(choosedSkill.GetID());
-
-            int count = choosedSkill.GetPossession();
-            skillCoinTxt.text = choosedSkill.GetLevelUpCost().ToString();
-            int num = SkillManager.GetInstance().GetLevelUpCostPerLevel(choosedSkill.GetLevel() - 1);
-            wPossessionTxt.text = count + "/" + num;
-            wPossessionSlider.value = (float)count / num >= 1 ? 1 : (float)count / num;
-
 
             if ( choosedSkill.GetLevel() == 10)
             {
                 MaxLevelOfSKill();
             }
+            else
+            {
+                wLevelTxt.text = choosedSkill.GetLevel() + "/10";
+                skillCoinTxt.text = choosedSkill.GetLevelUpCost().ToString();
+                int count = choosedSkill.GetPossession();
+                int num = SkillManager.GetInstance().GetLevelUpCostPerLevel(choosedSkill.GetLevel() - 1);
+                wPossessionTxt.text = count + "/" + num;
+                wPossessionSlider.value = (float)count / num >= 1 ? 1 : (float)count / num;
+            }
+
             // eCurStatusTxt.text = choosedSkill.GetCurStatus().ToString();
             // eNextStatusTxt.text = choosedSkill.GetNextStatus().ToString();
         }
@@ -82,25 +84,37 @@ public class SkillDetailUI : MonoBehaviour
 
     public void OnClickedLevelUP()
     {
-        if ( choosedSkill != null )
+        if ( choosedSkill != null && choosedSkill.GetLevel() < 10 )
         {
-            if (SkillManager.GetInstance().LevelUpSkill(choosedSkill.GetID())) {
-                wLevelTxt.text = choosedSkill.GetLevel() + "/10";
-                int count = choosedSkill.GetPossession();
+            if ( Player.Gold >= int.Parse(skillCoinTxt.text))
+            {
+                int result = SkillManager.GetInstance().LevelUpSkill(choosedSkill.GetID());
+                if ( result == 10)
+                {
+                    MaxLevelOfSKill();
+                }
+                else if (result != -1) {
+                    wLevelTxt.text = choosedSkill.GetLevel() + "/10";
+                    int count = choosedSkill.GetPossession();
 
-                // TODO: 코인 로직 만들기
-                Player.Gold -= int.Parse(skillCoinTxt.text);
+                    // TODO: 코인 로직 만들기
+                    Player.Gold -= int.Parse(skillCoinTxt.text);
 
-                int coin = choosedSkill.GetLevelUpCost();
-                skillCoinTxt.text = coin.ToString();
+                    int coin = choosedSkill.GetLevelUpCost();
+                    skillCoinTxt.text = coin.ToString();
 
-                int num = SkillManager.GetInstance().GetLevelUpCostPerLevel(choosedSkill.GetLevel() - 1);
-                wPossessionTxt.text = count + "/" + num;
-                wPossessionSlider.value = (float)count / num >= 1 ? 1 : (float)count / num;
+                    int num = SkillManager.GetInstance().GetLevelUpCostPerLevel(choosedSkill.GetLevel() - 1);
+                    wPossessionTxt.text = count + "/" + num;
+                    wPossessionSlider.value = (float)count / num >= 1 ? 1 : (float)count / num;
+                }
+                else
+                {
+                    Debug.Log("레벨 업에 실패했습니다.");
+                }
             }
             else
             {
-                MaxLevelOfSKill();
+                Debug.Log("돈이 부족합니다.");
             }
         }
     }
@@ -110,5 +124,6 @@ public class SkillDetailUI : MonoBehaviour
         wPossessionSlider.value = 1;
         wPossessionTxt.text = "max";
         skillCoinTxt.text = "max";
+        wLevelTxt.text = "10";
     }
 }

@@ -44352,10 +44352,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sprites:
-  - {fileID: 21300000, guid: a3521507405b8d647b8edacb2a021534, type: 3}
-  - {fileID: 21300000, guid: d63a37af625c7e245a00ea2cf1c7d6ff, type: 3}
-  - {fileID: 21300000, guid: 7ce2207286662f84e8c27f488e1166e6, type: 3}
   - {fileID: 21300000, guid: cb9e89bb9686fc54ab918aee33b9dcb3, type: 3}
+  - {fileID: 21300000, guid: 7ce2207286662f84e8c27f488e1166e6, type: 3}
+  - {fileID: 21300000, guid: d63a37af625c7e245a00ea2cf1c7d6ff, type: 3}
+  - {fileID: 21300000, guid: a3521507405b8d647b8edacb2a021534, type: 3}
 --- !u!1 &1978636291
 GameObject:
   m_ObjectHideFlags: 0
