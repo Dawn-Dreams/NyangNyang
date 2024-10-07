@@ -84,11 +84,13 @@ public class SkillDetailUI : MonoBehaviour
 
     public void OnClickedLevelUP()
     {
-        if ( choosedSkill != null && choosedSkill.GetLevel() < 10 )
+        if ( choosedSkill != null && choosedSkill.HasSkill() && choosedSkill.GetLevel() < 10 )
         {
             if ( Player.Gold >= int.Parse(skillCoinTxt.text))
             {
                 int result = SkillManager.GetInstance().LevelUpSkill(choosedSkill.GetID());
+                Player.Gold -= int.Parse(skillCoinTxt.text);
+
                 if ( result == 10)
                 {
                     MaxLevelOfSKill();
@@ -96,9 +98,6 @@ public class SkillDetailUI : MonoBehaviour
                 else if (result != -1) {
                     wLevelTxt.text = choosedSkill.GetLevel() + "/10";
                     int count = choosedSkill.GetPossession();
-
-                    // TODO: 코인 로직 만들기
-                    Player.Gold -= int.Parse(skillCoinTxt.text);
 
                     int coin = choosedSkill.GetLevelUpCost();
                     skillCoinTxt.text = coin.ToString();

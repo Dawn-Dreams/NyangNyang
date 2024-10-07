@@ -30,6 +30,7 @@ public class GachaManager : MonoBehaviour
 
     int showGachaLevel = 1;
 
+    // 밸런스 패치 필요
     int cost = 10000;
 
     Text GachaLevelTxt;

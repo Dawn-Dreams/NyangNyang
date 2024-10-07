@@ -53,13 +53,20 @@ public class WeaponDetailUI : MonoBehaviour
             choosedWeapon = WeaponManager.GetInstance().GetWeapon(_obj.name);
 
             wNameTxt.text = choosedWeapon.GetName();
-            wLevelTxt.text = choosedWeapon.GetLevel() + "/100";
             wImage.sprite = WeaponManager.GetInstance().GetSprite(choosedWeapon.GetID());
 
-            int count = choosedWeapon.GetWeaponCount();
-            weaponCoinTxt.text = choosedWeapon.GetNeedCoin().ToString();
-            wPossessionTxt.text = count + "/5";
-            wPossessionSlider.value = (float)count / 5 >= 1 ? 1 : (float)count / 5;
+            if ( choosedWeapon.GetLevel() == 100)
+            {
+                MaxLevelOfWeapon();
+            }
+            else
+            {
+                wLevelTxt.text = choosedWeapon.GetLevel() + "/100";
+                int count = choosedWeapon.GetWeaponCount();
+                weaponCoinTxt.text = choosedWeapon.GetNeedCoin().ToString();
+                wPossessionTxt.text = count + "/5";
+                wPossessionSlider.value = (float)count / 5 >= 1 ? 1 : (float)count / 5;
+            }
 
             eCurStatusTxt.text = choosedWeapon.GetCurStatus().ToString();
             eNextStatusTxt.text = choosedWeapon.GetNextStatus().ToString();
@@ -78,7 +85,7 @@ public class WeaponDetailUI : MonoBehaviour
     public void OnClickedMerge()
     {
         // 다음 단계로의 merge 과정
-        if (choosedWeapon != null && choosedWeapon.GetWeaponCount() >= 5)
+        if (choosedWeapon != null && choosedWeapon.GetWeaponCount() > 5)
         {
             if (WeaponManager.GetInstance().CombineWeapon(choosedWeapon.GetID()))
             {
@@ -100,21 +107,35 @@ public class WeaponDetailUI : MonoBehaviour
 
     public void OnClickedEnhance()
     {
-        if ( choosedWeapon != null && choosedWeapon.HasWeapon())
+        if ( choosedWeapon != null && choosedWeapon.HasWeapon() && choosedWeapon.GetLevel() < 100)
         {
-            // TODO: 코인 로직 만들기
-            Player.Gold -= int.Parse(weaponCoinTxt.text);
-            
-            // LevelUpWeapon 함수가 int 값으로 다음 단계에 필요한 코인의 양 return 함.
-            int num = WeaponManager.GetInstance().LevelUpWeapon(choosedWeapon.GetID());
-            weaponCoinTxt.text = num.ToString();
-            
-            wLevelTxt.text = choosedWeapon.GetLevel() + "/100";
-
-            // TODO: 능력치 증가 로직 만들기
-            WeaponManager.GetInstance().EnhanceEffectWeapon(choosedWeapon.GetID());
-            eCurStatusTxt.text = choosedWeapon.GetCurStatus().ToString();
-            eNextStatusTxt.text = choosedWeapon.GetNextStatus().ToString();
+            if ( Player.Gold >= int.Parse(weaponCoinTxt.text))
+            {
+                Player.Gold -= int.Parse(weaponCoinTxt.text);
+                // LevelUpWeapon 함수가 int 값으로 다음 단계에 필요한 코인의 양 return 함.
+                int num = WeaponManager.GetInstance().LevelUpWeapon(choosedWeapon.GetID());
+                // TODO: 능력치 증가 로직 만들기
+                WeaponManager.GetInstance().EnhanceEffectWeapon(choosedWeapon.GetID());
+                eCurStatusTxt.text = choosedWeapon.GetCurStatus().ToString();
+                eNextStatusTxt.text = choosedWeapon.GetNextStatus().ToString();
+                if ( choosedWeapon.GetLevel() == 100)
+                {
+                    MaxLevelOfWeapon();
+                }
+                else
+                {
+                    weaponCoinTxt.text = num.ToString();
+                    wLevelTxt.text = choosedWeapon.GetLevel() + "/100";
+                }
+            }
+            else
+            {
+                Debug.Log("돈이 부족합니다.");
+            }
+        }
+        else
+        {
+            Debug.Log("레벨 업에 실패했습니다.");
         }
     }
 
@@ -126,5 +147,11 @@ public class WeaponDetailUI : MonoBehaviour
         int count = choosedWeapon.GetWeaponCount();
         wPossessionTxt.text = count + "/5";
         wPossessionSlider.value = (float)count / 5 >= 1 ? 1 : (float)count / 5;
+    }
+
+    public void MaxLevelOfWeapon()
+    {
+        weaponCoinTxt.text = "max";
+        wLevelTxt.text = "100";
     }
 }
