@@ -127,8 +127,22 @@ public class StageManager : MonoBehaviour
 
     private void StageClear()
     {
-        Debug.Log("최고 단계 관문 클리어, 스테이지 이동");
+
+        SendStageClearDataToServer();
+
         ChangeStage();
+    }
+
+    void SendStageClearDataToServer()
+    {
+        int clearTheme;
+        int clearStage;
+        Player.GetPlayerHighestClearStageData(out clearTheme, out clearStage);
+        if (currentTheme > clearTheme || (currentTheme == clearTheme && currentStage > clearStage))
+        {
+            DummyServerData.PlayerClearStage(Player.GetUserID(), currentTheme, currentStage);
+            Player.playerHighestClearStageData = new int[] { currentTheme, currentStage };
+        }
     }
 
     private IEnumerator StartFade(Action FuncAfterStartFade)
