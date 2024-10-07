@@ -30,10 +30,12 @@ public class GachaManager : MonoBehaviour
 
     int showGachaLevel = 1;
 
+    Text GachaLevelTxt;
 
     private void Start()
     {
         board = BeforePanel.transform.Find("Board").gameObject;
+        GachaLevelTxt = ProbabilityPanel.transform.Find("Level").GetComponent<Text>();
         // TODO: 서버에서 뽑기 레벨 받아오기
     }
 
@@ -41,12 +43,14 @@ public class GachaManager : MonoBehaviour
     {
         ProbabilityPanel.SetActive(true);
         showGachaLevel = weaponGachaLevel;
+        GachaLevelTxt.text = "Lv. " + showGachaLevel;
     }
 
     public void OnClickedSkillProbButton()
     {
         ProbabilityPanel.SetActive(true);
         showGachaLevel = skillGachaLevel;
+        GachaLevelTxt.text = "Lv. " + showGachaLevel;
     }
 
     public void OnClickedProbPanelCancleButton()
@@ -58,8 +62,7 @@ public class GachaManager : MonoBehaviour
     {
         if ( showGachaLevel < 10)
         {
-            Text t = ProbabilityPanel.transform.Find("Level").GetComponent<Text>();
-            t.text = "Lv. " + (showGachaLevel + 1);
+            GachaLevelTxt.text = "Lv. " + (showGachaLevel + 1);
             showGachaLevel++;
         }
     }
@@ -68,8 +71,7 @@ public class GachaManager : MonoBehaviour
     {
         if ( showGachaLevel > 1)
         {
-            Text t = ProbabilityPanel.transform.Find("Level").GetComponent<Text>();
-            t.text = "Lv. " + (showGachaLevel - 1);
+            GachaLevelTxt.text = "Lv. " + (showGachaLevel - 1);
             showGachaLevel--;
         }
     }
