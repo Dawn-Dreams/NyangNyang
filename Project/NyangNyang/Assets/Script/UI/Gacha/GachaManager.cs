@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GachaManager : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class GachaManager : MonoBehaviour
 
     [SerializeField]
     private GameObject GachaDetailPanel;
+
+    [SerializeField]
+    private GameObject ProbabilityPanel;
 
     [SerializeField]
     private GameObject BeforePanel;
@@ -21,10 +25,53 @@ public class GachaManager : MonoBehaviour
     bool isRotate = false;
 
     type curType = type.none;
+    int weaponGachaLevel = 1;
+    int skillGachaLevel = 1;
+
+    int showGachaLevel = 1;
+
 
     private void Start()
     {
         board = BeforePanel.transform.Find("Board").gameObject;
+        // TODO: 서버에서 뽑기 레벨 받아오기
+    }
+
+    public void OnClickedWeaponProbButton()
+    {
+        ProbabilityPanel.SetActive(true);
+        showGachaLevel = weaponGachaLevel;
+    }
+
+    public void OnClickedSkillProbButton()
+    {
+        ProbabilityPanel.SetActive(true);
+        showGachaLevel = skillGachaLevel;
+    }
+
+    public void OnClickedProbPanelCancleButton()
+    {
+        ProbabilityPanel.SetActive(false);
+    }
+
+    public void OnClickedNextLevelButton()
+    {
+        if ( showGachaLevel < 10)
+        {
+            Text t = ProbabilityPanel.transform.Find("Level").GetComponent<Text>();
+            t.text = "Lv. " + (showGachaLevel + 1);
+            showGachaLevel++;
+        }
+    }
+
+    public void OnClickedPrevLevelButton()
+    {
+        if ( showGachaLevel > 1)
+        {
+            Text t = ProbabilityPanel.transform.Find("Level").GetComponent<Text>();
+            t.text = "Lv. " + (showGachaLevel - 1);
+            showGachaLevel--;
+        }
     }
 
     public void OnClickedWeaponDrawButton()
