@@ -30,6 +30,7 @@ public class GachaManager : MonoBehaviour
 
     int showGachaLevel = 1;
 
+    // ¹ë·±½º ÆÐÄ¡ ÇÊ¿ä
     int cost = 10000;
 
     Text GachaLevelTxt;
@@ -110,7 +111,7 @@ public class GachaManager : MonoBehaviour
     public void OnClickedDrawButton()
     {
         // ÇÏ³ª¸¸ »Ì±â
-        if (!isRotate)
+        if (!isRotate && Player.Gold >= cost)
         {
             BeforePanel.SetActive(true);
             AfterPanel.SetActive(false);
@@ -123,7 +124,7 @@ public class GachaManager : MonoBehaviour
     public void OnClickedDrawAllButton()
     {
         // ÀÏ°ý »Ì±â
-        if (!isRotate)
+        if (!isRotate && Player.Gold >= cost * 10)
         {
             BeforePanel.SetActive(true);
             AfterPanel.SetActive(false);

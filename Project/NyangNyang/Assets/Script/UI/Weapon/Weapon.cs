@@ -50,6 +50,7 @@ public class Weapon
     public int LevelUP()
     {
         level++;
+        // 밸런스 패치 필요
         return coin + level * (grade * 10 + subGrade);
     }
 
