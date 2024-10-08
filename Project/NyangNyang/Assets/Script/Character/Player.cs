@@ -16,6 +16,10 @@ public class Player : MonoBehaviour
     public delegate void OnGoldChangeDelegate(BigInteger newGoldVal);
     public static event OnGoldChangeDelegate OnGoldChange;
 
+    // 다이아 변화 델리게이트 이벤트
+    public delegate void OnDiamondChangeDelegate(BigInteger newDiamondValue);
+    public static event OnDiamondChangeDelegate OnDiamondChange;
+
     // 경험치 변화 델리게이트 이벤트
     public delegate void OnExpChangeDelegate(UserLevelData newLevelData);
     public static event OnExpChangeDelegate OnExpChange;
@@ -49,6 +53,21 @@ public class Player : MonoBehaviour
 
             if(OnGoldChange != null)
                 OnGoldChange(playerCurrency.gold);
+        }
+    }
+
+    public static BigInteger Diamond
+    {
+        get { return playerCurrency.diamond; }
+        set
+        {
+            if (value == playerCurrency.diamond) return;
+            playerCurrency.diamond = value;
+
+            if (OnDiamondChange != null)
+            {
+                OnDiamondChange(playerCurrency.diamond);
+            }
         }
     }
 
@@ -143,8 +162,8 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            continuousCombat = !continuousCombat;
-            GameManager.GetInstance().stageManager.SetContinuousCombat(continuousCombat);
+            // 다이아 지급
+            Diamond += 100;
         }
 
         if (Input.GetKeyDown(KeyCode.N))
