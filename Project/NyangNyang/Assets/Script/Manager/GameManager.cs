@@ -11,13 +11,28 @@ public class GameManager : MonoBehaviour
 
     public Cat catObject;
     public StageManager stageManager;
+
+    public GameObject questUI;
+
     private void Awake()
     {
         if (Instance == null)
             Instance = this;
+
+        StartCoroutine(SetInActiveQuestUIAtStart());
     }
 
-    
-    
-    
+    IEnumerator SetInActiveQuestUIAtStart()
+    {
+        yield return null;
+
+        RectTransform questUITransform = questUI.GetComponent<RectTransform>();
+        questUITransform.offsetMin = new Vector2(0, 0);
+        questUITransform.offsetMax = new Vector2(0, 0);
+        questUI.SetActive(false);
+    }
+
+
+
+
 }

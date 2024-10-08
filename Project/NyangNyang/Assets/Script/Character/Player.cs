@@ -16,6 +16,10 @@ public class Player : MonoBehaviour
     public delegate void OnGoldChangeDelegate(BigInteger newGoldVal);
     public static event OnGoldChangeDelegate OnGoldChange;
 
+    // 골드 소모 델리게이트 이벤트
+    public delegate void OnGoldSpendingDelegate(BigInteger spendingGoldVal);
+    public static event OnGoldSpendingDelegate OnGoldSpending;
+
     // 다이아 변화 델리게이트 이벤트
     public delegate void OnDiamondChangeDelegate(BigInteger newDiamondValue);
     public static event OnDiamondChangeDelegate OnDiamondChange;
@@ -49,6 +53,17 @@ public class Player : MonoBehaviour
         set
         {
             if (playerCurrency.gold == value) return;
+
+            // 골드 소모 이벤트
+            if (playerCurrency.gold > value)
+            {
+                if (OnGoldSpending != null)
+                {
+                    BigInteger difference = playerCurrency.gold - value;
+                    OnGoldSpending(difference);
+                }
+            }
+            
             playerCurrency.gold = value;
 
             if(OnGoldChange != null)

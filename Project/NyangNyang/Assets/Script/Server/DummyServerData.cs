@@ -71,7 +71,7 @@ public class DummyServerData : MonoBehaviour
     // 유저 재화(골드+보석+티켓) 데이터
     private static CurrencyData[] usersCurrencyData = new CurrencyData[]
     {
-        ScriptableObject.CreateInstance<CurrencyData>().SetCurrencyData(0,3,new int[] {5,5,5}),
+        ScriptableObject.CreateInstance<CurrencyData>().SetCurrencyData(1_000_000_000,3,new int[] {5,5,5}),
         ScriptableObject.CreateInstance<CurrencyData>(),
         ScriptableObject.CreateInstance<CurrencyData>(),
         ScriptableObject.CreateInstance<CurrencyData>(),
