@@ -403,8 +403,15 @@ public class DummyServerData : MonoBehaviour
         // *스테이지가 하나 차이인지도 추후 확인해야함
         playerClearStageData[userID, 0] = clearTheme;
         playerClearStageData[userID, 1] = clearStage;
+    }
 
+    public static void GiveUserDiamondAndSendData(int userID, BigInteger addDiamond)
+    {
+        //범위 체크 생략
+        usersCurrencyData[userID].diamond += addDiamond;
         
+        // 강제로 플레이어에게 주입
+        Player.Diamond = usersCurrencyData[userID].diamond;
     }
 
     // 함수 종료

@@ -11,9 +11,10 @@ public class GoldSpendingQuestData : QuestDataBase
     private BigInteger spendingGold = 0;
 
     public int requireSpendingGold;
-
     public override void QuestActing(Slider slider, Button button, TextMeshProUGUI rewardText, TextMeshProUGUI requireText, TextMeshProUGUI progressText)
     {
+        QuestType = QuestType.GoldSpending;
+        
         base.QuestActing(slider,button, rewardText, requireText, progressText);
 
         questSlider.minValue = 0;
@@ -23,12 +24,12 @@ public class GoldSpendingQuestData : QuestDataBase
         Player.OnRenewGoldSpendingQuest += GetDataFromServer;
 
         // 서버로부터 정보 요청
-        DummyQuestServer.SendGoldSpendingDataToPlayer(Player.GetUserID());
+        DummyQuestServer.SendQuestDataToPlayer(Player.GetUserID(),QuestType);
     }
 
     public override void RequestQuestReward()
     {
-        Debug.Log("버튼은 잘 눌림");
+        DummyQuestServer.UserRequestReward(Player.GetUserID(),QuestType);
     }
 
 
@@ -42,7 +43,6 @@ public class GoldSpendingQuestData : QuestDataBase
     public void AddQuestValue(BigInteger spendingGoldVal)
     {
         DummyQuestServer.AddGoldOnServer(Player.GetUserID(), spendingGoldVal);
-        //spendingGold += spendingGoldVal;
 
     }
 
@@ -68,6 +68,8 @@ public class GoldSpendingQuestData : QuestDataBase
         }
         else
         {
+            rewardCountText.text = "x " + rewardCount.ToString();
+            questProgressText.text = "진행중";
             rewardButton.interactable = false;
         }
     }

@@ -22,6 +22,8 @@ public abstract class QuestDataBase : ScriptableObject
     public TextMeshProUGUI questRequireText;
     public TextMeshProUGUI questProgressText;
 
+    protected QuestType QuestType;
+
     public virtual void QuestActing(Slider slider, Button button, TextMeshProUGUI rewardText, TextMeshProUGUI requireText, TextMeshProUGUI progressText)
     {
         questSlider = slider;
