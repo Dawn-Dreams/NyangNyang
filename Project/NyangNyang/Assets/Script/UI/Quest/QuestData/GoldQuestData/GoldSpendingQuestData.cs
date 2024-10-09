@@ -20,17 +20,8 @@ public class GoldSpendingQuestData : QuestDataBase
         questSlider.minValue = 0;
         questSlider.maxValue = 1;
 
-        Player.OnGoldSpending += AddQuestValue;
-        Player.OnRenewGoldSpendingQuest += GetDataFromServer;
-
-        // 서버로부터 정보 요청
-        DummyQuestServer.SendQuestDataToPlayer(Player.GetUserID(),QuestType);
     }
 
-    public override void RequestQuestReward()
-    {
-        DummyQuestServer.UserRequestReward(Player.GetUserID(),QuestType);
-    }
 
 
     protected override void SetRequireText()
@@ -40,10 +31,9 @@ public class GoldSpendingQuestData : QuestDataBase
         questRequireText.text = newText;
     }
 
-    public void AddQuestValue(BigInteger spendingGoldVal)
+    protected override void BindDelegate()
     {
-        DummyQuestServer.AddGoldOnServer(Player.GetUserID(), spendingGoldVal);
-
+        Player.OnRenewGoldSpendingQuest += GetDataFromServer;
     }
 
     public void GetDataFromServer(BigInteger newQuestDataValue)

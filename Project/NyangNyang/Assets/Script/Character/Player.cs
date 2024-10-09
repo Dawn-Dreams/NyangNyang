@@ -16,10 +16,6 @@ public class Player : MonoBehaviour
     public delegate void OnGoldChangeDelegate(BigInteger newGoldVal);
     public static event OnGoldChangeDelegate OnGoldChange;
 
-    // 골드 소모 델리게이트 이벤트
-    public delegate void OnGoldSpendingDelegate(BigInteger spendingGoldVal);
-    public static event OnGoldSpendingDelegate OnGoldSpending;
-
     // 다이아 변화 델리게이트 이벤트
     public delegate void OnDiamondChangeDelegate(BigInteger newDiamondValue);
     public static event OnDiamondChangeDelegate OnDiamondChange;
@@ -35,6 +31,8 @@ public class Player : MonoBehaviour
     // 플레이어 퀘스트 델리게이트
     public delegate void OnGoldSpendingQuestDelegate(BigInteger newQuestData);
     public static event OnGoldSpendingQuestDelegate OnRenewGoldSpendingQuest;
+    public delegate void OnMonsterKillQuestDelegate(long monsterKillCount);
+    public static event OnMonsterKillQuestDelegate OnMonsterKillQuestChange;
 
     [SerializeField] private GameObject levelUpIconObject;
 
@@ -58,15 +56,6 @@ public class Player : MonoBehaviour
         {
             if (playerCurrency.gold == value) return;
 
-            // 골드 소모 이벤트
-            if (playerCurrency.gold > value)
-            {
-                if (OnGoldSpending != null)
-                {
-                    BigInteger difference = playerCurrency.gold - value;
-                    OnGoldSpending(difference);
-                }
-            }
             
             playerCurrency.gold = value;
 
@@ -282,6 +271,13 @@ public class Player : MonoBehaviour
         {
             OnRenewGoldSpendingQuest(newVal);
         }
-        
+    }
+
+    public static void RecvMonsterKillDataFromServer(long newVal)
+    {
+        if (OnMonsterKillQuestChange != null)
+        {
+            OnMonsterKillQuestChange(newVal);
+        }
     }
 }

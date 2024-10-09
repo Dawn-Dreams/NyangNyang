@@ -246,6 +246,8 @@ public class Enemy : Character
             stageManager.GateClearAfterEnemyDeath(0.5f);
         }
 
+        DummyQuestServer.UserMonsterKill(Player.GetUserID(),initialNumOfDummyEnemy);
+
         base.Death();
     }
 

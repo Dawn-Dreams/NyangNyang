@@ -272,8 +272,6 @@ public class DummyServerData : MonoBehaviour
         if (userCurrencyData)
         {
             userCurrencyData.gold += addGoldValue;
-
-            
             Player.GetGoldDataFromServer();
             return true;
         }
