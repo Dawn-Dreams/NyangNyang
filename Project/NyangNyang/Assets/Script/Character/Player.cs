@@ -32,6 +32,10 @@ public class Player : MonoBehaviour
     public delegate void OnTicketChangeDelegate(int[] newTicketVal);
     public static event OnTicketChangeDelegate OnTicketChange;
 
+    // 플레이어 퀘스트 델리게이트
+    public delegate void OnGoldSpendingQuestDelegate(BigInteger newQuestData);
+    public static event OnGoldSpendingQuestDelegate OnRenewGoldSpendingQuest;
+
     [SerializeField] private GameObject levelUpIconObject;
 
     // 스테이터스 레벨 변화 델리게이트
@@ -270,5 +274,14 @@ public class Player : MonoBehaviour
 
         themeData = playerHighestClearStageData[0];
         stageData = playerHighestClearStageData[1];
+    }
+
+    public static void RecvGoldSpendingDataFromServer(BigInteger newVal)
+    {
+        if (OnRenewGoldSpendingQuest != null)
+        {
+            OnRenewGoldSpendingQuest(newVal);
+        }
+        
     }
 }

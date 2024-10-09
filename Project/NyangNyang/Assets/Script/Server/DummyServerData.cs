@@ -47,7 +47,7 @@ public class DummyServerData : MonoBehaviour
     // 데이터 시작
 
     // 유저 스탯 레벨 데이터
-    private static StatusLevelData[] usersStatusLevelData = new StatusLevelData[]
+    protected static StatusLevelData[] usersStatusLevelData = new StatusLevelData[]
     {
         new StatusLevelData(0,0,0,0,0),
         new StatusLevelData(10,0,5,0),
@@ -63,13 +63,13 @@ public class DummyServerData : MonoBehaviour
     //    new StatusLevelData(10, 0, 5, 2),
     //};
 
-    private static MonsterData[] enemyDatas = new MonsterData[]
+    protected static MonsterData[] enemyDatas = new MonsterData[]
     {
         new MonsterData().SetMonsterData(new StatusLevelData(1, 1, 1,1,1,1,1,1), ScriptableObject.CreateInstance<EnemyDropData>().SetEnemyDropData(1000, 1000)),
     };
 
     // 유저 재화(골드+보석+티켓) 데이터
-    private static CurrencyData[] usersCurrencyData = new CurrencyData[]
+    protected static CurrencyData[] usersCurrencyData = new CurrencyData[]
     {
         ScriptableObject.CreateInstance<CurrencyData>().SetCurrencyData(1_000_000_000,3,new int[] {5,5,5}),
         ScriptableObject.CreateInstance<CurrencyData>(),
@@ -79,7 +79,7 @@ public class DummyServerData : MonoBehaviour
     };
 
     // 유저 레벨+경험치 데이터
-    private static UserLevelData[] usersLevelData = new UserLevelData[]
+    protected static UserLevelData[] usersLevelData = new UserLevelData[]
     {
         ScriptableObject.CreateInstance<UserLevelData>().SetUserLevelData(1, 0),
         ScriptableObject.CreateInstance<UserLevelData>(),
@@ -89,17 +89,17 @@ public class DummyServerData : MonoBehaviour
     };
 
     // 스텟 레벨업 계산식 데이터
-    private static int statusStartGoldCost = 100;
-    private static int[] statusGoldCostAddValue = new int[]
+    protected static int statusStartGoldCost = 100;
+    protected static int[] statusGoldCostAddValue = new int[]
     {
         // StatusLevelType enum
         // HP, MP, STR, DEF, HEAL_HP, HEAL_MP, CRIT, ATTACK_SPEED, GOLD, EXP
         100, 100, 100, 100, 300, 300, 50000, 10000, 100000,100000
     };
     // 경험치 레벨업 계산식 데이터
-    private static int addExpPerLevel = 500;
+    protected static int addExpPerLevel = 500;
 
-    private static EnemyDropData[] enemyDropData = new EnemyDropData[]
+    protected static EnemyDropData[] enemyDropData = new EnemyDropData[]
     {
         ScriptableObject.CreateInstance<EnemyDropData>().SetEnemyDropData(1_000_000, 777_777),
         ScriptableObject.CreateInstance<EnemyDropData>(),
@@ -107,7 +107,7 @@ public class DummyServerData : MonoBehaviour
     };
 
     // 스테이지 테마와 스테이지 정보만 관리
-    private static int[,] playerClearStageData = new int[,]
+    protected static int[,] playerClearStageData = new int[,]
     {
         { 1,1 },
         {20,3}
@@ -115,6 +115,13 @@ public class DummyServerData : MonoBehaviour
 
     // 데이터 종료
     // ================== 
+    // 델리게이트 시작
+
+    public delegate void OnUserGoldSpendingDelegate(int userID, BigInteger spendingAmount);
+    public static OnUserGoldSpendingDelegate OnUserGoldSpending;
+
+    // 델리게이트 종료
+    // ==================
     // 함수 시작
 
 
@@ -171,7 +178,12 @@ public class DummyServerData : MonoBehaviour
         {
             GetUserStatusLevelData(userID).AddLevel(type, value);
             GetUserCurrencyData(userID).gold -= goldCost;
-            
+
+            if (OnUserGoldSpending != null)
+            {
+                OnUserGoldSpending(userID, goldCost);
+            }
+
             return true;
         }
 

@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
             Instance = this;
 
         StartCoroutine(SetInActiveQuestUIAtStart());
+
+        DummyQuestServer.ExecuteDummyQuestServer();
     }
 
     IEnumerator SetInActiveQuestUIAtStart()
