@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -5,15 +6,9 @@ public class SettingsMenu : MonoBehaviour
 {
     public GameObject settingsMenuCanvas;
 
-    // UI Elements
-    public InputField couponInputField;
-    public Text accountInfoText;
-    public Text termsOfServiceText;
-    public Toggle notificationToggle;
-    public Toggle vibrationToggle;
     public Slider bgmVolumeSlider;
     public Slider sfxVolumeSlider;
-    public Text uidText;
+    public TMP_InputField uidText;
     public Button copyUIDButton;
 
     private string userUID = "1234-5678-UID"; // 예시 UID
@@ -24,9 +19,6 @@ public class SettingsMenu : MonoBehaviour
         //bgmVolumeSlider.value = AudioManager.Instance.bgmVolume;
         //sfxVolumeSlider.value = AudioManager.Instance.sfxVolume;
         uidText.text = userUID;
-
-        notificationToggle.isOn = PlayerPrefs.GetInt("notificationsEnabled", 1) == 1;
-        vibrationToggle.isOn = PlayerPrefs.GetInt("vibrationEnabled", 1) == 1;
 
         // 이벤트 연결
         bgmVolumeSlider.onValueChanged.AddListener(delegate { OnBGMVolumeChanged(); });
@@ -48,22 +40,18 @@ public class SettingsMenu : MonoBehaviour
 
     public void SubmitCoupon()
     {
-        string couponCode = couponInputField.text;
-        Debug.Log($"쿠폰 코드 {couponCode} 제출됨");
-        // 쿠폰 코드 검증 및 보상 지급 로직 추가 가능
+        // 쿠폰 코드 검증 및 보상 지급
     }
 
     public void ViewAccountInfo()
     {
         Debug.Log("계정 정보 확인");
-        accountInfoText.text = "계정: 사용자123 (Level 45)";
-        // 실제 계정 정보 로드 로직 추가
+        // 실제 계정 정보 로드
     }
 
     public void ViewTermsOfService()
     {
         Debug.Log("게임 이용 약관 확인");
-        termsOfServiceText.text = "여기에 게임 이용 약관을 표시합니다...";
         // 약관 불러오기 로직 추가
     }
 
