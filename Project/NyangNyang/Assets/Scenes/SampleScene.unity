@@ -22324,6 +22324,7 @@ MonoBehaviour:
   catObject: {fileID: 2026967982}
   stageManager: {fileID: 213762223}
   questUI: {fileID: 12233761}
+  storyQuestObject: {fileID: 2027703865}
 --- !u!1 &671941387
 GameObject:
   m_ObjectHideFlags: 0

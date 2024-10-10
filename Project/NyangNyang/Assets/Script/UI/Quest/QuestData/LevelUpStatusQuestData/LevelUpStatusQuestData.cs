@@ -22,21 +22,22 @@ public class LevelUpStatusQuestData : QuestDataBase
         mainQuestTitle = statusType.ToString() + " 스탯 레벨" + MyBigIntegerMath.GetAbbreviationFromBigInteger(targetLevel) + "달성";
         rewardCount = diamondRewardCount;
 
-        LoadRewardImage(RewardType.Diamond);
+        rewardType = RewardType.Diamond;
 
         requireStatusLevel = targetLevel;
 
         return this;
     }
+    
 
     public override void QuestActing(BaseQuest quest)
     {
         QuestType = QuestType.LevelUpStatus;
         
         base.QuestActing(quest);
-
-        DummyStroyQuestServer.SendLevelUpStatusQuestDataToUser(Player.GetUserID(),questStatusType);
+        DummyStoryQuestServer.SendLevelUpStatusQuestDataToUser(Player.GetUserID(),questStatusType);
     }
+
 
     protected override void SetRequireText()
     {
@@ -49,6 +50,16 @@ public class LevelUpStatusQuestData : QuestDataBase
     protected override void BindDelegate()
     {
         Player.OnLevelUpStatusQuestChange += GetDataFromServer;
+    }
+
+    public override void BindDelegateOnServer()
+    {
+        DummyServerData.OnUserStatusLevelUp += DummyStoryQuestServer.SendLevelUpStatusQuestDataToUser;
+    }
+
+    public override void UnBindDelegateOnServer()
+    {
+        DummyServerData.OnUserStatusLevelUp -= DummyStoryQuestServer.SendLevelUpStatusQuestDataToUser;
     }
 
 

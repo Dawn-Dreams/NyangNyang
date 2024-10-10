@@ -55,8 +55,26 @@ public class DummyQuestServer : DummyServerData
         }
         
     }
-    public static void UserRequestReward(int userID, QuestType questType)
+    public static void UserRequestReward(int userID, QuestType questType, QuestDataBase questInfo)
     {
+        Action<int, BigInteger> giveUserCurrency = null;
+        BigInteger rewardCount;
+        if (questInfo)
+        {
+            rewardCount = questInfo.rewardCount;
+            switch (questInfo.rewardType)
+            {
+                case RewardType.Gold:
+                    
+                    break;
+                case RewardType.Diamond:
+                     giveUserCurrency += DummyServerData.GiveUserDiamondAndSendData;
+                    break;
+            }
+
+            
+        }
+
         switch (questType)
         {
             // TODO: 함수화
@@ -84,10 +102,21 @@ public class DummyQuestServer : DummyServerData
 
                     DummyServerData.GiveUserDiamondAndSendData(userID,clearCount);
                 }
-                
-
 
                 break;
+            case QuestType.LevelUpStatus:
+            {
+                // 체크 생략
+                if (questInfo)
+                {
+                    if (giveUserCurrency != null)
+                    {
+                        giveUserCurrency(userID, rewardCount);
+                        DummyStoryQuestServer.SendNewQuestDataToUser(userID);
+                    }
+                }
+                break;
+            }
             default:
                 throw new ArgumentOutOfRangeException(nameof(questType), questType, null);
         }

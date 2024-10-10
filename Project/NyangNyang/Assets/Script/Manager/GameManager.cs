@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public StageManager stageManager;
 
     public GameObject questUI;
+    public BaseStoryQuest storyQuestObject;
 
     private void Awake()
     {

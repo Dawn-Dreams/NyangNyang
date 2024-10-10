@@ -15,12 +15,14 @@ public abstract class QuestDataBase : ScriptableObject
     public string subQuestTitle;
 
     // 보상
-    public Sprite rewardImage;
+    public Sprite rewardSprite;
     public int rewardCount;
 
     // 퀘스트 컴퍼넌트
     protected BaseQuest QuestComp;
     protected QuestType QuestType;
+
+    public RewardType rewardType = RewardType.Diamond;
 
     // 보상 리워드 리소스 Addressable
     protected AsyncOperationHandle<Sprite> RewardSpriteHandle;
@@ -29,6 +31,8 @@ public abstract class QuestDataBase : ScriptableObject
     public virtual void QuestActing(BaseQuest quest)
     {
         QuestComp = quest;
+        LoadRewardImage(rewardType);
+        
 
         BindDelegate();
 
@@ -40,9 +44,12 @@ public abstract class QuestDataBase : ScriptableObject
         QuestComp.rewardButton.onClick.AddListener(RequestQuestReward);
     }
 
+    
+
     public void RequestQuestReward()
     {
-        DummyQuestServer.UserRequestReward(Player.GetUserID(), QuestType);
+        DummyQuestServer.UserRequestReward(Player.GetUserID(), QuestType, this);
+        QuestComp.rewardButton.onClick.RemoveListener(RequestQuestReward);
     }
 
     protected abstract void CheckQuestClear();
@@ -51,14 +58,25 @@ public abstract class QuestDataBase : ScriptableObject
 
     protected abstract void BindDelegate();
 
+    public virtual void BindDelegateOnServer()
+    {
+        // 서버에서 델리게이트 연결
+    }
+
+    public virtual void UnBindDelegateOnServer()
+    {
+        //....
+    }
+
     protected void LoadRewardImage(RewardType type)
     {
-        if (rewardImage == null)
+        if (rewardSprite == null)
         {
             string key = "Icon/" + type.ToString();
             RewardSpriteHandle = Addressables.LoadAssetAsync<Sprite>(key);
             RewardSpriteHandle.WaitForCompletion();
-            rewardImage = RewardSpriteHandle.Result;
+            rewardSprite = RewardSpriteHandle.Result;
+            
         }
     }
 

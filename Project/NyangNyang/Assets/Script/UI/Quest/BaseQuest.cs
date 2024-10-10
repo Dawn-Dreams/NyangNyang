@@ -33,13 +33,17 @@ public class BaseQuest : MonoBehaviour
 
     private void OnDestroy()
     {
-        questData.ReleaseResource();
+        if (questData)
+        {
+            questData.ReleaseResource();
+        }
     }
 
-    void LoadQuest()
+    protected void LoadQuest()
     {
         if (questData)
         {
+            questData.QuestActing(this);
             if (mainQuestText)
             {
                 mainQuestText.text = questData.mainQuestTitle;
@@ -50,9 +54,8 @@ public class BaseQuest : MonoBehaviour
             }
             if (rewardImage)
             {
-                rewardImage.sprite = questData.rewardImage;
+                rewardImage.sprite = questData.rewardSprite;
             }
-            questData.QuestActing(this);
         }
     }
 

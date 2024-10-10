@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
 
-public class DummyStroyQuestServer : DummyQuestServer
+public class DummyStoryQuestServer : DummyQuestServer
 {
     protected static QuestDataBase[] QuestData = new QuestDataBase[]
     {
@@ -24,33 +24,43 @@ public class DummyStroyQuestServer : DummyQuestServer
         0,
     };
 
+    // 유저가 접속한 초기 한번만 실행되도록
+    // TODO: 유저 접속 종료 시 해당 델리게이트 종료되도록 
     public static QuestDataBase SendQuestInfoDataToUser(int userID)
     {
         int currentUserQuestID = usersQuestID[userID];
-        
+
+        if (currentUserQuestID < 0 || currentUserQuestID >= QuestData.Length)
+        {
+            return null;
+        }
+
         QuestDataBase questInfoData = QuestData[currentUserQuestID];
         
-        DummyServerData.OnUserStatusLevelUp += SendLevelUpStatusQuestDataToUser;
+        questInfoData.BindDelegateOnServer();
+
         return questInfoData;
     }
 
     public static void SendLevelUpStatusQuestDataToUser(int userID, StatusLevelType type)
     {
         // 특정 userID인지 체크하는 부분 추가
-        // static 델리게이트 특성 상 델리게이트에 추가된 이벤트 만큼 반복 실행하므로
-        // 해당 플레이어에게 정보를 전송했는지 같은 값을 추가하거나... 등을 진행하면 가능할 것으로 보임
+        // 델리게이트 방식으로 함수를 추가하여 진행하지 말고 별도의 변수로 관리하면 편할 것으로 예상
+
         BigInteger userCurrentStatusLevel = GetUserStatusLevelData(userID).GetLevelFromType(type);
         Player.RecvStatusDataFromServer(type,userCurrentStatusLevel);
     }
-    public static void SendQuestDataToUser(int userID, QuestType storyQuestType)
+
+    public static void SendNewQuestDataToUser(int userID)
     {
-        switch (storyQuestType)
-        {
-            case QuestType.LevelUpStatus:
-                //Player.RecvStatusDataFromServer();
-                break;
-            default:
-                break;
-        }
+        int currentUserQuestID = usersQuestID[userID];
+        QuestDataBase questInfoData = QuestData[currentUserQuestID];
+        questInfoData.UnBindDelegateOnServer();
+
+        usersQuestID[userID] += 1;
+        int newQuestID = usersQuestID[userID];
+        QuestDataBase newQuestInfo = QuestData[currentUserQuestID];
+        newQuestInfo.BindDelegateOnServer();
+        GameManager.GetInstance().storyQuestObject.RecvQuestDataFromServer();
     }
 }
