@@ -52,13 +52,13 @@ public class MenuManager : MonoBehaviour
                 case "NoticeButton":
                     noticeButton = button;
                     break;
-                case "RankingButton":
+                case "RankButton":
                     rankingButton = button;
                     break;
-                case "BoardButton":
+                case "BulletinBoardButton":
                     boardButton = button;
                     break;
-                case "CafeButton":
+                case "CommunityButton":
                     cafeButton = button;
                     break;
                 case "SettingsButton":
