@@ -16,30 +16,22 @@ public abstract class QuestDataBase : ScriptableObject
     public int rewardCount;
 
     // UI
-    protected Slider questSlider;
-    protected Button rewardButton;
-    protected TextMeshProUGUI rewardCountText;
-    protected TextMeshProUGUI questRequireText;
-    protected TextMeshProUGUI questProgressText;
+    protected BaseQuest QuestComp;
 
     protected QuestType QuestType;
 
-    public virtual void QuestActing(Slider slider, Button button, TextMeshProUGUI rewardText, TextMeshProUGUI requireText, TextMeshProUGUI progressText)
+    public virtual void QuestActing(BaseQuest quest)
     {
+        QuestComp = quest;
+
         BindDelegate();
 
-        questSlider = slider;
-        rewardButton = button;
-        rewardButton.onClick.AddListener(RequestQuestReward);
-        rewardCountText = rewardText;
-        rewardCountText.text = "x " + rewardCount.ToString();
-        questRequireText = requireText;
         SetRequireText();
-        questProgressText = progressText;
-
-
+        
         // 서버로부터 정보 요청
         DummyQuestServer.SendQuestDataToPlayer(Player.GetUserID(), QuestType);
+
+        QuestComp.rewardButton.onClick.AddListener(RequestQuestReward);
     }
 
     public void RequestQuestReward()

@@ -11,11 +11,11 @@ public class KillMonsterQuestData : QuestDataBase
     private long _killMonsterCount;
 
     public int requireKillMonsterCount = 50;
-    public override void QuestActing(Slider slider, Button button, TextMeshProUGUI rewardText, TextMeshProUGUI requireText, TextMeshProUGUI progressText)
+    public override void QuestActing(BaseQuest quest)
     {
         QuestType = QuestType.KillMonster;
 
-        base.QuestActing(slider, button, rewardText, requireText, progressText);
+        base.QuestActing(quest);
 
     }
 
@@ -23,7 +23,7 @@ public class KillMonsterQuestData : QuestDataBase
     {
         string newText = MyBigIntegerMath.GetAbbreviationFromBigInteger(_killMonsterCount) + " / " +
                          requireKillMonsterCount;
-        questRequireText.text = newText;
+        QuestComp.SetRequireText(newText);
     }
 
     protected override void BindDelegate()
@@ -35,7 +35,9 @@ public class KillMonsterQuestData : QuestDataBase
     {
         _killMonsterCount = newQuestDataValue;
 
-        questSlider.value = Mathf.Min(1.0f, (float)_killMonsterCount / requireKillMonsterCount);
+        float newValue = Mathf.Min(1.0f, (float)_killMonsterCount / requireKillMonsterCount);
+        QuestComp.SetSliderValue(newValue);
+
         SetRequireText();
 
         CheckQuestClear();
@@ -45,16 +47,18 @@ public class KillMonsterQuestData : QuestDataBase
     {
         if (_killMonsterCount >= requireKillMonsterCount)
         {
-            rewardButton.interactable = true;
             int clearCount = (int)(_killMonsterCount / requireKillMonsterCount);
-            rewardCountText.text = "x " + (rewardCount * clearCount).ToString();
-            questProgressText.text = "보상받기";
+            QuestComp.SetRewardButtonInteractable(true, "보상받기");
+
+            string newText = "x " + (rewardCount * clearCount).ToString();
+            QuestComp.SetRewardCountText(newText);
         }
         else
         {
-            rewardCountText.text = "x " + rewardCount.ToString();
-            questProgressText.text = "진행중";
-            rewardButton.interactable = false;
+            QuestComp.SetRewardButtonInteractable(false, "진행중");
+
+            string newText = "x " + rewardCount.ToString();
+            QuestComp.SetRewardCountText(newText);
         }
     }
 
