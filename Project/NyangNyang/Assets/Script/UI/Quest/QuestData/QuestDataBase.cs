@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 
 
@@ -15,10 +18,13 @@ public abstract class QuestDataBase : ScriptableObject
     public Sprite rewardImage;
     public int rewardCount;
 
-    // UI
+    // 퀘스트 컴퍼넌트
     protected BaseQuest QuestComp;
-
     protected QuestType QuestType;
+
+    // 보상 리워드 리소스 Addressable
+    protected AsyncOperationHandle<Sprite> RewardSpriteHandle;
+
 
     public virtual void QuestActing(BaseQuest quest)
     {
@@ -44,4 +50,24 @@ public abstract class QuestDataBase : ScriptableObject
     protected abstract void SetRequireText();
 
     protected abstract void BindDelegate();
+
+    protected void LoadRewardImage(RewardType type)
+    {
+        if (rewardImage == null)
+        {
+            string key = "Icon/" + type.ToString();
+            RewardSpriteHandle = Addressables.LoadAssetAsync<Sprite>(key);
+            RewardSpriteHandle.WaitForCompletion();
+            rewardImage = RewardSpriteHandle.Result;
+        }
+    }
+
+    public void ReleaseResource()
+    {
+        if (RewardSpriteHandle.IsValid())
+        {
+            RewardSpriteHandle.Release();
+        }
+        
+    }
 }

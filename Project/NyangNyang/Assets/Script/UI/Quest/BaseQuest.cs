@@ -26,41 +26,72 @@ public class BaseQuest : MonoBehaviour
     // 퀘스트 데이터
     public QuestDataBase questData;
 
-    void Start()
+    protected virtual void Start()
     {
         LoadQuest();
+    }
+
+    private void OnDestroy()
+    {
+        questData.ReleaseResource();
     }
 
     void LoadQuest()
     {
         if (questData)
         {
-            mainQuestText.text = questData.mainQuestTitle;
-            subQuestText.text = questData.subQuestTitle;
-            rewardImage.sprite = questData.rewardImage;
-
+            if (mainQuestText)
+            {
+                mainQuestText.text = questData.mainQuestTitle;
+            }
+            if (subQuestText)
+            {
+                subQuestText.text = questData.subQuestTitle;
+            }
+            if (rewardImage)
+            {
+                rewardImage.sprite = questData.rewardImage;
+            }
             questData.QuestActing(this);
         }
     }
 
     public void SetRequireText(string newText)
     {
-        questRequireText.text = newText;
+        if (questRequireText)
+        {
+            questRequireText.text = newText;
+        }
+        
     }
 
     public void SetSliderValue(float newValue)
     {
-        questSlider.value = Mathf.Min(1.0f, newValue);
+        if (questSlider)
+        {
+            questSlider.value = Mathf.Min(1.0f, newValue);
+        }
+        
     }
 
-    public void SetRewardButtonInteractable(bool newActive, string newText)
+    public virtual void SetRewardButtonInteractable(bool newActive, string newText)
     {
-        rewardButton.interactable = newActive;
-        questProgressText.text = newText;
+        if (rewardButton)
+        {
+            rewardButton.interactable = newActive;
+        }
+
+        if (questProgressText)
+        {
+            questProgressText.text = newText;
+        }
     }
 
     public void SetRewardCountText(string newText)
     {
-        rewardCount.text = newText;
+        if (rewardCount)
+        {
+            rewardCount.text = newText;
+        }
     }
 }

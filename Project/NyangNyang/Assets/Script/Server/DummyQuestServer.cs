@@ -6,8 +6,17 @@ using UnityEngine;
 
 public enum QuestType
 {
-    GoldSpending, KillMonster
+    // Normal Quest
+    GoldSpending, KillMonster,
+    // Story Quest
+    LevelUpStatus
 }
+
+public enum RewardType
+{
+    Gold, Diamond
+}
+
 public class DummyQuestServer : DummyServerData
 {
     private static BigInteger[] userGoldSpendingData = new BigInteger[]

@@ -33,6 +33,8 @@ public class Player : MonoBehaviour
     public static event OnGoldSpendingQuestDelegate OnRenewGoldSpendingQuest;
     public delegate void OnMonsterKillQuestDelegate(long monsterKillCount);
     public static event OnMonsterKillQuestDelegate OnMonsterKillQuestChange;
+    public delegate void OnLevelUpStatusQuestDelegate(StatusLevelType type, BigInteger newVal);
+    public static event OnLevelUpStatusQuestDelegate OnLevelUpStatusQuestChange;
 
     [SerializeField] private GameObject levelUpIconObject;
 
@@ -278,6 +280,14 @@ public class Player : MonoBehaviour
         if (OnMonsterKillQuestChange != null)
         {
             OnMonsterKillQuestChange(newVal);
+        }
+    }
+
+    public static void RecvStatusDataFromServer(StatusLevelType type, BigInteger newValue)
+    {
+        if (OnLevelUpStatusQuestChange != null)
+        {
+            OnLevelUpStatusQuestChange(type, newValue);
         }
     }
 }

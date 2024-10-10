@@ -119,6 +119,8 @@ public class DummyServerData : MonoBehaviour
 
     public delegate void OnUserGoldSpendingDelegate(int userID, BigInteger spendingAmount);
     public static OnUserGoldSpendingDelegate OnUserGoldSpending;
+    public delegate void OnUserStatusLevelUpDelegate(int userID, StatusLevelType type);
+    public static OnUserStatusLevelUpDelegate OnUserStatusLevelUp;
 
     // 델리게이트 종료
     // ==================
@@ -183,6 +185,12 @@ public class DummyServerData : MonoBehaviour
             {
                 OnUserGoldSpending(userID, goldCost);
             }
+
+            if (OnUserStatusLevelUp != null)
+            {
+                OnUserStatusLevelUp(userID, type);
+            }
+            
 
             return true;
         }
