@@ -18,6 +18,11 @@ public class GoldSpendingQuestData : QuestDataBase
         base.QuestActing(quest);
     }
 
+    public override void RequestQuestData()
+    {
+        DummyQuestServer.SendQuestDataToPlayer(Player.GetUserID(), QuestType);
+    }
+
     protected override void SetRequireText()
     {
         string newText = MyBigIntegerMath.GetAbbreviationFromBigInteger(spendingGold) + " / " +

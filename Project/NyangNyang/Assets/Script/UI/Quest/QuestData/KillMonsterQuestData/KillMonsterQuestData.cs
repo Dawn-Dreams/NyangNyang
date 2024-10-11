@@ -19,6 +19,11 @@ public class KillMonsterQuestData : QuestDataBase
 
     }
 
+    public override void RequestQuestData()
+    {
+        DummyQuestServer.SendQuestDataToPlayer(Player.GetUserID(), QuestType);
+    }
+
     protected override void SetRequireText()
     {
         string newText = MyBigIntegerMath.GetAbbreviationFromBigInteger(_killMonsterCount) + " / " +

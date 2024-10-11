@@ -15,7 +15,7 @@ public abstract class QuestDataBase : ScriptableObject
     public string subQuestTitle;
 
     // 보상
-    public Sprite rewardSprite;
+    protected Sprite RewardSprite;
     public int rewardCount;
 
     // 퀘스트 컴퍼넌트
@@ -31,18 +31,38 @@ public abstract class QuestDataBase : ScriptableObject
     public virtual void QuestActing(BaseQuest quest)
     {
         QuestComp = quest;
-        LoadRewardImage(rewardType);
         
+        QuestDataInitialize();
 
-        BindDelegate();
-
-        SetRequireText();
-        
         // 서버로부터 정보 요청
-        DummyQuestServer.SendQuestDataToPlayer(Player.GetUserID(), QuestType);
+        RequestQuestData();
+        //DummyQuestServer.SendQuestDataToPlayer(Player.GetUserID(), QuestType);
 
         QuestComp.rewardButton.onClick.AddListener(RequestQuestReward);
     }
+
+    public void QuestDataInitialize()
+    {
+        LoadRewardImage(rewardType);
+        QuestComp.SetRewardCountText("x " + rewardCount);
+        if (QuestComp.mainQuestText)
+        {
+            QuestComp.mainQuestText.text = mainQuestTitle;
+        }
+        if (QuestComp.subQuestText)
+        {
+            QuestComp.subQuestText.text = subQuestTitle;
+        }
+        if (QuestComp.rewardImage)
+        {
+            QuestComp.rewardImage.sprite = RewardSprite;
+        }
+        SetRequireText();
+
+        BindDelegate();
+    }
+
+    public abstract void RequestQuestData();
 
     
 
@@ -70,12 +90,12 @@ public abstract class QuestDataBase : ScriptableObject
 
     protected void LoadRewardImage(RewardType type)
     {
-        if (rewardSprite == null)
+        if (RewardSprite == null)
         {
             string key = "Icon/" + type.ToString();
             RewardSpriteHandle = Addressables.LoadAssetAsync<Sprite>(key);
             RewardSpriteHandle.WaitForCompletion();
-            rewardSprite = RewardSpriteHandle.Result;
+            RewardSprite = RewardSpriteHandle.Result;
             
         }
     }

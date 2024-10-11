@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainQuestTitle: "\uACE8\uB4DC\uB97C \uC18C\uBAA8\uD558\uC2DC\uC624."
   subQuestTitle: "500 a \uACE8\uB4DC\uB97C \uC18C\uBAA8\uD558\uC138\uC694."
-  rewardImage: {fileID: 21300000, guid: bc7d5d07ab82efa4d97f448a5ceb6f92, type: 3}
   rewardCount: 1
+  rewardType: 1
   requireSpendingGold: 500000

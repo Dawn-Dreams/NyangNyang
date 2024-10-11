@@ -44,18 +44,8 @@ public class BaseQuest : MonoBehaviour
         if (questData)
         {
             questData.QuestActing(this);
-            if (mainQuestText)
-            {
-                mainQuestText.text = questData.mainQuestTitle;
-            }
-            if (subQuestText)
-            {
-                subQuestText.text = questData.subQuestTitle;
-            }
-            if (rewardImage)
-            {
-                rewardImage.sprite = questData.rewardSprite;
-            }
+            
+            
         }
     }
 
@@ -97,4 +87,5 @@ public class BaseQuest : MonoBehaviour
             rewardCount.text = newText;
         }
     }
+
 }

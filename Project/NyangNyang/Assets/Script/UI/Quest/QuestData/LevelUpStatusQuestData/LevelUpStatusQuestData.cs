@@ -35,13 +35,17 @@ public class LevelUpStatusQuestData : QuestDataBase
         QuestType = QuestType.LevelUpStatus;
         
         base.QuestActing(quest);
-        DummyStoryQuestServer.SendLevelUpStatusQuestDataToUser(Player.GetUserID(),questStatusType);
+
+    }
+
+    public override void RequestQuestData()
+    {
+        DummyStoryQuestServer.SendLevelUpStatusQuestDataToUser(Player.GetUserID(), questStatusType);
     }
 
 
     protected override void SetRequireText()
     {
-
         string newText = MyBigIntegerMath.GetAbbreviationFromBigInteger(currentStatusLevel) + " / " +
                          MyBigIntegerMath.GetAbbreviationFromBigInteger(requireStatusLevel);
         QuestComp.SetRequireText(newText);

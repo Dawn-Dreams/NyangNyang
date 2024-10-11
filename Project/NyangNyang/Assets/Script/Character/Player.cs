@@ -35,6 +35,8 @@ public class Player : MonoBehaviour
     public static event OnMonsterKillQuestDelegate OnMonsterKillQuestChange;
     public delegate void OnLevelUpStatusQuestDelegate(StatusLevelType type, BigInteger newVal);
     public static event OnLevelUpStatusQuestDelegate OnLevelUpStatusQuestChange;
+    public delegate void OnStageClearQuestDelegate(int clearTheme, int clearStage);
+    public static event OnStageClearQuestDelegate OnStageClear;
 
     [SerializeField] private GameObject levelUpIconObject;
 
@@ -288,6 +290,14 @@ public class Player : MonoBehaviour
         if (OnLevelUpStatusQuestChange != null)
         {
             OnLevelUpStatusQuestChange(type, newValue);
+        }
+    }
+
+    public static void RecvStageClearDataFromServer(int clearTheme, int clearStage)
+    {
+        if (OnStageClear != null)
+        {
+            OnStageClear(clearTheme, clearStage);
         }
     }
 }

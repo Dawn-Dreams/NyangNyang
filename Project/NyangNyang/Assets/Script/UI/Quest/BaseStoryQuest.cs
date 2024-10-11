@@ -32,8 +32,5 @@ public class BaseStoryQuest : BaseQuest
         {
             LoadQuest();
         }
-
-        
-        
     }
 }

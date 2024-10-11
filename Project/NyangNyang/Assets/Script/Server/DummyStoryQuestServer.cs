@@ -7,14 +7,20 @@ public class DummyStoryQuestServer : DummyQuestServer
 {
     protected static QuestDataBase[] QuestData = new QuestDataBase[]
     {
-        ScriptableObject.CreateInstance<LevelUpStatusQuestData>().Initialize(StatusLevelType.STR, 100),
-        ScriptableObject.CreateInstance<LevelUpStatusQuestData>().Initialize(StatusLevelType.HP, 100),
-        ScriptableObject.CreateInstance<LevelUpStatusQuestData>().Initialize(StatusLevelType.STR, 200),
-        ScriptableObject.CreateInstance<LevelUpStatusQuestData>().Initialize(StatusLevelType.HP, 200),
-        ScriptableObject.CreateInstance<LevelUpStatusQuestData>().Initialize(StatusLevelType.STR, 300),
-        ScriptableObject.CreateInstance<LevelUpStatusQuestData>().Initialize(StatusLevelType.HP, 300),
-        ScriptableObject.CreateInstance<LevelUpStatusQuestData>().Initialize(StatusLevelType.STR, 400),
-        ScriptableObject.CreateInstance<LevelUpStatusQuestData>().Initialize(StatusLevelType.HP, 400),
+        ScriptableObject.CreateInstance<LevelUpStatusQuestData>().Initialize(StatusLevelType.STR, 10),
+        ScriptableObject.CreateInstance<LevelUpStatusQuestData>().Initialize(StatusLevelType.HP, 10),
+        ScriptableObject.CreateInstance<StageClearQuestData>().Initialize(1,2, 100),
+        ScriptableObject.CreateInstance<LevelUpStatusQuestData>().Initialize(StatusLevelType.STR, 20),
+        ScriptableObject.CreateInstance<LevelUpStatusQuestData>().Initialize(StatusLevelType.HP, 20),
+        ScriptableObject.CreateInstance<StageClearQuestData>().Initialize(1,3, 200),
+        ScriptableObject.CreateInstance<LevelUpStatusQuestData>().Initialize(StatusLevelType.STR, 30),
+        ScriptableObject.CreateInstance<LevelUpStatusQuestData>().Initialize(StatusLevelType.HP, 30),
+        ScriptableObject.CreateInstance<StageClearQuestData>().Initialize(1,4, 300),
+        ScriptableObject.CreateInstance<LevelUpStatusQuestData>().Initialize(StatusLevelType.STR, 40),
+        ScriptableObject.CreateInstance<LevelUpStatusQuestData>().Initialize(StatusLevelType.HP, 40),
+        ScriptableObject.CreateInstance<StageClearQuestData>().Initialize(1,5, 400),
+        ScriptableObject.CreateInstance<LevelUpStatusQuestData>().Initialize(StatusLevelType.STR, 50),
+        ScriptableObject.CreateInstance<LevelUpStatusQuestData>().Initialize(StatusLevelType.HP, 50),
         // 추후 생성...
     };
 
@@ -49,6 +55,15 @@ public class DummyStoryQuestServer : DummyQuestServer
 
         BigInteger userCurrentStatusLevel = GetUserStatusLevelData(userID).GetLevelFromType(type);
         Player.RecvStatusDataFromServer(type,userCurrentStatusLevel);
+    }
+
+    public static void SendStageClearQuestDataToUser(int userID)
+    {
+        int userClearTheme = 0;
+        int userClearStage = 0;
+        GetUserClearStageData(userID, out userClearTheme, out userClearStage);
+
+        Player.RecvStageClearDataFromServer(userClearTheme,userClearStage);
     }
 
     public static void SendNewQuestDataToUser(int userID)

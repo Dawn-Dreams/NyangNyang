@@ -121,6 +121,8 @@ public class DummyServerData : MonoBehaviour
     public static OnUserGoldSpendingDelegate OnUserGoldSpending;
     public delegate void OnUserStatusLevelUpDelegate(int userID, StatusLevelType type);
     public static OnUserStatusLevelUpDelegate OnUserStatusLevelUp;
+    public delegate void OnUserStageClearDelegate(int userID);
+    public static OnUserStageClearDelegate OnUserStageClear;
 
     // 델리게이트 종료
     // ==================
@@ -409,6 +411,11 @@ public class DummyServerData : MonoBehaviour
         // *스테이지가 하나 차이인지도 추후 확인해야함
         playerClearStageData[userID, 0] = clearTheme;
         playerClearStageData[userID, 1] = clearStage;
+
+        if (OnUserStageClear != null)
+        {
+            OnUserStageClear(userID);
+        }
     }
 
     public static void GiveUserDiamondAndSendData(int userID, BigInteger addDiamond)
