@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class SpecialStageMenuPanel : MenuPanel
+public class DungeonPanel : MenuPanel
 {
     [SerializeField]
     private ScrollRect scrollView;
@@ -16,12 +16,12 @@ public class SpecialStageMenuPanel : MenuPanel
     private ScrollRect[] levelScrollViews;
     private Button[][] levelSelectButtons;
 
-    private SpecialStageManager specialStageManager;
+    private DungeonManager DungeonManager;
     private MiniGame1 miniGame1;
 
     // 현재 클리어한 최고 레벨을 Player가 저장하도록 수정 필요
     private int[] highestClearedStage = new int[3] { 1, 1, 1 };
-    public int TempSpecialStageLevel { get; private set; }
+    public int TempDungeonStageLevel { get; private set; }
     private int currentActiveTabIndex = 0;
 
     private void Start()
@@ -34,7 +34,7 @@ public class SpecialStageMenuPanel : MenuPanel
     private void InitializeManagers()
     {
         miniGame1 = FindObjectOfType<MiniGame1>() ?? throw new NullReferenceException("MiniGame1이 NULL입니다.");
-        specialStageManager = FindObjectOfType<SpecialStageManager>() ?? throw new NullReferenceException("SpecialStageManager가 존재하지 않습니다.");
+        DungeonManager = FindObjectOfType<DungeonManager>() ?? throw new NullReferenceException("DungeonManager가 존재하지 않습니다.");
     }
 
     private void InitializeUIComponents()
@@ -139,16 +139,16 @@ public class SpecialStageMenuPanel : MenuPanel
 
     private void OnClickStageLevelButton(int tabIndex, int levelIndex)
     {
-        TempSpecialStageLevel = levelIndex + 1;
+        TempDungeonStageLevel = levelIndex + 1;
         UpdateLevelSelectButtons(tabIndex);
-        titleTexts[tabIndex].text = $"미니게임 던전 {tabIndex + 1}-{TempSpecialStageLevel}";
+        titleTexts[tabIndex].text = $"미니게임 던전 {tabIndex + 1}-{TempDungeonStageLevel}";
     }
 
     // 미니게임 시작 버튼 클릭 시 실행
     void OnClickStartButton(int index)
     {
         // 스페셜 스테이지가 진행 중이면 미니게임을 시작하지 않음
-        if (GameManager.isSpecialStageActive)
+        if (GameManager.isDungeonActive)
         {
             Debug.Log("스페셜 스테이지가 실행 중이므로 미니게임을 시작할 수 없습니다.");
             return;
@@ -190,8 +190,8 @@ public class SpecialStageMenuPanel : MenuPanel
             Debug.Log("소탕권이 부족합니다.");
             return;
         }
-        specialStageManager.StartSpecialStage(index, TempSpecialStageLevel);
-        highestClearedStage[index] = specialStageManager.specialStageLevels[index];
+        DungeonManager.StartDungeon(index, TempDungeonStageLevel);
+        highestClearedStage[index] = DungeonManager.DungeonLevels[index];
         UpdateTicketText(index);
     }
 
