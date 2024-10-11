@@ -250,5 +250,12 @@ public class Enemy : Character
 
         base.Death();
     }
+
+    public void SetMaxHP(BigInteger newMaxHP)
+    {
+        this.maxHP = newMaxHP;
+        this.currentHP = newMaxHP; // 최대 체력을 변경할 때, 현재 체력도 최대 체력으로 설정
+        ChangeHealthBar(); // 체력바 업데이트
+    }
 }
 

@@ -71,6 +71,9 @@ public class DungeonManager : MonoBehaviour
         // 프리팹 인스턴스 생성
         catInstance = Instantiate(catPrefab, new Vector3(-10, 40, 0), Quaternion.identity).GetComponent<Character>();
         enemyInstance = Instantiate(enemyPrefab, new Vector3(5, 40, 0), Quaternion.identity).GetComponent<DungeonEnemy>();
+        
+        // 적의 생명력, 공격력, 공격 패턴 설정 (index와 level에 따라 다르게 설정)
+        enemyInstance.InitializeEnemyStats(index, level);
 
         // 고양이와 적군을 전투 상태로 설정
         catInstance.SetEnemy(enemyInstance);
@@ -160,13 +163,12 @@ public class DungeonManager : MonoBehaviour
         {
             Debug.Log($"스페셜 스테이지 {currentDungeonIndex + 1} 실패.");
         }
-        // 고양이, 적, 배경 등이 3초 후에 사라지도록 처리
-        StartCoroutine(DestroyObjectsWithDelay(3.0f));  // 3초 대기
+
+        StartCoroutine(DestroyObjectsWithDelay(2.0f));
     }
 
     private IEnumerator DestroyObjectsWithDelay(float delay)
     {
-        // 3초 대기
         yield return new WaitForSeconds(delay);
 
         // cat과 enemy 객체 삭제
@@ -186,25 +188,29 @@ public class DungeonManager : MonoBehaviour
         GameManager.isDungeonActive = false;
     }
 }
-
 public class DungeonRewardManager
 {
-    private static DungeonRewardManager _instance;
-    public static DungeonRewardManager Instance
+    public void GiveDungeonReward(string userID, int index, int level)
     {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = new DungeonRewardManager();
-            }
-            return _instance;
-        }
+        int goldReward = CalculateGoldReward(index, level);
+        int itemReward = CalculateItemReward(index, level);
+
+        // 보상 지급
+        Player.AddGold(goldReward);
+        //Player.AddItem(itemReward); // 아이템 보상... 추가 예정
+
+        Debug.Log($"유저 {userID}에게 던전 {index + 1} 레벨 {level} 보상을 지급했습니다. 골드: {goldReward}, 아이템: {itemReward}");
     }
 
-    public void GiveDungeonReward(string userID, int level)
+    private int CalculateGoldReward(int index, int level)
     {
-        // 보상 로직
-        Debug.Log("유저 " + userID + "에게 레벨 " + level + " 보상을 지급합니다.");
+        // index와 level에 따라 보상을 다르게 설정
+        return 10000 * (index + 1) * level; // 기본 골드 보상 예시
+    }
+
+    private int CalculateItemReward(int index, int level)
+    {
+        // 특정 레벨 도달 시 아이템 보상 지급 로직
+        return (index + 1) * level; // 아이템 보상 예시
     }
 }
