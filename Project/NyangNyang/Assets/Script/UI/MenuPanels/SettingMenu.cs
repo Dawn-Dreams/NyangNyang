@@ -16,8 +16,8 @@ public class SettingsMenu : MonoBehaviour
     void Start()
     {
         // 초기 설정
-        //bgmVolumeSlider.value = AudioManager.Instance.bgmVolume;
-        //sfxVolumeSlider.value = AudioManager.Instance.sfxVolume;
+        bgmVolumeSlider.value = AudioManager.Instance.bgmVolume;
+        sfxVolumeSlider.value = AudioManager.Instance.sfxVolume;
         uidText.text = userUID;
 
         // 이벤트 연결
@@ -69,14 +69,12 @@ public class SettingsMenu : MonoBehaviour
 
     public void OnBGMVolumeChanged()
     {
-        //AudioManager.Instance.bgmVolume = bgmVolumeSlider.value;
-        Debug.Log($"배경음악 볼륨: {bgmVolumeSlider.value}");
+        AudioManager.Instance.bgmVolume = bgmVolumeSlider.value;
     }
 
     public void OnSFXVolumeChanged()
     {
-        //AudioManager.Instance.sfxVolume = sfxVolumeSlider.value;
-        Debug.Log($"효과음 볼륨: {sfxVolumeSlider.value}");
+        AudioManager.Instance.sfxVolume = sfxVolumeSlider.value;
     }
 
     public void CopyUIDToClipboard()
