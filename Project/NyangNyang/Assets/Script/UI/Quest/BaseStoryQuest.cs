@@ -23,8 +23,8 @@ public class BaseStoryQuest : BaseQuest
 
     public void RecvQuestDataFromServer()
     {
-        questData = DummyStoryQuestServer.SendQuestInfoDataToUser(Player.GetUserID());
-        if (questData == null)
+        QuestData = DummyStoryQuestServer.SendQuestInfoDataToUser(Player.GetUserID());
+        if (QuestData == null)
         {
             gameObject.SetActive(false);
         }

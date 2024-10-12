@@ -6,21 +6,34 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "GoldSpendingQuestData", menuName = "ScriptableObjects/QuestData/GoldSpendingQuestData", order = 1)]
-public class GoldSpendingQuestData : QuestDataBase
+public class GoldSpendingQuestData : RepeatQuestDataBase
 {
-    private BigInteger spendingGold = 0;
+    protected BigInteger spendingGold = 0;
 
     public int requireSpendingGold;
+    public QuestDataBase QuestInitialize(QuestCategory questCategory, int getRequireSpendingGold, int getRewardCount = 1)
+    {
+        QuestCategory = questCategory;
+        mainQuestTitle = "골드 소모";
+        subQuestTitle = "골드를 " + MyBigIntegerMath.GetAbbreviationFromBigInteger(getRequireSpendingGold) + "소모하세요.";
+        requireSpendingGold = getRequireSpendingGold;
+
+        rewardType = RewardType.Diamond;
+        rewardCount = getRewardCount;
+        return this;
+    }
+
     public override void QuestActing(BaseQuest quest)
     {
-        QuestType = QuestType.Repeat_GoldSpending;
+        QuestType = QuestType.GoldSpending;
+        QuestCategory = QuestCategory.Repeat;
         
         base.QuestActing(quest);
     }
 
     public override void RequestQuestData()
     {
-        DummyQuestServer.SendQuestDataToPlayer(Player.GetUserID(), QuestType);
+        DummyQuestServer.SendQuestDataToPlayer(Player.GetUserID(), QuestCategory, QuestType);
     }
 
     protected override void SetRequireText()

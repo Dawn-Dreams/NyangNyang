@@ -21,12 +21,12 @@ public abstract class QuestDataBase : ScriptableObject
     // 퀘스트 컴퍼넌트
     protected BaseQuest QuestComp;
     protected QuestType QuestType;
+    protected QuestCategory QuestCategory;
 
     public RewardType rewardType = RewardType.Diamond;
 
     // 보상 리워드 리소스 Addressable
     protected AsyncOperationHandle<Sprite> RewardSpriteHandle;
-
 
     public virtual void QuestActing(BaseQuest quest)
     {
@@ -68,13 +68,16 @@ public abstract class QuestDataBase : ScriptableObject
         BindDelegate();
     }
 
-    public abstract void RequestQuestData();
+    public virtual void RequestQuestData()
+    {
+        DummyQuestServer.SendQuestDataToPlayer(Player.GetUserID(), QuestCategory, QuestType);
+    }
 
     
 
-    public void RequestQuestReward()
+    public virtual void RequestQuestReward()
     {
-        DummyQuestServer.UserRequestReward(Player.GetUserID(), QuestType, this);
+        DummyQuestServer.UserRequestReward(Player.GetUserID(),QuestCategory,  QuestType, this);
         QuestComp.rewardButton.onClick.RemoveListener(RequestQuestReward);
     }
 

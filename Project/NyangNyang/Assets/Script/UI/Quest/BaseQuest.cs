@@ -24,7 +24,7 @@ public class BaseQuest : MonoBehaviour
     public TextMeshProUGUI rewardCount;
 
     // 퀘스트 데이터
-    public QuestDataBase questData;
+    protected QuestDataBase QuestData;
 
     protected virtual void Start()
     {
@@ -33,9 +33,9 @@ public class BaseQuest : MonoBehaviour
 
     protected void LoadQuest()
     {
-        if (questData)
+        if (QuestData)
         {
-            questData.QuestActing(this);
+            QuestData.QuestActing(this);
         }
     }
 

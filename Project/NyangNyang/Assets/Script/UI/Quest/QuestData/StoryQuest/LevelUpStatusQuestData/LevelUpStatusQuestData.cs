@@ -15,8 +15,9 @@ public class LevelUpStatusQuestData : QuestDataBase
     public StatusLevelType questStatusType;
 
     // 서버 내 생성할 때 사용
-    public QuestDataBase Initialize(StatusLevelType statusType, BigInteger targetLevel, int diamondRewardCount = 100)
+    public QuestDataBase QuestInitialize(QuestCategory questCategory, StatusLevelType statusType, BigInteger targetLevel, int diamondRewardCount = 100)
     {
+        QuestCategory = questCategory;
         questStatusType = statusType;
 
         mainQuestTitle = statusType.ToString() + " 스탯 레벨" + MyBigIntegerMath.GetAbbreviationFromBigInteger(targetLevel) + "달성";

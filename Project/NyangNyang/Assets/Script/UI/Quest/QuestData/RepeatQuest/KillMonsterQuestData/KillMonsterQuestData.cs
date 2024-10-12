@@ -6,23 +6,30 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "KillMonsterQuestData", menuName = "ScriptableObjects/QuestData/KillMonsterQuestData", order = 1)]
-public class KillMonsterQuestData : QuestDataBase
+public class KillMonsterQuestData : RepeatQuestDataBase
 {
     private long _killMonsterCount;
 
-    public int requireKillMonsterCount = 50;
+    public int requireKillMonsterCount;
+    public QuestDataBase QuestInitialize(QuestCategory questCategory, int getRequireKillMonsterCount, int getRewardCount = 1)
+    {
+        QuestCategory = questCategory;
+        mainQuestTitle = "몬스터 처치";
+        subQuestTitle = "몬스터를 " + getRequireKillMonsterCount + "처치하세요.";
+        requireKillMonsterCount = getRequireKillMonsterCount;
+
+        rewardType = RewardType.Diamond;
+        rewardCount = getRewardCount;
+        return this;
+    }
     public override void QuestActing(BaseQuest quest)
     {
-        QuestType = QuestType.Repeat_KillMonster;
+        QuestType = QuestType.KillMonster;
 
         base.QuestActing(quest);
 
     }
 
-    public override void RequestQuestData()
-    {
-        DummyQuestServer.SendQuestDataToPlayer(Player.GetUserID(), QuestType);
-    }
 
     protected override void SetRequireText()
     {

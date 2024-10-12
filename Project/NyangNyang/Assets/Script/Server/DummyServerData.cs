@@ -117,7 +117,7 @@ public class DummyServerData : MonoBehaviour
     // ================== 
     // 델리게이트 시작
 
-    public delegate void OnUserGoldSpendingDelegate(int userID, BigInteger spendingAmount);
+    public delegate void OnUserGoldSpendingDelegate(int userID,  BigInteger spendingAmount);
     public static OnUserGoldSpendingDelegate OnUserGoldSpending;
     public delegate void OnUserStatusLevelUpDelegate(int userID, StatusLevelType type);
     public static OnUserStatusLevelUpDelegate OnUserStatusLevelUp;

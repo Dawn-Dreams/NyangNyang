@@ -16,8 +16,9 @@ public class StageClearQuestData : QuestDataBase
     private bool _isQuestClear;
 
     // 서버 내 생성할 때 사용
-    public QuestDataBase Initialize(int getTargetTheme, int getTargetStage, int getRewardCount = 100)
+    public QuestDataBase QuestInitialize(QuestCategory questCategory, int getTargetTheme, int getTargetStage, int getRewardCount = 100)
     {
+        QuestCategory = questCategory;
         targetTheme = getTargetTheme;
         targetStage = getTargetStage;
 
