@@ -20,22 +20,7 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
             Instance = this;
 
-        StartCoroutine(SetInActiveQuestUIAtStart());
 
         DummyQuestServer.ExecuteDummyQuestServer();
     }
-
-    IEnumerator SetInActiveQuestUIAtStart()
-    {
-        yield return null;
-
-        RectTransform questUITransform = questUI.GetComponent<RectTransform>();
-        questUITransform.offsetMin = new Vector2(0, 0);
-        questUITransform.offsetMax = new Vector2(0, 0);
-        questUI.SetActive(false);
-    }
-
-
-
-
 }
