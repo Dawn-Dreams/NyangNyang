@@ -11,7 +11,7 @@ public class DungeonPanel : MenuPanel
 
     [SerializeField]
     private GameObject[] stageTabs;
-    private Button[] startButtons, sweepButtons;
+    private Button[] minigameButtons, startButtons, sweepButtons;
     private TextMeshProUGUI[] ticketTexts, titleTexts;
     private ScrollRect[] levelScrollViews;
     private Button[][] levelSelectButtons;
@@ -57,6 +57,7 @@ public class DungeonPanel : MenuPanel
     private void InitializeTabs()
     {
         int tabCount = stageTabs.Length;
+        minigameButtons = new Button[tabCount];
         startButtons = new Button[tabCount];
         sweepButtons = new Button[tabCount];
         ticketTexts = new TextMeshProUGUI[tabCount];
@@ -66,13 +67,14 @@ public class DungeonPanel : MenuPanel
         for (int i = 0; i < tabCount; i++)
         {
             var tab = stageTabs[i].transform;
-            startButtons[i] = tab.Find("MiniGameStartButton").GetComponent<Button>();
-            sweepButtons[i] = tab.Find("DungeonStartButton").GetComponent<Button>();
-            //sweepButtons[i] = tab.Find("DungeonSweepButton").GetComponent<Button>();
+            minigameButtons[i] = tab.Find("MiniGameStartButton").GetComponent<Button>();
+            startButtons[i] = tab.Find("DungeonStartButton").GetComponent<Button>();
+            sweepButtons[i] = tab.Find("DungeonSweepButton").GetComponent<Button>();
             ticketTexts[i] = tab.Find("TicketText").GetComponent<TextMeshProUGUI>();
             titleTexts[i] = tab.Find("GameTitleText").GetComponent<TextMeshProUGUI>();
 
             int index = i;
+            minigameButtons[i].onClick.AddListener(() => OnClickMinigameButton(index));
             startButtons[i].onClick.AddListener(() => OnClickStartButton(index));
             sweepButtons[i].onClick.AddListener(() => OnClickSweepButton(index));
 
@@ -146,7 +148,7 @@ public class DungeonPanel : MenuPanel
     }
 
     // 미니게임 시작 버튼 클릭 시 실행
-    void OnClickStartButton(int index)
+    void OnClickMinigameButton(int index)
     {
         // 스페셜 스테이지가 진행 중이면 미니게임을 시작하지 않음
         if (GameManager.isDungeonActive)
@@ -184,14 +186,29 @@ public class DungeonPanel : MenuPanel
         UpdateTicketText(index);
     }
 
+    private void OnClickStartButton(int index)
+    {
+        if (!DummyServerData.HasTicket(Player.GetUserID(), index))
+        {
+            Debug.Log("입장권이 부족합니다.");
+            return;
+        }
+        DungeonManager.StartDungeon(index, TempDungeonStageLevel);
+        highestClearedStage[index] = DungeonManager.DungeonLevels[index];
+        UpdateTicketText(index);
+    }
+
     private void OnClickSweepButton(int index)
     {
         if (!DummyServerData.HasTicket(Player.GetUserID(), index))
         {
-            Debug.Log("소탕권이 부족합니다.");
+            Debug.Log("입장권이 부족합니다.");
             return;
         }
-        DungeonManager.StartDungeon(index, TempDungeonStageLevel);
+        //DungeonManager.StartDungeon(index, TempDungeonStageLevel);
+
+        // 아이템 획득 로직 추가
+        Debug.Log("소탕");
         highestClearedStage[index] = DungeonManager.DungeonLevels[index];
         UpdateTicketText(index);
     }

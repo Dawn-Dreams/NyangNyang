@@ -1,12 +1,16 @@
 using System;
 using System.Collections;
 using System.Reflection;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DungeonManager : MonoBehaviour
 {
     [SerializeField]
     private GameObject DungeonUI;
+    private GameObject[] dungeonPanels;
+    private TextMeshProUGUI DungeonResultText;
 
     public int[] DungeonLevels = new int[3] { 1, 1, 1 };
     private int currentDungeonIndex;
@@ -38,6 +42,28 @@ public class DungeonManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        // DungeonUI >> Panel >> Dungeon 하위에서 Dungeon 패널들을 동적으로 찾음
+        Transform panelTransform = DungeonUI.transform.Find("Panel");
+        if (panelTransform != null)
+        {
+            dungeonPanels = new GameObject[3];
+            for (int i = 0; i < 3; i++)
+            {
+                dungeonPanels[i] = panelTransform.Find($"Dungeon ({i})").gameObject;  // Dungeon[0], Dungeon[1], Dungeon[2]을 찾음
+            }
+        }
+        else
+        {
+            Debug.LogError("Panel을 찾을 수 없습니다.");
+        }
+
+        // DungeonUI >> Panel >> DungeonResultText 동적으로 찾음
+        DungeonResultText = panelTransform.Find("DungeonResultText").GetComponent<TextMeshProUGUI>();
+        if (DungeonResultText == null)
+        {
+            Debug.LogError("DungeonResultText를 찾을 수 없습니다.");
+        }
     }
 
     // 스페셜 스테이지 시작
@@ -68,6 +94,13 @@ public class DungeonManager : MonoBehaviour
         // 던전 활성화
         GameManager.isDungeonActive = true;
 
+        ShowDungeonResultText("START!!", 1);
+        // index에 맞는 UI 패널만 활성화
+        for (int i = 0; i < dungeonPanels.Length; i++)
+        {
+            dungeonPanels[i].SetActive(i == index); // 현재 선택한 index에 해당하는 패널만 활성화
+        }
+
         // 프리팹 인스턴스 생성
         catInstance = Instantiate(catPrefab, new Vector3(-10, 40, 0), Quaternion.identity).GetComponent<Character>();
         enemyInstance = Instantiate(enemyPrefab, new Vector3(5, 40, 0), Quaternion.identity).GetComponent<DungeonEnemy>();
@@ -75,9 +108,6 @@ public class DungeonManager : MonoBehaviour
         // 적의 생명력, 공격력, 공격 패턴 설정 (index와 level에 따라 다르게 설정)
         enemyInstance.InitializeEnemyStats(index, level);
 
-        // 고양이와 적군을 전투 상태로 설정
-        catInstance.SetEnemy(enemyInstance);
-        enemyInstance.SetEnemy(catInstance);
 
         currentDungeonIndex = index;
         DungeonUI.SetActive(true);  // UI 활성화
@@ -87,10 +117,19 @@ public class DungeonManager : MonoBehaviour
 
         DummyServerData.UseTicket(Player.GetUserID(), index); // 티켓 차감
 
-        // 전투 결과 체크 시작
+        StartCoroutine(StartCombatAfterDelay(1.0f));
         StartCoroutine(CheckBattleOutcome());
         // 스테이지 제한 시간 설정
         Invoke("TimeOut", playDuration);
+    }
+
+    // 일정 시간 딜레이 후 전투 시작
+    private IEnumerator StartCombatAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        // 전투 시작
+        catInstance.SetEnemy(enemyInstance);
+        enemyInstance.SetEnemy(catInstance);
     }
 
     private IEnumerator GainGoldOverTime(int level)
@@ -132,7 +171,7 @@ public class DungeonManager : MonoBehaviour
     {
         if (GameManager.isDungeonActive)
         {
-            Debug.Log("제한 시간이 초과되었습니다.");
+            ShowDungeonResultText("TIME OUT...", 2);
             isSuccess = false;
             EndDungeonStage(); // 실패 처리
         }
@@ -149,7 +188,7 @@ public class DungeonManager : MonoBehaviour
             if (currentDungeonIndex >= 0 && currentDungeonIndex < DungeonLevels.Length)
             {
                 DungeonLevels[currentDungeonIndex]++;
-                Debug.Log($"던전 {currentDungeonIndex + 1} 클리어! 다음 레벨이 활성화됩니다.");
+                ShowDungeonResultText("CLEAR!!", 2);
                 Player.AddGold(DungeonLevels[currentDungeonIndex] * gainGold);
 
                 var DungeonPanel = FindObjectOfType<DungeonPanel>();
@@ -161,10 +200,10 @@ public class DungeonManager : MonoBehaviour
         }
         else
         {
-            Debug.Log($"스페셜 스테이지 {currentDungeonIndex + 1} 실패.");
+            ShowDungeonResultText("FAIL...", 2);
         }
 
-        StartCoroutine(DestroyObjectsWithDelay(2.0f));
+        StartCoroutine(DestroyObjectsWithDelay(3.0f));
     }
 
     private IEnumerator DestroyObjectsWithDelay(float delay)
@@ -186,6 +225,20 @@ public class DungeonManager : MonoBehaviour
         DungeonUI.SetActive(false);
 
         GameManager.isDungeonActive = false;
+    }
+
+    // DungeonResultText
+    public void ShowDungeonResultText(string message, float displayDuration)
+    {
+        DungeonResultText.text = message;
+        DungeonResultText.gameObject.SetActive(true);
+        StartCoroutine(DisableDungeonResultTextAfterDelay(displayDuration));
+    }
+
+    private IEnumerator DisableDungeonResultTextAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        DungeonResultText.gameObject.SetActive(false);
     }
 }
 public class DungeonRewardManager
@@ -214,3 +267,5 @@ public class DungeonRewardManager
         return (index + 1) * level; // 아이템 보상 예시
     }
 }
+
+

@@ -5559,7 +5559,7 @@ MonoBehaviour:
   m_Content: {fileID: 1053336593}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 0
+  m_MovementType: 1
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
@@ -7768,6 +7768,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 228921819}
+  - component: {fileID: 228921820}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -7795,6 +7796,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
+--- !u!114 &228921820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 228921818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!1 &235223051
 GameObject:
   m_ObjectHideFlags: 0
@@ -21246,6 +21261,7 @@ GameObject:
   m_Component:
   - component: {fileID: 555453937}
   - component: {fileID: 555453938}
+  - component: {fileID: 555453939}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -21300,6 +21316,20 @@ MonoBehaviour:
   m_Spacing: {x: 5, y: 10}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!114 &555453939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 555453936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!1 &556195921
 GameObject:
   m_ObjectHideFlags: 0
@@ -28914,7 +28944,7 @@ MonoBehaviour:
   m_Content: {fileID: 1693855609}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 0
+  m_MovementType: 1
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
@@ -37567,6 +37597,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1053336593}
   - component: {fileID: 1053336594}
+  - component: {fileID: 1053336595}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -37592,10 +37623,10 @@ RectTransform:
   - {fileID: 1824630828}
   m_Father: {fileID: 349733947}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.0000363159, y: -0.00006374164}
-  m_SizeDelta: {x: 0, y: 744.773}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: -324.99997, y: -0.000061035156}
+  m_SizeDelta: {x: 650, y: 401.773}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1053336594
 MonoBehaviour:
@@ -37621,6 +37652,20 @@ MonoBehaviour:
   m_Spacing: {x: 5, y: 10}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!114 &1053336595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1053336592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!1001 &1053503577
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -47262,6 +47307,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1301109925}
+  - component: {fileID: 1301109926}
+  - component: {fileID: 1301109927}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -47284,11 +47331,51 @@ RectTransform:
   - {fileID: 773491111}
   m_Father: {fileID: 1584017076}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 38.792}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: -305, y: 0}
+  m_SizeDelta: {x: 610, y: -608.208}
   m_Pivot: {x: 0, y: 1}
+--- !u!114 &1301109926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1301109924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
+--- !u!114 &1301109927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1301109924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 10
+    m_Bottom: 0
+  m_ChildAlignment: 1
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &1306062409
 GameObject:
   m_ObjectHideFlags: 0
@@ -59368,6 +59455,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1693855609}
   - component: {fileID: 1693855610}
+  - component: {fileID: 1693855611}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -59422,6 +59510,20 @@ MonoBehaviour:
   m_Spacing: {x: 5, y: 10}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!114 &1693855611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1693855608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!1 &1698360140 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7361245266242734516, guid: 356c92c659ddb864697f736f8e8489da, type: 3}
@@ -72751,7 +72853,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2074730865}
   m_Layer: 5
-  m_Name: Dungeon
+  m_Name: Dungeon (0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

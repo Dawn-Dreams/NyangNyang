@@ -6,6 +6,7 @@ public class AudioManager : MonoBehaviour
 
     public AudioSource bgmSource;
     public AudioSource sfxSource;
+    //public AudioClip touchSound; // 터치 시 재생될 효과음
 
     public float bgmVolume
     {
@@ -46,6 +47,33 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    //private void Update()
+    //{
+    //// 모바일 터치 감지
+    //if (Input.touchCount > 0)
+    //{
+    //    for (int i = 0; i < Input.touchCount; i++)
+    //    {
+    //        if (Input.GetTouch(i).phase == TouchPhase.Began)
+    //        {
+    //            PlayTouchSound();
+    //        }
+    //    }
+    //}
+    //// PC 마우스 클릭 감지
+    //if (Input.GetMouseButtonDown(0))
+    //{
+    //    PlayTouchSound();
+    //}
+    //}
+
+    private void PlayTouchSound()
+    {
+        //if (touchSound != null)
+        //{
+        //    PlaySFX(touchSound); // 터치나 클릭 시 설정된 효과음 재생
+        //}
+    }
     private void Start()
     {
         // 게임 시작 시 저장된 볼륨 적용
@@ -61,7 +89,7 @@ public class AudioManager : MonoBehaviour
             bgmSource.Play();
         }
     }
-    
+
     public void PlaySFX(AudioClip clip)
     {
         sfxSource.PlayOneShot(clip);
