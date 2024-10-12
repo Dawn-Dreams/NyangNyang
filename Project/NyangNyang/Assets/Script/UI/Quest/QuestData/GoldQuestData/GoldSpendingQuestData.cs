@@ -13,7 +13,7 @@ public class GoldSpendingQuestData : QuestDataBase
     public int requireSpendingGold;
     public override void QuestActing(BaseQuest quest)
     {
-        QuestType = QuestType.GoldSpending;
+        QuestType = QuestType.Repeat_GoldSpending;
         
         base.QuestActing(quest);
     }
@@ -33,6 +33,11 @@ public class GoldSpendingQuestData : QuestDataBase
     protected override void BindDelegate()
     {
         Player.OnRenewGoldSpendingQuest += GetDataFromServer;
+    }
+
+    protected override void UnBindDelegate()
+    {
+        Player.OnRenewGoldSpendingQuest -= GetDataFromServer;
     }
 
     public void GetDataFromServer(BigInteger newQuestDataValue)

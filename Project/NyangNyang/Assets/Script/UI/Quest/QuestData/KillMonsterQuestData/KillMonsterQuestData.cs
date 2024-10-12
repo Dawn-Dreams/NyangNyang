@@ -13,7 +13,7 @@ public class KillMonsterQuestData : QuestDataBase
     public int requireKillMonsterCount = 50;
     public override void QuestActing(BaseQuest quest)
     {
-        QuestType = QuestType.KillMonster;
+        QuestType = QuestType.Repeat_KillMonster;
 
         base.QuestActing(quest);
 
@@ -34,6 +34,11 @@ public class KillMonsterQuestData : QuestDataBase
     protected override void BindDelegate()
     {
         Player.OnMonsterKillQuestChange += GetDataFromServer;
+    }
+
+    protected override void UnBindDelegate()
+    {
+        Player.OnMonsterKillQuestChange -= GetDataFromServer;
     }
 
     public void GetDataFromServer(long newQuestDataValue)

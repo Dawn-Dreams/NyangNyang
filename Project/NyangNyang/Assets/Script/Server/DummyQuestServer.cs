@@ -6,10 +6,11 @@ using UnityEngine;
 
 public enum QuestType
 {
-    // Normal Quest
-    GoldSpending, KillMonster,
+    // Normal Quest(Repeat)
+    Repeat_GoldSpending, Repeat_KillMonster,
+
     // Story Quest
-    LevelUpStatus
+    LevelUpStatus, StageClear,
 }
 
 public enum RewardType
@@ -19,10 +20,11 @@ public enum RewardType
 
 public class DummyQuestServer : DummyServerData
 {
-    private static BigInteger[] userGoldSpendingData = new BigInteger[]
+    // === 반복 퀘스트 데이터 ===
+    private static Dictionary<int, BigInteger> _repeatQuest_userGoldSpendingData = new Dictionary<int, BigInteger>
     {
-        150_000,
-        0,
+        {0, 150_000},
+        {1, 0}
     };
     private const int RequireGoldSpending = 500_000;
 
@@ -31,7 +33,17 @@ public class DummyQuestServer : DummyServerData
         98, 0,
     };
     private const int RequireMonsterKill = 50;
+    // ========================
+    // === 일일 퀘스트 데이터 ====
+    // 실제 서버에서는 {일일 초기화 시간} 마다 초기화 해주어야함.
+    private static Dictionary<int, BigInteger> dailyQuest_userGoldSpendingData = new Dictionary<int, BigInteger>
+    {
+        {0, 300},
+        {1, 0}
+    };
+    // =========================
 
+    // DummyServer라서 시작 시 초기화를 해당 함수에서 진행 (GameManager내에서 호출)
     public static void ExecuteDummyQuestServer()
     {
         OnUserGoldSpending += UserGoldSpending;
@@ -39,16 +51,21 @@ public class DummyQuestServer : DummyServerData
 
     public static void SendQuestDataToPlayer(int userID, QuestType questType)
     {
-        // 범위 체크 생략 // value return
-        //return userGoldSpendingData[userID];
+        // 범위 체크 생략 
+
         // 더미 서버이므로 현재는 강제로 플레이어에게 주입
         switch (questType)
         {
-            case QuestType.GoldSpending:
-                Player.RecvGoldSpendingDataFromServer(userGoldSpendingData[userID]);
+            case QuestType.Repeat_GoldSpending:
+                Player.RecvGoldSpendingDataFromServer(_repeatQuest_userGoldSpendingData[userID]);
                 break;
-            case QuestType.KillMonster:
+            case QuestType.Repeat_KillMonster:
                 Player.RecvMonsterKillDataFromServer(userMonsterKillData[userID]);
+                break;
+            case QuestType.LevelUpStatus:
+            // Flow
+            case QuestType.StageClear:
+                DummyStoryQuestServer.SendNewQuestDataToUser(userID);
                 break;
             default:
                 break;
@@ -78,23 +95,23 @@ public class DummyQuestServer : DummyServerData
         switch (questType)
         {
             // TODO: 함수화
-            case QuestType.GoldSpending:
+            case QuestType.Repeat_GoldSpending:
                 {
-                    if (userGoldSpendingData[userID] < RequireGoldSpending)
+                    if (_repeatQuest_userGoldSpendingData[userID] < RequireGoldSpending)
                     {
                         // 유저에게 잘못된 정보를 받았다는 정보 패킷 송신
                         return;
                     }
 
-                    BigInteger clearCount = BigInteger.Divide(userGoldSpendingData[userID], RequireGoldSpending);
-                    userGoldSpendingData[userID] -= RequireGoldSpending * clearCount;
+                    BigInteger clearCount = BigInteger.Divide(_repeatQuest_userGoldSpendingData[userID], RequireGoldSpending);
+                    _repeatQuest_userGoldSpendingData[userID] -= RequireGoldSpending * clearCount;
 
                     // 해당하는 재화 추가 후 정보 전송
                     DummyServerData.GiveUserDiamondAndSendData(userID, clearCount);
                 }
                 break;
 
-            case QuestType.KillMonster:
+            case QuestType.Repeat_KillMonster:
                 {
                     // 갯수 체크 생략
                     int clearCount = (int)(userMonsterKillData[userID] / RequireMonsterKill);
@@ -105,6 +122,8 @@ public class DummyQuestServer : DummyServerData
 
                 break;
             case QuestType.LevelUpStatus:
+                //Flow
+            case QuestType.StageClear:
             {
                 // 체크 생략
                 if (questInfo)
@@ -112,7 +131,6 @@ public class DummyQuestServer : DummyServerData
                     if (giveUserCurrency != null)
                     {
                         giveUserCurrency(userID, rewardCount);
-                        DummyStoryQuestServer.SendNewQuestDataToUser(userID);
                     }
                 }
                 break;
@@ -127,16 +145,25 @@ public class DummyQuestServer : DummyServerData
 
     public static void UserGoldSpending(int userID, BigInteger spendingAmount)
     {
-        userGoldSpendingData[userID] += spendingAmount;
+        // 범위 체크 생략
 
-        SendQuestDataToPlayer(userID, QuestType.GoldSpending);
+        // 반복 퀘스트 데이터 계산
+        if (_repeatQuest_userGoldSpendingData.ContainsKey(userID))
+        {
+            _repeatQuest_userGoldSpendingData[userID] += spendingAmount;
+            SendQuestDataToPlayer(userID, QuestType.Repeat_GoldSpending);
+        }
+        
+        
+        //
+        
     }
 
     public static void UserMonsterKill(int userID, int monsterKillCount)
     {
         userMonsterKillData[userID] += monsterKillCount;
 
-        SendQuestDataToPlayer(userID,QuestType.KillMonster);
+        SendQuestDataToPlayer(userID,QuestType.Repeat_KillMonster);
     }
 
     

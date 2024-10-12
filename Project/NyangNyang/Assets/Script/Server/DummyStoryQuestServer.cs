@@ -50,11 +50,18 @@ public class DummyStoryQuestServer : DummyQuestServer
 
     public static void SendLevelUpStatusQuestDataToUser(int userID, StatusLevelType type)
     {
-        // 특정 userID인지 체크하는 부분 추가
+        // TODO: 중요)) 특정 userID인지 체크하는 부분 추가
         // 델리게이트 방식으로 함수를 추가하여 진행하지 말고 별도의 변수로 관리하면 편할 것으로 예상
 
-        BigInteger userCurrentStatusLevel = GetUserStatusLevelData(userID).GetLevelFromType(type);
-        Player.RecvStatusDataFromServer(type,userCurrentStatusLevel);
+        // TODO: 유저가 다른 스테이터스를 레벨업 했을 때는 해당 델리게이트가 실행되지 않도록..
+        LevelUpStatusQuestData data = (LevelUpStatusQuestData)QuestData[usersQuestID[userID]];
+        if (data.questStatusType == type)
+        {
+            BigInteger userCurrentStatusLevel = GetUserStatusLevelData(userID).GetLevelFromType(type);
+            Player.RecvStatusDataFromServer(type, userCurrentStatusLevel);
+        }
+
+        
     }
 
     public static void SendStageClearQuestDataToUser(int userID)
@@ -73,9 +80,10 @@ public class DummyStoryQuestServer : DummyQuestServer
         questInfoData.UnBindDelegateOnServer();
 
         usersQuestID[userID] += 1;
-        int newQuestID = usersQuestID[userID];
-        QuestDataBase newQuestInfo = QuestData[currentUserQuestID];
-        newQuestInfo.BindDelegateOnServer();
+        //int newQuestID = usersQuestID[userID];
+        //QuestDataBase newQuestInfo = QuestData[currentUserQuestID];
+        //newQuestInfo.BindDelegateOnServer();
+
         GameManager.GetInstance().storyQuestObject.RecvQuestDataFromServer();
     }
 }

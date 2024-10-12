@@ -41,6 +41,12 @@ public abstract class QuestDataBase : ScriptableObject
         QuestComp.rewardButton.onClick.AddListener(RequestQuestReward);
     }
 
+    public void RemoveQuest()
+    {
+        ReleaseResource();
+        UnBindDelegate();
+    }
+
     public void QuestDataInitialize()
     {
         LoadRewardImage(rewardType);
@@ -77,6 +83,7 @@ public abstract class QuestDataBase : ScriptableObject
     protected abstract void SetRequireText();
 
     protected abstract void BindDelegate();
+    protected abstract void UnBindDelegate();
 
     public virtual void BindDelegateOnServer()
     {

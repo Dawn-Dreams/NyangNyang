@@ -32,10 +32,9 @@ public class StageClearQuestData : QuestDataBase
 
     public override void QuestActing(BaseQuest quest)
     {
-        QuestType = QuestType.LevelUpStatus;
+        QuestType = QuestType.StageClear;
         
         base.QuestActing(quest);
-
     }
 
     public override void RequestQuestData()
@@ -56,13 +55,20 @@ public class StageClearQuestData : QuestDataBase
         Player.OnStageClear += GetDataFromServer;
     }
 
+    protected override void UnBindDelegate()
+    {
+        Player.OnStageClear -= GetDataFromServer;
+    }
+
     public override void BindDelegateOnServer()
     {
+        Debug.Log("스테이지 클리어 추가");
         DummyServerData.OnUserStageClear += DummyStoryQuestServer.SendStageClearQuestDataToUser;
     }
 
     public override void UnBindDelegateOnServer()
     {
+        Debug.Log("스테이지 클리어 삭제");
         DummyServerData.OnUserStageClear -= DummyStoryQuestServer.SendStageClearQuestDataToUser;
     }
 

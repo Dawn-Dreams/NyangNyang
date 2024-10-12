@@ -56,13 +56,20 @@ public class LevelUpStatusQuestData : QuestDataBase
         Player.OnLevelUpStatusQuestChange += GetDataFromServer;
     }
 
+    protected override void UnBindDelegate()
+    {
+        Player.OnLevelUpStatusQuestChange -= GetDataFromServer;
+    }
+
     public override void BindDelegateOnServer()
     {
+        Debug.Log("스탯 레벨업 추가" + questStatusType);
         DummyServerData.OnUserStatusLevelUp += DummyStoryQuestServer.SendLevelUpStatusQuestDataToUser;
     }
 
     public override void UnBindDelegateOnServer()
     {
+        Debug.Log("스탯 레벨업 삭제" + questStatusType);
         DummyServerData.OnUserStatusLevelUp -= DummyStoryQuestServer.SendLevelUpStatusQuestDataToUser;
     }
 
@@ -85,16 +92,10 @@ public class LevelUpStatusQuestData : QuestDataBase
         {
             int clearCount = (int)MyBigIntegerMath.DivideToFloat(currentStatusLevel, requireStatusLevel, 5);
             QuestComp.SetRewardButtonInteractable(true, "보상받기");
-
-            string newText = "x " + (rewardCount * clearCount).ToString();
-            QuestComp.SetRewardCountText(newText);
         }
         else
         {
             QuestComp.SetRewardButtonInteractable(false, "진행중");
-
-            string newText = "x " + rewardCount.ToString();
-            QuestComp.SetRewardCountText(newText);
         }
     }
 }

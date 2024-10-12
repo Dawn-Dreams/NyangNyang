@@ -31,21 +31,11 @@ public class BaseQuest : MonoBehaviour
         LoadQuest();
     }
 
-    private void OnDestroy()
-    {
-        if (questData)
-        {
-            questData.ReleaseResource();
-        }
-    }
-
     protected void LoadQuest()
     {
         if (questData)
         {
             questData.QuestActing(this);
-            
-            
         }
     }
 
