@@ -67,7 +67,8 @@ public class DungeonPanel : MenuPanel
         {
             var tab = stageTabs[i].transform;
             startButtons[i] = tab.Find("MiniGameStartButton").GetComponent<Button>();
-            sweepButtons[i] = tab.Find("SpecialStageStartButton").GetComponent<Button>();
+            sweepButtons[i] = tab.Find("DungeonStartButton").GetComponent<Button>();
+            //sweepButtons[i] = tab.Find("DungeonSweepButton").GetComponent<Button>();
             ticketTexts[i] = tab.Find("TicketText").GetComponent<TextMeshProUGUI>();
             titleTexts[i] = tab.Find("GameTitleText").GetComponent<TextMeshProUGUI>();
 
