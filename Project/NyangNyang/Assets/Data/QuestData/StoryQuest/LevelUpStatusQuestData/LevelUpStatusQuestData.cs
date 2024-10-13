@@ -64,13 +64,11 @@ public class LevelUpStatusQuestData : QuestDataBase
 
     public override void BindDelegateOnServer()
     {
-        Debug.Log("스탯 레벨업 추가" + questStatusType);
         DummyServerData.OnUserStatusLevelUp += DummyStoryQuestServer.SendLevelUpStatusQuestDataToUser;
     }
 
     public override void UnBindDelegateOnServer()
     {
-        Debug.Log("스탯 레벨업 삭제" + questStatusType);
         DummyServerData.OnUserStatusLevelUp -= DummyStoryQuestServer.SendLevelUpStatusQuestDataToUser;
     }
 
