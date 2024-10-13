@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -88,39 +87,66 @@ public class OptionMenuManager : MonoBehaviour
         }
     }
 
-    // 패널 고유 함수들
+    // ----------------------------- 패널 고유 함수 -------------------------------------
+    // 공지
     void OpenNoticePanel()
     {
-        Debug.Log("공지 패널이 열렸습니다.");
+        List<NoticeData> notices = DummyOptionsServer.SendNoticeDataToUser(0);
+        foreach (NoticeData notice in notices)
+        {
+            Debug.Log($"공지: {notice.title}, 날짜: {notice.date}");
+        }
     }
 
+    // 랭킹
     void OpenRankingPanel()
     {
-        Debug.Log("랭킹 패널이 열렸습니다.");
+        List<RankingData> rankings = DummyOptionsServer.SendRankingDataToUser(0);
+        foreach (RankingData ranking in rankings)
+        {
+            Debug.Log($"랭킹 유저: {ranking.userName}, 점수: {ranking.score}");
+        }
     }
 
+    // 게시판
     void OpenBulletinBoardPanel()
     {
-        Debug.Log("게시판 패널이 열렸습니다.");
+        List<BoardData> boardPosts = DummyOptionsServer.SendBoardDataToUser(0);
+        foreach (BoardData post in boardPosts)
+        {
+            Debug.Log($"게시글: {post.title}, 작성일: {post.date}");
+        }
     }
 
+    // 친구
+    void OpenFriendsPanel()
+    {
+        List<FriendData> friends = DummyOptionsServer.SendFriendDataToUser(0);
+        foreach (FriendData friend in friends)
+        {
+            Debug.Log($"친구: {friend.friendName}, 레벨: {friend.friendLevel}");
+        }
+    }
+
+    // 우편
+    void OpenMessagePanel()
+    {
+        List<MailData> mails = DummyOptionsServer.SendMailDataToUser(0);
+        foreach (MailData mail in mails)
+        {
+            Debug.Log($"우편: {mail.title}, 날짜: {mail.date}, 수령 여부: {mail.isReceived}");
+        }
+    }
+
+    // 커뮤니티
     void OpenCommunityPanel()
     {
         Application.OpenURL("https://cafe.naver.com/yourcafeurl");
     }
 
+    // 설정
     void OpenSettingsPanel()
     {
         Debug.Log("설정 패널이 열렸습니다.");
-    }
-
-    void OpenFriendsPanel()
-    {
-        Debug.Log("친구 패널이 열렸습니다.");
-    }
-
-    void OpenMessagePanel()
-    {
-        Debug.Log("우편 패널이 열렸습니다.");
     }
 }
