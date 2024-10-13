@@ -144,4 +144,14 @@ public abstract class QuestDataBase : ScriptableObject
         bool isGetReward = DummyQuestServer.SendRewardInfoToUser(Player.GetUserID(), QuestCategory, QuestType);
         GetReward = isGetReward;
     }
+
+    public QuestCategory GetQuestCategory()
+    {
+        return QuestCategory;
+    }
+
+    public QuestType GetQuestType()
+    {
+        return QuestType;
+    }
 }

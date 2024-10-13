@@ -63,13 +63,11 @@ public class StageClearQuestData : QuestDataBase
 
     public override void BindDelegateOnServer()
     {
-        Debug.Log("스테이지 클리어 추가");
         DummyServerData.OnUserStageClear += DummyStoryQuestServer.SendStageClearQuestDataToUser;
     }
 
     public override void UnBindDelegateOnServer()
     {
-        Debug.Log("스테이지 클리어 삭제");
         DummyServerData.OnUserStageClear -= DummyStoryQuestServer.SendStageClearQuestDataToUser;
     }
 
@@ -88,7 +86,6 @@ public class StageClearQuestData : QuestDataBase
 
     protected override void CheckQuestClear()
     {
-        Debug.Log("퀘스트 클리어 체크 진행");
         _isQuestClear = (_currentClearTheme > targetTheme) || ((_currentClearTheme == targetTheme) && _currentClearStage >= targetStage);
         QuestComp.SetRewardButtonInteractable(_isQuestClear, "");
     }
