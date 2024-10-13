@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "KillMonsterQuestData", menuName = "ScriptableObjects/QuestData/KillMonsterQuestData", order = 1)]
-public class KillMonsterQuestData : RepeatQuestDataBase
+public class KillMonsterQuestData : QuestDataBase
 {
     private long _killMonsterCount;
 
@@ -67,15 +67,13 @@ public class KillMonsterQuestData : RepeatQuestDataBase
             int clearCount = (int)(_killMonsterCount / requireKillMonsterCount);
             QuestComp.SetRewardButtonInteractable(true, "보상받기");
 
-            string newText = "x " + (rewardCount * clearCount).ToString();
-            QuestComp.SetRewardCountText(newText);
+            QuestComp.SetRewardCountText(rewardCount, clearCount, CanRepeatReward);
         }
         else
         {
             QuestComp.SetRewardButtonInteractable(false, "진행중");
 
-            string newText = "x " + rewardCount.ToString();
-            QuestComp.SetRewardCountText(newText);
+            QuestComp.SetRewardCountText(rewardCount, 1, CanRepeatReward);
         }
     }
 

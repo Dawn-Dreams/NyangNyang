@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "GoldSpendingQuestData", menuName = "ScriptableObjects/QuestData/GoldSpendingQuestData", order = 1)]
-public class GoldSpendingQuestData : RepeatQuestDataBase
+public class GoldSpendingQuestData : QuestDataBase
 {
     protected BigInteger spendingGold = 0;
 
@@ -26,7 +26,6 @@ public class GoldSpendingQuestData : RepeatQuestDataBase
     public override void QuestActing(BaseQuest quest)
     {
         QuestType = QuestType.GoldSpending;
-        QuestCategory = QuestCategory.Repeat;
         
         base.QuestActing(quest);
     }
@@ -53,8 +52,10 @@ public class GoldSpendingQuestData : RepeatQuestDataBase
         Player.OnRenewGoldSpendingQuest -= GetDataFromServer;
     }
 
-    public void GetDataFromServer(BigInteger newQuestDataValue)
+    public void GetDataFromServer(QuestCategory questCategory, BigInteger newQuestDataValue)
     {
+        if (questCategory != QuestCategory) return;
+        
         spendingGold = newQuestDataValue;
         float currentValue = MyBigIntegerMath.DivideToFloat(spendingGold, requireSpendingGold, 5);
 
@@ -72,15 +73,12 @@ public class GoldSpendingQuestData : RepeatQuestDataBase
             int clearCount = (int)MyBigIntegerMath.DivideToFloat(spendingGold, requireSpendingGold, 5);
             QuestComp.SetRewardButtonInteractable(true, "보상받기");
 
-            string newText = "x " + (rewardCount * clearCount).ToString();
-            QuestComp.SetRewardCountText(newText);
+            QuestComp.SetRewardCountText(rewardCount, clearCount, CanRepeatReward);
         }
         else
         {
             QuestComp.SetRewardButtonInteractable(false, "진행중");
-
-            string newText = "x " + rewardCount.ToString();
-            QuestComp.SetRewardCountText(newText);
+            QuestComp.SetRewardCountText(rewardCount,1,CanRepeatReward);
         }
     }
 }

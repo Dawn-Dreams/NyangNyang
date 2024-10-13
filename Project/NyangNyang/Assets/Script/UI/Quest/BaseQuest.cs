@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class BaseQuest : MonoBehaviour
@@ -21,9 +23,11 @@ public class BaseQuest : MonoBehaviour
 
     // 보상
     public Image rewardImage;
-    public TextMeshProUGUI rewardCount;
+    [FormerlySerializedAs("rewardCount")] public TextMeshProUGUI rewardCountText;
 
     // 퀘스트 데이터
+    public QuestCategory requestQuestCategory;
+    public QuestType requestQuestType;
     protected QuestDataBase QuestData;
 
     protected virtual void Start()
@@ -33,10 +37,12 @@ public class BaseQuest : MonoBehaviour
 
     protected void LoadQuest()
     {
-        if (QuestData)
+        if (!QuestData)
         {
-            QuestData.QuestActing(this);
+            QuestData = DummyQuestServer.SendQuestInfoToUser(Player.GetUserID(), requestQuestCategory, requestQuestType);
         }
+
+        QuestData.QuestActing(this);
     }
 
     public void SetRequireText(string newText)
@@ -59,6 +65,18 @@ public class BaseQuest : MonoBehaviour
 
     public virtual void SetRewardButtonInteractable(bool newActive, string newText)
     {
+        if (!QuestData.IsRewardRepeatable())
+        {
+            QuestData.RequestHasReceivedRewardToServer();
+        }
+        if (QuestData.IsGetReward())
+        {
+            // TODO: 새로운 이미지로 변경
+            rewardButton.interactable = false;
+            questProgressText.text = "완료(새이미지)";
+            return;
+        }
+
         if (rewardButton)
         {
             rewardButton.interactable = newActive;
@@ -70,11 +88,16 @@ public class BaseQuest : MonoBehaviour
         }
     }
 
-    public void SetRewardCountText(string newText)
+    public void SetRewardCountText(BigInteger rewardCount, long clearCount, bool canRepeatReward)
     {
-        if (rewardCount)
+        if (rewardCountText)
         {
-            rewardCount.text = newText;
+            if (canRepeatReward)
+            {
+                rewardCount *= clearCount;
+            }
+            string newText = "x " + rewardCount.ToString();
+            rewardCountText.text = newText;
         }
     }
 

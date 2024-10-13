@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using Unity.Collections.LowLevel.Unsafe;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum QuestType
@@ -54,11 +56,23 @@ public class DummyQuestServer : DummyServerData
     // ========================
     // === 일일 퀘스트 데이터 ====
     // 실제 서버에서는 {일일 초기화 시간} 마다 초기화 해주어야함.
-    private static Dictionary<int, BigInteger> dailyQuest_userGoldSpendingData = new Dictionary<int, BigInteger>
+    protected static int Daily_RequireGoldSpending = 1_000_000;
+    private static Dictionary<QuestType, QuestDataBase> _dailyQuestDataBases = new Dictionary<QuestType, QuestDataBase>
+    {
+        { QuestType.GoldSpending, ScriptableObject.CreateInstance<GoldSpendingQuestData>().QuestInitialize(QuestCategory.Daily, Daily_RequireGoldSpending, 200) },
+
+    };
+
+    private static Dictionary<QuestType, List<int>> _dailyQuestGetRewardUsersID = new Dictionary<QuestType, List<int>>
+    {
+        { QuestType.GoldSpending, new List<int>() }
+    };
+    private static Dictionary<int, BigInteger> _dailyQuest_userGoldSpendingData = new Dictionary<int, BigInteger>
     {
         {0, 300},
         {1, 0}
     };
+    
     // =========================
 
     // DummyServer라서 시작 시 초기화를 해당 함수에서 진행 (GameManager내에서 호출)
@@ -67,9 +81,38 @@ public class DummyQuestServer : DummyServerData
         OnUserGoldSpending += UserGoldSpending;
     }
 
-    public static QuestDataBase SendRepeatQuestInfoToUser(int userID, QuestType questType)
+    public static QuestDataBase SendQuestInfoToUser(int userID, QuestCategory questCategory, QuestType questType)
     {
-        return _repeatQuestDataBases[questType];
+        // TODO: 해당 플레이어에게 보낼 수 있도록
+        return GetQuestInfo(questCategory, questType);
+    }
+
+    public static bool SendRewardInfoToUser(int userID, QuestCategory questCategory, QuestType questType)
+    {
+        bool isUserGetReward = false;
+        switch (questCategory)
+        {
+            case QuestCategory.Daily:
+                isUserGetReward = _dailyQuestGetRewardUsersID[questType].Contains(userID);
+                
+                break;
+        }
+
+        return isUserGetReward;
+
+    }
+
+    public static QuestDataBase GetQuestInfo(QuestCategory questCategory, QuestType questType)
+    {
+        switch (questCategory)
+        {
+            case QuestCategory.Repeat:
+                return _repeatQuestDataBases[questType];
+            case QuestCategory.Daily:
+                return _dailyQuestDataBases[questType];
+            default:
+                return null;
+        }
     }
 
     public static void SendQuestDataToPlayer(int userID, QuestCategory questCategory,QuestType questType)
@@ -81,7 +124,7 @@ public class DummyQuestServer : DummyServerData
         {
             // 반복 퀘스트
             case QuestType.GoldSpending:
-                Player.RecvGoldSpendingDataFromServer(_repeatQuest_userGoldSpendingData[userID], questCategory);
+                Player.RecvGoldSpendingDataFromServer(GetUserGoldSpendingData(userID,questCategory), questCategory);
                 break;
             case QuestType.KillMonster:
                 Player.RecvMonsterKillDataFromServer(userMonsterKillData[userID]);
@@ -124,17 +167,23 @@ public class DummyQuestServer : DummyServerData
             // TODO: 함수화
             case QuestType.GoldSpending:
                 {
-                    if (_repeatQuest_userGoldSpendingData[userID] < RequireGoldSpending)
+                    if (GetUserGoldSpendingData(userID, questCategory) < GetRequireSpendingGoldValue(questCategory))
                     {
                         // 유저에게 잘못된 정보를 받았다는 정보 패킷 송신
                         return;
                     }
 
-                    BigInteger clearCount = BigInteger.Divide(_repeatQuest_userGoldSpendingData[userID], RequireGoldSpending);
-                    _repeatQuest_userGoldSpendingData[userID] -= RequireGoldSpending * clearCount;
-
+                    BigInteger rewardValue = questInfo.rewardCount;
+                    BigInteger clearCount = 1;
+                    if (questInfo.IsRewardRepeatable())
+                    {
+                        clearCount = BigInteger.Divide(GetUserGoldSpendingData(userID, questCategory), RequireGoldSpending);
+                        rewardValue *= clearCount;
+                    }
+                    BigInteger newValue = GetUserGoldSpendingData(userID, questCategory) - GetRequireSpendingGoldValue(questCategory) * clearCount;
+                    SetUserGoldSpendingQuestDataAfterReward(userID, questCategory, newValue);
                     // 해당하는 재화 추가 후 정보 전송
-                    DummyServerData.GiveUserDiamondAndSendData(userID, clearCount);
+                    DummyServerData.GiveUserDiamondAndSendData(userID, rewardValue);
                 }
                 break;
 
@@ -183,7 +232,73 @@ public class DummyQuestServer : DummyServerData
         
         
         // TODO: 일일 퀘스트 데이터 계산
+        if (_dailyQuest_userGoldSpendingData.ContainsKey(userID))
+        {
+            _dailyQuest_userGoldSpendingData[userID] += spendingAmount;
+            SendQuestDataToPlayer(userID,QuestCategory.Daily, QuestType.GoldSpending);
+        }
+    }
+
+    public static BigInteger GetUserGoldSpendingData(int userID, QuestCategory questCategory)
+    {
+        switch (questCategory)
+        {
+            case QuestCategory.Repeat:
+                return _repeatQuest_userGoldSpendingData[userID];
+            case QuestCategory.Daily:
+                return _dailyQuest_userGoldSpendingData[userID];
+            default:
+                Debug.Log($"Error - {nameof(DummyQuestServer)} - {nameof(DummyQuestServer.GetUserGoldSpendingData)}" );
+                return 0;
+        }
+    }
+
+    public static void SetUserGoldSpendingQuestDataAfterReward(int userID, QuestCategory questCategory,  BigInteger newValue)
+    {
+        if (!GetQuestInfo(questCategory, QuestType.GoldSpending).IsRewardRepeatable())
+        {
+            // TODO: 보상 받은 유저들 정보 추가
+            switch (questCategory)
+            {
+                case QuestCategory.Daily:
+                    _dailyQuestGetRewardUsersID[QuestType.GoldSpending].Add(userID);
+                    break;
+                default:
+                    Debug.Log($"Error - {nameof(DummyQuestServer)} - {nameof(SetUserGoldSpendingQuestDataAfterReward)}");
+                    break;
+            }
+        }
+        else
+        {
+            // 퀘스트 데이터 값 갱신
+            switch (questCategory)
+            {
+                case QuestCategory.Repeat:
+                    _repeatQuest_userGoldSpendingData[userID] = newValue;
+                    break;
+                case QuestCategory.Daily:
+                    //_dailyQuest_userGoldSpendingData[userID] = newValue;
+                    break;
+                default:
+                    Debug.Log($"Error - {nameof(DummyQuestServer)} - {nameof(SetUserGoldSpendingQuestDataAfterReward)}");
+                    break;
+            }
+        }
+
         
+    }
+    public static int GetRequireSpendingGoldValue(QuestCategory questCategory)
+    {
+        switch (questCategory)
+        {
+            case QuestCategory.Repeat:
+                return RequireGoldSpending;
+            case QuestCategory.Daily:
+                return Daily_RequireGoldSpending;
+            default:
+                Debug.Log($"Error - {nameof(DummyQuestServer)} - {nameof(DummyQuestServer.GetRequireSpendingGoldValue)}");
+                return 0;
+        }
     }
 
     public static void UserMonsterKill(int userID, int monsterKillCount)
@@ -193,5 +308,6 @@ public class DummyQuestServer : DummyServerData
         SendQuestDataToPlayer(userID,QuestCategory.Repeat, QuestType.KillMonster);
     }
 
+    
     
 }

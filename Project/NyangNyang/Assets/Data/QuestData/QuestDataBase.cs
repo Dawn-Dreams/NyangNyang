@@ -28,8 +28,15 @@ public abstract class QuestDataBase : ScriptableObject
     // 보상 리워드 리소스 Addressable
     protected AsyncOperationHandle<Sprite> RewardSpriteHandle;
 
+    protected bool CanRepeatReward = false;
+    protected bool GetReward = false;
+
     public virtual void QuestActing(BaseQuest quest)
     {
+        if (QuestCategory == QuestCategory.Repeat)
+        {
+            CanRepeatReward = true;
+        }
         QuestComp = quest;
         
         QuestDataInitialize();
@@ -50,7 +57,7 @@ public abstract class QuestDataBase : ScriptableObject
     public void QuestDataInitialize()
     {
         LoadRewardImage(rewardType);
-        QuestComp.SetRewardCountText("x " + rewardCount);
+        QuestComp.SetRewardCountText(rewardCount,1,false);
         if (QuestComp.mainQuestText)
         {
             QuestComp.mainQuestText.text = mainQuestTitle;
@@ -78,7 +85,10 @@ public abstract class QuestDataBase : ScriptableObject
     public virtual void RequestQuestReward()
     {
         DummyQuestServer.UserRequestReward(Player.GetUserID(),QuestCategory,  QuestType, this);
-        QuestComp.rewardButton.onClick.RemoveListener(RequestQuestReward);
+        if (!CanRepeatReward)
+        {
+            QuestComp.rewardButton.onClick.RemoveListener(RequestQuestReward);
+        }
     }
 
     protected abstract void CheckQuestClear();
@@ -117,5 +127,21 @@ public abstract class QuestDataBase : ScriptableObject
             RewardSpriteHandle.Release();
         }
         
+    }
+
+    public bool IsRewardRepeatable()
+    {
+        return CanRepeatReward;
+    }
+
+    public bool IsGetReward()
+    {
+        return GetReward;
+    }
+
+    public void RequestHasReceivedRewardToServer()
+    {
+        bool isGetReward = DummyQuestServer.SendRewardInfoToUser(Player.GetUserID(), QuestCategory, QuestType);
+        GetReward = isGetReward;
     }
 }

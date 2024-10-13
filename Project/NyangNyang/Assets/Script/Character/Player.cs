@@ -29,7 +29,7 @@ public class Player : MonoBehaviour
     public static event OnTicketChangeDelegate OnTicketChange;
 
     // 플레이어 퀘스트 델리게이트
-    public delegate void OnGoldSpendingQuestDelegate(BigInteger newQuestData);
+    public delegate void OnGoldSpendingQuestDelegate(QuestCategory questCategory, BigInteger newQuestData);
     public static event OnGoldSpendingQuestDelegate OnRenewGoldSpendingQuest;
     public delegate void OnMonsterKillQuestDelegate(long monsterKillCount);
     public static event OnMonsterKillQuestDelegate OnMonsterKillQuestChange;
@@ -272,18 +272,9 @@ public class Player : MonoBehaviour
     // 반복 퀘스트
     public static void RecvGoldSpendingDataFromServer(BigInteger newVal, QuestCategory questCategory)
     {
-        switch (questCategory)
+        if (OnRenewGoldSpendingQuest != null)
         {
-            case QuestCategory.Repeat:
-                if (OnRenewGoldSpendingQuest != null)
-                {
-                    OnRenewGoldSpendingQuest(newVal);
-                }
-                break;
-            case QuestCategory.Daily:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(questCategory), questCategory, null);
+            OnRenewGoldSpendingQuest(questCategory, newVal);
         }
     }
 
@@ -296,14 +287,6 @@ public class Player : MonoBehaviour
     }
 
     // ================
-    // 일일 퀘스트
-    public static void DailyQuest_RecvGoldSpendingDataFromServer(BigInteger newVal)
-    {
-        if (OnRenewGoldSpendingQuest != null)
-        {
-            OnRenewGoldSpendingQuest(newVal);
-        }
-    }
     // ===========
 
     // 스토리 퀘스트
