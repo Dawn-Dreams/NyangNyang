@@ -19,14 +19,21 @@ public class DummyOptionsServer
 
     protected static List<FriendData> FriendDataList = new List<FriendData>
     {
-        new FriendData(1, "고양이친구1", 10),
-        new FriendData(2, "고양이친구2", 15)
+        new FriendData(1, "고양이친구1", 1110),
+        new FriendData(1, "고양이친구2", 234234),
+        new FriendData(1, "고양이친구3", 13434),
+        new FriendData(1, "고양이친구4", 45466),
+        new FriendData(1, "고양이친구5", 3432),
+        new FriendData(2, "고양이친구6", 232123)
     };
 
     protected static List<RankingData> RankingDataList = new List<RankingData>
     {
-        new RankingData(1, "고양이유저1", 1000),
-        new RankingData(2, "고양이유저2", 950)
+        new RankingData(1, "고양이유저1", 311000),
+        new RankingData(2, "고양이유저2", 221000),
+        new RankingData(3, "고양이유저3", 111000),
+        new RankingData(4, "고양이유저1", 31000),
+        new RankingData(5, "고양이유저2", 3950)
     };
 
     protected static List<BoardData> BoardDataList = new List<BoardData>
@@ -105,7 +112,7 @@ public class DummyOptionsServer
     {
         foreach (var rank in RankingDataList)
         {
-            if (rank.userID == userID)
+            if (rank.userUID == userID)
             {
                 rank.score = newScore;
                 Debug.Log($"유저 {userID}의 랭킹 점수 갱신: {newScore}");
@@ -120,6 +127,32 @@ public class DummyOptionsServer
         int newID = BoardDataList.Count + 1;
         BoardDataList.Add(new BoardData(newID, title, content, date));
         Debug.Log($"새 게시글 추가: {title}");
+    }
+
+    // -----------------------Get-----------------------------
+    public static List<NoticeData> GetNoticeData()
+    {
+        return NoticeDataList;
+    }
+
+    public static List<RankingData> GetRankingData()
+    {
+        return RankingDataList;
+    }
+
+    public static List<MailData> GetMailData()
+    {
+        return MailDataList;
+    }
+
+    public static List<FriendData> GetFriendData()
+    {
+        return FriendDataList;
+    }
+
+    public static List<BoardData> GetBoardData()
+    {
+        return BoardDataList;
     }
 }
 
@@ -163,13 +196,13 @@ public class MailData
 [System.Serializable]
 public class FriendData
 {
-    public int friendID;
+    public int friendUID;
     public string friendName;
     public int friendLevel;
 
-    public FriendData(int id, string name, int level)
+    public FriendData(int uid, string name, int level)
     {
-        this.friendID = id;
+        this.friendUID = uid;
         this.friendName = name;
         this.friendLevel = level;
     }
@@ -178,13 +211,13 @@ public class FriendData
 [System.Serializable]
 public class RankingData
 {
-    public int userID;
+    public int userUID;
     public string userName;
     public int score;
 
-    public RankingData(int id, string name, int score)
+    public RankingData(int uid, string name, int score)
     {
-        this.userID = id;
+        this.userUID = uid;
         this.userName = name;
         this.score = score;
     }
