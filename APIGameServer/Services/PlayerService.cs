@@ -1,5 +1,7 @@
-﻿using APIGameServer.Repositories.Interfaces;
+﻿using APIGameServer.Models;
+using APIGameServer.Repositories.Interfaces;
 using APIGameServer.Services.Interface;
+using System.Formats.Asn1;
 
 namespace APIGameServer.Services;
 using ErrorCode = ServerClientShare.ErrorCode;
@@ -19,7 +21,6 @@ public class PlayerService : IPlayerService
         var res = await _playerDB.CreatePlayerStat(uid);
         if(res == 0)
         {
-            //TODO. 에러코드 추가해야한다.
             return ErrorCode.FailRegistByUid;
         }
 
@@ -37,6 +38,32 @@ public class PlayerService : IPlayerService
 
         return ErrorCode.None;
     }
+    public async Task<(ErrorCode,PlayerStatusData,PlayerStatusLevelData,PlayerGoodsData)> GetPlayerTable(int uid)
+    {
+        var status = await _playerDB.GetPlayerStatus(uid);
+        if (status == null)
+        {
+            return (ErrorCode.FailConnectDB, null, null, null);
+        }
+
+        var lv = await _playerDB.GetPlayerStatusLevel(uid);
+        if (lv == null)
+        {
+            return (ErrorCode.FailConnectDB, null, null, null);
+        }
+
+        var goods = await _playerDB.GetPlayerGoods(uid);
+        if (goods == null)
+        {
+            return (ErrorCode.FailConnectDB, null, null, null);
+        }
+
+        return (ErrorCode.None, status,lv, goods);
+    }
+
+
+
+
 
     public void Dispose()
     {

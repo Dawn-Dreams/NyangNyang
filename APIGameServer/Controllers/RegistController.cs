@@ -55,9 +55,6 @@ public class RegistController : ControllerBase
             return response;
         }
 
-
-        //닉네임도 보내야하나...?흠냐리~~ 
-        //초기닉네임은 uid만 붙힌거라 uid만 보내도된다고 판단하긴했눈데 쩝
         response.Result = ServerClientShare.ErrorCode.None;
 
         return response;

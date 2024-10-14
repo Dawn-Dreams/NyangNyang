@@ -39,8 +39,6 @@ public class Dreams_UserInfo : IDreams_UserInfo
             recent_login_dt = DateTime.Now,
             is_active = true
         });
-
-
     }
 
     public async Task<int> ChangeNickname(long uid, string changeNickname)

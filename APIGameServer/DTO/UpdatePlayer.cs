@@ -18,7 +18,3 @@ public class ResponseUpdateStat
 }
 
 //
-public class ResUpdateStatusData
-{
-    public ErrorCode Result {  get; set; }
-}
