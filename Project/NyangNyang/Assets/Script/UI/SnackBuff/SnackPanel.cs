@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,5 +14,10 @@ public class SnackPanel : MonoBehaviour
 
     public Button showAdButton;
     public GameObject eatingImageObject;
+    public TextMeshProUGUI remainTimeText;
 
+    public void SetRemainTimeText(string newTime)
+    {
+        remainTimeText.text = newTime;
+    }
 }

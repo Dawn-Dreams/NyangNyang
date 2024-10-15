@@ -19056,6 +19056,10 @@ PrefabInstance:
       propertyPath: m_fontSizeBase
       value: 30
       objectReference: {fileID: 0}
+    - target: {fileID: 5839944983336666343, guid: 9e3c790edc2f8d9458d6b83dc9ce64fa, type: 3}
+      propertyPath: snackType
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7538853627784926553, guid: 9e3c790edc2f8d9458d6b83dc9ce64fa, type: 3}
       propertyPath: m_Name
       value: SnackPanel_Gold
