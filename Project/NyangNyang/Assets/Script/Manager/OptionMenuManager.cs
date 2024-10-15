@@ -9,7 +9,12 @@ public class OptionMenuManager : MonoBehaviour
     public GameObject buttonParentObject;   // 버튼들을 담고 있는 부모 오브젝트
     public GameObject panelParentObject;    // 패널들을 담고 있는 부모 오브젝트
 
-    // 버튼과 패널의 순서(index)가 대응되어야 작동
+    public GameObject noticeTextPrefab;     // 공지 텍스트 프리팹
+    public GameObject rankUserButtonPrefab; // 랭킹 버튼 프리팹
+    public GameObject boardButtonPrefab;    // 게시판 버튼 프리팹
+    public GameObject mailButtonPrefab;     // 우편 버튼 프리팹
+    public GameObject friendButtonPrefab;   // 친구 버튼 프리팹
+
     private Button[] buttons;               // 동적으로 찾은 버튼들을 저장할 배열
     private GameObject[] panels;            // 동적으로 찾은 패널들을 저장할 배열
 
@@ -40,7 +45,6 @@ public class OptionMenuManager : MonoBehaviour
         }
     }
 
-    // 고유 함수 호출 및 패널 열기
     void OpenPanel(int index)
     {
         foreach (GameObject panel in panels)
@@ -55,7 +59,6 @@ public class OptionMenuManager : MonoBehaviour
         }
     }
 
-    // 각 패널마다 고유한 함수 호출
     void CallPanelFunction(int index)
     {
         switch (index)
@@ -71,7 +74,7 @@ public class OptionMenuManager : MonoBehaviour
                 break;
             case 3:
                 OpenCommunityPanel();
-                panels[index].SetActive(false);
+                panels[3].gameObject.SetActive(false);
                 break;
             case 4:
                 OpenSettingsPanel();
@@ -97,7 +100,22 @@ public class OptionMenuManager : MonoBehaviour
         if (noticeList.Count > 0)
         {
             GameObject noticeTextObj = GameObject.Find("NoticeText");  // NoticeUI > Contents > Scroll View > Viewport > Content > NoticeText
+
+            // Null 체크 추가
+            if (noticeTextObj == null)
+            {
+                Debug.LogError("NoticeText 오브젝트를 찾을 수 없습니다. 이름이 정확한지 확인하세요.");
+                return;
+            }
+
             TMP_Text noticeTextComponent = noticeTextObj.GetComponent<TMP_Text>();
+
+            // TMP_Text 컴포넌트가 null인지 체크
+            if (noticeTextComponent == null)
+            {
+                Debug.LogError("TMP_Text 컴포넌트를 찾을 수 없습니다. 해당 오브젝트에 TMP_Text가 있는지 확인하세요.");
+                return;
+            }
 
             // 공지 내용 초기화
             string allNotices = "";  // 모든 공지를 저장할 문자열
@@ -115,26 +133,29 @@ public class OptionMenuManager : MonoBehaviour
         }
     }
 
-
     // 랭킹
     void OpenRankingPanel()
     {
         List<RankingData> rankList = DummyOptionsServer.GetRankingData();
+        GameObject contentObj = GameObject.Find("RankUI/Contents/Scroll View/Viewport/Content");
+
+        // 기존에 생성된 요소들을 모두 제거
+        foreach (Transform child in contentObj.transform)
+        {
+            Destroy(child.gameObject);
+        }
 
         if (rankList.Count > 0)
         {
-            GameObject contentObj = GameObject.Find("RankUI/Contents/Scroll View/Viewport/Content");
-
-            for (int i = 0; i < rankList.Count; i++)
+            foreach (RankingData rankData in rankList)
             {
-                RankingData rankData = rankList[i];
-                GameObject rankUserButton = contentObj.transform.GetChild(i).gameObject;
+                GameObject rankUserButton = Instantiate(rankUserButtonPrefab, contentObj.transform);
 
                 TMP_Text rankNumberText = rankUserButton.transform.Find("RankNumber").GetComponent<TMP_Text>();
                 TMP_Text rankUserNameText = rankUserButton.transform.Find("RankUserName").GetComponent<TMP_Text>();
                 TMP_Text rankScoreText = rankUserButton.transform.Find("RankScore").GetComponent<TMP_Text>();
 
-                rankNumberText.text = (i + 1).ToString();  // 순위를 1부터 시작하도록 수정
+                rankNumberText.text = (rankList.IndexOf(rankData) + 1).ToString();  // 순위를 1부터 시작
                 rankUserNameText.text = rankData.userName;
                 rankScoreText.text = rankData.score.ToString();
             }
@@ -145,22 +166,25 @@ public class OptionMenuManager : MonoBehaviour
         }
     }
 
-
     // 게시판
     void OpenBulletinBoardPanel()
     {
         List<BoardData> boardList = DummyOptionsServer.GetBoardData();
+        GameObject contentObj = GameObject.Find("BulletinBoardUI/Contents/Scroll View/Viewport/Content");
+
+        // 기존에 생성된 요소들을 모두 제거
+        foreach (Transform child in contentObj.transform)
+        {
+            Destroy(child.gameObject);
+        }
 
         if (boardList.Count > 0)
         {
-            GameObject contentObj = GameObject.Find("BulletinBoardUI/Contents/Scroll View/Viewport/Content");
-
-            for (int i = 0; i < boardList.Count; i++)
+            foreach (BoardData boardData in boardList)
             {
-                BoardData boardData = boardList[i];
-                GameObject boardButton = contentObj.transform.GetChild(i).gameObject;
-
+                GameObject boardButton = Instantiate(boardButtonPrefab, contentObj.transform);
                 TMP_Text titleText = boardButton.transform.Find("Title").GetComponent<TMP_Text>();
+
                 titleText.text = boardData.title;
             }
         }
@@ -174,25 +198,28 @@ public class OptionMenuManager : MonoBehaviour
     void OpenMessagePanel()
     {
         List<MailData> mailList = DummyOptionsServer.GetMailData();
+        GameObject contentObj = GameObject.Find("MessageUI/Contents/Scroll View/Viewport/Content");
+
+        foreach (Transform child in contentObj.transform)
+        {
+            Destroy(child.gameObject);
+        }
 
         if (mailList.Count > 0)
         {
-            GameObject contentObj = GameObject.Find("MessegeUI/Contents/Scroll View/Viewport/Content");
-
-            for (int i = 0; i < mailList.Count; i++)
+            foreach (MailData mailData in mailList)
             {
-                MailData mailData = mailList[i];
-                GameObject mailButton = contentObj.transform.GetChild(i).gameObject;
+                GameObject mailButton = Instantiate(mailButtonPrefab, contentObj.transform);
 
-                TMP_Text mailNumberText = mailButton.transform.Find("MessegeNumber").GetComponent<TMP_Text>();
-                TMP_Text mailTitleText = mailButton.transform.Find("MessegeTitle").GetComponent<TMP_Text>();
-                TMP_Text mailDateText = mailButton.transform.Find("MessegeDate").GetComponent<TMP_Text>();
-                TMP_Text mailReceivedText = mailButton.transform.Find("MessegeIsReceived").GetComponent<TMP_Text>();
+                TMP_Text mailNumberText = mailButton.transform.Find("MessageNumber").GetComponent<TMP_Text>();
+                TMP_Text mailTitleText = mailButton.transform.Find("MessageTitle").GetComponent<TMP_Text>();
+                TMP_Text mailDateText = mailButton.transform.Find("MessageDate").GetComponent<TMP_Text>();
+                TMP_Text mailReceivedText = mailButton.transform.Find("MessageIsReceived").GetComponent<TMP_Text>();
 
-                mailNumberText.text = mailData.mailID.ToString();
-                mailTitleText.text = mailData.title;
-                mailDateText.text = mailData.date;
-                mailReceivedText.text = mailData.isReceived ? "수령 완료" : "미수령";  // 우편 수령 상태
+                mailNumberText.text = mailData.mailID.ToString();  // 우편 ID 표시
+                mailTitleText.text = mailData.title;  // 우편 제목 표시
+                mailDateText.text = mailData.date;  // 우편 날짜 표시
+                mailReceivedText.text = mailData.isReceived ? "수령 완료" : "미수령";  // 수령 상태 표시
             }
         }
         else
@@ -202,26 +229,31 @@ public class OptionMenuManager : MonoBehaviour
     }
 
 
+
     // 친구
     void OpenFriendsPanel()
-    { 
+    {
         List<FriendData> friendList = DummyOptionsServer.GetFriendData();
+        GameObject contentObj = GameObject.Find("FriendsUI/Contents/Scroll View/Viewport/Content");
+
+        // 기존에 생성된 요소들을 모두 제거
+        foreach (Transform child in contentObj.transform)
+        {
+            Destroy(child.gameObject);
+        }
 
         if (friendList.Count > 0)
         {
-            GameObject contentObj = GameObject.Find("FriendsUI/Contents/Scroll View/Viewport/Content");
-
-            for (int i = 0; i < friendList.Count; i++)
+            foreach (FriendData friendData in friendList)
             {
-                FriendData friendData = friendList[i];
-                GameObject friendButton = contentObj.transform.GetChild(i).gameObject;
+                GameObject friendButton = Instantiate(friendButtonPrefab, contentObj.transform);
 
                 TMP_Text friendUserIDText = friendButton.transform.Find("FriendUserID").GetComponent<TMP_Text>();
                 TMP_Text friendUserNameText = friendButton.transform.Find("FriendUserName").GetComponent<TMP_Text>();
                 TMP_Text friendUserScoreText = friendButton.transform.Find("FriendUserScore").GetComponent<TMP_Text>();
 
                 friendUserIDText.text = friendData.friendUID.ToString();
-                friendUserNameText.text = friendData.friendName; 
+                friendUserNameText.text = friendData.friendName;
                 friendUserScoreText.text = friendData.friendLevel.ToString();
             }
         }
@@ -230,7 +262,6 @@ public class OptionMenuManager : MonoBehaviour
             Debug.LogWarning("친구 데이터가 없습니다.");
         }
     }
-
 
     // 커뮤니티
     void OpenCommunityPanel()
@@ -241,6 +272,5 @@ public class OptionMenuManager : MonoBehaviour
     // 설정
     void OpenSettingsPanel()
     {
-        Debug.Log("설정 패널이 열렸습니다.");
     }
 }
