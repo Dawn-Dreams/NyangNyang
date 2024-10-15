@@ -24,7 +24,13 @@ public class AdMobObject : MonoBehaviour
 
     public void OnMouseDown()
     {
-        GoogleMobileAdsManager.GetInstance().ShowRewardedAd();
+        Debug.Log("????");
+        GoogleMobileAdsManager.GetInstance().ShowRewardedAd(RewardAction);
     }
 
+    void RewardAction(Reward reward)
+    {
+        Debug.Log(" 다이아 지급 ");
+        DummyServerData.GiveUserDiamondAndSendData(Player.GetUserID(), (int)reward.Amount);
+    }
 }

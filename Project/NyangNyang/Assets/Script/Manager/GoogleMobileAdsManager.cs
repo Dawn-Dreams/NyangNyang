@@ -75,30 +75,24 @@ public class GoogleMobileAdsManager : MonoBehaviour
                 //ad.SetServerSideVerificationOptions(options);
 
                 _rewardedAd = ad;
-
                 RegisterEventHandlers(_rewardedAd);
             });
 
 
     }
 
-    public void ShowRewardedAd()
+    public void ShowRewardedAd(Action<Reward> rewardAction)
     {
-        const string rewardMsg =
-            "Rewarded ad rewarded the user. Type: {0}, amount: {1}.";
-
         if (_rewardedAd != null && _rewardedAd.CanShowAd())
         {
-            Debug.Log("광고 진행");
             _rewardedAd.Show((Reward reward) =>
             {
-                // TODO: Reward the user.
-                Debug.Log(String.Format(rewardMsg, reward.Type, reward.Amount));
-
-                DummyServerData.GiveUserDiamondAndSendData(Player.GetUserID(), (int)reward.Amount);
+                rewardAction(reward);
+                LoadRewardedAd();
             });
         }
     }
+
     private void RegisterEventHandlers(RewardedAd ad)
     {
         // Raised when the ad is estimated to have earned money.
