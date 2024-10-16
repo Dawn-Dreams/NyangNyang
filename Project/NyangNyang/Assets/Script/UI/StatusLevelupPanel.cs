@@ -100,11 +100,13 @@ public class StatusLevelupPanel : MonoBehaviour
 
     void LevelUpStatus()
     {
+
         BigInteger currentStatusLevel = Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType];
         // TODO: 서버에서 작동되도록 구현하기
         if (DummyServerData.UserStatusLevelUp(Player.GetUserID(), statusLevelType, currentStatusLevel, levelUpMultiplyValue))
         {
             // TODO: 서버에서 성공 패킷을 받을 경우 실행하기
+            
             LevelUpSuccess();
         }
     }
@@ -112,10 +114,15 @@ public class StatusLevelupPanel : MonoBehaviour
     // TODO: 서버에서 레벨업 성공 했을 때 받은 패킷에서 실행시킬 함수
     void LevelUpSuccess()
     {
+
         Player.GetGoldDataFromServer();
 
         BigInteger newLevelValue = DummyServerData.GetUserStatusLevelFromType(Player.GetUserID(), statusLevelType);
         Player.UpdatePlayerStatusLevelByType(statusLevelType, newLevelValue);
+
+        //가온테스트 -> 실제로 올라가는지 확잉하는중
+        var mgr = NetworkManager.GetStatusManager();
+        mgr.UpdatePlayerStatusLv(3,10,10,100,23,12,45,67,3,6,124);
     }
 
     public void ChangeMultiplyValue(int newValue)

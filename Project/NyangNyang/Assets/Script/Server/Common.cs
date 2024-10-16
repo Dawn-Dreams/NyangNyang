@@ -28,22 +28,6 @@ public enum ErrorCode : int
 
 
 
-//패킷을 일단 여기다가 정의
-//Test
-
-[System.Serializable]
-public class RequestTest
-{
-    public int uid;
-}
-
-[System.Serializable]
-public class ResponseTest
-{
-    public string message;
-}
-
-//데이터 공유 어케하는지 지금 고민
 [System.Serializable]
 public class ReqUpdateStatusData
 {
@@ -57,8 +41,26 @@ public class ReqUpdateStatusData
     public float crit_percent;
     public float attack_speed;
 }
+
 [System.Serializable]
-public class ResUpdateStatusData
+public class ReqUpdateStatusLvData
+{
+    public int uid;
+    public int hp_lv;
+    public int mp_lv;
+    public int str_lv;
+    public int def_lv;
+    public int heal_hp_lv;
+    public int heal_mp_lv;
+    public int crit_lv;
+    public int attack_speed_lv;
+    public int gold_acq_lv;
+    public int exp_acq_lv;
+}
+
+
+[System.Serializable]
+public class ResUpdateDbData
 {
     public int errorCode;
 }
