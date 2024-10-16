@@ -94,7 +94,16 @@ public class Enemy : Character
         // 09.23 - EnemyID 별개로 관리하도록 변경
         characterID = 0;
         IsEnemy = true;
-        
+
+        // 몬스터 정보 받기 (임시 코드 & 서버에서 미리 받아서 적용될 수 있도록 or SpawnerManager 에서 할 수 있도록 )
+        int currentTheme= GameManager.GetInstance().stageManager.GetCurrentTheme();
+        int currentStage = GameManager.GetInstance().stageManager.GetCurrentStage();
+        MonsterData monsterData = new MonsterData().SetMonsterData(DummyServerData.GetEnemyData(currentTheme, currentStage,
+            GameManager.GetInstance().stageManager.maxStageCount));
+        DropData = monsterData.enemyDropData;
+        status = new Status();
+        status.SetStatusLevelData(monsterData.monsterStatus);
+
         base.Awake();
         
         // stage manager 
@@ -103,20 +112,20 @@ public class Enemy : Character
             stageManager = FindObjectOfType<StageManager>();
         }
 
-        // enemy drop data 받기
-        if (DropData == null)
-        {
-            DropData = ScriptableObject.CreateInstance<EnemyDropData>().SetEnemyDropData(DummyServerData.GetEnemyDropData(characterID));
-        }
+        // ~~enemy drop data 받기~~  몬스터 정보 받기에서 진행
+        //if (DropData == null)
+        //{
+        //    DropData = ScriptableObject.CreateInstance<EnemyDropData>().SetEnemyDropData(DummyServerData.GetEnemyDropData(characterID));
+        //}
     }
 
     public void SetNumberOfEnemyInGroup(int numOfEnemy = 1)
     {
         // 적 개체는 최소 1마리에서 최대 5마리
-        initialNumOfDummyEnemy = numOfEnemy = (int)Mathf.Clamp(numOfEnemy, 1.0f, 5.0f);
+        initialNumOfDummyEnemy = numOfEnemy = (int)Mathf.Clamp(numOfEnemy, 1.0f, dummyEnemyImages.Length);
 
         BigInteger dummyMaxHp = BigInteger.Divide(maxHP, numOfEnemy);
-        for (int i = 0; i < 5; ++i)
+        for (int i = 0; i < dummyEnemyImages.Length; ++i)
         {
             // active dummy enemy
             if (i < numOfEnemy)
@@ -166,7 +175,7 @@ public class Enemy : Character
             moveToCombatAreaCoroutine = null;
         }
 
-        if (catObject)
+        if (catObject && catObject.gameObject.activeSelf)
         {
             SetEnemy(catObject);
             catObject.SetEnemy(this);
@@ -237,7 +246,16 @@ public class Enemy : Character
             stageManager.GateClearAfterEnemyDeath(0.5f);
         }
 
+        DummyQuestServer.UserMonsterKill(Player.GetUserID(),initialNumOfDummyEnemy);
+
         base.Death();
+    }
+
+    public void SetMaxHP(BigInteger newMaxHP)
+    {
+        this.maxHP = newMaxHP;
+        this.currentHP = newMaxHP; // 최대 체력을 변경할 때, 현재 체력도 최대 체력으로 설정
+        ChangeHealthBar(); // 체력바 업데이트
     }
 }
 

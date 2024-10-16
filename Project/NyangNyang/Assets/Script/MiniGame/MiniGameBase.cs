@@ -11,14 +11,14 @@ public abstract class MiniGameBase : MonoBehaviour
     {
         this.gameName = gameName;
         this.rewardTicketIndex = rewardTicketIndex;
+        GameManager.isMiniGameActive = false;
         isGameCleared = false;
-
-        Debug.Log($"{gameName} 초기화 완료. 보상 소탕권 인덱스: {rewardTicketIndex}");
     }
 
     // 미니게임 시작
     public void StartGame()
     {
+        GameManager.isMiniGameActive = true;
         StartGameLogic();
     }
 
@@ -26,6 +26,7 @@ public abstract class MiniGameBase : MonoBehaviour
     protected void ClearGame()
     {
         isGameCleared = true;
+        GameManager.isMiniGameActive = false;
         RewardSweepTicket();
         EndGameLogic();
     }
@@ -34,7 +35,7 @@ public abstract class MiniGameBase : MonoBehaviour
     private void RewardSweepTicket()
     {
         DummyServerData.AddTicket(Player.GetUserID(), rewardTicketIndex, 1);
-        Debug.Log($"미니게임 클리어! 소탕권 {rewardTicketIndex}번을 1개 획득했습니다.");
+        DummyServerData.GetTicketCount(Player.GetUserID(),rewardTicketIndex);
     }
 
     // 미니게임 시작 로직 (각 미니게임에서 구현)

@@ -6,7 +6,38 @@ using System.Linq;
 using System.Numerics;
 using UnityEngine;
 
+public enum MonsterType
+{
+    A_Monster,
+    B_Monster,
+    C_Monster,
+    D_Monster,
+    E_Monster,
+    F_Monster,
+    G_Monster
+};
+public class MonsterData
+{  
+    public MonsterType monsterType;
+    public StatusLevelData monsterStatus;
+    public EnemyDropData enemyDropData;
 
+    public MonsterData SetMonsterData(StatusLevelData status, EnemyDropData dropData, MonsterType type = MonsterType.A_Monster)
+    {
+        monsterType = type;
+        monsterStatus = new StatusLevelData(status);
+        enemyDropData = ScriptableObject.CreateInstance<EnemyDropData>().SetEnemyDropData(dropData);
+        return this;
+    }
+
+    public MonsterData SetMonsterData(MonsterData monsterData)
+    {
+        SetMonsterData(monsterData.monsterStatus, monsterData.enemyDropData, monsterData.monsterType);
+        return this;
+    }
+
+    
+}
 
 public class DummyServerData : MonoBehaviour
 {
@@ -16,25 +47,31 @@ public class DummyServerData : MonoBehaviour
     // 데이터 시작
 
     // 유저 스탯 레벨 데이터
-    private static StatusLevelData[] usersStatusLevelData = new StatusLevelData[]
+    protected static StatusLevelData[] usersStatusLevelData = new StatusLevelData[]
     {
-        new StatusLevelData(100000,0,100,0,0),
+        new StatusLevelData(0,0,0,0,0),
         new StatusLevelData(10,0,5,0),
         new StatusLevelData(),
         new StatusLevelData(),
         new StatusLevelData(),
     };
 
-    private static StatusLevelData[] enemyStatusLevelData = new StatusLevelData[]
+    // MonsterData 에서 관리
+    //private static StatusLevelData[] enemyStatusLevelData = new StatusLevelData[]
+    //{
+    //    new StatusLevelData(1, 1, 1, 2),
+    //    new StatusLevelData(10, 0, 5, 2),
+    //};
+
+    protected static MonsterData[] enemyDatas = new MonsterData[]
     {
-        new StatusLevelData(1000, 0, 1000, 2),
-        new StatusLevelData(10, 0, 5, 2),
+        new MonsterData().SetMonsterData(new StatusLevelData(1, 1, 1,1,1,1,1,1), ScriptableObject.CreateInstance<EnemyDropData>().SetEnemyDropData(1000, 1000)),
     };
 
     // 유저 재화(골드+보석+티켓) 데이터
-    private static CurrencyData[] usersCurrencyData = new CurrencyData[]
+    protected static CurrencyData[] usersCurrencyData = new CurrencyData[]
     {
-        ScriptableObject.CreateInstance<CurrencyData>().SetCurrencyData(150_000,3,new int[] {1,1,1}),
+        ScriptableObject.CreateInstance<CurrencyData>().SetCurrencyData(1_000_000_000,3,new int[] {5,5,5}),
         ScriptableObject.CreateInstance<CurrencyData>(),
         ScriptableObject.CreateInstance<CurrencyData>(),
         ScriptableObject.CreateInstance<CurrencyData>(),
@@ -42,45 +79,53 @@ public class DummyServerData : MonoBehaviour
     };
 
     // 유저 레벨+경험치 데이터
-    private static UserLevelData[] usersLevelData = new UserLevelData[]
+    protected static UserLevelData[] usersLevelData = new UserLevelData[]
     {
-        ScriptableObject.CreateInstance<UserLevelData>().SetUserLevelData(5, 100),
+        ScriptableObject.CreateInstance<UserLevelData>().SetUserLevelData(1, 0),
         ScriptableObject.CreateInstance<UserLevelData>(),
         ScriptableObject.CreateInstance<UserLevelData>(),
         ScriptableObject.CreateInstance<UserLevelData>(),
         ScriptableObject.CreateInstance<UserLevelData>(),
-    };
-
-    // 소탕권 개수를 저장하는 배열 (각 유저의 소탕권 수량 관리) ...일단 가정
-    private static int[,] sweepTickets = new int[,]
-    {
-        { 5, 3, 2 }, // 유저 0의 소탕권 인덱스별 수량
-        { 2, 1, 0 }, // 유저 1의 소탕권 인덱스별 수량
-        { 0, 0, 0 }, // 유저 2의 소탕권 인덱스별 수량
-        { 3, 2, 1 }, // 유저 3의 소탕권 인덱스별 수량
-        { 1, 0, 1 }  // 유저 4의 소탕권 인덱스별 수량
     };
 
     // 스텟 레벨업 계산식 데이터
-    private static int statusStartGoldCost = 100;
-    private static int[] statusGoldCostAddValue = new int[]
+    protected static int statusStartGoldCost = 100;
+    protected static int[] statusGoldCostAddValue = new int[]
     {
         // StatusLevelType enum
         // HP, MP, STR, DEF, HEAL_HP, HEAL_MP, CRIT, ATTACK_SPEED, GOLD, EXP
         100, 100, 100, 100, 300, 300, 50000, 10000, 100000,100000
     };
     // 경험치 레벨업 계산식 데이터
-    private static int addExpPerLevel = 500;
+    protected static int addExpPerLevel = 500;
 
-    private static EnemyDropData[] enemyDropData = new EnemyDropData[]
+    protected static EnemyDropData[] enemyDropData = new EnemyDropData[]
     {
         ScriptableObject.CreateInstance<EnemyDropData>().SetEnemyDropData(1_000_000, 777_777),
         ScriptableObject.CreateInstance<EnemyDropData>(),
         ScriptableObject.CreateInstance<EnemyDropData>()
     };
 
+    // 스테이지 테마와 스테이지 정보만 관리
+    protected static int[,] playerClearStageData = new int[,]
+    {
+        { 1,1 },
+        {20,3}
+    };
+
     // 데이터 종료
     // ================== 
+    // 델리게이트 시작
+
+    public delegate void OnUserGoldSpendingDelegate(int userID,  BigInteger spendingAmount);
+    public static OnUserGoldSpendingDelegate OnUserGoldSpending;
+    public delegate void OnUserStatusLevelUpDelegate(int userID, StatusLevelType type);
+    public static OnUserStatusLevelUpDelegate OnUserStatusLevelUp;
+    public delegate void OnUserStageClearDelegate(int userID);
+    public static OnUserStageClearDelegate OnUserStageClear;
+
+    // 델리게이트 종료
+    // ==================
     // 함수 시작
 
 
@@ -95,17 +140,18 @@ public class DummyServerData : MonoBehaviour
         return usersStatusLevelData[userID];
     }
 
-    public static StatusLevelData GetEnemyStatusLevelData(int characterID)
-    {
-        if (!(0 <= characterID && characterID < enemyStatusLevelData.Length))
-        {
-            Debug.Log("INVALID CHARACTER_ID");
-            return null;
-        }
-
-        
-        return enemyStatusLevelData[characterID];
-    }
+    // MonsterData에서 관리
+    //public static StatusLevelData GetEnemyStatusLevelData(int characterID)
+    //{
+    //    if (!(0 <= characterID && characterID < enemyStatusLevelData.Length))
+    //    {
+    //        Debug.Log("INVALID CHARACTER_ID");
+    //        return null;
+    //    }
+    //
+    //    
+    //    return enemyStatusLevelData[characterID];
+    //}
 
     public static BigInteger GetUserStatusLevelFromType(int userID, StatusLevelType type)
     {
@@ -136,7 +182,18 @@ public class DummyServerData : MonoBehaviour
         {
             GetUserStatusLevelData(userID).AddLevel(type, value);
             GetUserCurrencyData(userID).gold -= goldCost;
+
+            if (OnUserGoldSpending != null)
+            {
+                OnUserGoldSpending(userID, goldCost);
+            }
+
+            if (OnUserStatusLevelUp != null)
+            {
+                OnUserStatusLevelUp(userID, type);
+            }
             
+
             return true;
         }
 
@@ -207,16 +264,17 @@ public class DummyServerData : MonoBehaviour
         Player.GetExpDataFromServer();
     }
 
-    public static EnemyDropData GetEnemyDropData(int characterID)
-    {
-        if (characterID < 0 || characterID >= enemyDropData.Length)
-        {
-            Debug.Log("INVALID CHARACTER_ID");
-            return null;
-        }
-
-        return enemyDropData[characterID];
-    }
+    // MonsterData 내에 추가
+    //public static EnemyDropData GetEnemyDropData(int characterID)
+    //{
+    //    if (characterID < 0 || characterID >= enemyDropData.Length)
+    //    {
+    //        Debug.Log("INVALID CHARACTER_ID");
+    //        return null;
+    //    }
+    //
+    //    return enemyDropData[characterID];
+    //}
 
     public static bool AddGoldOnServer(int userID, BigInteger addGoldValue)
     {
@@ -224,8 +282,6 @@ public class DummyServerData : MonoBehaviour
         if (userCurrencyData)
         {
             userCurrencyData.gold += addGoldValue;
-
-            
             Player.GetGoldDataFromServer();
             return true;
         }
@@ -296,6 +352,80 @@ public class DummyServerData : MonoBehaviour
         return index >= 0 && index < 3; // 티켓 배열 크기와 동일
     }
 
+    public static void GetUserClearStageData(int userID, out int clearStageTheme, out int clearStage)
+    {
+        if (!(0 <= userID && userID < playerClearStageData.Length))
+        {
+            Debug.Log("INVALID USERID");
+            clearStageTheme = 1;
+            clearStage = 1;
+            return;
+        }
+
+        clearStageTheme = playerClearStageData[userID, 0];
+        clearStage = playerClearStageData[userID, 1];
+    }
+
+    public static MonsterData GetEnemyData(int themeNumber, int stageNumber, int maxStage)
+    {
+        MonsterData firstStageMonsterData = enemyDatas[0];
+        //TODO: 현재는 더미 서버라서 한개의 개체 정보만 저장했으나 추후엔 제안한 DB 구조로 테마-스테이지 정보에 맞춰 제공받기
+        MonsterType monsterType = (MonsterType)((themeNumber - 1) / 5 % 5);
+        MonsterData returnData = new MonsterData().SetMonsterData(firstStageMonsterData);
+        returnData.monsterType = monsterType;
+        // 스테이지마다 n(default: 1.3) 추가
+        // ex) 1-1 : 1 / 1-2 : 1 + n / 1-3 : 1 + 2n / ...
+        // 보스 몬스터의 경우 자체적으로 2배 추가
+        // ex) 1-1-3(보스) : 2 / 1-2-3(보스) : 3 / ...
+        // 테마 스테이지는 maxStage * pow((themeNumber-1),2) 만큼 가중치
+        // 해당 부분은 추후 조정
+        // ex) (20 스테이지 기준) 1-1 : 0 + 1 // 2-2 : 20 + 1 + n // 3-2 : 80 + 1 + n // 4-2 : 180 + 1 + n
+        float stageBuffValue = 1.3f;
+        float levelMulValue = maxStage * Mathf.Pow((themeNumber - 1), 2) + (stageNumber + 1) * stageBuffValue;
+        returnData.monsterStatus.MultipleLevel(levelMulValue);
+        // TODO 적군 보상도 스테이지에 따라 선형이 아닌 log 방식으로 올라가도록 바꾸기
+        
+        float dropDataBuffPerStage = 0.5f;
+        float dropDataMulValue = (maxStage * (themeNumber - 1) + stageNumber) * dropDataBuffPerStage;
+        returnData.enemyDropData.MulDropData(dropDataMulValue);
+        return returnData;
+    }
+
+    public static void PlayerClearStage(int userID, int clearTheme, int clearStage)
+    {
+        if (!(0 <= userID && userID < playerClearStageData.Length))
+        {
+            Debug.Log("INVALID USERID");
+            return;
+        }
+
+        // 잘못된 데이터인지 체크
+        int playerHighestTheme = playerClearStageData[userID, 0];
+        int playerHighestStage = playerClearStageData[userID, 1];
+        if (playerHighestTheme > clearTheme || (playerHighestTheme == clearTheme && playerHighestStage >= clearStage))
+        {
+            Debug.Log(userID + "이전 최고 스테이지보다 낮은 스테이지를 클리어했다고 정보 전달받음");
+            return;
+        } 
+        
+        // *스테이지가 하나 차이인지도 추후 확인해야함
+        playerClearStageData[userID, 0] = clearTheme;
+        playerClearStageData[userID, 1] = clearStage;
+
+        if (OnUserStageClear != null)
+        {
+            OnUserStageClear(userID);
+        }
+    }
+
+    public static void GiveUserDiamondAndSendData(int userID, BigInteger addDiamond)
+    {
+        //범위 체크 생략
+        usersCurrencyData[userID].diamond += addDiamond;
+        
+        // 강제로 플레이어에게 주입
+        Player.Diamond = usersCurrencyData[userID].diamond;
+    }
 
     // 함수 종료
     // ================

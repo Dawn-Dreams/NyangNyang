@@ -12,7 +12,7 @@ public class MiniGame1 : MiniGameBase
 
     private int currentScore = 0;   // 현재 점수
     private float remainingTime;    // 남은 시간
-    private bool isGameActive = false; // 게임 진행 상태
+
 
     // 초기화 로직
     void Start()
@@ -27,7 +27,7 @@ public class MiniGame1 : MiniGameBase
     protected override void StartGameLogic()
     {
         Debug.Log("미니게임 1 시작");
-        isGameActive = true;
+        //GameManager.isMiniGameActive = true;
         remainingTime = timeLimit;
         currentScore = 0;
         UpdateUI();
@@ -36,7 +36,7 @@ public class MiniGame1 : MiniGameBase
     // 매 프레임마다 시간 체크
     void Update()
     {
-        if (isGameActive)
+        if (GameManager.isMiniGameActive)
         {
             remainingTime -= Time.deltaTime;
             UpdateTimerUI();
@@ -53,7 +53,7 @@ public class MiniGame1 : MiniGameBase
     // 점수 버튼 클릭 시 호출되는 함수
     private void OnScoreButtonClick()
     {
-        if (isGameActive)
+        if (GameManager.isMiniGameActive)
         {
             currentScore++;
             UpdateScoreUI();
@@ -69,18 +69,11 @@ public class MiniGame1 : MiniGameBase
     // 미니게임 종료 로직
     protected override void EndGameLogic()
     {
-        isGameActive = false;
-        Debug.Log("미니게임 1 종료");
-
         // 클리어 여부에 따른 처리
-        if (currentScore >= targetScore)
-        {
-            Debug.Log("게임 클리어! 보상 지급");
-        }
-        else
-        {
-            Debug.Log("게임 실패. 다시 도전하세요.");
-        }
+        //if (currentScore >= targetScore) Debug.Log("게임 클리어! 보상 지급");
+        //else Debug.Log("게임 실패. 다시 도전하세요.");
+        
+        GameManager.isMiniGameActive = false;
     }
 
     // 게임 종료 호출 (성공 여부를 파라미터로 받음)
@@ -88,12 +81,7 @@ public class MiniGame1 : MiniGameBase
     {
         if (isClear)
         {
-            Debug.Log("미니게임 1 클리어!");
             ClearGame();
-        }
-        else
-        {
-            Debug.Log("미니게임 1 실패!");
         }
         EndGameLogic();
     }

@@ -40,4 +40,10 @@ public class EnemyDropData : ScriptableObject
         _gold = 0;
         _exp = 0;
     }
+
+    public void MulDropData(float mulValue)
+    {
+        _gold = MyBigIntegerMath.MultiplyWithFloat(_gold, mulValue, 5);
+        _exp = MyBigIntegerMath.MultiplyWithFloat(_exp, mulValue, 5);
+    }
 }

@@ -16,6 +16,10 @@ public class Player : MonoBehaviour
     public delegate void OnGoldChangeDelegate(BigInteger newGoldVal);
     public static event OnGoldChangeDelegate OnGoldChange;
 
+    // 다이아 변화 델리게이트 이벤트
+    public delegate void OnDiamondChangeDelegate(BigInteger newDiamondValue);
+    public static event OnDiamondChangeDelegate OnDiamondChange;
+
     // 경험치 변화 델리게이트 이벤트
     public delegate void OnExpChangeDelegate(UserLevelData newLevelData);
     public static event OnExpChangeDelegate OnExpChange;
@@ -23,6 +27,16 @@ public class Player : MonoBehaviour
     // 티켓 변화 델리게이트 이벤트
     public delegate void OnTicketChangeDelegate(int[] newTicketVal);
     public static event OnTicketChangeDelegate OnTicketChange;
+
+    // 플레이어 퀘스트 델리게이트
+    public delegate void OnGoldSpendingQuestDelegate(QuestCategory questCategory, BigInteger newQuestData);
+    public static event OnGoldSpendingQuestDelegate OnRenewGoldSpendingQuest;
+    public delegate void OnMonsterKillQuestDelegate(long monsterKillCount);
+    public static event OnMonsterKillQuestDelegate OnMonsterKillQuestChange;
+    public delegate void OnLevelUpStatusQuestDelegate(StatusLevelType type, BigInteger newVal);
+    public static event OnLevelUpStatusQuestDelegate OnLevelUpStatusQuestChange;
+    public delegate void OnStageClearQuestDelegate(int clearTheme, int clearStage);
+    public static event OnStageClearQuestDelegate OnStageClear;
 
     [SerializeField] private GameObject levelUpIconObject;
 
@@ -34,16 +48,38 @@ public class Player : MonoBehaviour
     public delegate void OnHPStatusLevelChangeDelegate();
     public static event OnHPStatusLevelChangeDelegate OnHPLevelChange;
 
+    // 한 스테이지 내에서 반복 전투를 진행하는 것에 대한 변수
+    public static bool continuousCombat = false;
+
+    public static int[] playerHighestClearStageData = new int[2];
+
     public static BigInteger Gold
     {
         get { return playerCurrency.gold; }
         set
         {
             if (playerCurrency.gold == value) return;
+
+            
             playerCurrency.gold = value;
 
             if(OnGoldChange != null)
                 OnGoldChange(playerCurrency.gold);
+        }
+    }
+
+    public static BigInteger Diamond
+    {
+        get { return playerCurrency.diamond; }
+        set
+        {
+            if (value == playerCurrency.diamond) return;
+            playerCurrency.diamond = value;
+
+            if (OnDiamondChange != null)
+            {
+                OnDiamondChange(playerCurrency.diamond);
+            }
         }
     }
 
@@ -96,13 +132,22 @@ public class Player : MonoBehaviour
     {
         // 서버로부터 user id 받기
         userID = 0;
-
         if (playerStatus == null)
-            playerStatus = new Status(userID);
+        {
+            playerStatus = new Status();
+            playerStatus.GetStatusFromServer(userID);
+            // 플레이어는 디폴트 스탯 버프
+            playerStatus.BuffPlayerStatusDefaultValue(5);
+        }
         if (playerCurrency == null)
+        {
             playerCurrency = ScriptableObject.CreateInstance<CurrencyData>().SetCurrencyData(DummyServerData.GetUserCurrencyData(userID));
+        }
         if (playerLevelData == null)
+        {
             GetExpDataFromServer();
+        }
+            
     }
 
     void Update()
@@ -120,12 +165,22 @@ public class Player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             // 임시 모든 적군 공격 
-            GameObject enemyObject = GameObject.Find("Enemy(Clone)");
-            if (enemyObject)
+            Character enemy = GameManager.GetInstance().catObject.enemyObject;
+            if (enemy)
             {
-                enemyObject.GetComponentInChildren<Enemy>().TakeDamage(100000, true);
+                enemy.TakeDamage(100000, true);
             }
-            
+        }
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            // 다이아 지급
+            Diamond += 100;
+        }
+
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            GameManager.GetInstance().stageManager.GoToSpecificStage(20,3);
         }
     }
 
@@ -202,4 +257,53 @@ public class Player : MonoBehaviour
             OnHPLevelChange();
         }
     }
+
+    public static void GetPlayerHighestClearStageData(out int themeData, out int stageData)
+    {
+        if (playerHighestClearStageData[0] == 0)
+        {
+            DummyServerData.GetUserClearStageData(Player.GetUserID(), out playerHighestClearStageData[0], out playerHighestClearStageData[1]);
+        }
+
+        themeData = playerHighestClearStageData[0];
+        stageData = playerHighestClearStageData[1];
+    }
+
+    // 반복 퀘스트
+    public static void RecvGoldSpendingDataFromServer(BigInteger newVal, QuestCategory questCategory)
+    {
+        if (OnRenewGoldSpendingQuest != null)
+        {
+            OnRenewGoldSpendingQuest(questCategory, newVal);
+        }
+    }
+
+    public static void RecvMonsterKillDataFromServer(long newVal)
+    {
+        if (OnMonsterKillQuestChange != null)
+        {
+            OnMonsterKillQuestChange(newVal);
+        }
+    }
+
+    // ================
+    // ===========
+
+    // 스토리 퀘스트
+    public static void RecvStatusDataFromServer(StatusLevelType type, BigInteger newValue)
+    {
+        if (OnLevelUpStatusQuestChange != null)
+        {
+            OnLevelUpStatusQuestChange(type, newValue);
+        }
+    }
+
+    public static void RecvStageClearDataFromServer(int clearTheme, int clearStage)
+    {
+        if (OnStageClear != null)
+        {
+            OnStageClear(clearTheme, clearStage);
+        }
+    }
+    // =================
 }

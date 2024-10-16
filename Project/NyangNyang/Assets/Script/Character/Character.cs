@@ -57,9 +57,7 @@ public class Character : MonoBehaviour
 
     public virtual void InitialSettings()
     {
-        if (status == null)
-            status = new Status(characterID, IsEnemy);
-
+        // Status 정보 Enemy/Cat 각자에서 정보를 받은 후 Character.Awake() 실행
         // 델리게이트 연결
         OnHealthChange += ChangeHealthBar;
 
@@ -67,15 +65,20 @@ public class Character : MonoBehaviour
         maxHP = status.hp;
         CurrentHP = maxHP;
         currentMP = status.mp;
-        healthBarSlider.value = 1;
+        if (healthBarSlider)
+        {
+            healthBarSlider.value = 1;
+        }
+        
 
     }
 
     protected IEnumerator AttackEnemy()
     {
+        yield return new WaitForSeconds(0.25f);
         while (true)
         {
-            if (enemyObject)
+            if (enemyObject && enemyObject.gameObject.activeSelf)
             {
                 enemyObject.TakeDamage(CalculateDamage());
             }
@@ -130,7 +133,7 @@ public class Character : MonoBehaviour
 
     public void SetEnemy(Character targetObject)
     {
-        if (targetObject == null)
+        if (targetObject == null || !targetObject.gameObject.activeSelf)
         {
             if (attackCoroutine != null)
             {
@@ -139,7 +142,6 @@ public class Character : MonoBehaviour
             
             return;
         }
-
         enemyObject = targetObject;
         attackCoroutine = StartCoroutine(AttackEnemy());
     }
@@ -154,9 +156,6 @@ public class Character : MonoBehaviour
         // TODO: 임시 사망 처리
         gameObject.SetActive(false);
     }
-
-
-    
 }
 
 //Character -> Cat / Enemy

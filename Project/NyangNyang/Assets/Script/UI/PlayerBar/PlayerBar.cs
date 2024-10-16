@@ -9,11 +9,15 @@ using UnityEngine.UI;
 public class PlayerBar : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI goldText;
+    [SerializeField] private TextMeshProUGUI diamondText;
+
     [SerializeField] private TextMeshProUGUI playerLevelText;
 
     [SerializeField] private TextMeshProUGUI currentLevelText;
     [SerializeField] private Slider expSlider;
     [SerializeField] private TextMeshProUGUI expText;
+
+    
 
     [SerializeField] private Button menuButton;
 
@@ -25,6 +29,10 @@ public class PlayerBar : MonoBehaviour
         ExpChangeHandler(Player.UserLevel);
         Player.OnExpChange += ExpChangeHandler;
 
+        DiamondTextChangeHandler(Player.Diamond);
+        Player.OnDiamondChange += DiamondTextChangeHandler;
+        
+
         menuButton.onClick.AddListener(OnClickMenuButton);
     }
 
@@ -34,6 +42,15 @@ public class PlayerBar : MonoBehaviour
         if (goldText != null)
         {
             goldText.text = text;
+        }
+    }
+
+    private void DiamondTextChangeHandler(BigInteger newDiamondValue)
+    {
+        string text = newDiamondValue.ToString();
+        if (diamondText != null)
+        {
+            diamondText.text = text;
         }
     }
 

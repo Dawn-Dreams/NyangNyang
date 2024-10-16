@@ -1,4 +1,7 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using Unity.Burst;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,12 +13,13 @@ public class StageManager : MonoBehaviour
 
     [SerializeField]
     private Text ThemeUI;
-
     [SerializeField]
     private Text StageUI;
 
-    [SerializeField]
-    private Text GateUI;
+    [SerializeField] 
+    private StageSlider stageSlider;
+
+    [SerializeField] private Button continuousCombatButton;
 
     [SerializeField] 
     private Image fadeImage;
@@ -27,12 +31,11 @@ public class StageManager : MonoBehaviour
     [SerializeField]
     private EnemySpawnManager enemySpawnManager;  // 적 스폰 매니저 변수
 
-    public bool isSpecial = false;  // 스페셜 스테이지 여부를 저장하는 변수
     private int originalTheme;  // 원래 테마를 저장할 변수
 
     // TODO: 초기값 설정은 추후 NetworkManager에서 각 유저별 스테이지 로 받아오는 것으로 설정
-    private int currentTheme = 5;
-    private int currentStage = 5;
+    private int currentTheme = 1;
+    private int currentStage = 1;
     private int currentGate = 1;
 
     // 특정 컨텐츠의 경우(보스 레이드 등) 관문이 하나만 있을 수 있으니 조정 가능한 변수로
@@ -41,39 +44,26 @@ public class StageManager : MonoBehaviour
 
     void Start()
     {
-        SetStageUI();
-    }
+        //SetStageUI();
+        SetNewStage(false);
 
-    void Update()
-    {
-        // TODO: 임시 테스트 코드, 추후 조정 필요
-        //if (Input.GetKeyDown(KeyCode.Tab))
-        //{
-        //    GateClear();
-        //}
-
-        if (isSpecial)
-        {
-            // 스페셜 스테이지일 경우, cat이 계속 앞으로 이동
-            MoveCatForward();
-        }
+        continuousCombatButton.onClick.AddListener(GoToLastClearStageNextStage);
     }
 
     private void SetStageUI()
     {
-        ThemeUI.text = "THEME " + currentTheme.ToString();
-        StageUI.text = "STAGE " + currentStage.ToString();
-        GateUI.text = "GATE " + currentGate.ToString();
+        ThemeUI.text = currentTheme.ToString();
+        StageUI.text = "- " +currentStage.ToString();
+        if (stageSlider)
+        {
+            stageSlider.CreateGateImage(maxGateCount);
+        }
     }
 
     private IEnumerator GateClear(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
-        if (isSpecial)
-        {
-            Debug.Log("스페셜 스테이지에서는 관문을 통과하지 않습니다.");
-            yield break; // 스페셜 스테이지일 경우, 관문 통과 시스템 비활성화
-        }
+
 
         if (currentGate >= maxGateCount)
         {
@@ -94,6 +84,10 @@ public class StageManager : MonoBehaviour
 
     private void GoToNextGate()
     {
+        if (stageSlider && !Player.continuousCombat)
+        {
+            stageSlider.MoveToNextGate(currentGate,maxGateCount,1.0f);
+        }
         parallaxScrollingManager.MoveBackgroundSprites(true);
         // TODO: 고양이 걷기 애니메이션
 
@@ -105,12 +99,14 @@ public class StageManager : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
 
         // 관문 index 1, 2, ..., maxGateCount 순환
-        currentGate++;
-
+        if (!Player.continuousCombat)
+        {
+            currentGate++;
+        }
+        
         SetStageUI();
 
         RequestEnemySpawn();
-
         yield break;
     }
 
@@ -121,7 +117,7 @@ public class StageManager : MonoBehaviour
         // 적군 생성
         if (enemySpawnManager != null)
         {
-            enemySpawnManager.OnGatePassed(); // 적을 스폰하도록 적 스폰 매니저 호출
+            enemySpawnManager.OnGatePassed(currentGate == maxGateCount); // 적을 스폰하도록 적 스폰 매니저 호출
         }
         else
         {
@@ -131,20 +127,25 @@ public class StageManager : MonoBehaviour
 
     private void StageClear()
     {
-        Debug.Log("최고 단계 관문 클리어, 스테이지 이동");
-        ChangeStage();
-        //if (currentStage >= maxStageCount)
-        //{
-        //    ChangeTheme();
-        //}
-        //else
-        //{
-        //    ChangeStage();
-        //}
 
+        SendStageClearDataToServer();
+
+        ChangeStage();
     }
 
-    private IEnumerator StartFade()
+    void SendStageClearDataToServer()
+    {
+        int clearTheme;
+        int clearStage;
+        Player.GetPlayerHighestClearStageData(out clearTheme, out clearStage);
+        if (currentTheme > clearTheme || (currentTheme == clearTheme && currentStage > clearStage))
+        {
+            DummyServerData.PlayerClearStage(Player.GetUserID(), currentTheme, currentStage);
+            Player.playerHighestClearStageData = new int[] { currentTheme, currentStage };
+        }
+    }
+
+    private IEnumerator StartFade(Action FuncAfterStartFade)
     {
         currentFadeTime = 0.0f;
         fadeImage.gameObject.SetActive(true);
@@ -157,16 +158,14 @@ public class StageManager : MonoBehaviour
 
             if (currentFadeTime >= fadeTime)
             {
-                AddStage();
-                StopCoroutine(fadeCoroutine);
-                fadeCoroutine = StartCoroutine(EndFade());
+                FuncAfterStartFade();
+                
             }
-
             yield return null;
         }
     }
 
-    private IEnumerator EndFade()
+    private IEnumerator EndFade(Action FuncAfterEndFade)
     {
         yield return new WaitForSeconds(fadeTime);
         currentFadeTime = 0.0f;
@@ -179,46 +178,70 @@ public class StageManager : MonoBehaviour
 
             if (currentFadeTime >= fadeTime)
             {
-                RequestEnemySpawn();
-                StopCoroutine(fadeCoroutine);
+                FuncAfterEndFade();
+                fadeImage.gameObject.SetActive(false);
             }
 
             yield return null;
         }
     }
 
-    void AddStage()
+    void FadeStartFuncWhileStageChange(bool addStage)
     {
-        currentGate = 1;
-        currentStage += 1;
-        if (currentStage > maxStageCount)
+        SetNewStage(addStage);
+        
+        StopCoroutine(fadeCoroutine);
+        fadeCoroutine = StartCoroutine(EndFade(FadeEndFuncWhileStageChange));
+    }
+
+    void FadeEndFuncWhileStageChange()
+    {
+        RequestEnemySpawn();
+        StopCoroutine(fadeCoroutine);
+    }
+
+    void SetNewStage(bool addStage)
+    {
+        if (stageSlider)
         {
-            parallaxScrollingManager.ChangeBackgroundImageFromPrefab(currentTheme);
-            currentStage = 1;
-            currentTheme += 1;
+            stageSlider.ClearGateImages();
         }
+
+        if (addStage)
+        {
+            currentGate = 1;
+            currentStage += 1;
+            if (currentStage > maxStageCount)
+            {
+                currentStage = 1;
+                currentTheme += 1;
+            }
+        }
+
+        parallaxScrollingManager.ChangeIndexNumberBackgroundImage(currentTheme);
+
+        GameManager.GetInstance().catObject.CatRespawn();
+
+        // 현재 스테이지가 최고 스테이지가 아니라면 반복 사냥 진행
+        int clearThemeData = 0;
+        int clearStageData = 0;
+        Player.GetPlayerHighestClearStageData(out clearThemeData, out clearStageData);
+        if (currentTheme < clearThemeData || ((currentTheme == clearThemeData) && currentStage < clearStageData))
+        {
+            SetContinuousCombat(true);
+        }
+        else
+        {
+            SetContinuousCombat(false);
+        }
+        
 
         SetStageUI();
     }
 
     private void ChangeStage()
     {
-        fadeCoroutine = StartCoroutine(StartFade());
-    }
-
-    // 스페셜 스테이지에서 고양이가 계속 앞으로 이동하는 함수
-    private void MoveCatForward()
-    {
-        Cat cat = GameManager.GetInstance().catObject;
-        if (cat != null)
-        {
-            parallaxScrollingManager.MoveBackgroundSprites(true);
-        }
-    }
-
-    public void StopSpecialStage()
-    {
-        parallaxScrollingManager.MoveBackgroundSprites(false);
+        fadeCoroutine = StartCoroutine(StartFade(() => FadeStartFuncWhileStageChange(true)));
     }
 
     // 현재 테마를 반환하는 함수
@@ -227,11 +250,82 @@ public class StageManager : MonoBehaviour
         return currentTheme;
     }
 
-    // 스페셜 스테이지로 배경 테마 변경
-    public void ChangeBackgroundToSpecialStage(int theme)
+    public int GetCurrentStage()
     {
-        parallaxScrollingManager.ChangeBackgroundImageFromPrefab(theme); // 배경 이미지를 스페셜 테마로 변경
-        SetStageUI();  // UI 업데이트
+        return currentStage;
     }
 
+    public void SetContinuousCombat(bool activeContinuousCombat)
+    {
+        Player.continuousCombat = activeContinuousCombat;
+        continuousCombatButton.gameObject.SetActive(activeContinuousCombat);
+        stageSlider.gameObject.SetActive(!activeContinuousCombat);
+        if (activeContinuousCombat)
+        {
+            currentGate = 1;
+        }
+    }
+    public void GoToLastClearStageNextStage()
+    {
+        int clearStageTheme = 1;
+        int clearStage = 1;
+        Player.GetPlayerHighestClearStageData(out clearStageTheme, out clearStage);
+        SetContinuousCombat(false);
+
+        enemySpawnManager.DestroyEnemy();
+        currentTheme = clearStageTheme;
+        currentStage = clearStage;
+        StageClear();
+    }
+
+    public void GoToSpecificStage(int stageThemeNum, int stageNum)
+    {
+        // TODO: 처음 실행 시 한번만 받고 적용되도록
+        int clearStageTheme = 1;
+        int clearStage = 1;
+        Player.GetPlayerHighestClearStageData(out clearStageTheme, out clearStage);
+        
+        if (stageThemeNum <= clearStageTheme && stageNum <= clearStage)
+        {
+            SetContinuousCombat(true);
+        }
+        else
+        {
+            SetContinuousCombat(false);
+        }
+        enemySpawnManager.DestroyEnemy();
+        currentTheme = stageThemeNum;
+        currentStage = stageNum;
+
+        fadeCoroutine = StartCoroutine(StartFade(() => FadeStartFuncWhileStageChange(false)));
+    }
+
+
+    void RespawnCat()
+    {
+        GameManager.GetInstance().catObject.CatRespawn();
+        StopCoroutine(fadeCoroutine);
+        enemySpawnManager.DestroyEnemy();
+
+        currentStage -= 1;
+        if (currentStage <= 0)
+        {
+            currentTheme -= 1;
+            currentStage = maxStageCount;
+            if (currentTheme <= 0)
+            {
+                currentTheme = 1;
+                currentStage = 1;
+            }
+            parallaxScrollingManager.ChangeIndexNumberBackgroundImage(currentTheme);
+        }
+        SetStageUI();
+
+        fadeCoroutine = StartCoroutine(EndFade(FadeEndFuncWhileStageChange));
+    }
+    public void PlayerDie()
+    {
+        fadeCoroutine = StartCoroutine(StartFade(RespawnCat));
+        SetContinuousCombat(true);
+    }
 }

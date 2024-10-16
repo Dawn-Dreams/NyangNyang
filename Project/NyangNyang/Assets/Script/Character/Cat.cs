@@ -13,23 +13,29 @@ public class Cat : Character
         characterID = Player.GetUserID();
 
         Player.OnHPLevelChange += HPLevelChanged;
+        Player.playerStatus.OnHpChange += HPLevelChanged;
         base.Awake();
     }
 
-    public override void InitialSettings()
-    {
-        base.InitialSettings();
 
 
-    }
-
-
-    void HPLevelChanged()
+    public void HPLevelChanged()
     {
         BigInteger hpDifference = Player.playerStatus.hp - maxHP;
         maxHP = Player.playerStatus.hp;
         CurrentHP += hpDifference;
-        
     }
-    
+
+    public void CatRespawn()
+    {
+        CurrentHP = maxHP;
+        gameObject.SetActive(true);
+    }
+
+    protected override void Death()
+    {
+        base.Death();
+
+        GameManager.GetInstance().stageManager.PlayerDie();
+    }
 }

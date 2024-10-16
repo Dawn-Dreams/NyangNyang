@@ -5,6 +5,8 @@ using UnityEngine;
 public class EnemySpawnManager : MonoBehaviour
 {
     public GameObject enemyPrefab;
+    public GameObject bossEnemyPrefab;
+
     public Transform enemySpawnPosition;
     public Transform enemyCombatPosition;
 
@@ -12,15 +14,23 @@ public class EnemySpawnManager : MonoBehaviour
 
     void Start()
     {
-        SpawnEnemy(); // 처음 적을 소환
+        OnGatePassed(false);
     }
 
     // Gate 통과 시 또는 적이 사망했을 때 적을 다시 소환
-    public void OnGatePassed()
+    public void OnGatePassed(bool isFinalStage)
     {
         if (currentEnemy == null || currentEnemy.IsDead()) // 적이 사망했는지 확인
         {
-            SpawnEnemy();
+            if (isFinalStage)
+            {
+                SpawnEnemy(bossEnemyPrefab, 1);
+            }
+            else
+            {
+                // TODO: 임시 무리 수, 추후 서버에서 정보를 받아올 예정
+                SpawnEnemy(enemyPrefab,3);
+            }
         }
     }
 
@@ -29,7 +39,7 @@ public class EnemySpawnManager : MonoBehaviour
     // StageManager내에서 호출 (고양이가 입장 or 이전 전투 승리 시)
 
     // 새로운 적을 소환하는 메서드
-    void SpawnEnemy()
+    void SpawnEnemy(GameObject enemyPrefab, int numOfEnemy)
     {
         Cat cat = GameManager.GetInstance().catObject;
 
@@ -37,8 +47,21 @@ public class EnemySpawnManager : MonoBehaviour
         currentEnemy = Instantiate(enemyPrefab, enemySpawnPosition).GetComponent<Enemy>();
         currentEnemy.SetNumberOfEnemyInGroup(3);
         currentEnemy.GoToCombatArea(cat, enemyCombatPosition.position);
-        // 적과 고양이의 적군 오브젝트 연결 -> 적군이 다 이동 한 뒤 오브젝트가 연결되도록 변경
-        //currentEnemy.SetEnemy(cat);
-        //cat.SetEnemy(currentEnemy);
+    }
+
+    public void DestroyEnemy()
+    {
+        Cat cat = GameManager.GetInstance().catObject;
+
+        if (currentEnemy)
+        {
+            Destroy(currentEnemy.gameObject);
+        }
+
+        currentEnemy = null;
+        cat.SetEnemy(null);
+
+
+
     }
 }
