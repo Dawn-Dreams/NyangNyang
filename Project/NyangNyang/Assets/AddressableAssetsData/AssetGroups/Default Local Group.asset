@@ -16,17 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 933ba2e0b1790284b882e1a5c632169e
-  m_SerializeEntries:
-  - m_GUID: 2caa5f7b9e59b6e439c19af0337425b0
-    m_Address: Assets/Sound/pop_sfx.mp3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: de7bd8d9152ea334b8b0f6eae90ae3cb
-    m_Address: Assets/Sound/swoosh_sfx.mp3
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5f1874fff1b70124d8333b18a2e9b4e8, type: 2}
   m_SchemaSet:
