@@ -13,8 +13,8 @@ public class DummyOptionsServer
 
     protected static List<MailData> MailDataList = new List<MailData>
     {
-        new MailData(1, "보상 우편", "전투 보상 지급", "2024-10-12", false),
-        new MailData(2, "이벤트 우편", "이벤트 참여 보상", "2024-10-13", false)
+        new MailData(1, "보상 우편", "전투 보상 지급", 1231, "2024-10-12", false),
+        new MailData(2, "이벤트 우편", "이벤트 참여 보상", 5322, "2024-10-13", false)
     };
 
     protected static List<FriendData> FriendDataList = new List<FriendData>
@@ -180,14 +180,16 @@ public class MailData
     public int mailID;
     public string title;
     public string content;
+    public int itemID;
     public string date;
     public bool isReceived;
 
-    public MailData(int id, string title, string content, string date, bool isReceived)
+    public MailData(int id, string title, string content, int itemID, string date, bool isReceived)
     {
         this.mailID = id;
         this.title = title;
         this.content = content;
+        this.itemID = itemID;
         this.date = date;
         this.isReceived = isReceived;
     }
