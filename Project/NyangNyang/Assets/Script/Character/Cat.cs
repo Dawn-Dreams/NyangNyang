@@ -14,12 +14,13 @@ public class Cat : Character
         status = Player.playerStatus;
 
         Player.OnHPLevelChange += HPLevelChanged;
+        Player.playerStatus.OnHpChange += HPLevelChanged;
         base.Awake();
     }
 
 
 
-    void HPLevelChanged()
+    public void HPLevelChanged()
     {
         BigInteger hpDifference = Player.playerStatus.hp - maxHP;
         maxHP = Player.playerStatus.hp;

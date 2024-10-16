@@ -2,15 +2,28 @@ using GoogleMobileAds.Api;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SnackBuff : MonoBehaviour
 {
-    public RectTransform snackBuffUIPanelRectTransform;
+    private static int _userMaxSnackBuffLevel = 10;
+
+    public HideUi snackBuffUIPanelHideUI;
 
     public SnackPanel[] snackPanels;
     private SnackPanel _currentPickSnackPanel;
+    [SerializeField] private TextMeshProUGUI snackBuffLevelText;
+    [SerializeField] private Slider snackBuffLevelSlider;
+    [SerializeField] private TextMeshProUGUI snackBuffLevelProgressText;
+
+    private int _snackBuffAdViewCount;
+    private int _currentSnackBuffLevel = 0;
+
+    private int _requireLevelStep = 5;
+    
 
     private Dictionary<SnackType, SnackPanel> _snackPanelDict = new Dictionary<SnackType, SnackPanel>();
     private Dictionary<SnackType, DateTime> _buffRemainTime = new Dictionary<SnackType, DateTime>();
@@ -21,7 +34,8 @@ public class SnackBuff : MonoBehaviour
     {
         // 서버로부터 정보 받기
         {
-
+            int adViewCount = DummyAdServer.UserRequestSnackLevelData(Player.GetUserID());
+            SetSnackBuffAdViewCount(adViewCount);
         }
 
         foreach (var snackPanel in snackPanels)
@@ -30,12 +44,38 @@ public class SnackBuff : MonoBehaviour
 
             snackPanel.showAdButton.onClick.AddListener(() => OnClickShowAdButton(snackPanel));
         }
+    }
 
-        // UI 위치 갱신 및 SetActive(false)
+    void SetSnackBuffAdViewCount(int newSnackBuffViewCount)
+    {
+        _snackBuffAdViewCount = newSnackBuffViewCount;
+
+        // 레벨이 오른다면,
+        if (_currentSnackBuffLevel != _snackBuffAdViewCount / _requireLevelStep)
         {
-            snackBuffUIPanelRectTransform.offsetMin = snackBuffUIPanelRectTransform.offsetMax = new Vector2(0, 0);
-            snackBuffUIPanelRectTransform.gameObject.SetActive(false);
+            _currentSnackBuffLevel = _snackBuffAdViewCount / _requireLevelStep;
+            foreach (var snackPanel in snackPanels)
+            {
+                snackPanel.SetSnackBuffValueText(CalculateSnackBuffValue(snackPanel.snackType));
+            }
         }
+        
+
+        snackBuffLevelText.text = _currentSnackBuffLevel.ToString();
+
+        if (_currentSnackBuffLevel== _userMaxSnackBuffLevel)
+        {
+            snackBuffLevelProgressText.text = "최대 레벨";
+            snackBuffLevelSlider.value = 1;
+        }
+        else
+        {
+            int requireAdViewCountForNextLevel = (_currentSnackBuffLevel + 1) * _requireLevelStep;
+            snackBuffLevelProgressText.text = _snackBuffAdViewCount + " / " + requireAdViewCountForNextLevel;
+            snackBuffLevelSlider.value = (float)_snackBuffAdViewCount / requireAdViewCountForNextLevel;
+        }
+
+            
     }
 
 
@@ -53,6 +93,12 @@ public class SnackBuff : MonoBehaviour
         // 서버에게 플레이어가 광고 영상을 봤다는 것을 전송
         // 서버에서는 해당 플레이어에게 SetActiveSnackBuffDataFromServer 실행시키기.
         //Debug.Log($"플레이어가 {_currentPickSnackPanel.snackType} 광고 영상을 봤습니다.");
+        if (_currentSnackBuffLevel < _userMaxSnackBuffLevel)
+        {
+            SetSnackBuffAdViewCount(_snackBuffAdViewCount + 1);
+            DummyAdServer.UserShowSnackBuffAd(Player.GetUserID());
+        }
+
         string buffEndDateTimeString = DateTime.Now.AddSeconds(10).ToString("yyyy/MM/dd tt hh:mm:ss");
         SetActiveSnackBuffDataFromServer(_currentPickSnackPanel.snackType, buffEndDateTimeString);
     }
@@ -63,10 +109,38 @@ public class SnackBuff : MonoBehaviour
 
         DateTime buffEndDateTime = DateTime.Parse(buffEndDateTimeString);
         _buffRemainTime.Add(snackType, buffEndDateTime);
+
+        // 해당 간식 버프 적용
+        {
+            Player.playerStatus.SetActiveSnackBuff(snackType, true, CalculateSnackBuffValue(snackType));
+        }
+
         if (BuffTimeCalculateCoroutine == null)
         {
             BuffTimeCalculateCoroutine = StartCoroutine(BuffTimeCalculate());
         }
+    }
+
+    private float CalculateSnackBuffValue(SnackType snackType)
+    {
+        float value = 1.0f;
+        switch (snackType)
+        {
+            case SnackType.Atk:
+                value += _currentSnackBuffLevel * 0.2f;
+                break;
+            case SnackType.Hp:
+                value += _currentSnackBuffLevel * 0.2f;
+                break;
+            case SnackType.Gold:
+                value += _currentSnackBuffLevel * 0.5f;
+                break;
+            default:
+                Debug.LogError("타입 에러");
+                break;
+        }
+
+        return value;
     }
 
     public void RecvBuffEndDataFromServer(SnackType snackType)
@@ -75,6 +149,7 @@ public class SnackBuff : MonoBehaviour
         {
             _buffRemainTime.Remove(snackType);
         }
+        Player.playerStatus.SetActiveSnackBuff(snackType, false);
         _snackPanelDict[snackType].eatingImageObject.SetActive(false);
     }
 

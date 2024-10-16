@@ -140,6 +140,9 @@ public class Status
 {
     private StatusLevelData levelData;
 
+    public delegate void OnHpChangeDelegate();
+    public event OnHpChangeDelegate OnHpChange;
+
     // 개인 스탯 (유저 / 적 적용)
     public int hp;             // 체력
     public int mp;             // 마나
@@ -150,10 +153,19 @@ public class Status
     public float critPercent; // 치명타 확률
     public float attackSpeed;    // 공격 속도(초기 1, 0.25 상한선 스탯) <- TODO: 회의 필요
 
+    public Dictionary<SnackType, float> snackBuffValue = new Dictionary<SnackType, float>
+    {
+        { SnackType.Atk, 1.0f },
+        { SnackType.Hp, 1.0f },
+        { SnackType.Gold, 1.0f }
+    };
+
     // 계정 스탯 (유저 (고양이) 적용) --> 게임메니저 관리 보류
     float goldAcquisitionPercent;    // 골드 획득량(가중치) (초기 1, value%로 적용)
     float expAcquisitionPercent;     // 경험치 획득량(가중치) (초기 1, value%로 적용)
     int userTouchDamage;    // 터치 당 공격력 <- TODO: 터치 말고 다른 좋은 아이디어 있는지 회의
+
+
 
     public Status()
     {
@@ -204,9 +216,16 @@ public class Status
     private void UpdateStatus()
     {
         // 임시 업데이트
-        hp = (int)levelData.CalculateValueFromLevel(StatusLevelType.HP);
+        float hpMulValue = snackBuffValue[SnackType.Hp];
+        hp = (int)(levelData.CalculateValueFromLevel(StatusLevelType.HP) * hpMulValue);
+        if (OnHpChange != null)
+        {
+            OnHpChange();
+        }
+
         mp = (int)levelData.CalculateValueFromLevel(StatusLevelType.MP);
-        attackPower = (int)levelData.CalculateValueFromLevel(StatusLevelType.STR);
+        float attackMulValue = snackBuffValue[SnackType.Atk];
+        attackPower = (int)(levelData.CalculateValueFromLevel(StatusLevelType.STR) * attackMulValue);
         defence = (int)levelData.CalculateValueFromLevel(StatusLevelType.DEF);
         healHPPerSec = (int)levelData.CalculateValueFromLevel(StatusLevelType.HEAL_HP);
         healMPPerSec = (int)levelData.CalculateValueFromLevel(StatusLevelType.HEAL_MP);
@@ -214,4 +233,18 @@ public class Status
         attackSpeed = levelData.CalculateValueFromLevel(StatusLevelType.ATTACK_SPEED);
     }
 
+    public void SetActiveSnackBuff(SnackType type, bool newActive, float mulValue = 1.0f)
+    {
+        // 간식 버프 활성화
+        if (newActive)
+        {
+            snackBuffValue[type] = mulValue;
+        }
+        // 이전 버프 적용 값 해제
+        else
+        {
+            snackBuffValue[type] = 1.0f;
+        }
+        UpdateStatus();
+    }
 }

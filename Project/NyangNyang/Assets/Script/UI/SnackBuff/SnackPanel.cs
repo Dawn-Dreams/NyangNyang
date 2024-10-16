@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -15,9 +16,15 @@ public class SnackPanel : MonoBehaviour
     public Button showAdButton;
     public GameObject eatingImageObject;
     public TextMeshProUGUI remainTimeText;
+    public TextMeshProUGUI snackBuffValueText;
 
     public void SetRemainTimeText(string newTime)
     {
         remainTimeText.text = newTime;
+    }
+
+    public void SetSnackBuffValueText(float newBuffValue)
+    {
+        snackBuffValueText.text = newBuffValue.ToString("F1");
     }
 }
