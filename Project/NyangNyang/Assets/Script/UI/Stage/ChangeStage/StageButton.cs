@@ -61,7 +61,6 @@ public class StageButton : MonoBehaviour
     private void SetImageSprite(StageButtonType type)
     {
         Sprite newSprite = normalSprite;
-        selectButtonImage.gameObject.SetActive(false);
         switch (type)
         {
             case StageButtonType.Normal:

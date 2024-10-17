@@ -1380,11 +1380,11 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2004404877}
   - {fileID: 455323389}
   - {fileID: 1941550346}
   - {fileID: 1034320356}
   - {fileID: 278121924}
-  - {fileID: 2004404877}
   - {fileID: 1048212816}
   - {fileID: 1239833652}
   - {fileID: 428804292}
@@ -10501,7 +10501,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 3778, y: 1520}
+  m_AnchoredPosition: {x: 3772, y: 1543}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &278121925
@@ -27274,8 +27274,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   catObject: {fileID: 2026967982}
   stageManager: {fileID: 213762223}
-  questUI: {fileID: 12233761}
   storyQuestObject: {fileID: 2027703865}
+  changeStageUI: {fileID: 278121925}
 --- !u!1 &671941387
 GameObject:
   m_ObjectHideFlags: 0
@@ -66024,7 +66024,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 76}
+  m_AnchoredPosition: {x: 0, y: 54}
   m_SizeDelta: {x: 900, y: 1600}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1718129873
@@ -67280,7 +67280,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -60, y: -522}
+  m_AnchoredPosition: {x: -60, y: -538}
   m_SizeDelta: {x: 100, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1750267866
@@ -79099,7 +79099,7 @@ GameObject:
   - component: {fileID: 2004404879}
   - component: {fileID: 2004404878}
   m_Layer: 5
-  m_Name: StageChangeFadeImage_MustUnderChangeStageUI
+  m_Name: StageChangeFadeImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

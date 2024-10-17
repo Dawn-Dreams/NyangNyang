@@ -29,6 +29,7 @@ public class DummyEnemy
     public BigInteger TakeDamage(BigInteger getDamage)
     {
         BigInteger returnApplyDamage = getDamage;
+        
         if (getDamage > currentHP)
         {
             returnApplyDamage = currentHP;
@@ -38,6 +39,7 @@ public class DummyEnemy
         hpText.text = currentHP + " / " + maxHP;
 
         // 대미지 출력
+        // TODO 오브젝트 풀링 방식으로 바꾸기
         GameObject textObject = (GameObject)GameObject.Instantiate(floatingDamage,
             dummyGameObject.transform.position, Quaternion.identity);
         textObject.GetComponentInChildren<TextMesh>().text = " " + getDamage + " ";
@@ -201,7 +203,7 @@ public class Enemy : Character
         }
 
         BigInteger amountOfDamage = 0;
-        BigInteger applyDamage = damage - status.defence;
+        BigInteger applyDamage = BigInteger.Max(0, damage - status.defence);
 
         int maxApplyDamageCount = 1;
         if (isAOESkill)

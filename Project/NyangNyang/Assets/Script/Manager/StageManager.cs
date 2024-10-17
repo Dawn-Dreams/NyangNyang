@@ -58,6 +58,9 @@ public class StageManager : MonoBehaviour
         {
             stageSlider.CreateGateImage(maxGateCount);
         }
+
+        // 새로운 스테이지 설정 시 ChangeStageUI의 정보도 갱신
+        GameManager.GetInstance().changeStageUI.RenewalStageButtonTypeInCurrentTheme();
     }
 
     private IEnumerator GateClear(float waitTime)
@@ -91,6 +94,7 @@ public class StageManager : MonoBehaviour
 
         // 유저들이 ChangeStageUI를 클릭을 하지 못하도록 fadeImage 활성화
         fadeImage.gameObject.SetActive(true);
+        GameManager.GetInstance().changeStageUI.SetChangeStageButtonInteractable(false);
 
         parallaxScrollingManager.MoveBackgroundSprites(true);
         // TODO: 고양이 걷기 애니메이션
@@ -109,6 +113,7 @@ public class StageManager : MonoBehaviour
         }
 
         fadeImage.gameObject.SetActive(false);
+        GameManager.GetInstance().changeStageUI.SetChangeStageButtonInteractable(true);
 
         SetStageUI();
 
@@ -155,6 +160,7 @@ public class StageManager : MonoBehaviour
     {
         currentFadeTime = 0.0f;
         fadeImage.gameObject.SetActive(true);
+        GameManager.GetInstance().changeStageUI.SetChangeStageButtonInteractable(false);
         while (true)
         {
             currentFadeTime += Time.deltaTime;
@@ -186,6 +192,7 @@ public class StageManager : MonoBehaviour
             {
                 FuncAfterEndFade();
                 fadeImage.gameObject.SetActive(false);
+                GameManager.GetInstance().changeStageUI.SetChangeStageButtonInteractable(true);
             }
 
             yield return null;

@@ -65,7 +65,7 @@ public class DummyServerData : MonoBehaviour
 
     protected static MonsterData[] enemyDatas = new MonsterData[]
     {
-        new MonsterData().SetMonsterData(new StatusLevelData(1, 1, 1,1,1,1,1,1), ScriptableObject.CreateInstance<EnemyDropData>().SetEnemyDropData(1000, 1000)),
+        new MonsterData().SetMonsterData(new StatusLevelData(1, 1, 1,100,1,1,1,1), ScriptableObject.CreateInstance<EnemyDropData>().SetEnemyDropData(1000, 1000)),
     };
 
     // 유저 재화(골드+보석+티켓) 데이터
@@ -109,7 +109,7 @@ public class DummyServerData : MonoBehaviour
     // 스테이지 테마와 스테이지 정보만 관리
     protected static int[,] playerClearStageData = new int[,]
     {
-        { 1,1 },
+        { 1,0 },        // 0번 유저
         {20,3}
     };
 
