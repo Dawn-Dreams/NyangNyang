@@ -88,6 +88,10 @@ public class StageManager : MonoBehaviour
         {
             stageSlider.MoveToNextGate(currentGate,maxGateCount,1.0f);
         }
+
+        // 유저들이 ChangeStageUI를 클릭을 하지 못하도록 fadeImage 활성화
+        fadeImage.gameObject.SetActive(true);
+
         parallaxScrollingManager.MoveBackgroundSprites(true);
         // TODO: 고양이 걷기 애니메이션
 
@@ -103,7 +107,9 @@ public class StageManager : MonoBehaviour
         {
             currentGate++;
         }
-        
+
+        fadeImage.gameObject.SetActive(false);
+
         SetStageUI();
 
         RequestEnemySpawn();

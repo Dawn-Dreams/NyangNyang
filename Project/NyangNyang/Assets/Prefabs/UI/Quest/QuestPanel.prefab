@@ -196,9 +196,9 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_PressedColor: {r: 1, g: 1, b: 1, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -212,7 +212,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 4300245627455623766}
   m_FillRect: {fileID: 6231844068307826131}
   m_HandleRect: {fileID: 0}
@@ -1319,5 +1319,6 @@ MonoBehaviour:
   questSlider: {fileID: 8210388935447592170}
   questRequireText: {fileID: 3065151208630889906}
   rewardImage: {fileID: 2380843515577458136}
-  rewardCount: {fileID: 8188354885537427904}
-  questData: {fileID: 0}
+  rewardCountText: {fileID: 8188354885537427904}
+  requestQuestCategory: 0
+  requestQuestType: 0
