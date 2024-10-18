@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public enum StageButtonType
 {
-    Normal, Select, Current, Close
+    Normal, Current, Close
 }
 
 public class StageButton : MonoBehaviour
@@ -43,6 +43,11 @@ public class StageButton : MonoBehaviour
         SetImageSprite(type);
     }
 
+    public void Select()
+    {
+        selectButtonImage.gameObject.SetActive(true);
+    }
+
     public void UnSelect()
     {
         selectButtonImage.gameObject.SetActive(false);
@@ -56,15 +61,10 @@ public class StageButton : MonoBehaviour
     private void SetImageSprite(StageButtonType type)
     {
         Sprite newSprite = normalSprite;
-        selectButtonImage.gameObject.SetActive(false);
         switch (type)
         {
             case StageButtonType.Normal:
                 newSprite = normalSprite;
-                break;
-            case StageButtonType.Select:
-                newSprite = null;
-                selectButtonImage.gameObject.SetActive(true);
                 break;
             case StageButtonType.Current:
                 newSprite = currentSprite;

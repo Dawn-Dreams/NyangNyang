@@ -109,7 +109,7 @@ public class DummyServerData : MonoBehaviour
     // 스테이지 테마와 스테이지 정보만 관리
     protected static int[,] playerClearStageData = new int[,]
     {
-        { 1,1 },
+        { 1,0 },        // 0번 유저
         {20,3}
     };
 

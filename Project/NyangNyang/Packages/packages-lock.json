@@ -17,6 +17,13 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
+    "com.rito.play-mode-saver": {
+      "version": "https://github.com/rito15/Unity-Play-Mode-Saver.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "61435a656d55cd8b5ca4483f5f2b98a942c3e9af"
+    },
     "com.unity.2d.animation": {
       "version": "9.1.1",
       "depth": 1,
@@ -174,6 +181,16 @@
         "com.unity.2d.aseprite": "1.1.4"
       }
     },
+    "com.unity.film-internal-utilities": {
+      "version": "0.18.4-preview",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.timeline": "1.2.18",
+        "com.unity.modules.uielements": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.ide.rider": {
       "version": "3.0.31",
       "depth": 0,
@@ -198,6 +215,17 @@
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
+    },
+    "com.unity.render-pipelines.core": {
+      "version": "14.0.11",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0",
+        "com.unity.modules.physics": "1.0.0",
+        "com.unity.modules.terrain": "1.0.0",
+        "com.unity.modules.jsonserialize": "1.0.0"
+      }
     },
     "com.unity.scriptablebuildpipeline": {
       "version": "1.21.24",
@@ -235,6 +263,16 @@
         "com.unity.modules.director": "1.0.0",
         "com.unity.modules.animation": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.toonshader": {
+      "version": "0.9.4-preview",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.render-pipelines.core": "10.0.0",
+        "com.unity.film-internal-utilities": "0.18.4-preview"
       },
       "url": "https://packages.unity.com"
     },

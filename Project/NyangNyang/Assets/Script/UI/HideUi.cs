@@ -7,6 +7,8 @@ public class HideUi : MonoBehaviour
 {
     RectTransform rectTransform;
 
+    public Action OnShowAction = null;
+
     public void Start()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -15,10 +17,16 @@ public class HideUi : MonoBehaviour
     public void HideUIInVisible()
     {
         rectTransform.offsetMin = rectTransform.offsetMax = new Vector2(10000, 10000);
+
     }
 
     public void ShowUI()
     {
         rectTransform.offsetMin = rectTransform.offsetMax = new Vector2(0,0);
+
+        if (OnShowAction != null)
+        {
+            OnShowAction();
+        }
     }
 }

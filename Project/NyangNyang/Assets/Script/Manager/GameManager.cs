@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,11 +10,11 @@ public class GameManager : MonoBehaviour
     public static bool isMiniGameActive = false;
     public static bool isDungeonActive = false;
 
+    // 다른 스크립트에서 사용
     public Cat catObject;
     public StageManager stageManager;
-
-    public GameObject questUI;
     public BaseStoryQuest storyQuestObject;
+    public ChangeStageUI changeStageUI;
 
     private void Awake()
     {

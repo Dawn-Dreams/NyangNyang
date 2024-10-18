@@ -97,8 +97,7 @@ public class Character : MonoBehaviour
         if (CurrentHP <= 0) return -1;
 
         // TODO: 이 식도 추후 status 에서 적용
-        BigInteger applyDamage = damage - status.defence;
-        
+        BigInteger applyDamage = BigInteger.Max(0, damage - status.defence);
         DecreaseHp(applyDamage);
        
         return applyDamage;
@@ -106,7 +105,8 @@ public class Character : MonoBehaviour
 
     protected void DecreaseHp(BigInteger applyDamage)
     {
-        CurrentHP = BigInteger.Max(0, currentHP - applyDamage);
+        CurrentHP = BigInteger.Min(maxHP, BigInteger.Max(0, currentHP - applyDamage));
+        
         if (IsDead())
         {
             Death();

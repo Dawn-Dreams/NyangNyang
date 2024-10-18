@@ -16,9 +16,9 @@ public class StatusLevelData
     public BigInteger[] statusLevels = new BigInteger[(int)StatusLevelType.COUNT];
 
 
-    private int HP_DEFAULT_VALUE = 10;
+    private int HP_DEFAULT_VALUE = 50;
     private int MP_DEFAULT_VALUE = 10;
-    private int STR_DEFAULT_VALUE = 1;
+    private int STR_DEFAULT_VALUE = 5;
     //private static int MAX_ATTACK_SPEED = 10000;
 
 
