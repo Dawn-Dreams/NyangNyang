@@ -58,6 +58,23 @@ public class ReqUpdateStatusLvData
     public int gold_acq_lv;
     public int exp_acq_lv;
 }
+[System.Serializable]
+
+public class mail
+{
+    public int uid;
+    public int mail_type;
+    public string mail_content;
+    public DateTime mali_create_dt;
+    public DateTime mali_read_dt;
+    public int mail_reward_item;
+    public bool is_recived;
+
+}
+
+//-------------------------------------------------
+
+
 
 [System.Serializable]
 
@@ -75,13 +92,14 @@ public class RankingData
         this.score = score;
     }
 }
+
+
 [System.Serializable]
 public class ResponseRanking
 {
     public ErrorCode ErrorCode;
     public List<RankingData> rankingData;
 }
-
 
 
 [System.Serializable]

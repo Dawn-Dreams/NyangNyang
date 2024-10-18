@@ -22,7 +22,7 @@ public class NetworkManager : MonoBehaviour
             instance = new NetworkManager();
         }
         //UpdatePlayerStatus(3, 1, 1, 1, 1, 21, 1, 1, 1);
-        UpdatePlayersRanking();
+      //  UpdatePlayersRanking();
         Debug.Log("networkd instatnce  초기화..");
     }
     IEnumerator CoSendNetRequest(string url, object obj, Action<UnityWebRequest> callback)
@@ -115,7 +115,7 @@ public class NetworkManager : MonoBehaviour
 
     public void UpdatePlayersRanking()
     {
-        //서버에 랭킹요청
+        //서버에 랭킹 업데이트 요청 -> 랭킹ui누를때 부르면될듯?
         StartCoroutine(CoSendNetRequest("UpdateRanking", null, SettingRankData));
         Debug.Log("UpdatePlayersRanking");
 
@@ -132,6 +132,7 @@ public class NetworkManager : MonoBehaviour
         }
         else
         {
+            //일단 받아오는거까지 완료.
             foreach(RankingData rank in res.rankingData)
             {
                 Debug.Log(string.Format("UID : {0}, SCORE : {1}", rank.uid, rank.score));
