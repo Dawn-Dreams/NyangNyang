@@ -5,6 +5,7 @@ using System.Text;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SocialPlatforms.Impl;
 
 
 public class NetworkManager : MonoBehaviour
@@ -20,7 +21,8 @@ public class NetworkManager : MonoBehaviour
         {
             instance = new NetworkManager();
         }
-        UpdatePlayerStatus(3, 1, 1, 1, 1, 21, 1, 1, 1);
+        //UpdatePlayerStatus(3, 1, 1, 1, 1, 21, 1, 1, 1);
+        UpdatePlayersRanking();
         Debug.Log("networkd instatnce  초기화..");
     }
     IEnumerator CoSendNetRequest(string url, object obj, Action<UnityWebRequest> callback)
@@ -98,6 +100,45 @@ public class NetworkManager : MonoBehaviour
         StartCoroutine(CoSendNetRequest("UpdatePlayerStatLv", req, UpdateStats));
     }
 
+    public void UpdatePlayerScore(int uid, int score)
+    {
+        Debug.Log("Update Player Score To server");
+        RequestUpdateScore req = new RequestUpdateScore
+        {
+            uid = uid,
+            score = score
+        };
+
+        StartCoroutine(CoSendNetRequest("UpdatePlayerScore", req, UpdateStats));
+
+    }
+
+    public void UpdatePlayersRanking()
+    {
+        //서버에 랭킹요청
+        StartCoroutine(CoSendNetRequest("UpdateRanking", null, SettingRankData));
+        Debug.Log("UpdatePlayersRanking");
+
+    }
+
+    void SettingRankData(UnityWebRequest uwr)
+    {
+        //랭킹리스트 받은거 사용하는 함수
+        var res = JsonUtility.FromJson<ResponseRanking>(uwr.downloadHandler.text);
+
+        if (res.ErrorCode != (int)ErrorCode.None)
+        {
+            Debug.Log("Failed get ranking data");
+        }
+        else
+        {
+            foreach(RankingData rank in res.rankingData)
+            {
+                Debug.Log(string.Format("UID : {0}, SCORE : {1}", rank.uid, rank.score));
+
+            }
+        }
+    }
     void UpdateStats(UnityWebRequest uwr)
     {
         //서버에 DB저장요청 보내고 서버에서 받은 응답

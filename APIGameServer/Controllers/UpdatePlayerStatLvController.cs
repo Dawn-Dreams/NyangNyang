@@ -1,5 +1,4 @@
-﻿
-using APIGameServer.DTO;
+﻿using APIGameServer.DTO;
 using APIGameServer.Models;
 using APIGameServer.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;

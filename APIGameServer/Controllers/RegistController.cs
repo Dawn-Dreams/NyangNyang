@@ -40,6 +40,7 @@ public class RegistController : ControllerBase
         response.Uid = uid;
 
         var nickname = "nyang" + uid;
+        //여기서 redis에 uid랑 닉네임도 pair로 저장할까?
         var res = await _userInfo.CreateUserInfo(uid, nickname);
         
         if(res == 0)

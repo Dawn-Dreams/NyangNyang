@@ -17,4 +17,14 @@ public class ResponseUpdateStat
     public ErrorCode Result { get; set; }    
 }
 
-//
+public class RequestUpdateScore
+{
+    public int uid {  get; set; }   
+    public int score {get; set; }
+}
+
+public class ResponseUpdateScore
+{
+    public ErrorCode Result { get; set; }
+
+}

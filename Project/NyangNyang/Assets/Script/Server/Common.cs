@@ -26,7 +26,8 @@ public enum ErrorCode : int
 }
 
 
-
+//-------------------------------------------------
+//DB에서 긁어올 내용들
 
 [System.Serializable]
 public class ReqUpdateStatusData
@@ -58,9 +59,53 @@ public class ReqUpdateStatusLvData
     public int exp_acq_lv;
 }
 
+[System.Serializable]
+
+public class RankingData
+{
+    public int rank;
+    public int uid;
+    public string nickname;
+    public int score;
+    public RankingData(int rank, int uid, string name, int score)
+    {
+        this.rank = rank;
+        this.uid = uid;
+        this.nickname = name;
+        this.score = score;
+    }
+}
+[System.Serializable]
+public class ResponseRanking
+{
+    public ErrorCode ErrorCode;
+    public List<RankingData> rankingData;
+}
+
+
 
 [System.Serializable]
 public class ResUpdateDbData
 {
     public int errorCode;
 }
+//-------------------------------------------------
+
+
+
+//-------------------------------------------------
+//스코어 업데이트
+[System.Serializable]
+public class RequestUpdateScore
+{
+    public int uid { get; set; }
+    public int score { get; set; }
+}
+
+[System.Serializable]
+public class ResponseUpdateScore
+{
+    public ErrorCode Result { get; set; }
+
+}
+

@@ -156,7 +156,7 @@ public class OptionMenuManager : MonoBehaviour
                 TMP_Text rankScoreText = rankUserButton.transform.Find("RankScore").GetComponent<TMP_Text>();
 
                 rankNumberText.text = (rankList.IndexOf(rankData) + 1).ToString();  // 순위를 1부터 시작
-                rankUserNameText.text = rankData.userName;
+                rankUserNameText.text = rankData.nickname;
                 rankScoreText.text = rankData.score.ToString();
             }
         }
