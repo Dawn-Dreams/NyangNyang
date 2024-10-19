@@ -48,7 +48,7 @@ public class TitleDataManager : DataManager
         return _instance;
     }
 
-    protected override void Start()
+    protected override void Awake()
     {
         if (_instance == null)
         {

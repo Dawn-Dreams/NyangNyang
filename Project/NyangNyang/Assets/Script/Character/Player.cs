@@ -8,6 +8,10 @@ using Vector3 = System.Numerics.Vector3;
 public class Player : MonoBehaviour
 {
     private static int userID = 0;
+    public static string PlayerName;
+    public static int PlayerCurrentTitleID;
+    public static int[] PlayerOwningTitles;
+
     public static Status playerStatus;
     private static CurrencyData playerCurrency;
     private static UserLevelData playerLevelData;
@@ -38,7 +42,6 @@ public class Player : MonoBehaviour
     public delegate void OnStageClearQuestDelegate(int clearTheme, int clearStage);
     public static event OnStageClearQuestDelegate OnStageClear;
 
-    [SerializeField] private GameObject levelUpIconObject;
 
     // 스테이터스 레벨 변화 델리게이트
     public delegate void OnStatusLevelChangeDelegate(StatusLevelType type);
@@ -127,8 +130,7 @@ public class Player : MonoBehaviour
                 OnExpChange(playerLevelData);
         }
     }
-
-    void Awake()
+    public static void OnAwakeGetInitialDataFromServer()
     {
         // 서버로부터 user id 받기
         userID = 0;
@@ -147,7 +149,12 @@ public class Player : MonoBehaviour
         {
             GetExpDataFromServer();
         }
-            
+
+        // 서버로부터 받기
+        PlayerName = "냥냥이";
+        PlayerCurrentTitleID = DummyPlayerTitleServer.UserRequestCurrentSelectedTitleID(userID);
+        PlayerOwningTitles = DummyPlayerTitleServer.UserRequestOwningTitles(userID);
+
     }
 
     void Update()
@@ -232,16 +239,6 @@ public class Player : MonoBehaviour
 
         if (OnTicketChange != null)
             OnTicketChange(playerCurrency.ticket);
-    }
-
-    // TODO: 임시 함수
-    public void ShowLevelUpIcon()
-    {
-        // 대미지 출력
-        UnityEngine.Vector3 spawnTransform = GameManager.GetInstance().catObject.transform.position;
-        spawnTransform.z = -5;
-        GameObject textObject = Instantiate(levelUpIconObject, spawnTransform ,UnityEngine.Quaternion.identity);
-        Destroy(textObject, 3.0f);
     }
 
     public static void UpdatePlayerStatusLevelByType(StatusLevelType type, BigInteger newValue)

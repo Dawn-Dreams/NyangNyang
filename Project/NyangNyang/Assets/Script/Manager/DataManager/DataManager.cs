@@ -18,7 +18,7 @@ public class DataManager : MonoBehaviour
         return _instance;
     }
 
-    protected virtual void Start()
+    protected virtual void Awake()
     {
         if (_instance == null)
         {
