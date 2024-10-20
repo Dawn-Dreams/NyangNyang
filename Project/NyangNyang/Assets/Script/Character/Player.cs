@@ -3,14 +3,47 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Vector3 = System.Numerics.Vector3;
 
 public class Player : MonoBehaviour
 {
     private static int userID = 0;
     public static string PlayerName;
-    public static int PlayerCurrentTitleID;
-    public static int[] PlayerOwningTitles;
+    private static int _playerCurrentTitleID;
+
+    public static int PlayerCurrentTitleID
+    {
+        get { return _playerCurrentTitleID; }
+        set
+        {
+            if (value == _playerCurrentTitleID) return;
+            _playerCurrentTitleID = value;
+
+            if (OnSelectTitleChange != null)
+            {
+                OnSelectTitleChange();
+            }
+        }
+    }
+    private static int[] _playerOwningTitles;
+
+    public static int[] playerOwningTitles
+    {
+        get { return _playerOwningTitles; }
+        set
+        {
+            if (value == _playerOwningTitles) return;
+
+            _playerOwningTitles = value;
+
+            if (OnOwningTitleChange != null)
+            {
+                OnOwningTitleChange();
+            }
+        }
+    }
+
 
     public static Status playerStatus;
     private static CurrencyData playerCurrency;
@@ -50,6 +83,13 @@ public class Player : MonoBehaviour
     // 스테이터스중 체력 변화 시 실행될 델리게이트 (캐릭터 체력 변경, 체력바 UI 기능 등)
     public delegate void OnHPStatusLevelChangeDelegate();
     public static event OnHPStatusLevelChangeDelegate OnHPLevelChange;
+
+    // 유저 착용 칭호 변경 델리게이트
+    public delegate void OnSelectTitleChangeDelegate();
+    public static event OnSelectTitleChangeDelegate OnSelectTitleChange;
+    // 유저 보유 칭호 변경 델리게이트
+    public delegate void OnOwningTitleChangeDelegate();
+    public static event OnOwningTitleChangeDelegate OnOwningTitleChange;
 
     // 한 스테이지 내에서 반복 전투를 진행하는 것에 대한 변수
     public static bool continuousCombat = false;
@@ -150,10 +190,12 @@ public class Player : MonoBehaviour
             GetExpDataFromServer();
         }
 
+        OnOwningTitleChange += SetTitleOwningEffectToStatus;
+
         // 서버로부터 받기
         PlayerName = "냥냥이";
         PlayerCurrentTitleID = DummyPlayerTitleServer.UserRequestCurrentSelectedTitleID(userID);
-        PlayerOwningTitles = DummyPlayerTitleServer.UserRequestOwningTitles(userID);
+        playerOwningTitles = DummyPlayerTitleServer.UserRequestOwningTitles(userID);
 
     }
 
@@ -303,4 +345,21 @@ public class Player : MonoBehaviour
         }
     }
     // =================
+
+    // 칭호 보유 효과 ==
+    public static void SetTitleOwningEffectToStatus()
+    {
+        List<TitleOwningEffect> titleOwningEffects = new List<TitleOwningEffect>();
+        foreach (int owningTitleID in playerOwningTitles)
+        {
+            TitleInfo titleInfo = TitleDataManager.GetInstance().titleInfoDic[owningTitleID];
+            foreach (TitleOwningEffect owningEffect in titleInfo.effect)
+            {
+                titleOwningEffects.Add(owningEffect);
+            }
+        }
+        playerStatus.SetTitleOwningEffect(titleOwningEffects);
+    }
+    // 칭호 보유 효과 끝 ==
+
 }

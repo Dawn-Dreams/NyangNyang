@@ -9,16 +9,10 @@ public enum TitleGrade
 }
 
 [Serializable]
-public struct OwningEffect
+public struct TitleOwningEffect
 {
     public string type;
     public int value;
-}
-
-[SerializeField]
-public struct TitleOwningEffect
-{
-    public OwningEffect[] effects;
 }
 
 [Serializable]
@@ -27,7 +21,7 @@ public struct TitleInfo
     public int id;
     public string name;
     public int grade;
-    public OwningEffect[] effect;
+    public TitleOwningEffect[] effect;
 }
 
 [Serializable]
@@ -40,8 +34,19 @@ public class TitleDataManager : DataManager
 {
     private static TitleDataManager _instance;
 
+
+    public static Dictionary<TitleGrade, Color> titleGradeColors = new Dictionary<TitleGrade, Color>
+    {
+        { TitleGrade.Normal, Color.white },
+        { TitleGrade.Uncommon, Color.green },
+        { TitleGrade.Rare, Color.blue },
+        { TitleGrade.Epic, new Color(185.0f / 255, 80.0f / 255, 250.0f / 255) },
+        { TitleGrade.Legendary, new Color(1.0f, 100.0f / 255, 0.0f) }
+    };
+
     public TextAsset titleDataJsonAsset;
     public TitleData titleData;
+    public Dictionary<int, TitleInfo> titleInfoDic = new Dictionary<int, TitleInfo>();
 
     public new static TitleDataManager GetInstance()
     {
@@ -66,5 +71,10 @@ public class TitleDataManager : DataManager
         }
 
         titleData = JsonUtility.FromJson<TitleData>(titleDataJsonAsset.ToString());
+
+        foreach (TitleInfo titleInfo in titleData.title)
+        {
+            titleInfoDic.Add(titleInfo.id,titleInfo);
+        }
     }
 }

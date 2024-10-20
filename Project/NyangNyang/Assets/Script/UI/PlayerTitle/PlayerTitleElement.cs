@@ -28,14 +28,6 @@ public class AddressableHandleSpritePair
 
 public class PlayerTitleElement : MonoBehaviour
 {
-    private static Dictionary<TitleGrade, Color> _titleGradeColors = new Dictionary<TitleGrade, Color>
-    {
-        { TitleGrade.Normal, Color.white },
-        { TitleGrade.Uncommon, Color.green },
-        { TitleGrade.Rare, Color.blue },
-        { TitleGrade.Epic, new Color(185.0f / 255, 80.0f / 255, 250.0f / 255) },
-        { TitleGrade.Legendary, new Color(1.0f, 100.0f / 255, 0.0f) }
-    };
 
     private AddressableHandleSpritePair _notOwningSprite;
     private AddressableHandleSpritePair _owningSprite;
@@ -56,7 +48,7 @@ public class PlayerTitleElement : MonoBehaviour
 
         titleInfo = newTitleInfo;
         titleNameText.text = titleInfo.name;
-        titleNameText.color = _titleGradeColors[(TitleGrade)titleInfo.grade];
+        titleNameText.color = TitleDataManager.titleGradeColors[(TitleGrade)titleInfo.grade];
 
         
 
@@ -65,6 +57,7 @@ public class PlayerTitleElement : MonoBehaviour
 
     public void SetIsOwning(bool newOwning)
     {
+        selectTitleButton.interactable = false;
         if (newOwning)
         {
             if (titleInfo.id == Player.PlayerCurrentTitleID)
@@ -76,7 +69,9 @@ public class PlayerTitleElement : MonoBehaviour
             {
                 selectTitleButtonImage.sprite = _owningSprite.sprite;
                 selectTitleText.text = "보유중";
+                selectTitleButton.interactable = true;
             }
+
         }
         else
         {
