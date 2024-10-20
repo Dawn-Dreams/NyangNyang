@@ -61,6 +61,9 @@ public class TitleDataManager : DataManager
         }
 
         ReadTitleData();
+
+        // 초기 한번은 설정
+        Player.SetTitleOwningEffectToStatus();
     }
 
     private void ReadTitleData()

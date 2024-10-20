@@ -349,6 +349,10 @@ public class Player : MonoBehaviour
     // 칭호 보유 효과 ==
     public static void SetTitleOwningEffectToStatus()
     {
+        if (!TitleDataManager.GetInstance())
+        {
+            return;
+        }
         List<TitleOwningEffect> titleOwningEffects = new List<TitleOwningEffect>();
         foreach (int owningTitleID in playerOwningTitles)
         {
