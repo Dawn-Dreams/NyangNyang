@@ -28,7 +28,7 @@ public class BaseQuest : MonoBehaviour
     // 퀘스트 데이터
     public QuestCategory requestQuestCategory;
     public QuestType requestQuestType;
-    protected QuestDataBase QuestData;
+    public QuestDataBase questData;
 
     protected virtual void Start()
     {
@@ -37,12 +37,12 @@ public class BaseQuest : MonoBehaviour
 
     protected void LoadQuest()
     {
-        if (!QuestData)
+        if (!questData)
         {
-            QuestData = DummyQuestServer.SendQuestInfoToUser(Player.GetUserID(), requestQuestCategory, requestQuestType);
+            questData = DummyQuestServer.SendQuestInfoToUser(Player.GetUserID(), requestQuestCategory, requestQuestType);
         }
 
-        QuestData.QuestActing(this);
+        questData.QuestActing(this);
     }
 
     public void SetRequireText(string newText)
@@ -63,13 +63,13 @@ public class BaseQuest : MonoBehaviour
         
     }
 
-    public virtual void SetRewardButtonInteractable(bool newActive, string newText)
+    public virtual void SetRewardButtonInteractable(bool newActive, string newText= "진행중")
     {
-        if (!QuestData.IsRewardRepeatable())
+        if (!questData.IsRewardRepeatable())
         {
-            QuestData.RequestHasReceivedRewardToServer();
+            questData.RequestHasReceivedRewardToServer();
         }
-        if (QuestData.IsGetReward())
+        if (questData.IsGetReward())
         {
             // TODO: 새로운 이미지로 변경
             rewardButton.interactable = false;

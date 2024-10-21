@@ -255,11 +255,6 @@ public class Status
             }
         }
 
-        foreach (var VARIABLE in titleOwningEffectValue)
-        {
-            Debug.Log($"{VARIABLE.Key} - {VARIABLE.Value}" );
-        }
-
         UpdateStatus();
     }
 

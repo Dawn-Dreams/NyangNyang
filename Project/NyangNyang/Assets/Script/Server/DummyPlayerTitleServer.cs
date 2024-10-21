@@ -36,9 +36,10 @@ public class DummyPlayerTitleServer : MonoBehaviour
         _userOwningTitles[userID].Add(acquireTitleID);
     }
 
-    public static int[] UserRequestOwningTitles(int userID)
+    public static List<int> UserRequestOwningTitles(int userID)
     {
-        int[] returnData = _userOwningTitles[userID].ToArray();
+        //int[] returnData = _userOwningTitles[userID].ToArray();
+        List<int> returnData = new List<int>(_userOwningTitles[userID]);
         return returnData;
     }
 }

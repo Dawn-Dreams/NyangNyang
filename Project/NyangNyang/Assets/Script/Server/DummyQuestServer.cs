@@ -11,7 +11,7 @@ using UnityEngine;
 public enum QuestType
 {
     GoldSpending, KillMonster,
-
+    FirstTime,
     LevelUpStatus, StageClear,
 }
 

@@ -18,17 +18,21 @@ public class PlayerTitleUI : MonoBehaviour
     void Start()
     {
         OnStartCreateTitleInfoElementObj();
-
-
-
         SortingTitleElements();
+
+        Player.OnOwningTitleChange += SortingTitleElements;
     }
 
     // TitleElement의 자식 순서를 변경하는 함수
     void SortingTitleElements()
     {
+        if (_titleElements.Count == 0)
+        {
+            return;
+        }
+
         // 보유 -> 미보유 / ID 오름차 순으로 정렬
-        int[] currentOwningTitles =  Player.playerOwningTitles;
+        List<int> currentOwningTitles =  new List<int>(Player.playerOwningTitles);
 
         List<int> notOwningTitles = new List<int>();
         // 추후 NotOwningTitles 추출 방식 변경
@@ -51,6 +55,8 @@ public class PlayerTitleUI : MonoBehaviour
         {
             _titleElements[id].gameObject.transform.SetSiblingIndex(currentOrder++);
         }
+
+        titleListContentTransform.gameObject.GetComponent<RectTransform>().localPosition = new Vector3(0.0f,-10000.0f,0.0f);
 
         SetTitleElementsOwning();
     }
@@ -104,10 +110,6 @@ public class PlayerTitleUI : MonoBehaviour
         }
     }
 
-    void CalculateAndApplyTitleOwningEffect()
-    {
-        
-    }
 
     // 타이틀 선택 버튼 클릭시 OnClick 함수
     void OnClickSelectTitleButton(int titleID)

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Vector3 = System.Numerics.Vector3;
@@ -26,23 +27,7 @@ public class Player : MonoBehaviour
             }
         }
     }
-    private static int[] _playerOwningTitles;
-
-    public static int[] playerOwningTitles
-    {
-        get { return _playerOwningTitles; }
-        set
-        {
-            if (value == _playerOwningTitles) return;
-
-            _playerOwningTitles = value;
-
-            if (OnOwningTitleChange != null)
-            {
-                OnOwningTitleChange();
-            }
-        }
-    }
+    public static List<int> playerOwningTitles = new List<int>();
 
 
     public static Status playerStatus;
@@ -241,7 +226,7 @@ public class Player : MonoBehaviour
     public static void GetGoldDataFromServer()
     {
         Gold = DummyServerData.GetUserGoldData(userID);
-        OnGoldChange(Gold);
+        //OnGoldChange(Gold);
         if(OnGoldChange != null)
             OnGoldChange(Gold);
     }
@@ -346,7 +331,19 @@ public class Player : MonoBehaviour
     }
     // =================
 
-    // 칭호 보유 효과 ==
+    // 관련 ==
+    public static void AcquireTitle(int titleID)
+    {
+        if (!playerOwningTitles.Contains(titleID))
+        {
+            playerOwningTitles.Add(titleID);
+
+            if (OnOwningTitleChange != null)
+            {
+                OnOwningTitleChange();
+            }
+        }
+    }
     public static void SetTitleOwningEffectToStatus()
     {
         if (!TitleDataManager.GetInstance())
@@ -364,6 +361,6 @@ public class Player : MonoBehaviour
         }
         playerStatus.SetTitleOwningEffect(titleOwningEffects);
     }
-    // 칭호 보유 효과 끝 ==
+    // =====================
 
 }

@@ -13,11 +13,15 @@
     },
     {
       "id": 1,
-      "name": "초보",
+      "name": "냥냥",
       "grade": 0,
       "effect": [
         {
           "type": "HP",
+          "value": 15
+        },
+        {
+          "type": "STR",
           "value":  15
         }
       ]

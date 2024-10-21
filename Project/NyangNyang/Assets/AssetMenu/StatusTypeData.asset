@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07c7aba85b1ed9e4691973a1699ef012, type: 3}
   m_Name: StatusTypeData
   m_EditorClassIdentifier: 
-  hp_sprite: {fileID: 21300000, guid: 44ed3c6a7e910534897fe9517e1d791e, type: 3}
-  mp_sprite: {fileID: 21300000, guid: 81871fae60893e54c910632ffd2b4ebe, type: 3}
-  str_sprite: {fileID: 21300000, guid: 388f4d878f04c7449ab12e4ebba8d342, type: 3}
+  hp_sprite: {fileID: 21300000, guid: 4e23deb1adfcf4fc1832c2ebe9be1398, type: 3}
+  mp_sprite: {fileID: 21300000, guid: 8650a2790c817454bb229a3f8af46cbd, type: 3}
+  str_sprite: {fileID: 21300000, guid: d842dba8cf6c14250a517cd8ec57fe50, type: 3}
   def_sprite: {fileID: 21300000, guid: 652730cb9d0d0c24e87eb7802d5a8025, type: 3}
   heal_hp_sprite: {fileID: 21300000, guid: 5b78684315e51a040aa0689cd9f2e826, type: 3}
   heal_mp_sprite: {fileID: 21300000, guid: a63522a4b6cdfb14fa6fcf272a6596d8, type: 3}
