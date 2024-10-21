@@ -6,6 +6,8 @@ public class AudioManager : MonoBehaviour
 
     public AudioSource bgmSource;
     public AudioSource sfxSource;
+    public bool sfxSoundOn = true;
+    public bool bgSoundOn = true;
     //public AudioClip touchSound; // 터치 시 재생될 효과음
 
     public float bgmVolume

@@ -1,26 +1,19 @@
-// Copyright (C) 2024 ricimi. All rights reserved.
-// This code can only be used under the standard Unity Asset Store EULA,
-// a copy of which is available at https://unity.com/legal/as-terms.
-
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Ricimi
 {
-    // This class is responsible for popup management. Popups follow the traditional behavior of
-    // automatically blocking the input on elements behind it and adding a background texture.
     public class Popup : MonoBehaviour
     {
         public Color backgroundColor = new Color(10.0f / 255.0f, 10.0f / 255.0f, 10.0f / 255.0f, 0.6f);
-
-        public float destroyTime = 0.5f;
 
         private GameObject m_background;
 
         public void Open()
         {
             AddBackground();
+            gameObject.SetActive(true); // 팝업 활성화
         }
 
         public void Close()
@@ -31,19 +24,27 @@ namespace Ricimi
                 animator.Play("Close");
             }
 
-            RemoveBackground();
-            StartCoroutine(RunPopupDestroy());
+            if (m_background != null)
+            {
+                RemoveBackground();
+            }
+            else
+            {
+                Debug.LogWarning("Background was not found during Close.");
+            }
+
+            StartCoroutine(RunPopupDeactivate());
         }
 
-        // We destroy the popup automatically 0.5 seconds after closing it.
-        // The destruction is performed asynchronously via a coroutine. If you
-        // want to destroy the popup at the exact time its closing animation is
-        // finished, you can use an animation event instead.
-        private IEnumerator RunPopupDestroy()
+        // 팝업 비활성화 처리 (비파괴)
+        private IEnumerator RunPopupDeactivate()
         {
-            yield return new WaitForSeconds(destroyTime);
-            Destroy(m_background);
-            Destroy(gameObject);
+            yield return new WaitForSeconds(0.5f); // 닫기 애니메이션 후 대기 시간
+            if (m_background != null)
+            {
+                m_background.SetActive(false); // 배경 비활성화
+            }
+            gameObject.SetActive(false); // 팝업 비활성화
         }
 
         private void AddBackground()
@@ -56,12 +57,9 @@ namespace Ricimi
             var image = m_background.AddComponent<Image>();
             var rect = new Rect(0, 0, bgTex.width, bgTex.height);
             var sprite = Sprite.Create(bgTex, rect, new Vector2(0.5f, 0.5f), 1);
-            // Clone the material, which is the default UI material, to avoid changing it permanently.
             image.material = new Material(image.material);
             image.material.mainTexture = bgTex;
             image.sprite = sprite;
-            var newColor = image.color;
-            image.color = newColor;
             image.canvasRenderer.SetAlpha(0.0f);
             image.CrossFadeAlpha(1.0f, 0.4f, false);
 

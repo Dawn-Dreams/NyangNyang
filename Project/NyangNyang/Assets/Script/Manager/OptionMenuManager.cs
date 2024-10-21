@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class OptionMenuManager : MonoBehaviour
 {
-    public GameObject buttonParentObject;   // 버튼들을 담고 있는 부모 오브젝트
+    public GameObject toggleParentObject;   // Toggle들을 담고 있는 부모 오브젝트
     public GameObject panelParentObject;    // 패널들을 담고 있는 부모 오브젝트
 
     public GameObject noticeTextPrefab;     // 공지 텍스트 프리팹
@@ -15,28 +15,41 @@ public class OptionMenuManager : MonoBehaviour
     public GameObject mailButtonPrefab;     // 우편 버튼 프리팹
     public GameObject friendButtonPrefab;   // 친구 버튼 프리팹
 
-    private Button[] buttons;               // 동적으로 찾은 버튼들을 저장할 배열
+    private Toggle[] toggles;               // 동적으로 찾은 Toggle들을 저장할 배열
     private GameObject[] panels;            // 동적으로 찾은 패널들을 저장할 배열
 
     private void Start()
     {
-        FindButtonsAndPanels();
+        FindTogglesAndPanels();
 
-        for (int i = 0; i < buttons.Length; i++)
+        for (int i = 0; i < toggles.Length; i++)
         {
             int index = i;
-            buttons[i].onClick.AddListener(() => OpenPanel(index));
+            toggles[i].onValueChanged.AddListener(isOn =>
+            {
+                if (isOn)
+                {
+                    OpenPanel(index);
+                }
+            });
         }
 
         foreach (GameObject panel in panels)
         {
             panel.SetActive(false);
         }
+        
+        // 0번 패널 활성화
+        if (toggles.Length > 0 && panels.Length > 0)
+        {
+            toggles[0].isOn = true;
+            panels[0].SetActive(true);
+        }
     }
 
-    void FindButtonsAndPanels()
+    void FindTogglesAndPanels()
     {
-        buttons = buttonParentObject.GetComponentsInChildren<Button>();
+        toggles = toggleParentObject.GetComponentsInChildren<Toggle>();
         panels = new GameObject[panelParentObject.transform.childCount];
 
         for (int i = 0; i < panels.Length; i++)
@@ -57,6 +70,9 @@ public class OptionMenuManager : MonoBehaviour
             panels[index].SetActive(true);
             CallPanelFunction(index);
         }
+        else
+        {
+        }
     }
 
     void CallPanelFunction(int index)
@@ -64,26 +80,25 @@ public class OptionMenuManager : MonoBehaviour
         switch (index)
         {
             case 0:
-                OpenNoticePanel();
+                OpenMessagePanel();
                 break;
             case 1:
-                OpenRankingPanel();
-                break;
-            case 2:
-                OpenBulletinBoardPanel();
-                break;
-            case 3:
-                OpenCommunityPanel();
-                panels[3].gameObject.SetActive(false);
-                break;
-            case 4:
-                OpenSettingsPanel();
-                break;
-            case 5:
                 OpenFriendsPanel();
                 break;
+            case 2:
+                OpenRankingPanel();
+                break;
+            case 3:
+                OpenSettingsPanel();
+                break;
+            case 4:
+                OpenNoticePanel();
+                break;
+            case 5:
+                OpenBulletinBoardPanel();
+                break;
             case 6:
-                OpenMessagePanel();
+                OpenCommunityPanel();
                 break;
             default:
                 Debug.LogWarning("해당 인덱스에 대한 고유 함수가 없습니다.");
@@ -99,9 +114,8 @@ public class OptionMenuManager : MonoBehaviour
 
         if (noticeList.Count > 0)
         {
-            GameObject noticeTextObj = GameObject.Find("NoticeText");  // NoticeUI > Contents > Scroll View > Viewport > Content > NoticeText
+            GameObject noticeTextObj = GameObject.Find("NoticeText");
 
-            // Null 체크 추가
             if (noticeTextObj == null)
             {
                 Debug.LogError("NoticeText 오브젝트를 찾을 수 없습니다. 이름이 정확한지 확인하세요.");
@@ -110,15 +124,13 @@ public class OptionMenuManager : MonoBehaviour
 
             TMP_Text noticeTextComponent = noticeTextObj.GetComponent<TMP_Text>();
 
-            // TMP_Text 컴포넌트가 null인지 체크
             if (noticeTextComponent == null)
             {
                 Debug.LogError("TMP_Text 컴포넌트를 찾을 수 없습니다. 해당 오브젝트에 TMP_Text가 있는지 확인하세요.");
                 return;
             }
 
-            // 공지 내용 초기화
-            string allNotices = "";  // 모든 공지를 저장할 문자열
+            string allNotices = "";
 
             foreach (NoticeData notice in noticeList)
             {
@@ -137,7 +149,7 @@ public class OptionMenuManager : MonoBehaviour
     void OpenRankingPanel()
     {
         List<RankingData> rankList = DummyOptionsServer.GetRankingData();
-        GameObject contentObj = GameObject.Find("RankUI/Contents/Scroll View/Viewport/Content");
+        GameObject contentObj = GameObject.Find("RankUI/Viewport/Content");
 
         // 기존에 생성된 요소들을 모두 제거
         foreach (Transform child in contentObj.transform)
@@ -155,7 +167,7 @@ public class OptionMenuManager : MonoBehaviour
                 TMP_Text rankUserNameText = rankUserButton.transform.Find("RankUserName").GetComponent<TMP_Text>();
                 TMP_Text rankScoreText = rankUserButton.transform.Find("RankScore").GetComponent<TMP_Text>();
 
-                rankNumberText.text = (rankList.IndexOf(rankData) + 1).ToString();  // 순위를 1부터 시작
+                rankNumberText.text = (rankList.IndexOf(rankData) + 1).ToString();
                 rankUserNameText.text = rankData.userName;
                 rankScoreText.text = rankData.score.ToString();
             }
@@ -170,8 +182,8 @@ public class OptionMenuManager : MonoBehaviour
     void OpenBulletinBoardPanel()
     {
         List<BoardData> boardList = DummyOptionsServer.GetBoardData();
-        GameObject contentObj = GameObject.Find("BulletinBoardUI/Contents/Scroll View/Viewport/Content");
-
+        GameObject contentObj = GameObject.Find("BulletinBoardUI/Viewport/Content");
+        // Application.OpenURL("https://cafe.naver.com/nyangnyangcafeurl"); // 게시판에 커뮤니티 버튼 추가
         // 기존에 생성된 요소들을 모두 제거
         foreach (Transform child in contentObj.transform)
         {
@@ -198,7 +210,7 @@ public class OptionMenuManager : MonoBehaviour
     void OpenMessagePanel()
     {
         List<MailData> mailList = DummyOptionsServer.GetMailData();
-        GameObject contentObj = GameObject.Find("MessageUI/Contents/Scroll View/Viewport/Content");
+        GameObject contentObj = GameObject.Find("MessageUI/Viewport/Content");
 
         foreach (Transform child in contentObj.transform)
         {
@@ -234,7 +246,7 @@ public class OptionMenuManager : MonoBehaviour
     void OpenFriendsPanel()
     {
         List<FriendData> friendList = DummyOptionsServer.GetFriendData();
-        GameObject contentObj = GameObject.Find("FriendsUI/Contents/Scroll View/Viewport/Content");
+        GameObject contentObj = GameObject.Find("FriendUI/Viewport/Content");
 
         // 기존에 생성된 요소들을 모두 제거
         foreach (Transform child in contentObj.transform)
@@ -266,7 +278,7 @@ public class OptionMenuManager : MonoBehaviour
     // 커뮤니티
     void OpenCommunityPanel()
     {
-        Application.OpenURL("https://cafe.naver.com/nyangnyangcafeurl");
+        
     }
 
     // 설정
