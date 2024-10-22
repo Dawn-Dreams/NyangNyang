@@ -9,7 +9,7 @@ public class HideUi : MonoBehaviour
 
     public Action OnShowAction = null;
 
-    public void Start()
+    public void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
     }

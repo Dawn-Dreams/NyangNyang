@@ -14,7 +14,6 @@ public class QuestMainObject : MonoBehaviour
     private void Start()
     {
         SetInActiveQuestUIAtStart();
-        
     }
 
     void SetInActiveQuestUIAtStart()
