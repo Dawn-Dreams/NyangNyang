@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraShake : MonoBehaviour
 {
     public float shakeDuration = 0.5f;      // 카메라 흔들림의 지속 시간
-    public float shakeMagnitude = 0.5f;     // 카메라 흔들림의 강도
+    public float shakeMagnitude = 0.2f;     // 카메라 흔들림의 강도
     public float dampingSpeed = 1.0f;       // 흔들림이 점차 감소하는 속도 (감쇠 속도)
 
     private Vector3 originPos;      // 카메라의 원래 위치 저장 변수
@@ -16,12 +16,13 @@ public class CameraShake : MonoBehaviour
         originPos = transform.position;
     }
 
+    // 기본
     public void TriggerShake()
     {
         shakingTime = shakeDuration;
     }
-
-     public void TriggerShake(float _shakeDuration, float _shakeMagnitude)
+    // 커스텀
+    public void TriggerShake(float _shakeDuration, float _shakeMagnitude)
     {
         shakeMagnitude = _shakeMagnitude;
         shakingTime = _shakeDuration;
@@ -38,6 +39,6 @@ public class CameraShake : MonoBehaviour
         }
         else
             transform.localPosition = originPos;
-        
+
     }
 }
