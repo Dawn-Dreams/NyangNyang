@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class DungeonPanel : MenuPanel
 {
@@ -168,7 +169,8 @@ public class DungeonPanel : MenuPanel
         switch (index)
         {
             case 0:
-                FindObjectOfType<MiniGame1>().StartGame();
+                SceneManager.LoadScene("MiniGameDemoScene", LoadSceneMode.Additive);
+                //FindObjectOfType<MiniGame1>().StartGame();
                 GameManager.isMiniGameActive = true;
                 break;
             case 1:
