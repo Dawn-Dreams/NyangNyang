@@ -8,30 +8,12 @@ using UnityEngine.Rendering;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 
-public class AddressableHandleSpritePair
-{
-    public AsyncOperationHandle<Sprite> handle;
-    public Sprite sprite;
-
-    public void Load(string key)
-    {
-        handle = Addressables.LoadAssetAsync<Sprite>(key);
-        handle.WaitForCompletion();
-        sprite = handle.Result;
-    }
-
-    public void Release()
-    {
-        handle.Release();
-    }
-}
 
 public class PlayerTitleElement : MonoBehaviour
 {
-
-    private AddressableHandleSpritePair _notOwningSprite;
-    private AddressableHandleSpritePair _owningSprite;
-    private AddressableHandleSpritePair _selectedSprite;
+    private AddressableHandle<Sprite> _notOwningSprite;
+    private AddressableHandle<Sprite> _owningSprite;
+    private AddressableHandle<Sprite> _selectedSprite;
 
     public TitleInfo titleInfo;
 
@@ -62,12 +44,12 @@ public class PlayerTitleElement : MonoBehaviour
         {
             if (titleInfo.id == Player.PlayerCurrentTitleID)
             {
-                selectTitleButtonImage.sprite = _selectedSprite.sprite;
+                selectTitleButtonImage.sprite = _selectedSprite.obj;
                 selectTitleText.text = "착용중";
             }
             else
             {
-                selectTitleButtonImage.sprite = _owningSprite.sprite;
+                selectTitleButtonImage.sprite = _owningSprite.obj;
                 selectTitleText.text = "보유중";
                 selectTitleButton.interactable = true;
             }
@@ -75,7 +57,7 @@ public class PlayerTitleElement : MonoBehaviour
         }
         else
         {
-            selectTitleButtonImage.sprite = _notOwningSprite.sprite;
+            selectTitleButtonImage.sprite = _notOwningSprite.obj;
             selectTitleText.text = "미보유";
         }
     }
@@ -100,19 +82,19 @@ public class PlayerTitleElement : MonoBehaviour
         // Load Sprite
         if (_notOwningSprite == null)
         {
-            _notOwningSprite = new AddressableHandleSpritePair();
+            _notOwningSprite = new AddressableHandle<Sprite>();
             _notOwningSprite.Load("TitleButton/NotOwning");
         }
 
         if (_owningSprite == null)
         {
-            _owningSprite = new AddressableHandleSpritePair();
+            _owningSprite = new AddressableHandle<Sprite>();
             _owningSprite.Load("TitleButton/Owning");
         }
 
         if (_selectedSprite == null)
         {
-            _selectedSprite = new AddressableHandleSpritePair();
+            _selectedSprite = new AddressableHandle<Sprite>();
             _selectedSprite.Load("TitleButton/CurrentSelect");
         }
     }
