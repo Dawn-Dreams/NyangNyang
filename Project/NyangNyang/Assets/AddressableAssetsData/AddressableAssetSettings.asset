@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 933ba2e0b1790284b882e1a5c632169e
   m_currentHash:
     serializedVersion: 2
-    Hash: b8fa97cf20c6ffb4ff5b54b34231ebd8
+    Hash: 975e51e8fd8e98eeb807f2b674056b0e
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_BundleLocalCatalog: 0
@@ -45,6 +45,8 @@ MonoBehaviour:
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
   - {fileID: 11400000, guid: 79c78450d9bfc9148b640b6c5bf31ac9, type: 2}
+  - {fileID: 11400000, guid: d02d47b1cae0db649a868cd30c0827d1, type: 2}
+  - {fileID: 11400000, guid: 61579fa1f7da2fb41aa2c442031897c4, type: 2}
   - {fileID: 11400000, guid: de91e23fc801fd34ea2b894d830fdc81, type: 2}
   - {fileID: 11400000, guid: 6b11de3deb3d19740858947bc0176c7a, type: 2}
   - {fileID: 11400000, guid: 27538cc3cf334f04aac84fc69a23c522, type: 2}
@@ -95,6 +97,11 @@ MonoBehaviour:
     - TitleButton/NotOwning
     - TitleButton/Owning
     - TitleButton/CurrentSelect
+    - Pass/Background/Open
+    - Pass/Background/Close/Gold
+    - Pass/Background/Close/Free
+    - Icon/Checkmark
+    - Icon/Lock
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 1357d4d6892ead44d8606e168156272e, type: 2}
