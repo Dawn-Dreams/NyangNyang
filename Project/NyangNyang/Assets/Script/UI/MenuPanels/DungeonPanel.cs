@@ -18,7 +18,7 @@ public class DungeonPanel : MenuPanel
     private Button[][] levelSelectButtons;
 
     private DungeonManager DungeonManager;
-    private MiniGame1 miniGame1;
+    //private MiniGame1 miniGame1;
 
     // 현재 클리어한 최고 레벨을 Player가 저장하도록 수정 필요
     private int[] highestClearedStage = new int[3] { 1, 1, 1 };
@@ -34,7 +34,7 @@ public class DungeonPanel : MenuPanel
 
     private void InitializeManagers()
     {
-        miniGame1 = FindObjectOfType<MiniGame1>() ?? throw new NullReferenceException("MiniGame1이 NULL입니다.");
+        //miniGame1 = FindObjectOfType<MiniGame1>() ?? throw new NullReferenceException("MiniGame1이 NULL입니다.");
         DungeonManager = FindObjectOfType<DungeonManager>() ?? throw new NullReferenceException("DungeonManager가 존재하지 않습니다.");
     }
 

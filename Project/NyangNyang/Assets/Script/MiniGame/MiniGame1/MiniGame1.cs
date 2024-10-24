@@ -14,6 +14,11 @@ public class MiniGame1 : MiniGameBase
     private Tile[,] grid;       // 그리드에 배치된 타일 배열
     private bool isProcessing;  // 병합 처리 중 여부
 
+    private void Start()
+    {
+        StartGameLogic();
+    }
+
     // 게임 시작 시 로직
     protected override void StartGameLogic()
     {
