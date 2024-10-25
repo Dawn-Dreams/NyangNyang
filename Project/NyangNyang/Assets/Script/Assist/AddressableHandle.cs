@@ -62,4 +62,9 @@ public class AddressableHandleAssets<T> where T : UnityEngine.Object
 
     }
 
+    public void Release()
+    {
+        assetsHandle.Release();
+    }
+
 }

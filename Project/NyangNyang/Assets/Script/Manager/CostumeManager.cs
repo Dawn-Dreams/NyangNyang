@@ -58,99 +58,33 @@ public class CostumeManager : MonoBehaviour
         return _instance;
     }
 
-    [SerializeField] private SkinnedMeshRenderer catSkinnedMesh;
-
-    // 고양이 코스튬 소켓
-    [SerializeField] private Transform catHeadTransform;
-    [SerializeField] private Transform catBodyTransform;
-    [SerializeField] private Transform catHandRTransform;
-    private Dictionary<CatCostumePart, Transform> _catCostumeTransforms = new Dictionary<CatCostumePart, Transform>
-    {
-        { CatCostumePart.Head , null},
-        { CatCostumePart.Body , null},
-        { CatCostumePart.Hand_R , null},
-    };
-
     // 고양이 털 스킨 머테리얼 에셋 관리 변수
     private List<AddressableHandle<Material>> _catFurMaterials = new List<AddressableHandle<Material>>();
     // 고양이 코스튬 프리팹 에셋 관리 변수
     private Dictionary<CatCostumePart, AddressableHandleAssets<GameObject>> _catCostumes =
         new Dictionary<CatCostumePart, AddressableHandleAssets<GameObject>>();
     
-
-    // 현재 유저의 털 스킨
-    private CatFurSkin _currentCatFurSkin = CatFurSkin.Cheese;
-    // 현재 유저의 각 부위별 고양이 코스튬 번호
-    private Dictionary<CatCostumePart, int> _currentCatCostume = new Dictionary<CatCostumePart, int>
+    void Awake()
     {
-        { CatCostumePart.Head, (int)(HeadCostumeType.NotEquip)  },
-        { CatCostumePart.Body, (int)(BodyCostumeType.NotEquip)  },
-        { CatCostumePart.Hand_R, (int)(HandRCostumeType.NotEquip) },
-    };
-    // 해당 파츠의 코스튬 GameObject
-    private Dictionary<CatCostumePart, GameObject> _currentCatCostumeGameObjects = new Dictionary<CatCostumePart, GameObject>
-    {
-        { CatCostumePart.Head, null },
-        { CatCostumePart.Body, null },
-        { CatCostumePart.Hand_R, null },
-    };
-    
-    
-    void Start()
-    {
-        // 고양이 코스튬 소켓(Transform) 연결
-        _catCostumeTransforms[CatCostumePart.Head] = catHeadTransform;
-        _catCostumeTransforms[CatCostumePart.Body] = catBodyTransform;
-        _catCostumeTransforms[CatCostumePart.Hand_R] = catHandRTransform;
-
-
         AssetLoad();
 
         if (_instance == null)
         {
             _instance = this;
         }
-
-        // TODO: 서버로부터 현재 유저의 CatFurSkin 정보 받기
-        // TODO: 서버로부터 현재 고양이 코스튬 정보 받기
-        
-        ChangeCatFurSkin(_currentCatFurSkin);
-        for (int i = 0; i < (int)CatCostumePart.Count; ++i)
-        {
-            ChangeCatCostume((CatCostumePart)i, _currentCatCostume[(CatCostumePart)i]);
-        }
     }
 
-    // 고양이의 털 스킨을 변경하는 함수
-    public void ChangeCatFurSkin(CatFurSkin changeFurSkin)
+    void OnDestroy()
     {
-        Debug.Log("ChangeCatFurSkin");
-        _currentCatFurSkin = changeFurSkin;
-
-        Material[] mats = catSkinnedMesh.materials;
-        mats[0] = _catFurMaterials[(int)changeFurSkin].obj;
-        catSkinnedMesh.materials = mats;
-    }
-
-    public void ChangeCatCostume(CatCostumePart part, int costumeType)
-    {
-        // 현재 착용중인 코스튬은 삭제
-        if (_currentCatCostumeGameObjects[part] != null)
+        foreach (var VARIABLE in _catFurMaterials)
         {
-            Destroy(_currentCatCostumeGameObjects[part]);
-            _currentCatCostumeGameObjects[part] = null;
+            VARIABLE.Release();
         }
 
-        // 해당 번호는 NotEquip
-        if (costumeType == 0)
+        foreach (var VARIABLE in _catCostumes)
         {
-            return;
+            VARIABLE.Value.assetsHandle.Release();
         }
-
-        GameObject changeCostumePrefab = _catCostumes[part].objs[costumeType];
-
-        _currentCatCostume[part] = costumeType;
-        _currentCatCostumeGameObjects[part] = Instantiate(changeCostumePrefab, _catCostumeTransforms[part]);
     }
 
     // Addressable 에셋 로드
@@ -170,27 +104,20 @@ public class CostumeManager : MonoBehaviour
             // 에셋 로드 후
             _catCostumes.Add((CatCostumePart)i, new AddressableHandleAssets<GameObject>());
         }
+
         // TODO: 빠르게 진행하기 위해 해당 방식을 사용, 추후 for문으로 할 수 있도록 조정
         _catCostumes[(CatCostumePart.Head)].LoadAssets("Costume/Head", Enum.GetNames(typeof(HeadCostumeType)).ToList());
         _catCostumes[(CatCostumePart.Hand_R)].LoadAssets("Costume/Hand_R", Enum.GetNames(typeof(HandRCostumeType)).ToList());
         _catCostumes[(CatCostumePart.Body)].LoadAssets("Costume/Body", Enum.GetNames(typeof(BodyCostumeType)).ToList());
     }
 
-    void Update()
+    public Material GetCatFurSkinMaterial(CatFurSkin furSkinType)
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            Debug.Log("고양이 털 스킨 바꾸기");
-            ChangeCatFurSkin((CatFurSkin)(((int)_currentCatFurSkin + 1) % (int)(CatFurSkin.Count)));
-        }
+        return _catFurMaterials[(int)furSkinType].obj;
+    }
 
-        if (Input.GetKeyDown(KeyCode.RightShift))
-        {
-            Debug.Log("고양이 모든 스킨 바꾸기");
-            
-            ChangeCatCostume(CatCostumePart.Head, (_currentCatCostume[CatCostumePart.Head] + 1) % (int)HeadCostumeType.Count);
-            ChangeCatCostume(CatCostumePart.Body, (_currentCatCostume[CatCostumePart.Body] + 1) % (int)BodyCostumeType.Count);
-            ChangeCatCostume(CatCostumePart.Hand_R, (_currentCatCostume[CatCostumePart.Hand_R] + 1) % (int)HandRCostumeType.Count);
-        }
+    public GameObject GetCatCostumePrefab(CatCostumePart part, int costumeType)
+    {
+        return _catCostumes[part].objs[costumeType];
     }
 }
