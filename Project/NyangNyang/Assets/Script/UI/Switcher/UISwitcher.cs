@@ -32,7 +32,6 @@ public class UISwitcher : MonoBehaviour
             return;
         }
 
-        Debug.Log($"잘 되는가? {buttonID}");
         // UI 비활성화 or 자식 순서 변경
         if (!switchUiInActive)
         {

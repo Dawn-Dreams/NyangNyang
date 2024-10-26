@@ -83,19 +83,19 @@ public class PlayerTitleElement : MonoBehaviour
         if (_notOwningSprite == null)
         {
             _notOwningSprite = new AddressableHandle<Sprite>();
-            _notOwningSprite.Load("TitleButton/NotOwning");
+            _notOwningSprite.Load("Sprite/Button/NotOwning");
         }
 
         if (_owningSprite == null)
         {
             _owningSprite = new AddressableHandle<Sprite>();
-            _owningSprite.Load("TitleButton/Owning");
+            _owningSprite.Load("Sprite/Button/Owning");
         }
 
         if (_selectedSprite == null)
         {
             _selectedSprite = new AddressableHandle<Sprite>();
-            _selectedSprite.Load("TitleButton/CurrentSelect");
+            _selectedSprite.Load("Sprite/Button/CurrentSelect");
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Costume : MonoBehaviour
 {
@@ -52,7 +53,7 @@ public class Costume : MonoBehaviour
     }
 
     // 고양이의 털 스킨을 변경하는 함수
-    public void ChangeCatFurSkin(CatFurSkin changeFurSkin)
+    private void ChangeCatFurSkin(CatFurSkin changeFurSkin)
     {
         _currentCatCostume[CatCostumePart.FurSkin] = (int)changeFurSkin;
 
@@ -83,10 +84,27 @@ public class Costume : MonoBehaviour
         {
             return;
         }
-
+        
         GameObject changeCostumePrefab = CostumeManager.GetInstance().GetCatCostumePrefab(part, costumeType);
 
         _currentCatCostumeGameObjects[part] = Instantiate(changeCostumePrefab, _catCostumeTransforms[part]);
+    }
+
+    public void SetAllCurrentCostumeLayerToUI()
+    {
+        foreach (var VARIABLE in _currentCatCostumeGameObjects)
+        {
+            // 장착중이라면
+            if (VARIABLE.Value != null)
+            {
+                VARIABLE.Value.layer = LayerMask.NameToLayer("UI");
+                foreach (Transform child in VARIABLE.Value.transform)
+                {
+                    child.gameObject.layer = LayerMask.NameToLayer("UI");
+                }
+            }
+            
+        }
     }
 
     void Update()

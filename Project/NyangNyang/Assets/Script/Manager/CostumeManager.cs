@@ -83,7 +83,7 @@ public class CostumeManager : MonoBehaviour
 
         foreach (var VARIABLE in _catCostumes)
         {
-            VARIABLE.Value.assetsHandle.Release();
+            //VARIABLE.Value.assetsHandle.Release();
         }
     }
 

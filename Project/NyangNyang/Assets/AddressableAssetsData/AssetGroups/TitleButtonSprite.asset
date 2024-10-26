@@ -21,19 +21,20 @@ MonoBehaviour:
     m_Address: Assets/MyAsset/CuteKawaiiGUIPack/Icons/Icons/Trophies-Badges/Squircle--Green-256.png
     m_ReadOnly: 0
     m_SerializedLabels:
-    - TitleButton/Owning
+    - Sprite/Button/CurrentSelect
+    - Sprite/Button/Owning
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 83842b40cc43d48ffaeca5ef7da46789
     m_Address: Assets/MyAsset/CuteKawaiiGUIPack/Icons/Icons/Trophies-Badges/Squircle--Blue-256.png
     m_ReadOnly: 0
     m_SerializedLabels:
-    - TitleButton/CurrentSelect
+    - Sprite/Button/CurrentSelect
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cd146a721efb14e1891b24d83f67b045
     m_Address: Assets/MyAsset/CuteKawaiiGUIPack/Icons/Icons/Trophies-Badges/Squircle-Gray-256.png
     m_ReadOnly: 0
     m_SerializedLabels:
-    - TitleButton/NotOwning
+    - Sprite/Button/NotOwning
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5f1874fff1b70124d8333b18a2e9b4e8, type: 2}

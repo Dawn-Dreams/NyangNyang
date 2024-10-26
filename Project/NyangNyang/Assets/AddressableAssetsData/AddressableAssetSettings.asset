@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 933ba2e0b1790284b882e1a5c632169e
   m_currentHash:
     serializedVersion: 2
-    Hash: c155338c6b1daf1e8b0aa2a4644d89cb
+    Hash: 79bfebef5f357035c0985bbb6b54cac7
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_BundleLocalCatalog: 0
@@ -96,9 +96,6 @@ MonoBehaviour:
     m_LabelNames:
     - default
     - BG
-    - TitleButton/NotOwning
-    - TitleButton/Owning
-    - TitleButton/CurrentSelect
     - Pass/Background/Open
     - Pass/Background/Close/Gold
     - Pass/Background/Close/Free
@@ -107,6 +104,9 @@ MonoBehaviour:
     - Costume/Body
     - Costume/Hand_R
     - Costume/Head
+    - Sprite/Button/NotOwning
+    - Sprite/Button/Owning
+    - Sprite/Button/CurrentSelect
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 1357d4d6892ead44d8606e168156272e, type: 2}

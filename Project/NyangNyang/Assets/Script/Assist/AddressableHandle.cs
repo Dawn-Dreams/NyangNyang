@@ -15,17 +15,23 @@ public class AddressableHandle<T>
     public AsyncOperationHandle<T> handle;
     public T obj;
 
-    public void Load(string key)
+    public AddressableHandle<T> Load(string key)
     {
         handle = Addressables.LoadAssetAsync<T>(key);
         handle.WaitForCompletion();
         obj = handle.Result;
+
+        return this;
     }
 
 
     public void Release()
     {
-        handle.Release();
+        if (handle.IsValid())
+        {
+            handle.Release();
+        }
+        
     }
 }
 
@@ -64,7 +70,10 @@ public class AddressableHandleAssets<T> where T : UnityEngine.Object
 
     public void Release()
     {
-        assetsHandle.Release();
+        if (assetsHandle.IsValid())
+        {
+            Addressables.Release(assetsHandle);
+        }
     }
 
 }
