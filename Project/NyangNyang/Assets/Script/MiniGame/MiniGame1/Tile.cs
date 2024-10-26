@@ -40,6 +40,21 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUp
         }
 
         isMerged = false;
+        UpdatePosition();
+    }
+
+    // 타일의 위치를 설정하고 이동
+    public void SetPosition(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+        UpdatePosition();
+    }
+
+    // 타일의 현재 x, y 좌표에 맞는 위치로 이동
+    private void UpdatePosition()
+    {
+        transform.localPosition = new Vector3(x, -y, 0);
     }
 
     // 터치 시작 시 호출
@@ -59,13 +74,13 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUp
         {
             OnTileTouched.Invoke();
         }
-        Debug.Log($"Tile ({x}, {y}) is being dragged.");
+        //Debug.Log($"Tile ({x}, {y}) is being dragged.");
     }
 
     // 터치 종료 시 호출
     public void OnPointerUp(PointerEventData eventData)
     {
-        Debug.Log($"Tile ({x}, {y}) touch released.");
+        //Debug.Log($"Tile ({x}, {y}) touch released.");
     }
 
     public void SetMerged()
