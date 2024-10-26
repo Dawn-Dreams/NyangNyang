@@ -23,7 +23,7 @@ public enum CatFurSkin
 [Serializable]
 public enum CatCostumePart
 {
-    Head, Hand_R, Body, Count
+    Head, Hand_R, Body,FurSkin, Count
 }
 
 // 머리 장착 코스튬
@@ -119,5 +119,54 @@ public class CostumeManager : MonoBehaviour
     public GameObject GetCatCostumePrefab(CatCostumePart part, int costumeType)
     {
         return _catCostumes[part].objs[costumeType];
+    }
+
+    public int GetCostumeCountByPart(CatCostumePart part)
+    {
+        int retVal = 0;
+        switch (part)
+        {
+            case CatCostumePart.Head:
+                retVal = (int)HeadCostumeType.Count;
+                break;
+            case CatCostumePart.Hand_R:
+                retVal = (int)HandRCostumeType.Count;
+                break;
+            case CatCostumePart.Body:
+                retVal = (int) BodyCostumeType.Count;
+                break;
+            case CatCostumePart.FurSkin:
+                retVal = (int)CatFurSkin.Count;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(part), part, null);
+        }
+
+        return retVal;
+    }
+
+    public string GetCostumeName(CatCostumePart part, int index, bool inKor = true)
+    {
+        string retVal = "";
+        switch (part)
+        {
+            case CatCostumePart.Head:
+                retVal = ((HeadCostumeType)index).ToString();
+                break;
+            case CatCostumePart.Hand_R:
+                retVal = ((HandRCostumeType)index).ToString();
+                break;
+            case CatCostumePart.Body:
+                retVal = ((BodyCostumeType)index).ToString();
+                break;
+            case CatCostumePart.FurSkin:
+                retVal = ((CatFurSkin)index).ToString();
+                break;
+            case CatCostumePart.Count:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(part), part, null);
+        }
+        return retVal;
     }
 }
