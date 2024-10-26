@@ -19,6 +19,35 @@ public class MiniGame1 : MiniGameBase
         StartGameLogic();
     }
 
+    private void Update()
+    {
+        // F5 키를 누르면 그리드를 초기화
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            ResetGrid();
+        }
+    }
+
+    // 그리드를 초기화하는 메서드
+    private void ResetGrid()
+    {
+        // 기존 타일 삭제
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                if (grid[x, y] != null)
+                {
+                    Destroy(grid[x, y].gameObject);
+                    grid[x, y] = null;
+                }
+            }
+        }
+
+        // 새로운 그리드 생성
+        InitializeGrid();
+    }
+
     // 게임 시작 시 로직
     protected override void StartGameLogic()
     {
@@ -43,13 +72,11 @@ public class MiniGame1 : MiniGameBase
     {
         if (tilePrefab == null)
         {
-            Debug.LogError("Tile prefab is not assigned in the Inspector.");
             return;
         }
 
         if (gridParent == null)
         {
-            Debug.LogError("Grid parent is not assigned in the Inspector.");
             return;
         }
 
@@ -58,7 +85,6 @@ public class MiniGame1 : MiniGameBase
 
         if (tile == null)
         {
-            Debug.LogError("The instantiated object does not have a Tile component.");
             return;
         }
 
@@ -77,7 +103,6 @@ public class MiniGame1 : MiniGameBase
         if (isProcessing)
             return;
 
-        Debug.Log($"Tile at {x},{y} touched");
         List<Tile> matchingTiles = FindMatchingTiles(x, y);
 
         if (matchingTiles.Count >= matchCount)
