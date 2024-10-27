@@ -17,6 +17,12 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 7268a158264961546bcb1317df09cb97
   m_SerializeEntries:
+  - m_GUID: 12348fc04884c514184365cc4df792af
+    m_Address: Assets/MyAsset/PspspsCat/Pspsps/Prefab/Characters/Chibi_Cat_01.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/FurSkin
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1438380ef88485049acbc82385b7114a
     m_Address: Assets/Prefabs/Costume/Head/Head_Meat.prefab
     m_ReadOnly: 0
@@ -28,6 +34,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Costume/Body
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2a1777b46cb191d409ae3f72d74cea05
+    m_Address: Assets/MyAsset/PspspsCat/Pspsps/Prefab/Characters/Chibi_Cat_07.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/FurSkin
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3acf5afc1f4c12347b6b848fb484e41a
+    m_Address: Assets/MyAsset/PspspsCat/Pspsps/Prefab/Characters/Chibi_Cat_08.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/FurSkin
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 501c820cbd1948b44b2695ba9a4564d1
     m_Address: Assets/Prefabs/Costume/Head/Head_Glass_Green.prefab
@@ -41,11 +59,35 @@ MonoBehaviour:
     m_SerializedLabels:
     - Costume/Hand_R
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6bcde8da7d11c3145b1ffa422536ddff
+    m_Address: Assets/MyAsset/PspspsCat/Pspsps/Prefab/Characters/Chibi_Cat_05.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/FurSkin
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 720e20d598733f74699ef0e5413891c8
+    m_Address: Assets/MyAsset/PspspsCat/Pspsps/Prefab/Characters/Chibi_Cat_03.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/FurSkin
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 746a576b75b529b419ce389d079ea379
     m_Address: Assets/Prefabs/Costume/Head/Head_HikingHat.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Costume/Head
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 824cb3d3a8a9e6b489447271ad157fad
+    m_Address: Assets/MyAsset/PspspsCat/Pspsps/Prefab/Characters/Chibi_Cat_02.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/FurSkin
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 82f864f3c3980f54884017918a66727e
+    m_Address: Assets/MyAsset/PspspsCat/Pspsps/Prefab/Characters/Chibi_Cat_04.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/FurSkin
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9431f34675a2d1148965d0c0cbc9ade5
     m_Address: Assets/Prefabs/Costume/Hand_R/Hand_R_Fork.prefab
@@ -64,6 +106,24 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Costume/Hand_R
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b4fc71ddd6a39e142926411a5f8147de
+    m_Address: Assets/MyAsset/PspspsCat/Pspsps/Prefab/Characters/Chibi_Cat_09.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/FurSkin
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: baa36186587bd9d4ab769976bbfb187e
+    m_Address: Assets/MyAsset/PspspsCat/Pspsps/Prefab/Characters/Chibi_Cat_06.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/FurSkin
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ca7723b78d9cb3f4591d1de36bfaa445
+    m_Address: Assets/MyAsset/PspspsCat/Pspsps/Prefab/Characters/Chibi_Cat_00.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/FurSkin
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cc1acbd4434b52f41858ec5ac36e677a
     m_Address: Assets/Prefabs/Costume/Body/Body_Bag.prefab

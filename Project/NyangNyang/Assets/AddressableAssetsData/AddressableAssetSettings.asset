@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 933ba2e0b1790284b882e1a5c632169e
   m_currentHash:
     serializedVersion: 2
-    Hash: 79bfebef5f357035c0985bbb6b54cac7
+    Hash: ba4b34d9c15dfa7644026ac5ae3e8233
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_BundleLocalCatalog: 0
@@ -107,6 +107,7 @@ MonoBehaviour:
     - Sprite/Button/NotOwning
     - Sprite/Button/Owning
     - Sprite/Button/CurrentSelect
+    - Costume/FurSkin
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 1357d4d6892ead44d8606e168156272e, type: 2}

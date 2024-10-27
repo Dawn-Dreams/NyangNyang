@@ -103,7 +103,6 @@ public class Costume : MonoBehaviour
                     child.gameObject.layer = LayerMask.NameToLayer("UI");
                 }
             }
-            
         }
     }
 

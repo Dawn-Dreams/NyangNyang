@@ -109,6 +109,8 @@ public class CostumeManager : MonoBehaviour
         _catCostumes[(CatCostumePart.Head)].LoadAssets("Costume/Head", Enum.GetNames(typeof(HeadCostumeType)).ToList());
         _catCostumes[(CatCostumePart.Hand_R)].LoadAssets("Costume/Hand_R", Enum.GetNames(typeof(HandRCostumeType)).ToList());
         _catCostumes[(CatCostumePart.Body)].LoadAssets("Costume/Body", Enum.GetNames(typeof(BodyCostumeType)).ToList());
+        _catCostumes[(CatCostumePart.FurSkin)].LoadAssets("Costume/FurSkin", Enum.GetNames(typeof(CatFurSkin)).ToList());
+        Debug.Log($"로드는 됐는데, {_catCostumes[CatCostumePart.Head].objs.Count}");
     }
 
     public Material GetCatFurSkinMaterial(CatFurSkin furSkinType)
@@ -168,5 +170,10 @@ public class CostumeManager : MonoBehaviour
                 throw new ArgumentOutOfRangeException(nameof(part), part, null);
         }
         return retVal;
+    }
+
+    public GameObject GetCostumePrefab(CatCostumePart part, int index)
+    {
+        return _catCostumes[part].objs[index];
     }
 }

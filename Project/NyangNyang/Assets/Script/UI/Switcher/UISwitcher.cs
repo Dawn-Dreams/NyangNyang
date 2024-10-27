@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -15,7 +16,6 @@ public class UISwitcher : MonoBehaviour
 
     void Start()
     {
-        
         for (int i = 0; i < toggles.Length; ++i)
         {
             int id = i;
@@ -23,6 +23,11 @@ public class UISwitcher : MonoBehaviour
             toggles[i].onValueChanged.AddListener((bool b) => SwitchGameObject(b, id));
         }
         SwitchGameObject(true,0);
+    }
+
+    public void SelectFirstToggle()
+    {
+        toggles[0].isOn = true;
     }
 
     void SwitchGameObject(bool isPress, int buttonID)
