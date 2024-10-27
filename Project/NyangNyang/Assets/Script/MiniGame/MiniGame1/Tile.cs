@@ -18,6 +18,7 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUp
     private void Awake()
     {
         image = GetComponent<Image>();
+        transform.localScale = Vector3.one;
 
         if (GetComponent<Collider2D>() == null)
         {
@@ -85,7 +86,7 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUp
     // 터치 종료 시 호출
     public void OnPointerUp(PointerEventData eventData)
     {
-        Debug.Log($"Tile ({x}, {y}) touch released.");
+        //Debug.Log($"Tile ({x}, {y}) touch released.");
     }
 
     public void SetMerged()
@@ -97,7 +98,7 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUp
         }
     }
 
-    private IEnumerator MergeEffect()
+    public IEnumerator MergeEffect()
     {
         float duration = 0.5f;
         float elapsedTime = 0f;
@@ -111,9 +112,10 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUp
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
-        gameObject.SetActive(false);
+        transform.localScale = Vector3.zero; // 크기를 완전히 줄임
+        gameObject.SetActive(false); // 애니메이션 완료 후 타일 비활성화
     }
+
 }
 
 public enum Direction

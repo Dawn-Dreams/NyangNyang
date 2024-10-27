@@ -959,7 +959,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridSizeX: 7
-  gridSizeY: 7
+  gridSizeY: 8
   tilePrefab: {fileID: 7738798599913100365, guid: 446de69a475041146b5921dce5760b9d, type: 3}
   gridParent: {fileID: 674565882}
   possibleTileTypes:
@@ -971,6 +971,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8a36f2d1f26d1224181a2b216c8863f9, type: 2}
   - {fileID: 11400000, guid: da155b50e5f32704897209ba71ce892e, type: 2}
   matchCount: 3
+  slideDuration: 0.3
 --- !u!1 &1949588195
 GameObject:
   m_ObjectHideFlags: 0

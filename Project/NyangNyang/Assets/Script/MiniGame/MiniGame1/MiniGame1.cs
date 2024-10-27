@@ -223,7 +223,9 @@ public class MiniGame1 : MonoBehaviour
             for (int y = 0; y < gridSizeY; y++)
             {
                 Tile currentTile = grid[x, y];
-                if (currentTile == null) continue;
+
+                if (currentTile == null) // currentTile이 null인지 확인
+                    continue;
 
                 // 가로 체크
                 List<Tile> horizontalMatch = new List<Tile> { currentTile };
@@ -237,7 +239,7 @@ public class MiniGame1 : MonoBehaviour
                     else break;
                 }
                 if (horizontalMatch.Count >= 3)
-                    matchedTiles.AddRange(horizontalMatch);
+                    matchedTiles.AddRange(horizontalMatch.Where(tile => tile != null)); // null 검사 후 추가
 
                 // 세로 체크
                 List<Tile> verticalMatch = new List<Tile> { currentTile };
@@ -251,7 +253,7 @@ public class MiniGame1 : MonoBehaviour
                     else break;
                 }
                 if (verticalMatch.Count >= 3)
-                    matchedTiles.AddRange(verticalMatch);
+                    matchedTiles.AddRange(verticalMatch.Where(tile => tile != null)); // null 검사 후 추가;
             }
         }
 
@@ -265,6 +267,7 @@ public class MiniGame1 : MonoBehaviour
                 Tile tile3 = grid[x, y + 1];
                 Tile tile4 = grid[x + 1, y + 1];
 
+                // null 체크 추가
                 if (tile1 != null && tile2 != null && tile3 != null && tile4 != null &&
                     tile1.tileType == tile2.tileType &&
                     tile1.tileType == tile3.tileType &&
@@ -285,7 +288,11 @@ public class MiniGame1 : MonoBehaviour
         List<Tile> additionalMatches = new List<Tile>();
         foreach (Tile tile in matchedTiles)
         {
-            FindConnectedTiles(tile, tile.tileType, additionalMatches);
+            // null 검사
+            if (tile != null)
+            {
+                FindConnectedTiles(tile, tile.tileType, additionalMatches);
+            }
         }
         matchedTiles.AddRange(additionalMatches);
         matchedTiles = matchedTiles.Distinct().ToList(); // 중복 제거
@@ -293,11 +300,15 @@ public class MiniGame1 : MonoBehaviour
         // 삭제 수행
         foreach (Tile tile in matchedTiles)
         {
-            grid[tile.x, tile.y] = null;  // 그리드에서 타일 제거
-            tile.SetMerged();             // 타일의 삭제 효과 처리 (타일 비활성화 등)
+            if (tile != null) // null 검사
+            {
+                grid[tile.x, tile.y] = null;  // 그리드에서 타일 제거
+                tile.SetMerged();             // 타일의 삭제 효과 처리 (타일 비활성화 등)
+            }
         }
 
         matchedTiles.Clear(); // 리스트 초기화
+
     }
 
     // 재귀적으로 인접한 같은 타입의 타일을 찾는 함수
@@ -316,8 +327,6 @@ public class MiniGame1 : MonoBehaviour
         if (y > 0) FindConnectedTiles(grid[x, y - 1], type, connectedTiles); // Down
         if (y < gridSizeY - 1) FindConnectedTiles(grid[x, y + 1], type, connectedTiles); // Up
     }
-
-
 
     private void EndGameLogic()
     {

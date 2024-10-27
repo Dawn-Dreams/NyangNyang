@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 283ff717e8bed8c4b8c9afdc76d6714c, type: 3}
-  m_Name: PinkCat
+  m_Name: Chick
   m_EditorClassIdentifier: 
-  typeName: PinkCat
-  tileSprite: {fileID: 21300000, guid: 2ab920844a2f441599a55e4f72f3c6d1, type: 3}
+  typeName: Chick
+  tileSprite: {fileID: 21300000, guid: 2be5235ae0663496cade85145e3a288e, type: 3}
   tileColor: {r: 1, g: 1, b: 1, a: 0}
