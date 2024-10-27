@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   typeName: Blueberry
   tileSprite: {fileID: 21300000, guid: 3d85d1a1dcd2a457eb2f72041d36c809, type: 3}
-  tileColor: {r: 0, g: 0, b: 0, a: 0}
+  tileColor: {r: 1, g: 1, b: 1, a: 0}

@@ -10,9 +10,10 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUp
     public int y;              // 타일의 Y 좌표
     public TileType tileType;  // 타일의 타입
     public bool isMerged;      // 타일이 병합되었는지 여부
-    public event Action OnTileTouched;  // 타일이 터치될 때 발생하는 이벤트
+    public event Action<Direction, int, int> OnTileDragged;  // 드래그 이벤트
 
     private Image image;  // 타일의 이미지 컴포넌트
+    private Vector2 startDragPosition;
 
     private void Awake()
     {
@@ -60,27 +61,31 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUp
     // 터치 시작 시 호출
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (OnTileTouched != null && !isMerged)
-        {
-            OnTileTouched.Invoke();
-        }
-        Debug.Log($"Tile ({x}, {y}) touched.");
+        startDragPosition = eventData.position; // 드래그 시작 위치 저장
     }
 
     // 드래그 중 호출
     public void OnDrag(PointerEventData eventData)
     {
-        if (OnTileTouched != null && !isMerged)
+        Vector2 dragOffset = eventData.position - startDragPosition;
+
+        if (dragOffset.magnitude > 20) // 드래그가 일정 거리 이상일 때 방향 판별
         {
-            OnTileTouched.Invoke();
+            Direction direction;
+            if (Mathf.Abs(dragOffset.x) > Mathf.Abs(dragOffset.y))
+                direction = dragOffset.x > 0 ? Direction.Right : Direction.Left;
+            else
+                direction = dragOffset.y > 0 ? Direction.Up : Direction.Down;
+
+            OnTileDragged?.Invoke(direction, x, y); // 드래그 방향과 타일 좌표 전달
+            startDragPosition = eventData.position; // 새로운 시작 위치 설정
         }
-        //Debug.Log($"Tile ({x}, {y}) is being dragged.");
     }
 
     // 터치 종료 시 호출
     public void OnPointerUp(PointerEventData eventData)
     {
-        //Debug.Log($"Tile ({x}, {y}) touch released.");
+        Debug.Log($"Tile ({x}, {y}) touch released.");
     }
 
     public void SetMerged()
@@ -109,4 +114,12 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUp
 
         gameObject.SetActive(false);
     }
+}
+
+public enum Direction
+{
+    Right,
+    Left,
+    Up,
+    Down
 }

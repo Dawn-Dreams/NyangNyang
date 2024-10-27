@@ -14,6 +14,7 @@ public class MiniGame1 : MonoBehaviour
     private Tile[,] grid;       // 그리드에 배치된 타일 배열
     private List<Tile> tilesList = new List<Tile>(); // 순서대로 타일을 관리하는 배열
     private bool isProcessing;  // 병합 처리 중 여부
+    private Tile selectedTile;  // 현재 선택된 타일
 
     private void Start()
     {
@@ -54,6 +55,7 @@ public class MiniGame1 : MonoBehaviour
                 CreateTile(x, y);
             }
         }
+        ShuffleTiles();
         AssignTileIndices(); // 타일 인덱스 초기 설정
     }
 
@@ -87,7 +89,7 @@ public class MiniGame1 : MonoBehaviour
         tilesList.Add(tile);
 
         SetTilePosition(tile, x, y);
-        tile.OnTileTouched += () => OnTileTouched(x, y);
+        tile.OnTileDragged += (direction, startX, startY) => OnTileDragged(startX, startY, direction); // 드래그 이벤트 연결
     }
 
     public void OnTileTouched(int x, int y)
@@ -95,139 +97,56 @@ public class MiniGame1 : MonoBehaviour
         if (isProcessing)
             return;
 
-        List<Tile> matchingTiles = FindMatchingTiles(x, y);
-
-        if (matchingTiles.Count >= matchCount)
-        {
-            StartCoroutine(MergeTiles(matchingTiles));
-        }
+        selectedTile = grid[x, y];
+        // 추가적으로 타일 터치 시 처리할 로직 작성
+        Debug.Log($"Tile ({x}, {y}) touched.");
     }
 
-    private List<Tile> FindMatchingTiles(int startX, int startY)
+    private void OnTileDragged(int startX, int startY, Direction direction)
     {
-        List<Tile> matchingTiles = new List<Tile>();
-        Tile startTile = grid[startX, startY];
-        TileType startType = startTile.tileType;
+        int targetX = startX;
+        int targetY = startY;
 
-        Queue<Tile> toCheck = new Queue<Tile>();
-        HashSet<Tile> checkedTiles = new HashSet<Tile>();
-        toCheck.Enqueue(startTile);
-        checkedTiles.Add(startTile);
-
-        while (toCheck.Count > 0)
+        switch (direction)
         {
-            Tile currentTile = toCheck.Dequeue();
-            matchingTiles.Add(currentTile);
-
-            foreach (Tile neighbor in GetNeighbors(currentTile))
-            {
-                if (!checkedTiles.Contains(neighbor) && neighbor.tileType == startType)
-                {
-                    toCheck.Enqueue(neighbor);
-                    checkedTiles.Add(neighbor);
-                }
-            }
+            case Direction.Up: targetY += 1; break;
+            case Direction.Down: targetY -= 1; break;
+            case Direction.Left: targetX -= 1; break;
+            case Direction.Right: targetX += 1; break;
         }
 
-        return matchingTiles;
+        // 그리드 범위 확인
+        if (targetX < 0 || targetX >= gridSizeX || targetY < 0 || targetY >= gridSizeY)
+            return;
+
+        // 인접한 타일과 교환 시도
+        if (Mathf.Abs(startX - targetX) + Mathf.Abs(startY - targetY) == 1)
+        {
+            SwapTiles(startX, startY, targetX, targetY);
+        }
     }
 
-    // 주어진 타일의 이웃 타일을 반환하는 메서드
-    private IEnumerable<Tile> GetNeighbors(Tile tile)
+    private void SwapTiles(int x1, int y1, int x2, int y2)
     {
-        int x = tile.x;
-        int y = tile.y;
 
-        // 좌측 하단에서 시작하므로 그리드의 경계 조건을 조정
-        if (x >= 0 && x < gridSizeX && y >= 0 && y < gridSizeY)
-        {
-            if (x > 0) yield return grid[x - 1, y];      // 왼쪽 타일
-            if (x < gridSizeX - 1) yield return grid[x + 1, y]; // 오른쪽 타일
-            if (y > 0) yield return grid[x, y - 1];      // 아래쪽 타일
-            if (y < gridSizeY - 1) yield return grid[x, y + 1]; // 위쪽 타일
-        }
+        // 타일 참조
+        Tile tile1 = grid[x1, y1];
+        Tile tile2 = grid[x2, y2];
+
+        if (tile1 == null || tile2 == null) return;
+
+        // 그리드 배열에서 위치 교환
+        grid[x1, y1] = tile2;
+        grid[x2, y2] = tile1;
+
+        // 인덱스와 좌표 갱신
+        tile1.SetPosition(x2, y2);
+        tile2.SetPosition(x1, y1);
+
+        SetTilePosition(tile1, x2, y2);
+        SetTilePosition(tile2, x1, y1);
+        Debug.Log($"Swapped tiles at ({x1}, {y1}) and ({x2}, {y2}).");
     }
-
-
-
-    private IEnumerator MergeTiles(List<Tile> matchingTiles)
-    {
-        isProcessing = true;
-
-        foreach (Tile tile in matchingTiles)
-        {
-            tile.SetMerged();
-            yield return new WaitForSeconds(0.1f);
-            tilesList.Remove(tile); // 리스트에서 타일 제거
-            Destroy(tile.gameObject);
-            grid[tile.x, tile.y] = null;
-            Debug.Log("Delete : " + tile.x + ", " + tile.y);
-        }
-
-        yield return new WaitForSeconds(0.5f);
-
-        DropTiles();
-
-        for (int x = 0; x < gridSizeX; x++)
-        {
-            for (int y = 0; y < gridSizeY; y++)
-            {
-                if (grid[x, y] == null)
-                {
-                    CreateTile(x, y);
-                }
-                else
-                {
-                    grid[x, y].SetPosition(x, y);
-                    SetTilePosition(grid[x, y], x, y);
-                }
-            }
-        }
-
-        AssignTileIndices(); // 타일 병합 후 인덱스 재할당
-        isProcessing = false;
-    }
-
-    private void DropTiles()
-    {
-        for (int x = 0; x < gridSizeX; x++)
-        {
-            int emptySlotY = -1;
-
-            for (int y = 0; y < gridSizeY; y++)
-            {
-                if (grid[x, y] == null) // 빈 칸 발견
-                {
-                    if (emptySlotY == -1) // 첫 빈 칸의 y 위치를 저장
-                        emptySlotY = y;
-                }
-                else if (emptySlotY != -1) // 빈 칸이 있고 타일을 이동할 수 있는 경우
-                {
-                    // 타일을 빈 칸 위치로 이동
-                    grid[x, emptySlotY] = grid[x, y];
-                    grid[x, emptySlotY].SetPosition(x, emptySlotY);
-                    SetTilePosition(grid[x, emptySlotY], x, emptySlotY);
-
-                    grid[x, y] = null; // 원래 위치는 빈 칸으로 설정
-                    emptySlotY++; // 다음 빈 칸으로 이동
-                }
-            }
-
-            // 최상단에 빈 칸이 있는 경우에만 새로운 타일 생성
-            if (emptySlotY != -1)
-            {
-                for (int y = emptySlotY; y < gridSizeY; y++)
-                {
-                    // 빈 슬롯만 채우도록 조건 추가
-                    if (grid[x, y] == null)
-                    {
-                        CreateTile(x, y);
-                    }
-                }
-            }
-        }
-    }
-
 
     private void SetTilePosition(Tile tile, int x, int y)
     {
@@ -242,19 +161,6 @@ public class MiniGame1 : MonoBehaviour
         tile.transform.localPosition = tilePosition;
     }
 
-
-    private Vector3 GetTilePosition(int x, int y)
-    {
-        // 타일의 실제 크기를 RectTransform에서 가져옴
-        RectTransform tileRect = tilePrefab.GetComponent<RectTransform>();
-        float tileWidth = tileRect.rect.width;
-        float tileHeight = tileRect.rect.height;
-
-        // 타일 간격을 타일의 너비와 높이로 설정
-        return new Vector3(x * tileWidth, -y * tileHeight, 0);
-    }
-
-
     // 모든 타일의 인덱스를 다시 설정하는 메서드
     private void AssignTileIndices()
     {
@@ -265,6 +171,36 @@ public class MiniGame1 : MonoBehaviour
             SetTilePosition(tile, tile.x, tile.y); // 위치 재배치
         }
     }
+
+    private void SwapTilesInList(int indexA, int indexB)
+    {
+        Tile temp = tilesList[indexA];
+        tilesList[indexA] = tilesList[indexB];
+        tilesList[indexB] = temp;
+    }
+
+
+    private void ShuffleTiles()
+    {
+        // 타일 목록 랜덤
+        for (int i = 0; i < tilesList.Count; i++)
+        {
+            int randomIndex = Random.Range(i, tilesList.Count);
+            SwapTilesInList(i, randomIndex);
+        }
+
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                Tile tile = tilesList[x + y * gridSizeX];
+                grid[x, y] = tile;
+                tile.SetPosition(x, y);
+                SetTilePosition(tile, x, y);
+            }
+        }
+    }
+
 
     private void EndGameLogic()
     {
