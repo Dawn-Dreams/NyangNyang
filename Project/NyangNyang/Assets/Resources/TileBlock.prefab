@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7358329369020471460}
   - component: {fileID: 3256930020772856524}
   - component: {fileID: 341151528131175562}
+  - component: {fileID: 4445783441881924600}
   m_Layer: 5
   m_Name: TileBlock
   m_TagString: Untagged
@@ -137,3 +138,24 @@ MonoBehaviour:
   y: 0
   tileType: {fileID: 0}
   isMerged: 0
+--- !u!95 &4445783441881924600
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7738798599913100365}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7ef8665a225974081b47d25a3ecd511f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

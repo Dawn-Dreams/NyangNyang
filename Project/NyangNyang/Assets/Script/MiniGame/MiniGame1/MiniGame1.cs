@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MiniGame1 : MonoBehaviour
@@ -28,6 +29,7 @@ public class MiniGame1 : MonoBehaviour
         {
             ResetGrid();
         }
+        CheckAndRemoveMatches();
     }
 
     private void ResetGrid()
@@ -63,25 +65,18 @@ public class MiniGame1 : MonoBehaviour
     private void CreateTile(int x, int y)
     {
         if (x < 0 || x >= gridSizeX || y < 0 || y >= gridSizeY)
-        {
-            Debug.LogError($"Attempted to create a tile at out-of-bounds position: ({x}, {y})");
             return;
-        }
 
         if (tilePrefab == null || gridParent == null)
-        {
-            Debug.LogError("Tile prefab or Grid parent is not assigned.");
             return;
-        }
+
 
         GameObject tileObj = Instantiate(tilePrefab, gridParent);
         Tile tile = tileObj.GetComponent<Tile>();
 
         if (tile == null)
-        {
-            Debug.LogError("The instantiated object does not have a Tile component.");
             return;
-        }
+
 
         TileType randomType = possibleTileTypes[Random.Range(0, possibleTileTypes.Length)];
         tile.Initialize(x, y, randomType);
@@ -90,7 +85,7 @@ public class MiniGame1 : MonoBehaviour
         tilesList.Add(tile);
 
         SetTilePosition(tile, x, y);
-        tile.OnTileDragged += (direction, startX, startY) => OnTileDragged(startX, startY, direction); // 드래그 이벤트 연결
+        tile.OnTileDragged += (direction, startX, startY) => OnTileDragged(startX, startY, direction);
     }
 
     public void OnTileTouched(int x, int y)
@@ -99,8 +94,6 @@ public class MiniGame1 : MonoBehaviour
             return;
 
         selectedTile = grid[x, y];
-        // 추가적으로 타일 터치 시 처리할 로직 작성
-        Debug.Log($"Tile ({x}, {y}) touched.");
     }
 
     private void OnTileDragged(int startX, int startY, Direction direction)
@@ -120,10 +113,12 @@ public class MiniGame1 : MonoBehaviour
         if (targetX < 0 || targetX >= gridSizeX || targetY < 0 || targetY >= gridSizeY)
             return;
 
-        // 인접한 타일과 교환 시도
+        // 인접한 타일과 교환
         if (Mathf.Abs(startX - targetX) + Mathf.Abs(startY - targetY) == 1)
         {
+
             StartCoroutine(SwapTilesCoroutine(startX, startY, targetX, targetY));
+            CheckAndRemoveMatches();
             selectedTile = null;
         }
     }
@@ -160,9 +155,6 @@ public class MiniGame1 : MonoBehaviour
 
         SetTilePosition(tile1, x2, y2);
         SetTilePosition(tile2, x1, y1);
-
-        Debug.Log($"Swapped tiles at ({x1}, {y1}) and ({x2}, {y2}).");
-
         isProcessing = false;
     }
 
@@ -217,6 +209,86 @@ public class MiniGame1 : MonoBehaviour
                 SetTilePosition(tile, x, y);
             }
         }
+    }
+
+    private List<Tile> matchedTiles = new List<Tile>(); // 삭제할 타일들을 저장할 리스트
+
+    private void CheckAndRemoveMatches()
+    {
+        matchedTiles.Clear();
+
+        // 가로/세로로 3개 이상 인접한 같은 타입의 타일을 찾음
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                Tile currentTile = grid[x, y];
+                if (currentTile == null) continue;
+
+                // 가로 체크
+                List<Tile> horizontalMatch = new List<Tile> { currentTile };
+                for (int i = 1; x + i < gridSizeX; i++)
+                {
+                    Tile nextTile = grid[x + i, y];
+                    if (nextTile != null && nextTile.tileType == currentTile.tileType)
+                    {
+                        horizontalMatch.Add(nextTile);
+                    }
+                    else break;
+                }
+                if (horizontalMatch.Count >= 3)
+                    matchedTiles.AddRange(horizontalMatch);
+
+                // 세로 체크
+                List<Tile> verticalMatch = new List<Tile> { currentTile };
+                for (int i = 1; y + i < gridSizeY; i++)
+                {
+                    Tile nextTile = grid[x, y + i];
+                    if (nextTile != null && nextTile.tileType == currentTile.tileType)
+                    {
+                        verticalMatch.Add(nextTile);
+                    }
+                    else break;
+                }
+                if (verticalMatch.Count >= 3)
+                    matchedTiles.AddRange(verticalMatch);
+            }
+        }
+
+        // 2x2 모양 체크
+        for (int x = 0; x < gridSizeX - 1; x++)
+        {
+            for (int y = 0; y < gridSizeY - 1; y++)
+            {
+                Tile tile1 = grid[x, y];
+                Tile tile2 = grid[x + 1, y];
+                Tile tile3 = grid[x, y + 1];
+                Tile tile4 = grid[x + 1, y + 1];
+
+                if (tile1 != null && tile2 != null && tile3 != null && tile4 != null &&
+                    tile1.tileType == tile2.tileType &&
+                    tile1.tileType == tile3.tileType &&
+                    tile1.tileType == tile4.tileType)
+                {
+                    matchedTiles.Add(tile1);
+                    matchedTiles.Add(tile2);
+                    matchedTiles.Add(tile3);
+                    matchedTiles.Add(tile4);
+                }
+            }
+        }
+
+        // 중복 타일 제거
+        matchedTiles = matchedTiles.Distinct().ToList();
+
+        // 삭제 수행
+        foreach (Tile tile in matchedTiles)
+        {
+            grid[tile.x, tile.y] = null;  // 그리드에서 타일 제거
+            tile.SetMerged();             // 타일의 삭제 효과 처리 (타일 비활성화 등)
+        }
+
+        matchedTiles.Clear(); // 리스트 초기화
     }
 
 
