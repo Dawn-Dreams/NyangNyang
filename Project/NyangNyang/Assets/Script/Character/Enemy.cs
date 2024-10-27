@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 using Quaternion = UnityEngine.Quaternion;
@@ -16,10 +17,15 @@ public class DummyEnemy
     private BigInteger currentHP;
     private BigInteger maxHP;
     private TextMesh hpText;
+
+    public AnimationManager animationManager;
     
     public DummyEnemy(GameObject dummyObject, BigInteger maxHP)
     {
         this.dummyGameObject = dummyObject;
+        // TODO: 10/27. 수정하기
+        animationManager = dummyGameObject.GetComponentInChildren<AnimationManager>();
+
         this.currentHP = this.maxHP = maxHP;
 
         hpText = dummyObject.GetComponentInChildren<TextMesh>();
@@ -37,6 +43,13 @@ public class DummyEnemy
         currentHP = currentHP - getDamage;
 
         hpText.text = currentHP + " / " + maxHP;
+
+        // 피격 애니메이션
+        if (animationManager)
+        {
+            animationManager.PlayAnimation(AnimationManager.AnimationState.Damage);
+        }
+        
 
         // 대미지 출력
         // TODO 오브젝트 풀링 방식으로 바꾸기
@@ -56,7 +69,12 @@ public class DummyEnemy
     public void DestroyDummyEnemy()
     {
         // TODO : 임시 사망 코드 추후 애니메이션으로 변경 및 ...
-        dummyGameObject.GetComponent<SpriteRenderer>().color = new Color(0.25f, 0.25f, 0.25f);
+        if (animationManager)
+        {
+            animationManager.PlayAnimation(AnimationManager.AnimationState.DieA);
+        }
+        
+        //dummyGameObject.GetComponent<SpriteRenderer>().color = new Color(0.25f, 0.25f, 0.25f);
         hpText.gameObject.SetActive(false);
     }
 
@@ -75,7 +93,7 @@ public class Enemy : Character
     [SerializeField] private StageManager stageManager;
     protected EnemyDropData DropData = null;
 
-    [SerializeField] private GameObject[] dummyEnemyImages;
+    [SerializeField] private GameObject[] dummyEnemyObj;
     private List<DummyEnemy> _dummyEnemies;
 
     private int initialNumOfDummyEnemy = 0;
@@ -124,19 +142,19 @@ public class Enemy : Character
     public void SetNumberOfEnemyInGroup(int numOfEnemy = 1)
     {
         // 적 개체는 최소 1마리에서 최대 5마리
-        initialNumOfDummyEnemy = numOfEnemy = (int)Mathf.Clamp(numOfEnemy, 1.0f, dummyEnemyImages.Length);
+        initialNumOfDummyEnemy = numOfEnemy = (int)Mathf.Clamp(numOfEnemy, 1.0f, dummyEnemyObj.Length);
 
         BigInteger dummyMaxHp = BigInteger.Divide(maxHP, numOfEnemy);
-        for (int i = 0; i < dummyEnemyImages.Length; ++i)
+        for (int i = 0; i < dummyEnemyObj.Length; ++i)
         {
             // active dummy enemy
             if (i < numOfEnemy)
             {
-                _dummyEnemies.Add(new DummyEnemy(dummyEnemyImages[i], dummyMaxHp));
+                _dummyEnemies.Add(new DummyEnemy(dummyEnemyObj[i], dummyMaxHp));
             }
             else
             {
-                dummyEnemyImages[i].SetActive(false);
+                dummyEnemyObj[i].SetActive(false);
             }
         }
 
@@ -171,6 +189,15 @@ public class Enemy : Character
 
     void ArriveCombatArea()
     {
+        foreach (var dummyEnemy in _dummyEnemies)
+        {
+            if (dummyEnemy.animationManager)
+            {
+                dummyEnemy.animationManager.PlayAnimation(AnimationManager.AnimationState.IdleA);
+            }
+            
+        }
+        
         if (moveToCombatAreaCoroutine != null)
         {
             StopCoroutine(moveToCombatAreaCoroutine);
@@ -192,6 +219,19 @@ public class Enemy : Character
         float divideValue = ((float)_dummyEnemies.Count / initialNumOfDummyEnemy);
         damage = MyBigIntegerMath.MultiplyWithFloat(damage,divideValue,5);
         return damage;
+    }
+
+    protected override void Attack()
+    {
+        base.Attack();
+
+        foreach (var dummyEnemy in _dummyEnemies)
+        {
+            if (dummyEnemy.animationManager)
+            {
+                dummyEnemy.animationManager.PlayAnimation(AnimationManager.AnimationState.ATK1);
+            }
+        }
     }
 
     public override BigInteger TakeDamage(BigInteger damage, bool isAOESkill = false)
