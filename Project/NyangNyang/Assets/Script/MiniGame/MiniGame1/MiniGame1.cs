@@ -281,6 +281,15 @@ public class MiniGame1 : MonoBehaviour
         // 중복 타일 제거
         matchedTiles = matchedTiles.Distinct().ToList();
 
+        // 인접한 같은 타입 타일도 찾음
+        List<Tile> additionalMatches = new List<Tile>();
+        foreach (Tile tile in matchedTiles)
+        {
+            FindConnectedTiles(tile, tile.tileType, additionalMatches);
+        }
+        matchedTiles.AddRange(additionalMatches);
+        matchedTiles = matchedTiles.Distinct().ToList(); // 중복 제거
+
         // 삭제 수행
         foreach (Tile tile in matchedTiles)
         {
@@ -290,6 +299,24 @@ public class MiniGame1 : MonoBehaviour
 
         matchedTiles.Clear(); // 리스트 초기화
     }
+
+    // 재귀적으로 인접한 같은 타입의 타일을 찾는 함수
+    private void FindConnectedTiles(Tile tile, TileType type, List<Tile> connectedTiles)
+    {
+        if (tile == null || tile.tileType != type || connectedTiles.Contains(tile)) return;
+
+        connectedTiles.Add(tile);
+
+        int x = tile.x;
+        int y = tile.y;
+
+        // 인접한 4방향 검사
+        if (x > 0) FindConnectedTiles(grid[x - 1, y], type, connectedTiles); // Left
+        if (x < gridSizeX - 1) FindConnectedTiles(grid[x + 1, y], type, connectedTiles); // Right
+        if (y > 0) FindConnectedTiles(grid[x, y - 1], type, connectedTiles); // Down
+        if (y < gridSizeY - 1) FindConnectedTiles(grid[x, y + 1], type, connectedTiles); // Up
+    }
+
 
 
     private void EndGameLogic()
