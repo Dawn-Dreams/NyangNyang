@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -6,17 +6,17 @@ using UnityEngine.UI;
 
 public class OptionMenuManager : MonoBehaviour
 {
-    public GameObject toggleParentObject;   // ToggleµéÀ» ´ã°í ÀÖ´Â ºÎ¸ğ ¿ÀºêÁ§Æ®
-    public GameObject panelParentObject;    // ÆĞ³ÎµéÀ» ´ã°í ÀÖ´Â ºÎ¸ğ ¿ÀºêÁ§Æ®
+    public GameObject toggleParentObject;   // Toggleë“¤ì„ ë‹´ê³  ìˆëŠ” ë¶€ëª¨ ì˜¤ë¸Œì íŠ¸
+    public GameObject panelParentObject;    // íŒ¨ë„ë“¤ì„ ë‹´ê³  ìˆëŠ” ë¶€ëª¨ ì˜¤ë¸Œì íŠ¸
 
-    public GameObject noticeTextPrefab;     // °øÁö ÅØ½ºÆ® ÇÁ¸®ÆÕ
-    public GameObject rankUserButtonPrefab; // ·©Å· ¹öÆ° ÇÁ¸®ÆÕ
-    public GameObject boardButtonPrefab;    // °Ô½ÃÆÇ ¹öÆ° ÇÁ¸®ÆÕ
-    public GameObject mailButtonPrefab;     // ¿ìÆí ¹öÆ° ÇÁ¸®ÆÕ
-    public GameObject friendButtonPrefab;   // Ä£±¸ ¹öÆ° ÇÁ¸®ÆÕ
+    public GameObject noticeTextPrefab;     // ê³µì§€ í…ìŠ¤íŠ¸ í”„ë¦¬íŒ¹
+    public GameObject rankUserButtonPrefab; // ë­í‚¹ ë²„íŠ¼ í”„ë¦¬íŒ¹
+    public GameObject boardButtonPrefab;    // ê²Œì‹œíŒ ë²„íŠ¼ í”„ë¦¬íŒ¹
+    public GameObject mailButtonPrefab;     // ìš°í¸ ë²„íŠ¼ í”„ë¦¬íŒ¹
+    public GameObject friendButtonPrefab;   // ì¹œêµ¬ ë²„íŠ¼ í”„ë¦¬íŒ¹
 
-    private Toggle[] toggles;               // µ¿ÀûÀ¸·Î Ã£Àº ToggleµéÀ» ÀúÀåÇÒ ¹è¿­
-    private GameObject[] panels;            // µ¿ÀûÀ¸·Î Ã£Àº ÆĞ³ÎµéÀ» ÀúÀåÇÒ ¹è¿­
+    private Toggle[] toggles;               // ë™ì ìœ¼ë¡œ ì°¾ì€ Toggleë“¤ì„ ì €ì¥í•  ë°°ì—´
+    private GameObject[] panels;            // ë™ì ìœ¼ë¡œ ì°¾ì€ íŒ¨ë„ë“¤ì„ ì €ì¥í•  ë°°ì—´
 
     private void Start()
     {
@@ -39,7 +39,7 @@ public class OptionMenuManager : MonoBehaviour
             panel.SetActive(false);
         }
         
-        // 0¹ø ÆĞ³Î È°¼ºÈ­
+        // 0ë²ˆ íŒ¨ë„ í™œì„±í™”
         if (toggles.Length > 0 && panels.Length > 0)
         {
             toggles[0].isOn = true;
@@ -101,13 +101,13 @@ public class OptionMenuManager : MonoBehaviour
                 OpenCommunityPanel();
                 break;
             default:
-                Debug.LogWarning("ÇØ´ç ÀÎµ¦½º¿¡ ´ëÇÑ °íÀ¯ ÇÔ¼ö°¡ ¾ø½À´Ï´Ù.");
+                Debug.LogWarning("í•´ë‹¹ ì¸ë±ìŠ¤ì— ëŒ€í•œ ê³ ìœ  í•¨ìˆ˜ê°€ ì—†ìŠµë‹ˆë‹¤.");
                 break;
         }
     }
 
-    // ----------------------------- ÆĞ³Î °íÀ¯ ÇÔ¼ö -------------------------------------
-    // °øÁö
+    // ----------------------------- íŒ¨ë„ ê³ ìœ  í•¨ìˆ˜ -------------------------------------
+    // ê³µì§€
     void OpenNoticePanel()
     {
         List<NoticeData> noticeList = DummyOptionsServer.GetNoticeData();
@@ -118,7 +118,7 @@ public class OptionMenuManager : MonoBehaviour
 
             if (noticeTextObj == null)
             {
-                Debug.LogError("NoticeText ¿ÀºêÁ§Æ®¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù. ÀÌ¸§ÀÌ Á¤È®ÇÑÁö È®ÀÎÇÏ¼¼¿ä.");
+                Debug.LogError("NoticeText ì˜¤ë¸Œì íŠ¸ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤. ì´ë¦„ì´ ì •í™•í•œì§€ í™•ì¸í•˜ì„¸ìš”.");
                 return;
             }
 
@@ -126,7 +126,7 @@ public class OptionMenuManager : MonoBehaviour
 
             if (noticeTextComponent == null)
             {
-                Debug.LogError("TMP_Text ÄÄÆ÷³ÍÆ®¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù. ÇØ´ç ¿ÀºêÁ§Æ®¿¡ TMP_Text°¡ ÀÖ´ÂÁö È®ÀÎÇÏ¼¼¿ä.");
+                Debug.LogError("TMP_Text ì»´í¬ë„ŒíŠ¸ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤. í•´ë‹¹ ì˜¤ë¸Œì íŠ¸ì— TMP_Textê°€ ìˆëŠ”ì§€ í™•ì¸í•˜ì„¸ìš”.");
                 return;
             }
 
@@ -134,24 +134,24 @@ public class OptionMenuManager : MonoBehaviour
 
             foreach (NoticeData notice in noticeList)
             {
-                allNotices += $"µ¥ÀÌÅÍ {notice.noticeID}: {notice.title} - {notice.content} ({notice.date})\n";  // Çü½Ä¿¡ ¸ÂÃç Ãß°¡
+                allNotices += $"ë°ì´í„° {notice.noticeID}: {notice.title} - {notice.content} ({notice.date})\n";  // í˜•ì‹ì— ë§ì¶° ì¶”ê°€
             }
 
-            noticeTextComponent.text = allNotices;  // TMP_Text¿¡ ¸ğµç °øÁö¸¦ Àû¿ë
+            noticeTextComponent.text = allNotices;  // TMP_Textì— ëª¨ë“  ê³µì§€ë¥¼ ì ìš©
         }
         else
         {
-            Debug.LogWarning("°øÁö µ¥ÀÌÅÍ°¡ ¾ø½À´Ï´Ù.");
+            Debug.LogWarning("ê³µì§€ ë°ì´í„°ê°€ ì—†ìŠµë‹ˆë‹¤.");
         }
     }
 
-    // ·©Å·
+    // ë­í‚¹
     void OpenRankingPanel()
     {
         List<RankingData> rankList = DummyOptionsServer.GetRankingData();
         GameObject contentObj = GameObject.Find("RankUI/Viewport/Content");
 
-        // ±âÁ¸¿¡ »ı¼ºµÈ ¿ä¼ÒµéÀ» ¸ğµÎ Á¦°Å
+        // ê¸°ì¡´ì— ìƒì„±ëœ ìš”ì†Œë“¤ì„ ëª¨ë‘ ì œê±°
         foreach (Transform child in contentObj.transform)
         {
             Destroy(child.gameObject);
@@ -174,17 +174,17 @@ public class OptionMenuManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("·©Å· µ¥ÀÌÅÍ°¡ ¾ø½À´Ï´Ù.");
+            Debug.LogWarning("ë­í‚¹ ë°ì´í„°ê°€ ì—†ìŠµë‹ˆë‹¤.");
         }
     }
 
-    // °Ô½ÃÆÇ
+    // ê²Œì‹œíŒ
     void OpenBulletinBoardPanel()
     {
         List<BoardData> boardList = DummyOptionsServer.GetBoardData();
         GameObject contentObj = GameObject.Find("BulletinBoardUI/Viewport/Content");
-        // Application.OpenURL("https://cafe.naver.com/nyangnyangcafeurl"); // °Ô½ÃÆÇ¿¡ Ä¿¹Â´ÏÆ¼ ¹öÆ° Ãß°¡
-        // ±âÁ¸¿¡ »ı¼ºµÈ ¿ä¼ÒµéÀ» ¸ğµÎ Á¦°Å
+        // Application.OpenURL("https://cafe.naver.com/nyangnyangcafeurl"); // ê²Œì‹œíŒì— ì»¤ë®¤ë‹ˆí‹° ë²„íŠ¼ ì¶”ê°€
+        // ê¸°ì¡´ì— ìƒì„±ëœ ìš”ì†Œë“¤ì„ ëª¨ë‘ ì œê±°
         foreach (Transform child in contentObj.transform)
         {
             Destroy(child.gameObject);
@@ -202,11 +202,11 @@ public class OptionMenuManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("°Ô½ÃÆÇ µ¥ÀÌÅÍ°¡ ¾ø½À´Ï´Ù.");
+            Debug.LogWarning("ê²Œì‹œíŒ ë°ì´í„°ê°€ ì—†ìŠµë‹ˆë‹¤.");
         }
     }
 
-    // ¿ìÆí
+    // ìš°í¸
     void OpenMessagePanel()
     {
         List<MailData> mailList = DummyOptionsServer.GetMailData();
@@ -228,27 +228,27 @@ public class OptionMenuManager : MonoBehaviour
                 TMP_Text mailDateText = mailButton.transform.Find("MessageDate").GetComponent<TMP_Text>();
                 TMP_Text mailReceivedText = mailButton.transform.Find("MessageIsReceived").GetComponent<TMP_Text>();
 
-                mailNumberText.text = mailData.mailID.ToString();  // ¿ìÆí ID Ç¥½Ã
-                mailTitleText.text = mailData.title;  // ¿ìÆí Á¦¸ñ Ç¥½Ã
-                mailDateText.text = mailData.date;  // ¿ìÆí ³¯Â¥ Ç¥½Ã
-                mailReceivedText.text = mailData.isReceived ? "¼ö·É ¿Ï·á" : "¹Ì¼ö·É";  // ¼ö·É »óÅÂ Ç¥½Ã
+                mailNumberText.text = mailData.mailID.ToString();  // ìš°í¸ ID í‘œì‹œ
+                mailTitleText.text = mailData.title;  // ìš°í¸ ì œëª© í‘œì‹œ
+                mailDateText.text = mailData.date;  // ìš°í¸ ë‚ ì§œ í‘œì‹œ
+                mailReceivedText.text = mailData.isReceived ? "ìˆ˜ë ¹ ì™„ë£Œ" : "ë¯¸ìˆ˜ë ¹";  // ìˆ˜ë ¹ ìƒíƒœ í‘œì‹œ
             }
         }
         else
         {
-            Debug.LogWarning("¿ìÆí µ¥ÀÌÅÍ°¡ ¾ø½À´Ï´Ù.");
+            Debug.LogWarning("ìš°í¸ ë°ì´í„°ê°€ ì—†ìŠµë‹ˆë‹¤.");
         }
     }
 
 
 
-    // Ä£±¸
+    // ì¹œêµ¬
     void OpenFriendsPanel()
     {
         List<FriendData> friendList = DummyOptionsServer.GetFriendData();
         GameObject contentObj = GameObject.Find("FriendUI/Viewport/Content");
 
-        // ±âÁ¸¿¡ »ı¼ºµÈ ¿ä¼ÒµéÀ» ¸ğµÎ Á¦°Å
+        // ê¸°ì¡´ì— ìƒì„±ëœ ìš”ì†Œë“¤ì„ ëª¨ë‘ ì œê±°
         foreach (Transform child in contentObj.transform)
         {
             Destroy(child.gameObject);
@@ -271,17 +271,17 @@ public class OptionMenuManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Ä£±¸ µ¥ÀÌÅÍ°¡ ¾ø½À´Ï´Ù.");
+            Debug.LogWarning("ì¹œêµ¬ ë°ì´í„°ê°€ ì—†ìŠµë‹ˆë‹¤.");
         }
     }
 
-    // Ä¿¹Â´ÏÆ¼
+    // ì»¤ë®¤ë‹ˆí‹°
     void OpenCommunityPanel()
     {
         
     }
 
-    // ¼³Á¤
+    // ì„¤ì •
     void OpenSettingsPanel()
     {
     }

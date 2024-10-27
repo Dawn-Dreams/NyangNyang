@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
@@ -8,7 +8,7 @@ public class AudioManager : MonoBehaviour
     public AudioSource sfxSource;
     public bool sfxSoundOn = true;
     public bool bgSoundOn = true;
-    //public AudioClip touchSound; // ÅÍÄ¡ ½Ã Àç»ýµÉ È¿°úÀ½
+    //public AudioClip touchSound; // í„°ì¹˜ ì‹œ ìž¬ìƒë  íš¨ê³¼ìŒ
 
     public float bgmVolume
     {
@@ -32,15 +32,15 @@ public class AudioManager : MonoBehaviour
 
     void Awake()
     {
-        // ½Ì±ÛÅæ ÆÐÅÏÀ» Àû¿ëÇÏ¿© AudioManager°¡ ÇÏ³ª¸¸ Á¸ÀçÇÏµµ·Ï
+        // ì‹±ê¸€í†¤ íŒ¨í„´ì„ ì ìš©í•˜ì—¬ AudioManagerê°€ í•˜ë‚˜ë§Œ ì¡´ìž¬í•˜ë„ë¡
         if (Instance == null)
         {
             Instance = this;
 
-            // AudioManager°¡ ºÎ¸ð ¿ÀºêÁ§Æ®¿¡¼­ ºÐ¸®µÇ¾î ÃÖ»óÀ§·Î ÀÌµ¿µÇµµ·Ï ¼³Á¤
+            // AudioManagerê°€ ë¶€ëª¨ ì˜¤ë¸Œì íŠ¸ì—ì„œ ë¶„ë¦¬ë˜ì–´ ìµœìƒìœ„ë¡œ ì´ë™ë˜ë„ë¡ ì„¤ì •
             transform.SetParent(null);
 
-            // ¾À ÀÌµ¿ ½Ã ÆÄ±«µÇÁö ¾Êµµ·Ï ¼³Á¤
+            // ì”¬ ì´ë™ ì‹œ íŒŒê´´ë˜ì§€ ì•Šë„ë¡ ì„¤ì •
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -51,7 +51,7 @@ public class AudioManager : MonoBehaviour
 
     //private void Update()
     //{
-    //// ¸ð¹ÙÀÏ ÅÍÄ¡ °¨Áö
+    //// ëª¨ë°”ì¼ í„°ì¹˜ ê°ì§€
     //if (Input.touchCount > 0)
     //{
     //    for (int i = 0; i < Input.touchCount; i++)
@@ -62,7 +62,7 @@ public class AudioManager : MonoBehaviour
     //        }
     //    }
     //}
-    //// PC ¸¶¿ì½º Å¬¸¯ °¨Áö
+    //// PC ë§ˆìš°ìŠ¤ í´ë¦­ ê°ì§€
     //if (Input.GetMouseButtonDown(0))
     //{
     //    PlayTouchSound();
@@ -73,12 +73,12 @@ public class AudioManager : MonoBehaviour
     {
         //if (touchSound != null)
         //{
-        //    PlaySFX(touchSound); // ÅÍÄ¡³ª Å¬¸¯ ½Ã ¼³Á¤µÈ È¿°úÀ½ Àç»ý
+        //    PlaySFX(touchSound); // í„°ì¹˜ë‚˜ í´ë¦­ ì‹œ ì„¤ì •ëœ íš¨ê³¼ìŒ ìž¬ìƒ
         //}
     }
     private void Start()
     {
-        // °ÔÀÓ ½ÃÀÛ ½Ã ÀúÀåµÈ º¼·ý Àû¿ë
+        // ê²Œìž„ ì‹œìž‘ ì‹œ ì €ìž¥ëœ ë³¼ë¥¨ ì ìš©
         bgmSource.volume = bgmVolume;
         sfxSource.volume = sfxVolume;
     }

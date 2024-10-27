@@ -1,20 +1,20 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MiniGame1 : MonoBehaviour
 {
-    public int gridSizeX = 7;   // ±×¸®µåÀÇ °¡·Î Å©±â
-    public int gridSizeY = 7;   // ±×¸®µåÀÇ ¼¼·Î Å©±â
-    public GameObject tilePrefab; // Å¸ÀÏ ÇÁ¸®ÆÕ
-    public Transform gridParent;  // Å¸ÀÏÀÌ ¹èÄ¡µÉ ºÎ¸ğ ¿ÀºêÁ§Æ®
-    public TileType[] possibleTileTypes; // »ı¼º °¡´ÉÇÑ Å¸ÀÏÀÇ Á¾·ùµé
-    public int matchCount = 3;   // º´ÇÕÀ» À§ÇØ ÇÊ¿äÇÑ °°Àº Å¸ÀÏÀÇ °³¼ö
+    public int gridSizeX = 7;   // ê·¸ë¦¬ë“œì˜ ê°€ë¡œ í¬ê¸°
+    public int gridSizeY = 7;   // ê·¸ë¦¬ë“œì˜ ì„¸ë¡œ í¬ê¸°
+    public GameObject tilePrefab; // íƒ€ì¼ í”„ë¦¬íŒ¹
+    public Transform gridParent;  // íƒ€ì¼ì´ ë°°ì¹˜ë  ë¶€ëª¨ ì˜¤ë¸Œì íŠ¸
+    public TileType[] possibleTileTypes; // ìƒì„± ê°€ëŠ¥í•œ íƒ€ì¼ì˜ ì¢…ë¥˜ë“¤
+    public int matchCount = 3;   // ë³‘í•©ì„ ìœ„í•´ í•„ìš”í•œ ê°™ì€ íƒ€ì¼ì˜ ê°œìˆ˜
 
-    private Tile[,] grid;       // ±×¸®µå¿¡ ¹èÄ¡µÈ Å¸ÀÏ ¹è¿­
-    private List<Tile> tilesList = new List<Tile>(); // ¼ø¼­´ë·Î Å¸ÀÏÀ» °ü¸®ÇÏ´Â ¹è¿­
-    private bool isProcessing;  // º´ÇÕ Ã³¸® Áß ¿©ºÎ
-    private Tile selectedTile;  // ÇöÀç ¼±ÅÃµÈ Å¸ÀÏ
+    private Tile[,] grid;       // ê·¸ë¦¬ë“œì— ë°°ì¹˜ëœ íƒ€ì¼ ë°°ì—´
+    private List<Tile> tilesList = new List<Tile>(); // ìˆœì„œëŒ€ë¡œ íƒ€ì¼ì„ ê´€ë¦¬í•˜ëŠ” ë°°ì—´
+    private bool isProcessing;  // ë³‘í•© ì²˜ë¦¬ ì¤‘ ì—¬ë¶€
+    private Tile selectedTile;  // í˜„ì¬ ì„ íƒëœ íƒ€ì¼
     public float slideDuration = 0.3f;
 
     private void Start()
@@ -57,7 +57,7 @@ public class MiniGame1 : MonoBehaviour
             }
         }
         ShuffleTiles();
-        AssignTileIndices(); // Å¸ÀÏ ÀÎµ¦½º ÃÊ±â ¼³Á¤
+        AssignTileIndices(); // íƒ€ì¼ ì¸ë±ìŠ¤ ì´ˆê¸° ì„¤ì •
     }
 
     private void CreateTile(int x, int y)
@@ -90,7 +90,7 @@ public class MiniGame1 : MonoBehaviour
         tilesList.Add(tile);
 
         SetTilePosition(tile, x, y);
-        tile.OnTileDragged += (direction, startX, startY) => OnTileDragged(startX, startY, direction); // µå·¡±× ÀÌº¥Æ® ¿¬°á
+        tile.OnTileDragged += (direction, startX, startY) => OnTileDragged(startX, startY, direction); // ë“œë˜ê·¸ ì´ë²¤íŠ¸ ì—°ê²°
     }
 
     public void OnTileTouched(int x, int y)
@@ -99,7 +99,7 @@ public class MiniGame1 : MonoBehaviour
             return;
 
         selectedTile = grid[x, y];
-        // Ãß°¡ÀûÀ¸·Î Å¸ÀÏ ÅÍÄ¡ ½Ã Ã³¸®ÇÒ ·ÎÁ÷ ÀÛ¼º
+        // ì¶”ê°€ì ìœ¼ë¡œ íƒ€ì¼ í„°ì¹˜ ì‹œ ì²˜ë¦¬í•  ë¡œì§ ì‘ì„±
         Debug.Log($"Tile ({x}, {y}) touched.");
     }
 
@@ -116,11 +116,11 @@ public class MiniGame1 : MonoBehaviour
             case Direction.Right: targetX += 1; break;
         }
 
-        // ±×¸®µå ¹üÀ§ È®ÀÎ
+        // ê·¸ë¦¬ë“œ ë²”ìœ„ í™•ì¸
         if (targetX < 0 || targetX >= gridSizeX || targetY < 0 || targetY >= gridSizeY)
             return;
 
-        // ÀÎÁ¢ÇÑ Å¸ÀÏ°ú ±³È¯ ½Ãµµ
+        // ì¸ì ‘í•œ íƒ€ì¼ê³¼ êµí™˜ ì‹œë„
         if (Mathf.Abs(startX - targetX) + Mathf.Abs(startY - targetY) == 1)
         {
             StartCoroutine(SwapTilesCoroutine(startX, startY, targetX, targetY));
@@ -140,7 +140,7 @@ public class MiniGame1 : MonoBehaviour
         Vector2 originalPos1 = tile1.transform.localPosition;
         Vector2 originalPos2 = tile2.transform.localPosition;
 
-        // ½½¶óÀÌµå ¾Ö´Ï¸ŞÀÌ¼Ç
+        // ìŠ¬ë¼ì´ë“œ ì• ë‹ˆë©”ì´ì…˜
         float elapsedTime = 0f;
         while (elapsedTime < slideDuration)
         {
@@ -151,7 +151,7 @@ public class MiniGame1 : MonoBehaviour
             yield return null;
         }
 
-        // À§Ä¡ ±³È¯
+        // ìœ„ì¹˜ êµí™˜
         grid[x1, y1] = tile2;
         grid[x2, y2] = tile1;
 
@@ -179,14 +179,14 @@ public class MiniGame1 : MonoBehaviour
         tile.transform.localPosition = tilePosition;
     }
 
-    // ¸ğµç Å¸ÀÏÀÇ ÀÎµ¦½º¸¦ ´Ù½Ã ¼³Á¤ÇÏ´Â ¸Ş¼­µå
+    // ëª¨ë“  íƒ€ì¼ì˜ ì¸ë±ìŠ¤ë¥¼ ë‹¤ì‹œ ì„¤ì •í•˜ëŠ” ë©”ì„œë“œ
     private void AssignTileIndices()
     {
         for (int i = 0; i < tilesList.Count; i++)
         {
             var tile = tilesList[i];
-            tile.SetPosition(i % gridSizeX, i / gridSizeX); // ¼ø¼­´ë·Î Àç¼³Á¤
-            SetTilePosition(tile, tile.x, tile.y); // À§Ä¡ Àç¹èÄ¡
+            tile.SetPosition(i % gridSizeX, i / gridSizeX); // ìˆœì„œëŒ€ë¡œ ì¬ì„¤ì •
+            SetTilePosition(tile, tile.x, tile.y); // ìœ„ì¹˜ ì¬ë°°ì¹˜
         }
     }
 
@@ -200,7 +200,7 @@ public class MiniGame1 : MonoBehaviour
 
     private void ShuffleTiles()
     {
-        // Å¸ÀÏ ¸ñ·Ï ·£´ı
+        // íƒ€ì¼ ëª©ë¡ ëœë¤
         for (int i = 0; i < tilesList.Count; i++)
         {
             int randomIndex = Random.Range(i, tilesList.Count);

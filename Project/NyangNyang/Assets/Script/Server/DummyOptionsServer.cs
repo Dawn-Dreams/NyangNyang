@@ -1,83 +1,83 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class DummyOptionsServer
 {
-    // °øÁö, ¿ìÆí, Ä£±¸, ·©Å·, °Ô½ÃÆÇ¿¡ ´ëÇÑ µ¥ÀÌÅÍº£ÀÌ½º (ÇöÀç µ¥ÀÌÅÍ´Â ¿¹½Ã)
+    // ê³µì§€, ìš°í¸, ì¹œêµ¬, ë­í‚¹, ê²Œì‹œíŒì— ëŒ€í•œ ë°ì´í„°ë² ì´ìŠ¤ (í˜„ì¬ ë°ì´í„°ëŠ” ì˜ˆì‹œ)
     protected static List<NoticeData> NoticeDataList = new List<NoticeData>
     {
-        new NoticeData(1, "¾÷µ¥ÀÌÆ® °øÁö", "»õ·Î¿î ¾÷µ¥ÀÌÆ®°¡ Àû¿ëµÇ¾ú½À´Ï´Ù.", "2024-10-13"),
-        new NoticeData(2, "ÀÌº¥Æ® °øÁö", "ÇÒ·ÎÀ© ÀÌº¥Æ®°¡ ½ÃÀÛµË´Ï´Ù.", "2024-10-20")
+        new NoticeData(1, "ì—…ë°ì´íŠ¸ ê³µì§€", "ìƒˆë¡œìš´ ì—…ë°ì´íŠ¸ê°€ ì ìš©ë˜ì—ˆìŠµë‹ˆë‹¤.", "2024-10-13"),
+        new NoticeData(2, "ì´ë²¤íŠ¸ ê³µì§€", "í• ë¡œìœˆ ì´ë²¤íŠ¸ê°€ ì‹œì‘ë©ë‹ˆë‹¤.", "2024-10-20")
     };
 
     protected static List<MailData> MailDataList = new List<MailData>
     {
-        new MailData(1, "º¸»ó ¿ìÆí", "ÀüÅõ º¸»ó Áö±Ş", 1231, "2024-10-12", false),
-        new MailData(2, "ÀÌº¥Æ® ¿ìÆí", "ÀÌº¥Æ® Âü¿© º¸»ó", 5322, "2024-10-13", false)
+        new MailData(1, "ë³´ìƒ ìš°í¸", "ì „íˆ¬ ë³´ìƒ ì§€ê¸‰", 1231, "2024-10-12", false),
+        new MailData(2, "ì´ë²¤íŠ¸ ìš°í¸", "ì´ë²¤íŠ¸ ì°¸ì—¬ ë³´ìƒ", 5322, "2024-10-13", false)
     };
 
     protected static List<FriendData> FriendDataList = new List<FriendData>
     {
-        new FriendData(1, "°í¾çÀÌÄ£±¸1", 1110),
-        new FriendData(1, "°í¾çÀÌÄ£±¸2", 234234),
-        new FriendData(1, "°í¾çÀÌÄ£±¸3", 13434),
-        new FriendData(1, "°í¾çÀÌÄ£±¸4", 45466),
-        new FriendData(1, "°í¾çÀÌÄ£±¸5", 3432),
-        new FriendData(2, "°í¾çÀÌÄ£±¸6", 232123)
+        new FriendData(1, "ê³ ì–‘ì´ì¹œêµ¬1", 1110),
+        new FriendData(1, "ê³ ì–‘ì´ì¹œêµ¬2", 234234),
+        new FriendData(1, "ê³ ì–‘ì´ì¹œêµ¬3", 13434),
+        new FriendData(1, "ê³ ì–‘ì´ì¹œêµ¬4", 45466),
+        new FriendData(1, "ê³ ì–‘ì´ì¹œêµ¬5", 3432),
+        new FriendData(2, "ê³ ì–‘ì´ì¹œêµ¬6", 232123)
     };
 
     protected static List<RankingData> RankingDataList = new List<RankingData>
     {
-        new RankingData(1, "°í¾çÀÌÀ¯Àú1", 311000),
-        new RankingData(2, "°í¾çÀÌÀ¯Àú2", 221000),
-        new RankingData(3, "°í¾çÀÌÀ¯Àú3", 111000),
-        new RankingData(4, "°í¾çÀÌÀ¯Àú1", 31000),
-        new RankingData(5, "°í¾çÀÌÀ¯Àú2", 3950)
+        new RankingData(1, "ê³ ì–‘ì´ìœ ì €1", 311000),
+        new RankingData(2, "ê³ ì–‘ì´ìœ ì €2", 221000),
+        new RankingData(3, "ê³ ì–‘ì´ìœ ì €3", 111000),
+        new RankingData(4, "ê³ ì–‘ì´ìœ ì €1", 31000),
+        new RankingData(5, "ê³ ì–‘ì´ìœ ì €2", 3950)
     };
 
     protected static List<BoardData> BoardDataList = new List<BoardData>
     {
-        new BoardData(1, "Ã¹ ¹øÂ° °Ô½Ã±Û", "¾È³çÇÏ¼¼¿ä! °ÔÀÓÀÌ ³Ê¹« Àç¹Õ¾î¿ä!", "2024-10-11"),
-        new BoardData(2, "µÎ ¹øÂ° °Ô½Ã±Û", "ÁÁÀº ÆÁ °øÀ¯ÇÕ´Ï´Ù.", "2024-10-12")
+        new BoardData(1, "ì²« ë²ˆì§¸ ê²Œì‹œê¸€", "ì•ˆë…•í•˜ì„¸ìš”! ê²Œì„ì´ ë„ˆë¬´ ì¬ë°Œì–´ìš”!", "2024-10-11"),
+        new BoardData(2, "ë‘ ë²ˆì§¸ ê²Œì‹œê¸€", "ì¢‹ì€ íŒ ê³µìœ í•©ë‹ˆë‹¤.", "2024-10-12")
     };
 
-    // °øÁö µ¥ÀÌÅÍ Àü¼Û ÇÔ¼ö
+    // ê³µì§€ ë°ì´í„° ì „ì†¡ í•¨ìˆ˜
     public static List<NoticeData> SendNoticeDataToUser(int userID)
     {
-        // »ç¿ëÀÚ°¡ Á¢¼ÓÇÒ ¶§ °øÁö µ¥ÀÌÅÍ¸¦ Àü¼Û
+        // ì‚¬ìš©ìê°€ ì ‘ì†í•  ë•Œ ê³µì§€ ë°ì´í„°ë¥¼ ì „ì†¡
         return NoticeDataList;
     }
 
-    // ¿ìÆí µ¥ÀÌÅÍ Àü¼Û ÇÔ¼ö
+    // ìš°í¸ ë°ì´í„° ì „ì†¡ í•¨ìˆ˜
     public static List<MailData> SendMailDataToUser(int userID)
     {
-        // »ç¿ëÀÚ°¡ Á¢¼ÓÇÒ ¶§ ¿ìÆí µ¥ÀÌÅÍ¸¦ Àü¼Û
+        // ì‚¬ìš©ìê°€ ì ‘ì†í•  ë•Œ ìš°í¸ ë°ì´í„°ë¥¼ ì „ì†¡
         return MailDataList;
     }
 
-    // Ä£±¸ µ¥ÀÌÅÍ Àü¼Û ÇÔ¼ö
+    // ì¹œêµ¬ ë°ì´í„° ì „ì†¡ í•¨ìˆ˜
     public static List<FriendData> SendFriendDataToUser(int userID)
     {
-        // »ç¿ëÀÚ°¡ Á¢¼ÓÇÒ ¶§ Ä£±¸ µ¥ÀÌÅÍ¸¦ Àü¼Û
+        // ì‚¬ìš©ìê°€ ì ‘ì†í•  ë•Œ ì¹œêµ¬ ë°ì´í„°ë¥¼ ì „ì†¡
         return FriendDataList;
     }
 
-    // ·©Å· µ¥ÀÌÅÍ Àü¼Û ÇÔ¼ö
+    // ë­í‚¹ ë°ì´í„° ì „ì†¡ í•¨ìˆ˜
     public static List<RankingData> SendRankingDataToUser(int userID)
     {
-        // »ç¿ëÀÚ°¡ Á¢¼ÓÇÒ ¶§ ·©Å· µ¥ÀÌÅÍ¸¦ Àü¼Û
+        // ì‚¬ìš©ìê°€ ì ‘ì†í•  ë•Œ ë­í‚¹ ë°ì´í„°ë¥¼ ì „ì†¡
         return RankingDataList;
     }
 
-    // °Ô½ÃÆÇ µ¥ÀÌÅÍ Àü¼Û ÇÔ¼ö
+    // ê²Œì‹œíŒ ë°ì´í„° ì „ì†¡ í•¨ìˆ˜
     public static List<BoardData> SendBoardDataToUser(int userID)
     {
-        // »ç¿ëÀÚ°¡ Á¢¼ÓÇÒ ¶§ °Ô½ÃÆÇ µ¥ÀÌÅÍ¸¦ Àü¼Û
+        // ì‚¬ìš©ìê°€ ì ‘ì†í•  ë•Œ ê²Œì‹œíŒ ë°ì´í„°ë¥¼ ì „ì†¡
         return BoardDataList;
     }
 
-    // ¿ìÆí ¼ö·É Ã³¸® ÇÔ¼ö
+    // ìš°í¸ ìˆ˜ë ¹ ì²˜ë¦¬ í•¨ìˆ˜
     public static void ReceiveMail(int userID, int mailID)
     {
         foreach (var mail in MailDataList)
@@ -85,29 +85,29 @@ public class DummyOptionsServer
             if (mail.mailID == mailID && !mail.isReceived)
             {
                 mail.isReceived = true;
-                Debug.Log($"À¯Àú {userID}°¡ ¿ìÆí {mailID}À»(¸¦) ¼ö·ÉÇß½À´Ï´Ù.");
+                Debug.Log($"ìœ ì € {userID}ê°€ ìš°í¸ {mailID}ì„(ë¥¼) ìˆ˜ë ¹í–ˆìŠµë‹ˆë‹¤.");
                 break;
             }
         }
     }
 
-    // »õ °øÁö Ãß°¡ ÇÔ¼ö
+    // ìƒˆ ê³µì§€ ì¶”ê°€ í•¨ìˆ˜
     public static void AddNewNotice(string title, string content, string date)
     {
         int newID = NoticeDataList.Count + 1;
         NoticeDataList.Add(new NoticeData(newID, title, content, date));
-        Debug.Log($"»õ °øÁö Ãß°¡: {title}");
+        Debug.Log($"ìƒˆ ê³µì§€ ì¶”ê°€: {title}");
     }
 
-    // »õ Ä£±¸ Ãß°¡ ÇÔ¼ö
+    // ìƒˆ ì¹œêµ¬ ì¶”ê°€ í•¨ìˆ˜
     public static void AddFriend(int userID, string friendName, int friendLevel)
     {
         int newID = FriendDataList.Count + 1;
         FriendDataList.Add(new FriendData(newID, friendName, friendLevel));
-        Debug.Log($"À¯Àú {userID}ÀÇ »õ·Î¿î Ä£±¸ Ãß°¡: {friendName}");
+        Debug.Log($"ìœ ì € {userID}ì˜ ìƒˆë¡œìš´ ì¹œêµ¬ ì¶”ê°€: {friendName}");
     }
 
-    // ·©Å· °»½Å ÇÔ¼ö (ÀÓÀÇ·Î ·©Å· Á¡¼ö ¾÷µ¥ÀÌÆ®)
+    // ë­í‚¹ ê°±ì‹  í•¨ìˆ˜ (ì„ì˜ë¡œ ë­í‚¹ ì ìˆ˜ ì—…ë°ì´íŠ¸)
     public static void UpdateRanking(int userID, int newScore)
     {
         foreach (var rank in RankingDataList)
@@ -115,18 +115,18 @@ public class DummyOptionsServer
             if (rank.userUID == userID)
             {
                 rank.score = newScore;
-                Debug.Log($"À¯Àú {userID}ÀÇ ·©Å· Á¡¼ö °»½Å: {newScore}");
+                Debug.Log($"ìœ ì € {userID}ì˜ ë­í‚¹ ì ìˆ˜ ê°±ì‹ : {newScore}");
                 break;
             }
         }
     }
 
-    // °Ô½Ã±Û ÀÛ¼º ÇÔ¼ö
+    // ê²Œì‹œê¸€ ì‘ì„± í•¨ìˆ˜
     public static void AddNewBoardPost(string title, string content, string date)
     {
         int newID = BoardDataList.Count + 1;
         BoardDataList.Add(new BoardData(newID, title, content, date));
-        Debug.Log($"»õ °Ô½Ã±Û Ãß°¡: {title}");
+        Debug.Log($"ìƒˆ ê²Œì‹œê¸€ ì¶”ê°€: {title}");
     }
 
     // -----------------------Get-----------------------------
@@ -156,7 +156,7 @@ public class DummyOptionsServer
     }
 }
 
-// µ¥ÀÌÅÍ ±¸Á¶Ã¼ (°øÁö, ¿ìÆí, Ä£±¸, ·©Å·, °Ô½ÃÆÇ)
+// ë°ì´í„° êµ¬ì¡°ì²´ (ê³µì§€, ìš°í¸, ì¹œêµ¬, ë­í‚¹, ê²Œì‹œíŒ)
 [System.Serializable]
 public class NoticeData
 {

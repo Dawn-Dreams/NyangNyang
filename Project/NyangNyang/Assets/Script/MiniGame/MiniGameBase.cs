@@ -1,12 +1,12 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public abstract class MiniGameBase : MonoBehaviour
 {
     protected string gameName;
-    protected int rewardTicketIndex; // º¸»óÀ¸·Î ¹ŞÀ» ¼ÒÅÁ±Ç ÀÎµ¦½º
-    protected bool isGameCleared;         // °ÔÀÓ Å¬¸®¾î ¿©ºÎ
+    protected int rewardTicketIndex; // ë³´ìƒìœ¼ë¡œ ë°›ì„ ì†Œíƒ•ê¶Œ ì¸ë±ìŠ¤
+    protected bool isGameCleared;         // ê²Œì„ í´ë¦¬ì–´ ì—¬ë¶€
 
-    // ¹Ì´Ï°ÔÀÓ ÃÊ±âÈ­
+    // ë¯¸ë‹ˆê²Œì„ ì´ˆê¸°í™”
     protected void Initialize(string gameName, int rewardTicketIndex)
     {
         this.gameName = gameName;
@@ -15,14 +15,14 @@ public abstract class MiniGameBase : MonoBehaviour
         isGameCleared = false;
     }
 
-    // ¹Ì´Ï°ÔÀÓ ½ÃÀÛ
+    // ë¯¸ë‹ˆê²Œì„ ì‹œì‘
     public void StartGame()
     {
         GameManager.isMiniGameActive = true;
         StartGameLogic();
     }
 
-    // ¹Ì´Ï°ÔÀÓ Å¬¸®¾î Ã³¸®
+    // ë¯¸ë‹ˆê²Œì„ í´ë¦¬ì–´ ì²˜ë¦¬
     protected void ClearGame()
     {
         isGameCleared = true;
@@ -31,16 +31,16 @@ public abstract class MiniGameBase : MonoBehaviour
         EndGameLogic();
     }
 
-    // Å¬¸®¾î ½Ã ¼ÒÅÁ±Ç º¸»ó Áö±Ş
+    // í´ë¦¬ì–´ ì‹œ ì†Œíƒ•ê¶Œ ë³´ìƒ ì§€ê¸‰
     private void RewardSweepTicket()
     {
         DummyServerData.AddTicket(Player.GetUserID(), rewardTicketIndex, 1);
         DummyServerData.GetTicketCount(Player.GetUserID(),rewardTicketIndex);
     }
 
-    // ¹Ì´Ï°ÔÀÓ ½ÃÀÛ ·ÎÁ÷ (°¢ ¹Ì´Ï°ÔÀÓ¿¡¼­ ±¸Çö)
+    // ë¯¸ë‹ˆê²Œì„ ì‹œì‘ ë¡œì§ (ê° ë¯¸ë‹ˆê²Œì„ì—ì„œ êµ¬í˜„)
     protected abstract void StartGameLogic();
 
-    // ¹Ì´Ï°ÔÀÓ Á¾·á ·ÎÁ÷ (°¢ ¹Ì´Ï°ÔÀÓ¿¡¼­ ±¸Çö)
+    // ë¯¸ë‹ˆê²Œì„ ì¢…ë£Œ ë¡œì§ (ê° ë¯¸ë‹ˆê²Œì„ì—ì„œ êµ¬í˜„)
     protected abstract void EndGameLogic();
 }

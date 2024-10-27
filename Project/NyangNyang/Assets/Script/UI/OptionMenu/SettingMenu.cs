@@ -1,4 +1,4 @@
-using TMPro;
+ï»¿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,8 +9,8 @@ public class SettingsMenu : MonoBehaviour
     public Slider bgmVolumeSlider;
     public Slider sfxVolumeSlider;
     public Slider brightnessSlider;
-    public Toggle bgmSoundOnOffToggle; // BGM Åä±Û Ãß°¡
-    public Toggle sfxSoundOnOffToggle; // SFX Åä±Û Ãß°¡
+    public Toggle bgmSoundOnOffToggle; // BGM í† ê¸€ ì¶”ê°€
+    public Toggle sfxSoundOnOffToggle; // SFX í† ê¸€ ì¶”ê°€
     public Toggle alertToggle;
     public Toggle vibrationToggle;
     public TMP_InputField uidText;
@@ -24,14 +24,14 @@ public class SettingsMenu : MonoBehaviour
     public Button makersButton;
     public Button askButton;
 
-    private string userUID = "1234-5678-UID"; // »ç¿ëÀÚ UID
-    private string userNickname = "Player";  // ±âº» ´Ğ³×ÀÓ
-    private string normalCoupon = "DAWNDREAMS2024";  // ¿¹½Ã ÄíÆù ¹øÈ£
-    private float brightness = 1f;  // ±âº» ¹à±â °ª (1.0 = ÃÖ´ë ¹à±â)
+    private string userUID = "1234-5678-UID"; // ì‚¬ìš©ì UID
+    private string userNickname = "Player";  // ê¸°ë³¸ ë‹‰ë„¤ì„
+    private string normalCoupon = "DAWNDREAMS2024";  // ì˜ˆì‹œ ì¿ í° ë²ˆí˜¸
+    private float brightness = 1f;  // ê¸°ë³¸ ë°ê¸° ê°’ (1.0 = ìµœëŒ€ ë°ê¸°)
 
     void Start()
     {
-        // ÃÊ±â ¼³Á¤
+        // ì´ˆê¸° ì„¤ì •
         bgmVolumeSlider.value = AudioManager.Instance.bgmVolume;
         sfxVolumeSlider.value = AudioManager.Instance.sfxVolume;
         brightnessSlider.value = brightness;
@@ -43,7 +43,7 @@ public class SettingsMenu : MonoBehaviour
         nicknameText.text = userNickname;
         couponText.text = normalCoupon;
 
-        // ÀÌº¥Æ® ¿¬°á
+        // ì´ë²¤íŠ¸ ì—°ê²°
         bgmVolumeSlider.onValueChanged.AddListener(delegate { OnBGMVolumeChanged(); });
         sfxVolumeSlider.onValueChanged.AddListener(delegate { OnSFXVolumeChanged(); });
         brightnessSlider.onValueChanged.AddListener(delegate { OnBrightnessChanged(); });
@@ -64,42 +64,42 @@ public class SettingsMenu : MonoBehaviour
     public void OpenSettingsMenu()
     {
         settingsMenuCanvas.SetActive(true);
-        //Time.timeScale = 0f;  // ÀÏ½ÃÁ¤Áö
+        //Time.timeScale = 0f;  // ì¼ì‹œì •ì§€
     }
 
     public void CloseSettingsMenu()
     {
         settingsMenuCanvas.SetActive(false);
-        //Time.timeScale = 1f;  // Àç°³
+        //Time.timeScale = 1f;  // ì¬ê°œ
     }
 
     public void SubmitCoupon()
     {
-        Debug.Log("ÄíÆù Á¦Ãâ");
-        // ÄíÆù ÄÚµå ÀÔ·Â ÈÄ Ã³¸®
+        Debug.Log("ì¿ í° ì œì¶œ");
+        // ì¿ í° ì½”ë“œ ì…ë ¥ í›„ ì²˜ë¦¬
     }
     
     public void ViewAccountInfo()
     {
-        Debug.Log("°èÁ¤ Á¤º¸ È®ÀÎ");
-        // °èÁ¤ Á¤º¸ ·Îµå
+        Debug.Log("ê³„ì • ì •ë³´ í™•ì¸");
+        // ê³„ì • ì •ë³´ ë¡œë“œ
     }
 
     public void ViewTermsOfService()
     {
-        Debug.Log("ÀÌ¿ë ¾à°ü È®ÀÎ");
-        // ÀÌ¿ë ¾à°ü ·Îµå
+        Debug.Log("ì´ìš© ì•½ê´€ í™•ì¸");
+        // ì´ìš© ì•½ê´€ ë¡œë“œ
     }
 
       public void ViewMakersInfo()
     {
-        Debug.Log("¸¸µç»ç¶÷µé È®ÀÎ");
+        Debug.Log("ë§Œë“ ì‚¬ëŒë“¤ í™•ì¸");
 
     }
 
     public void ViewAskService()
     {
-        Debug.Log("¹®ÀÇ »çÇ× È®ÀÎ");
+        Debug.Log("ë¬¸ì˜ ì‚¬í•­ í™•ì¸");
 
     }
 
@@ -176,13 +176,13 @@ public class SettingsMenu : MonoBehaviour
     public void CopyUIDToClipboard()
     {
         GUIUtility.systemCopyBuffer = userUID;
-        Debug.Log($"UID {userUID} º¹»çµÊ");
+        Debug.Log($"UID {userUID} ë³µì‚¬ë¨");
     }
 
     public void ChangeNickname()
     {
         userNickname = nicknameText.text;
-        Debug.Log($"´Ğ³×ÀÓÀÌ {userNickname}(À¸)·Î º¯°æµÊ");
-        // ´Ğ³×ÀÓ º¯°æ ÈÄ ¼­¹ö¿¡ ÀúÀå
+        Debug.Log($"ë‹‰ë„¤ì„ì´ {userNickname}(ìœ¼)ë¡œ ë³€ê²½ë¨");
+        // ë‹‰ë„¤ì„ ë³€ê²½ í›„ ì„œë²„ì— ì €ì¥
     }
 }

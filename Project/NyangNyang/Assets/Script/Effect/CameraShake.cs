@@ -1,27 +1,27 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraShake : MonoBehaviour
 {
-    public float shakeDuration = 0.5f;      // Ä«¸Ş¶ó Èçµé¸²ÀÇ Áö¼Ó ½Ã°£
-    public float shakeMagnitude = 0.2f;     // Ä«¸Ş¶ó Èçµé¸²ÀÇ °­µµ
-    public float dampingSpeed = 1.0f;       // Èçµé¸²ÀÌ Á¡Â÷ °¨¼ÒÇÏ´Â ¼Óµµ (°¨¼è ¼Óµµ)
+    public float shakeDuration = 0.5f;      // ì¹´ë©”ë¼ í”ë“¤ë¦¼ì˜ ì§€ì† ì‹œê°„
+    public float shakeMagnitude = 0.2f;     // ì¹´ë©”ë¼ í”ë“¤ë¦¼ì˜ ê°•ë„
+    public float dampingSpeed = 1.0f;       // í”ë“¤ë¦¼ì´ ì ì°¨ ê°ì†Œí•˜ëŠ” ì†ë„ (ê°ì‡  ì†ë„)
 
-    private Vector3 originPos;      // Ä«¸Ş¶óÀÇ ¿ø·¡ À§Ä¡ ÀúÀå º¯¼ö
-    private float shakingTime;      // Èçµé¸®´Â ½Ã°£ Ä«¿îÅÍ
+    private Vector3 originPos;      // ì¹´ë©”ë¼ì˜ ì›ë˜ ìœ„ì¹˜ ì €ì¥ ë³€ìˆ˜
+    private float shakingTime;      // í”ë“¤ë¦¬ëŠ” ì‹œê°„ ì¹´ìš´í„°
 
     private void OnEnable()
     {
         originPos = transform.position;
     }
 
-    // ±âº»
+    // ê¸°ë³¸
     public void TriggerShake()
     {
         shakingTime = shakeDuration;
     }
-    // Ä¿½ºÅÒ
+    // ì»¤ìŠ¤í…€
     public void TriggerShake(float _shakeDuration, float _shakeMagnitude)
     {
         shakeMagnitude = _shakeMagnitude;
@@ -32,7 +32,7 @@ public class CameraShake : MonoBehaviour
     {
         if (shakingTime > 0)
         {
-            // Èçµé¸² °­µµ¸¦ ½Ã°£¿¡ ºñ·ÊÇÏ¿© °¨¼è
+            // í”ë“¤ë¦¼ ê°•ë„ë¥¼ ì‹œê°„ì— ë¹„ë¡€í•˜ì—¬ ê°ì‡ 
             float currentShakeMagnitude = shakeMagnitude * (shakingTime / shakeDuration);
             transform.localPosition = originPos - Random.insideUnitSphere * currentShakeMagnitude;
             shakingTime -= Time.deltaTime * dampingSpeed;

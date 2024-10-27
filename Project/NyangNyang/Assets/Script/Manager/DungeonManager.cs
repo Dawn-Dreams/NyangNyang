@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Reflection;
 using TMPro;
@@ -15,25 +15,25 @@ public class DungeonManager : MonoBehaviour
     public int[] DungeonLevels = new int[3] { 1, 1, 1 };
     private int currentDungeonIndex;
 
-    // ½ºÆä¼È ½ºÅ×ÀÌÁö Áö¼Ó ½Ã°£
+    // ìŠ¤í˜ì…œ ìŠ¤í…Œì´ì§€ ì§€ì† ì‹œê°„
     public float playDuration = 10.0f;
 
     public int baseGoldAmount = 100000;
     private Coroutine goldCoroutine;
     private bool isSuccess;
-    private int gainGold = 100000;               // ±âº» °ñµå È¹µæ·®
-    // ÀÓ½Ã °´Ã¼·Î »ç¿ëÇÒ cat°ú enemy ÇÁ¸®ÆÕ
+    private int gainGold = 100000;               // ê¸°ë³¸ ê³¨ë“œ íšë“ëŸ‰
+    // ì„ì‹œ ê°ì²´ë¡œ ì‚¬ìš©í•  catê³¼ enemy í”„ë¦¬íŒ¹
     public Character catPrefab;
     public DungeonEnemy enemyPrefab;
     private Character catInstance;
     private DungeonEnemy enemyInstance;
 
-    // ½Ì±ÛÅæ ÀÎ½ºÅÏ½º
+    // ì‹±ê¸€í†¤ ì¸ìŠ¤í„´ìŠ¤
     public static DungeonManager Instance { get; private set; }
 
     private void Awake()
     {
-        // ½Ì±ÛÅæ ÆĞÅÏ ±¸Çö
+        // ì‹±ê¸€í†¤ íŒ¨í„´ êµ¬í˜„
         if (Instance == null)
         {
             Instance = this;
@@ -43,91 +43,91 @@ public class DungeonManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        // DungeonUI >> Panel >> Dungeon ÇÏÀ§¿¡¼­ Dungeon ÆĞ³ÎµéÀ» µ¿ÀûÀ¸·Î Ã£À½
+        // DungeonUI >> Panel >> Dungeon í•˜ìœ„ì—ì„œ Dungeon íŒ¨ë„ë“¤ì„ ë™ì ìœ¼ë¡œ ì°¾ìŒ
         Transform panelTransform = DungeonUI.transform.Find("Panel");
         if (panelTransform != null)
         {
             dungeonPanels = new GameObject[3];
             for (int i = 0; i < 3; i++)
             {
-                dungeonPanels[i] = panelTransform.Find($"Dungeon ({i})").gameObject;  // Dungeon[0], Dungeon[1], Dungeon[2]À» Ã£À½
+                dungeonPanels[i] = panelTransform.Find($"Dungeon ({i})").gameObject;  // Dungeon[0], Dungeon[1], Dungeon[2]ì„ ì°¾ìŒ
             }
         }
         else
         {
-            Debug.LogError("PanelÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+            Debug.LogError("Panelì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
         }
 
-        // DungeonUI >> Panel >> DungeonResultText µ¿ÀûÀ¸·Î Ã£À½
+        // DungeonUI >> Panel >> DungeonResultText ë™ì ìœ¼ë¡œ ì°¾ìŒ
         DungeonResultText = panelTransform.Find("DungeonResultText").GetComponent<TextMeshProUGUI>();
         if (DungeonResultText == null)
         {
-            Debug.LogError("DungeonResultText¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+            Debug.LogError("DungeonResultTextë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
         }
     }
 
-    // ½ºÆä¼È ½ºÅ×ÀÌÁö ½ÃÀÛ
+    // ìŠ¤í˜ì…œ ìŠ¤í…Œì´ì§€ ì‹œì‘
     public void StartDungeon(int index, int level)
     {
         if (GameManager.isDungeonActive)
         {
-            Debug.Log("½ºÆä¼È ½ºÅ×ÀÌÁö°¡ ÀÌ¹Ì È°¼ºÈ­µÇ¾î ÀÖ½À´Ï´Ù.");
+            Debug.Log("ìŠ¤í˜ì…œ ìŠ¤í…Œì´ì§€ê°€ ì´ë¯¸ í™œì„±í™”ë˜ì–´ ìˆìŠµë‹ˆë‹¤.");
             return;
         }
 
         if (GameManager.isMiniGameActive)
         {
-            Debug.Log("¹Ì´Ï°ÔÀÓÀÌ ½ÇÇà ÁßÀÌ¹Ç·Î ½ºÆä¼È ½ºÅ×ÀÌÁö¸¦ ½ÃÀÛÇÒ ¼ö ¾ø½À´Ï´Ù.");
+            Debug.Log("ë¯¸ë‹ˆê²Œì„ì´ ì‹¤í–‰ ì¤‘ì´ë¯€ë¡œ ìŠ¤í˜ì…œ ìŠ¤í…Œì´ì§€ë¥¼ ì‹œì‘í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
             return;
         }
 
-        // Æ¼ÄÏ È®ÀÎ
+        // í‹°ì¼“ í™•ì¸
         if (!DummyServerData.HasTicket(Player.GetUserID(), index))
         {
-            Debug.Log("¼ÒÅÁ±ÇÀÌ ºÎÁ·ÇÏ¿© ½ºÆä¼È ½ºÅ×ÀÌÁö¸¦ ½ÃÀÛÇÒ ¼ö ¾ø½À´Ï´Ù.");
+            Debug.Log("ì†Œíƒ•ê¶Œì´ ë¶€ì¡±í•˜ì—¬ ìŠ¤í˜ì…œ ìŠ¤í…Œì´ì§€ë¥¼ ì‹œì‘í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
             return;
         }
 
-        // ÀÌÀü Invoke È£ÃâÀÌ ÀÖÀ» °æ¿ì Ãë¼Ò
+        // ì´ì „ Invoke í˜¸ì¶œì´ ìˆì„ ê²½ìš° ì·¨ì†Œ
         CancelInvoke("TimeOut");
 
-        // ´øÀü È°¼ºÈ­
+        // ë˜ì „ í™œì„±í™”
         GameManager.isDungeonActive = true;
 
         ShowDungeonResultText("START!!", 1);
-        // index¿¡ ¸Â´Â UI ÆĞ³Î¸¸ È°¼ºÈ­
+        // indexì— ë§ëŠ” UI íŒ¨ë„ë§Œ í™œì„±í™”
         for (int i = 0; i < dungeonPanels.Length; i++)
         {
-            dungeonPanels[i].SetActive(i == index); // ÇöÀç ¼±ÅÃÇÑ index¿¡ ÇØ´çÇÏ´Â ÆĞ³Î¸¸ È°¼ºÈ­
+            dungeonPanels[i].SetActive(i == index); // í˜„ì¬ ì„ íƒí•œ indexì— í•´ë‹¹í•˜ëŠ” íŒ¨ë„ë§Œ í™œì„±í™”
         }
 
-        // ÇÁ¸®ÆÕ ÀÎ½ºÅÏ½º »ı¼º
+        // í”„ë¦¬íŒ¹ ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
         catInstance = Instantiate(catPrefab, new Vector3(-10, 40, 0), Quaternion.identity).GetComponent<Character>();
         enemyInstance = Instantiate(enemyPrefab, new Vector3(5, 40, 0), Quaternion.identity).GetComponent<DungeonEnemy>();
         
-        // ÀûÀÇ »ı¸í·Â, °ø°İ·Â, °ø°İ ÆĞÅÏ ¼³Á¤ (index¿Í level¿¡ µû¶ó ´Ù¸£°Ô ¼³Á¤)
+        // ì ì˜ ìƒëª…ë ¥, ê³µê²©ë ¥, ê³µê²© íŒ¨í„´ ì„¤ì • (indexì™€ levelì— ë”°ë¼ ë‹¤ë¥´ê²Œ ì„¤ì •)
         enemyInstance.InitializeEnemyStats(index, level);
 
 
         currentDungeonIndex = index;
-        DungeonUI.SetActive(true);  // UI È°¼ºÈ­
+        DungeonUI.SetActive(true);  // UI í™œì„±í™”
 
-        // ÀÏÁ¤ ½Ã°£ µ¿¾È °ñµå¸¦ È¹µæÇÏ´Â ÄÚ·çÆ¾
+        // ì¼ì • ì‹œê°„ ë™ì•ˆ ê³¨ë“œë¥¼ íšë“í•˜ëŠ” ì½”ë£¨í‹´
         // goldCoroutine = StartCoroutine(GainGoldOverTime(level));
 
-        DummyServerData.UseTicket(Player.GetUserID(), index); // Æ¼ÄÏ Â÷°¨
+        DummyServerData.UseTicket(Player.GetUserID(), index); // í‹°ì¼“ ì°¨ê°
 
         StartCoroutine(StartCombatAfterDelay(1.0f));
         StartCoroutine(CheckBattleOutcome());
-        // ½ºÅ×ÀÌÁö Á¦ÇÑ ½Ã°£ ¼³Á¤
+        // ìŠ¤í…Œì´ì§€ ì œí•œ ì‹œê°„ ì„¤ì •
         Invoke("TimeOut", playDuration);
     }
 
-    // ÀÏÁ¤ ½Ã°£ µô·¹ÀÌ ÈÄ ÀüÅõ ½ÃÀÛ
+    // ì¼ì • ì‹œê°„ ë”œë ˆì´ í›„ ì „íˆ¬ ì‹œì‘
     private IEnumerator StartCombatAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        // ÀüÅõ ½ÃÀÛ
+        // ì „íˆ¬ ì‹œì‘
         catInstance.SetEnemy(enemyInstance);
         enemyInstance.SetEnemy(catInstance);
     }
@@ -141,12 +141,12 @@ public class DungeonManager : MonoBehaviour
         }
     }
 
-    // ÀüÅõ °á°ú Ã¼Å©
+    // ì „íˆ¬ ê²°ê³¼ ì²´í¬
     private IEnumerator CheckBattleOutcome()
     {
         while (GameManager.isDungeonActive)
         {
-            // Àû±ºÀÌ Á×À¸¸é Å¬¸®¾î
+            // ì êµ°ì´ ì£½ìœ¼ë©´ í´ë¦¬ì–´
             if (enemyInstance != null && enemyInstance.IsDead())
             {
                 isSuccess = true;
@@ -154,7 +154,7 @@ public class DungeonManager : MonoBehaviour
                 yield break;
             }
 
-            // ÇÃ·¹ÀÌ¾î°¡ Á×À¸¸é ½ÇÆĞ
+            // í”Œë ˆì´ì–´ê°€ ì£½ìœ¼ë©´ ì‹¤íŒ¨
             if (catInstance != null && catInstance.IsDead())
             {
                 isSuccess = false;
@@ -166,14 +166,14 @@ public class DungeonManager : MonoBehaviour
         }
     }
 
-    // Á¦ÇÑ ½Ã°£ ÃÊ°ú ½Ã ½ÇÆĞ Ã³¸®
+    // ì œí•œ ì‹œê°„ ì´ˆê³¼ ì‹œ ì‹¤íŒ¨ ì²˜ë¦¬
     private void TimeOut()
     {
         if (GameManager.isDungeonActive)
         {
             ShowDungeonResultText("TIME OUT...", 2);
             isSuccess = false;
-            EndDungeonStage(); // ½ÇÆĞ Ã³¸®
+            EndDungeonStage(); // ì‹¤íŒ¨ ì²˜ë¦¬
         }
     }
 
@@ -182,7 +182,7 @@ public class DungeonManager : MonoBehaviour
         if (goldCoroutine != null)
             StopCoroutine(goldCoroutine);
 
-        // ¼º°ø Ã³¸®
+        // ì„±ê³µ ì²˜ë¦¬
         if (isSuccess)
         {
             if (currentDungeonIndex >= 0 && currentDungeonIndex < DungeonLevels.Length)
@@ -210,7 +210,7 @@ public class DungeonManager : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
 
-        // cat°ú enemy °´Ã¼ »èÁ¦
+        // catê³¼ enemy ê°ì²´ ì‚­ì œ
         if (catInstance != null)
         {
             Destroy(catInstance.gameObject);
@@ -248,23 +248,23 @@ public class DungeonRewardManager
         int goldReward = CalculateGoldReward(index, level);
         int itemReward = CalculateItemReward(index, level);
 
-        // º¸»ó Áö±Ş
+        // ë³´ìƒ ì§€ê¸‰
         Player.AddGold(goldReward);
-        //Player.AddItem(itemReward); // ¾ÆÀÌÅÛ º¸»ó... Ãß°¡ ¿¹Á¤
+        //Player.AddItem(itemReward); // ì•„ì´í…œ ë³´ìƒ... ì¶”ê°€ ì˜ˆì •
 
-        Debug.Log($"À¯Àú {userID}¿¡°Ô ´øÀü {index + 1} ·¹º§ {level} º¸»óÀ» Áö±ŞÇß½À´Ï´Ù. °ñµå: {goldReward}, ¾ÆÀÌÅÛ: {itemReward}");
+        Debug.Log($"ìœ ì € {userID}ì—ê²Œ ë˜ì „ {index + 1} ë ˆë²¨ {level} ë³´ìƒì„ ì§€ê¸‰í–ˆìŠµë‹ˆë‹¤. ê³¨ë“œ: {goldReward}, ì•„ì´í…œ: {itemReward}");
     }
 
     private int CalculateGoldReward(int index, int level)
     {
-        // index¿Í level¿¡ µû¶ó º¸»óÀ» ´Ù¸£°Ô ¼³Á¤
-        return 10000 * (index + 1) * level; // ±âº» °ñµå º¸»ó ¿¹½Ã
+        // indexì™€ levelì— ë”°ë¼ ë³´ìƒì„ ë‹¤ë¥´ê²Œ ì„¤ì •
+        return 10000 * (index + 1) * level; // ê¸°ë³¸ ê³¨ë“œ ë³´ìƒ ì˜ˆì‹œ
     }
 
     private int CalculateItemReward(int index, int level)
     {
-        // Æ¯Á¤ ·¹º§ µµ´Ş ½Ã ¾ÆÀÌÅÛ º¸»ó Áö±Ş ·ÎÁ÷
-        return (index + 1) * level; // ¾ÆÀÌÅÛ º¸»ó ¿¹½Ã
+        // íŠ¹ì • ë ˆë²¨ ë„ë‹¬ ì‹œ ì•„ì´í…œ ë³´ìƒ ì§€ê¸‰ ë¡œì§
+        return (index + 1) * level; // ì•„ì´í…œ ë³´ìƒ ì˜ˆì‹œ
     }
 }
 

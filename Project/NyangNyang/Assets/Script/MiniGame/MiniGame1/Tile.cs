@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections;
 using System;
 using UnityEngine.UI;
@@ -6,13 +6,13 @@ using UnityEngine.EventSystems;
 
 public class Tile : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
-    public int x;              // Å¸ÀÏÀÇ X ÁÂÇ¥
-    public int y;              // Å¸ÀÏÀÇ Y ÁÂÇ¥
-    public TileType tileType;  // Å¸ÀÏÀÇ Å¸ÀÔ
-    public bool isMerged;      // Å¸ÀÏÀÌ º´ÇÕµÇ¾ú´ÂÁö ¿©ºÎ
-    public event Action<Direction, int, int> OnTileDragged;  // µå·¡±× ÀÌº¥Æ®
+    public int x;              // íƒ€ì¼ì˜ X ì¢Œí‘œ
+    public int y;              // íƒ€ì¼ì˜ Y ì¢Œí‘œ
+    public TileType tileType;  // íƒ€ì¼ì˜ íƒ€ì…
+    public bool isMerged;      // íƒ€ì¼ì´ ë³‘í•©ë˜ì—ˆëŠ”ì§€ ì—¬ë¶€
+    public event Action<Direction, int, int> OnTileDragged;  // ë“œë˜ê·¸ ì´ë²¤íŠ¸
 
-    private Image image;  // Å¸ÀÏÀÇ ÀÌ¹ÌÁö ÄÄÆ÷³ÍÆ®
+    private Image image;  // íƒ€ì¼ì˜ ì´ë¯¸ì§€ ì»´í¬ë„ŒíŠ¸
     private Vector2 startDragPosition;
 
     private void Awake()
@@ -44,7 +44,7 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUp
         UpdatePosition();
     }
 
-    // Å¸ÀÏÀÇ À§Ä¡¸¦ ¼³Á¤ÇÏ°í ÀÌµ¿
+    // íƒ€ì¼ì˜ ìœ„ì¹˜ë¥¼ ì„¤ì •í•˜ê³  ì´ë™
     public void SetPosition(int x, int y)
     {
         this.x = x;
@@ -52,24 +52,24 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUp
         UpdatePosition();
     }
 
-    // Å¸ÀÏÀÇ ÇöÀç x, y ÁÂÇ¥¿¡ ¸Â´Â À§Ä¡·Î ÀÌµ¿
+    // íƒ€ì¼ì˜ í˜„ì¬ x, y ì¢Œí‘œì— ë§ëŠ” ìœ„ì¹˜ë¡œ ì´ë™
     private void UpdatePosition()
     {
         transform.localPosition = new Vector3(x, -y, 0);
     }
 
-    // ÅÍÄ¡ ½ÃÀÛ ½Ã È£Ãâ
+    // í„°ì¹˜ ì‹œì‘ ì‹œ í˜¸ì¶œ
     public void OnPointerDown(PointerEventData eventData)
     {
-        startDragPosition = eventData.position; // µå·¡±× ½ÃÀÛ À§Ä¡ ÀúÀå
+        startDragPosition = eventData.position; // ë“œë˜ê·¸ ì‹œì‘ ìœ„ì¹˜ ì €ì¥
     }
 
-    // µå·¡±× Áß È£Ãâ
+    // ë“œë˜ê·¸ ì¤‘ í˜¸ì¶œ
     public void OnDrag(PointerEventData eventData)
     {
         Vector2 dragOffset = eventData.position - startDragPosition;
 
-        if (dragOffset.magnitude > 20) // µå·¡±×°¡ ÀÏÁ¤ °Å¸® ÀÌ»óÀÏ ¶§ ¹æÇâ ÆÇº°
+        if (dragOffset.magnitude > 20) // ë“œë˜ê·¸ê°€ ì¼ì • ê±°ë¦¬ ì´ìƒì¼ ë•Œ ë°©í–¥ íŒë³„
         {
             Direction direction;
             if (Mathf.Abs(dragOffset.x) > Mathf.Abs(dragOffset.y))
@@ -77,12 +77,12 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUp
             else
                 direction = dragOffset.y > 0 ? Direction.Up : Direction.Down;
 
-            OnTileDragged?.Invoke(direction, x, y); // µå·¡±× ¹æÇâ°ú Å¸ÀÏ ÁÂÇ¥ Àü´Ş
-            startDragPosition = eventData.position; // »õ·Î¿î ½ÃÀÛ À§Ä¡ ¼³Á¤
+            OnTileDragged?.Invoke(direction, x, y); // ë“œë˜ê·¸ ë°©í–¥ê³¼ íƒ€ì¼ ì¢Œí‘œ ì „ë‹¬
+            startDragPosition = eventData.position; // ìƒˆë¡œìš´ ì‹œì‘ ìœ„ì¹˜ ì„¤ì •
         }
     }
 
-    // ÅÍÄ¡ Á¾·á ½Ã È£Ãâ
+    // í„°ì¹˜ ì¢…ë£Œ ì‹œ í˜¸ì¶œ
     public void OnPointerUp(PointerEventData eventData)
     {
         Debug.Log($"Tile ({x}, {y}) touch released.");

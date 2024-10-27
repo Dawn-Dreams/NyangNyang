@@ -1,41 +1,41 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 
 public class SliderPoint : MonoBehaviour
 {
-    public Slider slider;      // Slider ÄÄÆ÷³ÍÆ®
-    public Transform center;   // Áß¾Ó À§Ä¡ (¿¹: ½½¶óÀÌ´õÀÇ Áß½ÉÁ¡)
-    public Transform point;    // ÀÌµ¿ÇÒ Á¡ À§Ä¡
+    public Slider slider;      // Slider ì»´í¬ë„ŒíŠ¸
+    public Transform center;   // ì¤‘ì•™ ìœ„ì¹˜ (ì˜ˆ: ìŠ¬ë¼ì´ë”ì˜ ì¤‘ì‹¬ì )
+    public Transform point;    // ì´ë™í•  ì  ìœ„ì¹˜
 
-    private float radius;      // ¹İÁö¸§
-    private float angle;       // °¢µµ
+    private float radius;      // ë°˜ì§€ë¦„
+    private float angle;       // ê°ë„
 
     private void Start()
     {
-        // ¹İÁö¸§ ¼³Á¤: Á¡ÀÇ Ã¹ À§Ä¡¿Í Áß¾Ó À§Ä¡ °£ °Å¸® °è»ê
+        // ë°˜ì§€ë¦„ ì„¤ì •: ì ì˜ ì²« ìœ„ì¹˜ì™€ ì¤‘ì•™ ìœ„ì¹˜ ê°„ ê±°ë¦¬ ê³„ì‚°
         radius = Vector3.Distance(point.position, center.position);
 
-        // SliderÀÇ °ªÀÌ º¯°æµÉ ¶§ OnValueChanged ÀÌº¥Æ® È£Ãâ
+        // Sliderì˜ ê°’ì´ ë³€ê²½ë  ë•Œ OnValueChanged ì´ë²¤íŠ¸ í˜¸ì¶œ
         slider.onValueChanged.AddListener(UpdatePointPosition);
     }
 
     private void UpdatePointPosition(float sliderValue)
     {
-        // °¢µµ °è»ê: sliderÀÇ °ª¿¡ -360À» °öÇÑ ÈÄ 90µµ¸¦ ´õÇÏ¿© ½ÃÀÛ À§Ä¡¸¦ 12½Ã ¹æÇâÀ¸·Î ¼³Á¤
+        // ê°ë„ ê³„ì‚°: sliderì˜ ê°’ì— -360ì„ ê³±í•œ í›„ 90ë„ë¥¼ ë”í•˜ì—¬ ì‹œì‘ ìœ„ì¹˜ë¥¼ 12ì‹œ ë°©í–¥ìœ¼ë¡œ ì„¤ì •
         angle = -sliderValue * 360f + 90f;
 
-        // °¢µµ¸¦ ¶óµğ¾ÈÀ¸·Î º¯È¯ ÈÄ, x¿Í y ÁÂÇ¥ °è»ê
+        // ê°ë„ë¥¼ ë¼ë””ì•ˆìœ¼ë¡œ ë³€í™˜ í›„, xì™€ y ì¢Œí‘œ ê³„ì‚°
         float radian = angle * Mathf.Deg2Rad;
         float x = center.position.x + Mathf.Cos(radian) * radius;
         float y = center.position.y + Mathf.Sin(radian) * radius;
 
-        // Á¡ÀÇ À§Ä¡ ¾÷µ¥ÀÌÆ®
+        // ì ì˜ ìœ„ì¹˜ ì—…ë°ì´íŠ¸
         point.position = new Vector3(x, y, point.position.z);
     }
 
     private void OnDestroy()
     {
-        // OnValueChanged ¸®½º³Ê Á¦°Å
+        // OnValueChanged ë¦¬ìŠ¤ë„ˆ ì œê±°
         slider.onValueChanged.RemoveListener(UpdatePointPosition);
     }
 }
