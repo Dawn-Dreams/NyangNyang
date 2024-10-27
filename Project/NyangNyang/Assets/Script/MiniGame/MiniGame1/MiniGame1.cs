@@ -15,6 +15,7 @@ public class MiniGame1 : MonoBehaviour
     private List<Tile> tilesList = new List<Tile>(); // 순서대로 타일을 관리하는 배열
     private bool isProcessing;  // 병합 처리 중 여부
     private Tile selectedTile;  // 현재 선택된 타일
+    public float slideDuration = 0.3f;
 
     private void Start()
     {
@@ -122,30 +123,47 @@ public class MiniGame1 : MonoBehaviour
         // 인접한 타일과 교환 시도
         if (Mathf.Abs(startX - targetX) + Mathf.Abs(startY - targetY) == 1)
         {
-            SwapTiles(startX, startY, targetX, targetY);
+            StartCoroutine(SwapTilesCoroutine(startX, startY, targetX, targetY));
+            selectedTile = null;
         }
     }
 
-    private void SwapTiles(int x1, int y1, int x2, int y2)
+    private IEnumerator SwapTilesCoroutine(int x1, int y1, int x2, int y2)
     {
+        isProcessing = true;
 
-        // 타일 참조
         Tile tile1 = grid[x1, y1];
         Tile tile2 = grid[x2, y2];
 
-        if (tile1 == null || tile2 == null) return;
+        if (tile1 == null || tile2 == null) yield break;
 
-        // 그리드 배열에서 위치 교환
+        Vector2 originalPos1 = tile1.transform.localPosition;
+        Vector2 originalPos2 = tile2.transform.localPosition;
+
+        // 슬라이드 애니메이션
+        float elapsedTime = 0f;
+        while (elapsedTime < slideDuration)
+        {
+            float t = elapsedTime / slideDuration;
+            tile1.transform.localPosition = Vector2.Lerp(originalPos1, originalPos2, t);
+            tile2.transform.localPosition = Vector2.Lerp(originalPos2, originalPos1, t);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // 위치 교환
         grid[x1, y1] = tile2;
         grid[x2, y2] = tile1;
 
-        // 인덱스와 좌표 갱신
         tile1.SetPosition(x2, y2);
         tile2.SetPosition(x1, y1);
 
         SetTilePosition(tile1, x2, y2);
         SetTilePosition(tile2, x1, y1);
+
         Debug.Log($"Swapped tiles at ({x1}, {y1}) and ({x2}, {y2}).");
+
+        isProcessing = false;
     }
 
     private void SetTilePosition(Tile tile, int x, int y)
