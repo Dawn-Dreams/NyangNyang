@@ -15,7 +15,7 @@ MonoBehaviour:
   m_GroupName: PassButtonBackground
   m_Data:
     m_SerializedData: []
-  m_GUID: 73b4f69236f2a704db5e6e4794b029da
+  m_GUID: cca78b93175e81a49966a93e35011b0e
   m_SerializeEntries:
   - m_GUID: a321a884f8f2d5242b074aa4ea27d9a7
     m_Address: Assets/Prefabs/UI/Pass/PassRewardOpenBackground.prefab
@@ -38,4 +38,6 @@ MonoBehaviour:
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5f1874fff1b70124d8333b18a2e9b4e8, type: 2}
   m_SchemaSet:
-    m_Schemas: []
+    m_Schemas:
+    - {fileID: 11400000, guid: e9721844ab7ca4340b168b1583611a6c, type: 2}
+    - {fileID: 11400000, guid: 83d9c917882ec58448b931b6a1943837, type: 2}

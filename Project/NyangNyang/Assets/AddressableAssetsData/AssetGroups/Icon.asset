@@ -15,7 +15,7 @@ MonoBehaviour:
   m_GroupName: Icon
   m_Data:
     m_SerializedData: []
-  m_GUID: 63b1e8b7c568b0a4cb5fc62fc0d12b38
+  m_GUID: f5621916dba42d94b99f8f962f34da57
   m_SerializeEntries:
   - m_GUID: 9a8a247ba0dca4d02b349891f034076c
     m_Address: Assets/MyAsset/CuteKawaiiGUIPack/Demo/Sprites/Common/Icons/Checkmark.png
@@ -32,4 +32,6 @@ MonoBehaviour:
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5f1874fff1b70124d8333b18a2e9b4e8, type: 2}
   m_SchemaSet:
-    m_Schemas: []
+    m_Schemas:
+    - {fileID: 11400000, guid: 039eed529e23b2347b13099dfd593d74, type: 2}
+    - {fileID: 11400000, guid: 022305d17a36115418ebca13a93c916f, type: 2}

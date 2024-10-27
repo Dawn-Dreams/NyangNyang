@@ -15,7 +15,7 @@ MonoBehaviour:
   m_GroupName: CatFurSkinMaterials
   m_Data:
     m_SerializedData: []
-  m_GUID: ed80e6f1fea8a5f4b837a867921372a8
+  m_GUID: 8b75948734bd438489fb66906d3ae5f0
   m_SerializeEntries:
   - m_GUID: 18cb8ea1ea3ed5242bfa708e61ec01aa
     m_Address: CatFurSkin/Mackerel
@@ -70,4 +70,6 @@ MonoBehaviour:
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5f1874fff1b70124d8333b18a2e9b4e8, type: 2}
   m_SchemaSet:
-    m_Schemas: []
+    m_Schemas:
+    - {fileID: 11400000, guid: 1fdae7e734674f843a7f1439fa5ca9e5, type: 2}
+    - {fileID: 11400000, guid: d57de773ce790874ab3cdad174e5448c, type: 2}

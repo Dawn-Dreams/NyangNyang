@@ -1,11 +1,6 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
-using UnityEditor.Rendering;
 using UnityEngine;
-using UnityEngine.Rendering;
-using Vector3 = System.Numerics.Vector3;
 
 public class Player : MonoBehaviour
 {

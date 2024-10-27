@@ -15,7 +15,7 @@ MonoBehaviour:
   m_GroupName: TitleButtonSprite
   m_Data:
     m_SerializedData: []
-  m_GUID: 9fa1e5a0152e9b349a53430e641ec83a
+  m_GUID: a4063e5c641a1c243a6faee274706555
   m_SerializeEntries:
   - m_GUID: 6e325d085339a458ab28d7ba62fa1c87
     m_Address: Assets/MyAsset/CuteKawaiiGUIPack/Icons/Icons/Trophies-Badges/Squircle--Green-256.png
@@ -39,4 +39,6 @@ MonoBehaviour:
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5f1874fff1b70124d8333b18a2e9b4e8, type: 2}
   m_SchemaSet:
-    m_Schemas: []
+    m_Schemas:
+    - {fileID: 11400000, guid: 94a8f90ec95da0b43bf696c10d08b387, type: 2}
+    - {fileID: 11400000, guid: 332cfeee77b750a4692d8922d1f78c44, type: 2}
