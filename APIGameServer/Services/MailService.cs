@@ -26,6 +26,25 @@ public class MailService : IMailService
         }
         return ErrorCode.None;
     }
+    public async Task<ErrorCode> RemoveinMailbox(string uid, int type, int reward)
+    {
+       
+        return ErrorCode.None;
+    }
+
+    public async Task<(ErrorCode, List<Mail>)> GetMailList(int uid )
+    {
+
+        //db에서 가져와야함
+        List<Mail> mails = await _mailbox.GetAllMailList(uid);
+
+       if(mails.Count == 0)
+        {
+
+        }
+
+       return (ErrorCode.None, mails);
+    }
 
     public void Dispose()
     {

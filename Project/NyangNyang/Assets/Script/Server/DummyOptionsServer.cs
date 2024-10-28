@@ -29,11 +29,11 @@ public class DummyOptionsServer
 
     protected static List<RankingData> RankingDataList = new List<RankingData>
     {
-        new RankingData(1, "고양이유저1", 311000),
-        new RankingData(2, "고양이유저2", 221000),
-        new RankingData(3, "고양이유저3", 111000),
-        new RankingData(4, "고양이유저1", 31000),
-        new RankingData(5, "고양이유저2", 3950)
+        //new RankingData(1, "고양이유저1", 311000),
+        //new RankingData(2, "고양이유저2", 221000),
+        //new RankingData(3, "고양이유저3", 111000),
+        //new RankingData(4, "고양이유저1", 31000),
+        //new RankingData(5, "고양이유저2", 3950)
     };
 
     protected static List<BoardData> BoardDataList = new List<BoardData>
@@ -112,7 +112,7 @@ public class DummyOptionsServer
     {
         foreach (var rank in RankingDataList)
         {
-            if (rank.userUID == userID)
+            if (rank.uid == userID)
             {
                 rank.score = newScore;
                 Debug.Log($"유저 {userID}의 랭킹 점수 갱신: {newScore}");
@@ -210,20 +210,20 @@ public class FriendData
     }
 }
 
-[System.Serializable]
-public class RankingData
-{
-    public int userUID;
-    public string userName;
-    public int score;
+//[System.Serializable]
+//public class RankingData
+//{
+//    public int uid;
+//    public string nickname;
+//    public int score;
 
-    public RankingData(int uid, string name, int score)
-    {
-        this.userUID = uid;
-        this.userName = name;
-        this.score = score;
-    }
-}
+//    public RankingData(int uid, string name, int score)
+//    {
+//        this.uid = uid;
+//        this.nickname = name;
+//        this.score = score;
+//    }
+//}
 
 [System.Serializable]
 public class BoardData

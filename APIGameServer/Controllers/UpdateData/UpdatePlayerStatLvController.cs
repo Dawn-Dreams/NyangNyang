@@ -3,26 +3,26 @@ using APIGameServer.Models;
 using APIGameServer.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace APIGameServer.Controllers;
+namespace APIGameServer.Controllers.UpdateData;
 
 [Route("[controller]")]
 [ApiController]
-public class UpdatePlayerStatController : ControllerBase
+public class UpdatePlayerStatLvController : ControllerBase
 {
     readonly IDreams_Player _playerStat;
 
-    public UpdatePlayerStatController(IDreams_Player playerStat)
+    public UpdatePlayerStatLvController(IDreams_Player playerStat)
     {
         _playerStat = playerStat;
     }
 
     [HttpPost]
-    public async Task<ResponseUpdateStat> Create([FromBody] PlayerStatusData req)
+    public async Task<ResponseUpdateStat> Create([FromBody] PlayerStatusLevelData req)
     {
         ResponseUpdateStat res = new ResponseUpdateStat();
 
-        var temp = await _playerStat.UpdatePlayerStatus(req);
-        if(temp == 0)
+        var temp = await _playerStat.UpdatePlayerStatusLevel(req);
+        if (temp == 0)
         {
             res.result = ErrorCode.FailUpdatePlayerTable;
         }
@@ -31,5 +31,5 @@ public class UpdatePlayerStatController : ControllerBase
 
 
     }
-        
+
 }

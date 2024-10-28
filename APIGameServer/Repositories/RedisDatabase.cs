@@ -26,8 +26,15 @@ public class RedisDatabase : IRedisDatabase
         return (int)UID;
 
     }
-    
 
+    public async Task<bool> SaveUserNickname(int uid, string nickname)
+    {
+        return await _redisDb.StringSetAsync(uid.ToString(), nickname);
+    }
+    public async Task<bool> CheckUserUid(int uid)
+    {
+        return await _redisDb.KeyExistsAsync(uid.ToString());
+    }
     public async Task<ErrorCode> UpdateUserScore(int uid, int score)
     {
         //score 갱신할때 사용하는것이다.
@@ -38,8 +45,7 @@ public class RedisDatabase : IRedisDatabase
 
         if (ret == false)
         {
-            //이게 맞나?
-         
+        
             return ErrorCode.FailConnectDB;
         }
         return ErrorCode.None;
@@ -47,13 +53,13 @@ public class RedisDatabase : IRedisDatabase
 
     }
 
-    public async Task<(ErrorCode, List<RankingData>)> GetRankingTopFive()
+    public async Task<(ErrorCode, List<RankingData>)> GetRankingTop100()
     {
         List<RankingData> ranking = new();
 
         var rankSet = new RedisSortedSet<int>(_redisCon, "player_score_ranking", null);
 
-        var rankDatas = await rankSet.RangeByRankWithScoresAsync(0, 5, order: StackExchange.Redis.Order.Descending);
+        var rankDatas = await rankSet.RangeByRankWithScoresAsync(0, 100, order: StackExchange.Redis.Order.Descending);
 
         //닉네임은 어떻게 해결해야하죠?? 흠냐
         //일단 레디스에 {uid : socre}가 저장되어있음

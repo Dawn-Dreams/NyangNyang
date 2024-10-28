@@ -19,10 +19,7 @@ public class UserService : IUserService
 
         for(int i=0;i<rewards.Length;i++)
         {
-            rewards[i] = 2;
-            //여기서 할까말까 고민중~
-            //아이템 번호를 가지고 있는거임 -1로 세팅하고
-            //rewrad[attendence]가 음수가 아니면 우편함에 넣어주는거로 하면된다.
+            rewards[i] = -1;
         }
     }
 
@@ -45,9 +42,7 @@ public class UserService : IUserService
  
         if (attendence != 0 && rewards[attendence] >=0 )
         {
-            //보상을 우편함에 넣어야한다. 
             await _mailService.AddRewardinMailbox(uid, (int)MailType.Reward,rewards[attendence]);
-
         }
         return rewards[attendence];
     }

@@ -77,26 +77,26 @@ public class mail
 //메일관련
 
 
-[System.Serializable]
-public class MailData
-{
-    public int mail_type;
-    public string title;
-    public string content;
-    public int itemID;
-    public string date;
-    public bool is_recived;
+//[System.Serializable]
+//public class MailData
+//{
+//    public int mail_type;
+//    public string title;
+//    public string content;
+//    public int itemID;
+//    public string date;
+//    public bool is_recived;
 
-    public MailData(int id, string title, string content, int itemID, string date, bool isReceived)
-    {
-        this.mail_type = id;
-        this.title = title;
-        this.content = content;
-        this.itemID = itemID;
-        this.date = date;
-        this.is_recived = isReceived;
-    }
-}
+//    public MailData(int id, string title, string content, int itemID, string date, bool isReceived)
+//    {
+//        this.mail_type = id;
+//        this.title = title;
+//        this.content = content;
+//        this.itemID = itemID;
+//        this.date = date;
+//        this.is_recived = isReceived;
+//    }
+//}
 
 //-------------------------------------------------
 

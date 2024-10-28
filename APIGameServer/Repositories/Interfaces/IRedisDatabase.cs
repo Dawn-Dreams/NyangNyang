@@ -6,8 +6,11 @@ namespace APIGameServer.Repository.Interfaces;
 public interface IRedisDatabase : IDisposable
 {
     public Task<int> GetNewUserUid();
-    public  Task<ErrorCode> UpdateUserScore(int uid, int score);
-    public Task<(ErrorCode, List<RankingData>)> GetRankingTopFive();
+    public Task<bool> SaveUserNickname(int uid, string nickname);
+    public Task<bool> CheckUserUid (int uid);
+
+    public Task<ErrorCode> UpdateUserScore(int uid, int score);
+    public Task<(ErrorCode, List<RankingData>)> GetRankingTop100();
 
 
 }

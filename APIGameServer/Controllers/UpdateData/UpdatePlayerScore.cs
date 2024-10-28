@@ -4,7 +4,7 @@ using APIGameServer.Repositories.Interfaces;
 using APIGameServer.Repository.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace APIGameServer.Controllers;
+namespace APIGameServer.Controllers.UpdateData;
 
 [Route("[controller]")]
 [ApiController]

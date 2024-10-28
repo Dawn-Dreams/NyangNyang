@@ -33,9 +33,13 @@ public class ResponseLogin
     [Required]
     public ErrorCode result { get; set; } = 0;
 
-    public PlayerStatusData status;
-    public PlayerStatusLevelData statusLv;
-    public PlayerGoodsData goods;
+    public PlayerStatusData status {  get; set; }
+    public PlayerStatusLevelData statusLv {  get; set; }
+    public PlayerGoodsData goods {  get; set; }
+
+    //메일리스트도 같이 받자. 
+    public List<Mail> mailList { get; set; }
+
 
 }
 

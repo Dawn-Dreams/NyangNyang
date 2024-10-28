@@ -30,6 +30,17 @@ public class Dreams_Mailbox : IDreams_Mailbox
         return await _queryFactory.Query("mailbox").InsertAsync(mail);
     }
 
+    public async Task<List<Mail>> GetAllMailList(int uid)
+    {
+        var result = await _queryFactory.Query("mailbox")
+            .Where("uid", uid)
+            .Select()
+            .GetAsync<Mail>();
+
+        return result.ToList();
+
+    
+    }
     public void Dispose()
     {
         Close();
