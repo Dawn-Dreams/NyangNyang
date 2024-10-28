@@ -21,7 +21,6 @@ MonoBehaviour:
     m_Address: Assets/MyAsset/CuteKawaiiGUIPack/Icons/Icons/Trophies-Badges/Squircle--Green-256.png
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Sprite/Button/CurrentSelect
     - Sprite/Button/Owning
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 83842b40cc43d48ffaeca5ef7da46789

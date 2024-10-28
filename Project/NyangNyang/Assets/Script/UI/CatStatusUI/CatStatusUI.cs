@@ -10,12 +10,12 @@ public class CatStatusUI : MonoBehaviour
 
     void Start()
     {
-        Player.OnSelectTitleChange += ChangePlayerCurrentTitleText;
+        PlayerTitle.OnSelectTitleChange += ChangePlayerCurrentTitleText;
     }
 
     public void ChangePlayerCurrentTitleText()
     {
-        TitleInfo currentTitleInfo = TitleDataManager.GetInstance().titleInfoDic[Player.PlayerCurrentTitleID];
+        TitleInfo currentTitleInfo = TitleDataManager.GetInstance().titleInfoDic[PlayerTitle.PlayerCurrentTitleID];
         playerCurrentTitleText.text = currentTitleInfo.name;
         playerCurrentTitleText.color = TitleDataManager.titleGradeColors[(TitleGrade)currentTitleInfo.grade];
     }

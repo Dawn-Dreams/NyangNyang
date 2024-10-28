@@ -47,12 +47,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - Costume/FurSkin
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 501c820cbd1948b44b2695ba9a4564d1
-    m_Address: Assets/Prefabs/Costume/Head/Head_Glass_Green.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Costume/Head
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 56bf6a3fcc111944c9735e2344e34dab
     m_Address: Assets/Prefabs/Costume/Hand_R/Hand_R_Flower.prefab
     m_ReadOnly: 0
@@ -133,18 +127,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d144e70835093ea4c94f0aa49a0046c3
     m_Address: Assets/Prefabs/Costume/Head/Head_Glass_Red.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Costume/Head
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d93ec8b91bb7b3a44b126e5fd901cf97
-    m_Address: Assets/Prefabs/Costume/Body/Body_Butterfly.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Costume/Body
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ddeca3dd6f761e8489f76dcf73caa640
-    m_Address: Assets/Prefabs/Costume/Head/Head_Glass_Blue.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Costume/Head
