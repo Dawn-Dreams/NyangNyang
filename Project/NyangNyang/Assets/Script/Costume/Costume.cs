@@ -39,21 +39,26 @@ public class Costume : MonoBehaviour
         _catCostumeTransforms[CatCostumePart.Body] = catBodyTransform;
         _catCostumeTransforms[CatCostumePart.Hand_R] = catHandRTransform;
 
-        // TODO: 해당 정보는 플레이어에서 CatObject 에 접근해서 하기.
-        // // TODO: 서버로부터 현재 유저의 CatFurSkin 정보 받기
-        // // TODO: 서버로부터 현재 고양이 코스튬 정보 받기
-
         for (int i = 0; i < (int)CatCostumePart.Count; ++i)
         {
             ChangeCatCostume((CatCostumePart)i, _currentCatCostume[(CatCostumePart)i]);
         }
     }
 
+    public int GetCurrentCostumeIndex(CatCostumePart part)
+    {
+        return _currentCatCostume[part];
+    }
+
     // 고양이의 털 스킨을 변경하는 함수
     private void ChangeCatFurSkin(CatFurSkin changeFurSkin)
     {
-        _currentCatCostume[CatCostumePart.FurSkin] = (int)changeFurSkin;
+        if (CostumeManager.GetInstance() == null)
+        {
+            return;
+        }
 
+        _currentCatCostume[CatCostumePart.FurSkin] = (int)changeFurSkin;
         Material[] mats = catSkinnedMesh.materials;
         mats[0] = CostumeManager.GetInstance().GetCatFurSkinMaterial(changeFurSkin);
         catSkinnedMesh.materials = mats;

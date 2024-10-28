@@ -109,6 +109,7 @@ MonoBehaviour:
     - Sprite/Button/Owning
     - Sprite/Button/CurrentSelect
     - Costume/FurSkin
+    - Sprite/Button/CurrentPreview
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 1357d4d6892ead44d8606e168156272e, type: 2}

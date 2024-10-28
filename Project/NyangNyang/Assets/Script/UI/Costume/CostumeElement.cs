@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public enum OwningSelectButtonType
 {
-    NotOwning, Owning, CurrentSelect, Count
+    NotOwning, Owning, CurrentSelect, CurrentPreview, Count
 }
 
 public class CostumeElement : MonoBehaviour
@@ -15,7 +15,8 @@ public class CostumeElement : MonoBehaviour
         {
             { OwningSelectButtonType.NotOwning, "미보유" },
             { OwningSelectButtonType.Owning, "보유중" },
-            { OwningSelectButtonType.CurrentSelect, "선택중" }
+            { OwningSelectButtonType.CurrentSelect, "선택중" },
+            { OwningSelectButtonType.CurrentPreview , "미리보기" }
         };
 
     public TextMeshProUGUI costumeNameText;
@@ -57,9 +58,15 @@ public class CostumeElement : MonoBehaviour
 
     private void AssetLoad()
     {
-        _sprites.Add(OwningSelectButtonType.CurrentSelect, new AddressableHandle<Sprite>().Load("Sprite/Button/CurrentSelect"));
-        _sprites.Add(OwningSelectButtonType.Owning, new AddressableHandle<Sprite>().Load("Sprite/Button/Owning"));
-        _sprites.Add(OwningSelectButtonType.NotOwning, new AddressableHandle<Sprite>().Load("Sprite/Button/NotOwning"));
+        for (int i = 0; i < (int)OwningSelectButtonType.Count; ++i)
+        {
+            OwningSelectButtonType type = (OwningSelectButtonType)i;
+            _sprites.Add(type,new AddressableHandle<Sprite>().Load("Sprite/Button/"+type));
+        }
+        //_sprites.Add(OwningSelectButtonType.CurrentSelect, new AddressableHandle<Sprite>().Load("Sprite/Button/CurrentSelect"));
+        //_sprites.Add(OwningSelectButtonType.Owning, new AddressableHandle<Sprite>().Load("Sprite/Button/Owning"));
+        //_sprites.Add(OwningSelectButtonType.NotOwning, new AddressableHandle<Sprite>().Load("Sprite/Button/NotOwning"));
+        
     }
 
     public void SetNameText(string nameString)
@@ -74,6 +81,11 @@ public class CostumeElement : MonoBehaviour
     {
         owningImage.sprite = _sprites[type].obj;
         selectButtonText.text = buttonTypeText[type];
+        
+        // 보유중/선택중 버튼은 선택 가능하게, (미리보기로 인해 선택중도 추가)
+        bool selectable = (type == OwningSelectButtonType.Owning || type == OwningSelectButtonType.CurrentSelect);
+        selectButton.interactable = selectable;
+        
     }
 
     public void SetCostumeData(CatCostumePart catCostumePart, int index)
@@ -103,9 +115,5 @@ public class CostumeElement : MonoBehaviour
             previewImage.gameObject.SetActive(false);
         }
         
-
-        // 보유중인지 변경
-        // TODO: 10/27 임시코드. 추후 서버에서 보유중인 코스튬 정보를 받아와 갱신 예정
-        SetSelectButtonType(OwningSelectButtonType.Owning);
     }
 }
