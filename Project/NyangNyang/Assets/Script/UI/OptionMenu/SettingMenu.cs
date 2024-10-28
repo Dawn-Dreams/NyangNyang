@@ -34,6 +34,7 @@ public class SettingsMenu : MonoBehaviour
         // 초기 설정
         bgmVolumeSlider.value = AudioManager.Instance.bgmVolume;
         sfxVolumeSlider.value = AudioManager.Instance.sfxVolume;
+        brightness = Screen.brightness;
         brightnessSlider.value = brightness;
         bgmSoundOnOffToggle.isOn = bgmVolumeSlider.value > 0;
         sfxSoundOnOffToggle.isOn = sfxVolumeSlider.value > 0;
