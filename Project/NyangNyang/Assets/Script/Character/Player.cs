@@ -1,13 +1,30 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
-using Vector3 = System.Numerics.Vector3;
 
 public class Player : MonoBehaviour
 {
     private static int userID = 0;
+    public static string PlayerName;
+    private static int _playerCurrentTitleID;
+
+    public static int PlayerCurrentTitleID
+    {
+        get { return _playerCurrentTitleID; }
+        set
+        {
+            if (value == _playerCurrentTitleID) return;
+            _playerCurrentTitleID = value;
+
+            if (OnSelectTitleChange != null)
+            {
+                OnSelectTitleChange();
+            }
+        }
+    }
+    public static List<int> playerOwningTitles = new List<int>();
+
+
     public static Status playerStatus;
     private static CurrencyData playerCurrency;
     private static UserLevelData playerLevelData;
@@ -38,7 +55,6 @@ public class Player : MonoBehaviour
     public delegate void OnStageClearQuestDelegate(int clearTheme, int clearStage);
     public static event OnStageClearQuestDelegate OnStageClear;
 
-    [SerializeField] private GameObject levelUpIconObject;
 
     // 스테이터스 레벨 변화 델리게이트
     public delegate void OnStatusLevelChangeDelegate(StatusLevelType type);
@@ -47,6 +63,13 @@ public class Player : MonoBehaviour
     // 스테이터스중 체력 변화 시 실행될 델리게이트 (캐릭터 체력 변경, 체력바 UI 기능 등)
     public delegate void OnHPStatusLevelChangeDelegate();
     public static event OnHPStatusLevelChangeDelegate OnHPLevelChange;
+
+    // 유저 착용 칭호 변경 델리게이트
+    public delegate void OnSelectTitleChangeDelegate();
+    public static event OnSelectTitleChangeDelegate OnSelectTitleChange;
+    // 유저 보유 칭호 변경 델리게이트
+    public delegate void OnOwningTitleChangeDelegate();
+    public static event OnOwningTitleChangeDelegate OnOwningTitleChange;
 
     // 한 스테이지 내에서 반복 전투를 진행하는 것에 대한 변수
     public static bool continuousCombat = false;
@@ -127,8 +150,7 @@ public class Player : MonoBehaviour
                 OnExpChange(playerLevelData);
         }
     }
-
-    void Awake()
+    public static void OnAwakeGetInitialDataFromServer()
     {
         // 서버로부터 user id 받기
         userID = 0;
@@ -147,7 +169,14 @@ public class Player : MonoBehaviour
         {
             GetExpDataFromServer();
         }
-            
+
+        OnOwningTitleChange += SetTitleOwningEffectToStatus;
+
+        // 서버로부터 받기
+        PlayerName = "냥냥이";
+        PlayerCurrentTitleID = DummyPlayerTitleServer.UserRequestCurrentSelectedTitleID(userID);
+        playerOwningTitles = DummyPlayerTitleServer.UserRequestOwningTitles(userID);
+
     }
 
     void Update()
@@ -192,7 +221,7 @@ public class Player : MonoBehaviour
     public static void GetGoldDataFromServer()
     {
         Gold = DummyServerData.GetUserGoldData(userID);
-        OnGoldChange(Gold);
+        //OnGoldChange(Gold);
         if(OnGoldChange != null)
             OnGoldChange(Gold);
     }
@@ -232,16 +261,6 @@ public class Player : MonoBehaviour
 
         if (OnTicketChange != null)
             OnTicketChange(playerCurrency.ticket);
-    }
-
-    // TODO: 임시 함수
-    public void ShowLevelUpIcon()
-    {
-        // 대미지 출력
-        UnityEngine.Vector3 spawnTransform = GameManager.GetInstance().catObject.transform.position;
-        spawnTransform.z = -5;
-        GameObject textObject = Instantiate(levelUpIconObject, spawnTransform ,UnityEngine.Quaternion.identity);
-        Destroy(textObject, 3.0f);
     }
 
     public static void UpdatePlayerStatusLevelByType(StatusLevelType type, BigInteger newValue)
@@ -306,4 +325,37 @@ public class Player : MonoBehaviour
         }
     }
     // =================
+
+    // 관련 ==
+    public static void AcquireTitle(int titleID)
+    {
+        if (!playerOwningTitles.Contains(titleID))
+        {
+            playerOwningTitles.Add(titleID);
+
+            if (OnOwningTitleChange != null)
+            {
+                OnOwningTitleChange();
+            }
+        }
+    }
+    public static void SetTitleOwningEffectToStatus()
+    {
+        if (!TitleDataManager.GetInstance())
+        {
+            return;
+        }
+        List<TitleOwningEffect> titleOwningEffects = new List<TitleOwningEffect>();
+        foreach (int owningTitleID in playerOwningTitles)
+        {
+            TitleInfo titleInfo = TitleDataManager.GetInstance().titleInfoDic[owningTitleID];
+            foreach (TitleOwningEffect owningEffect in titleInfo.effect)
+            {
+                titleOwningEffects.Add(owningEffect);
+            }
+        }
+        playerStatus.SetTitleOwningEffect(titleOwningEffects);
+    }
+    // =====================
+
 }

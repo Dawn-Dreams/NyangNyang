@@ -1,0 +1,169 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: CatCostumePrefab
+  m_EditorClassIdentifier: 
+  m_GroupName: CatCostumePrefab
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 712c4f539ac9f4c438339dfc567b7507
+  m_SerializeEntries:
+  - m_GUID: 12348fc04884c514184365cc4df792af
+    m_Address: Assets/MyAsset/PspspsCat/Pspsps/Prefab/Characters/Chibi_Cat_01.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/FurSkin
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1438380ef88485049acbc82385b7114a
+    m_Address: Assets/Prefabs/Costume/Head/Head_Meat.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/Head
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1717e28f4fc8183408c905d96de75f9a
+    m_Address: Assets/Prefabs/Costume/Body/Body_Fish.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/Body
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2a1777b46cb191d409ae3f72d74cea05
+    m_Address: Assets/MyAsset/PspspsCat/Pspsps/Prefab/Characters/Chibi_Cat_07.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/FurSkin
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3acf5afc1f4c12347b6b848fb484e41a
+    m_Address: Assets/MyAsset/PspspsCat/Pspsps/Prefab/Characters/Chibi_Cat_08.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/FurSkin
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 501c820cbd1948b44b2695ba9a4564d1
+    m_Address: Assets/Prefabs/Costume/Head/Head_Glass_Green.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/Head
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 56bf6a3fcc111944c9735e2344e34dab
+    m_Address: Assets/Prefabs/Costume/Hand_R/Hand_R_Flower.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/Hand_R
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6bcde8da7d11c3145b1ffa422536ddff
+    m_Address: Assets/MyAsset/PspspsCat/Pspsps/Prefab/Characters/Chibi_Cat_05.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/FurSkin
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 720e20d598733f74699ef0e5413891c8
+    m_Address: Assets/MyAsset/PspspsCat/Pspsps/Prefab/Characters/Chibi_Cat_03.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/FurSkin
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 746a576b75b529b419ce389d079ea379
+    m_Address: Assets/Prefabs/Costume/Head/Head_HikingHat.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/Head
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 824cb3d3a8a9e6b489447271ad157fad
+    m_Address: Assets/MyAsset/PspspsCat/Pspsps/Prefab/Characters/Chibi_Cat_02.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/FurSkin
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 82f864f3c3980f54884017918a66727e
+    m_Address: Assets/MyAsset/PspspsCat/Pspsps/Prefab/Characters/Chibi_Cat_04.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/FurSkin
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9431f34675a2d1148965d0c0cbc9ade5
+    m_Address: Assets/Prefabs/Costume/Hand_R/Hand_R_Fork.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/Hand_R
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a17fbc0b0416abe4489636f6117c9113
+    m_Address: Assets/Prefabs/Costume/Hand_R/Hand_R_Wood.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/Hand_R
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a46b95deabdbf8946b0137cc40f4dca2
+    m_Address: Assets/Prefabs/Costume/Hand_R/Hand_R_PinWheel.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/Hand_R
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b4fc71ddd6a39e142926411a5f8147de
+    m_Address: Assets/MyAsset/PspspsCat/Pspsps/Prefab/Characters/Chibi_Cat_09.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/FurSkin
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: baa36186587bd9d4ab769976bbfb187e
+    m_Address: Assets/MyAsset/PspspsCat/Pspsps/Prefab/Characters/Chibi_Cat_06.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/FurSkin
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ca7723b78d9cb3f4591d1de36bfaa445
+    m_Address: Assets/MyAsset/PspspsCat/Pspsps/Prefab/Characters/Chibi_Cat_00.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/FurSkin
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cc1acbd4434b52f41858ec5ac36e677a
+    m_Address: Assets/Prefabs/Costume/Body/Body_Bag.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/Body
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d144e70835093ea4c94f0aa49a0046c3
+    m_Address: Assets/Prefabs/Costume/Head/Head_Glass_Red.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/Head
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d93ec8b91bb7b3a44b126e5fd901cf97
+    m_Address: Assets/Prefabs/Costume/Body/Body_Butterfly.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/Body
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ddeca3dd6f761e8489f76dcf73caa640
+    m_Address: Assets/Prefabs/Costume/Head/Head_Glass_Blue.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/Head
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e34b2700fdd5a00498b4c3f6d31ff7f5
+    m_Address: Assets/Prefabs/Costume/Body/Body_Pan.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/Body
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e8886d767fe95b64d98541a12618296e
+    m_Address: Assets/Prefabs/Costume/Head/Head_Grass.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/Head
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 5f1874fff1b70124d8333b18a2e9b4e8, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 03a69f1d20a372e4e97663eb075ef80a, type: 2}
+    - {fileID: 11400000, guid: 6814928b0a784de4ebf04b045b0c180c, type: 2}

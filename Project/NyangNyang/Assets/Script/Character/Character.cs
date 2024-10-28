@@ -30,6 +30,10 @@ public class Character : MonoBehaviour
     // 공격 코루틴
     private Coroutine attackCoroutine;
 
+    // 카메라 흔들림 참조
+    [SerializeField]
+    private CameraShake cameraShake;
+
     public BigInteger CurrentHP
     {
         get { return currentHP; }
@@ -53,6 +57,11 @@ public class Character : MonoBehaviour
     protected virtual void Awake()
     {
         InitialSettings();
+
+        if (!cameraShake)
+        {
+            cameraShake = FindObjectOfType<CameraShake>();
+        }
     }
 
     public virtual void InitialSettings()
@@ -78,11 +87,24 @@ public class Character : MonoBehaviour
         yield return new WaitForSeconds(0.25f);
         while (true)
         {
-            if (enemyObject && enemyObject.gameObject.activeSelf)
-            {
-                enemyObject.TakeDamage(CalculateDamage());
-            }
+            Attack();
+            
             yield return new WaitForSeconds(0.5f);
+        }
+    }
+
+    protected virtual void Attack()
+    {
+        if (enemyObject && enemyObject.gameObject.activeSelf)
+        {
+            enemyObject.TakeDamage(CalculateDamage());
+
+            if (cameraShake)
+            {
+                cameraShake.TriggerShake();  // 기본 흔들림
+                // cameraShake.TriggerShake(0.5f, 0.8f);  // 커스텀 흔들림
+
+            }
         }
     }
 

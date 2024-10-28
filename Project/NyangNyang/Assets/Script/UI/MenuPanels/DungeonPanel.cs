@@ -1,7 +1,8 @@
-using System;
+ï»¿using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class DungeonPanel : MenuPanel
 {
@@ -17,9 +18,9 @@ public class DungeonPanel : MenuPanel
     private Button[][] levelSelectButtons;
 
     private DungeonManager DungeonManager;
-    private MiniGame1 miniGame1;
+    //private MiniGame1 miniGame1;
 
-    // ÇöÀç Å¬¸®¾îÇÑ ÃÖ°í ·¹º§À» Player°¡ ÀúÀåÇÏµµ·Ï ¼öÁ¤ ÇÊ¿ä
+    // í˜„ì¬ í´ë¦¬ì–´í•œ ìµœê³  ë ˆë²¨ì„ Playerê°€ ì €ì¥í•˜ë„ë¡ ìˆ˜ì • í•„ìš”
     private int[] highestClearedStage = new int[3] { 1, 1, 1 };
     public int TempDungeonStageLevel { get; private set; }
     private int currentActiveTabIndex = 0;
@@ -33,8 +34,8 @@ public class DungeonPanel : MenuPanel
 
     private void InitializeManagers()
     {
-        miniGame1 = FindObjectOfType<MiniGame1>() ?? throw new NullReferenceException("MiniGame1ÀÌ NULLÀÔ´Ï´Ù.");
-        DungeonManager = FindObjectOfType<DungeonManager>() ?? throw new NullReferenceException("DungeonManager°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.");
+        //miniGame1 = FindObjectOfType<MiniGame1>() ?? throw new NullReferenceException("MiniGame1ì´ NULLì…ë‹ˆë‹¤.");
+        DungeonManager = FindObjectOfType<DungeonManager>() ?? throw new NullReferenceException("DungeonManagerê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
     }
 
     private void InitializeUIComponents()
@@ -97,11 +98,11 @@ public class DungeonPanel : MenuPanel
     {
         for (int j = 0; j < buttons.Length; j++)
         {
-            int level = j + 1; // ·¹º§Àº 1ºÎÅÍ ½ÃÀÛÇÏ¹Ç·Î j + 1·Î ¼³Á¤
-            buttons[j].onClick.RemoveAllListeners(); // ÀÌÀü ¸®½º³Ê Á¦°Å
-            buttons[j].onClick.AddListener(() => OnClickStageLevelButton(tabIndex, level - 1)); // levelIndex´Â 0ºÎÅÍ ½ÃÀÛÇÏ¹Ç·Î level - 1
-            buttons[j].interactable = level <= highestClearedStage[tabIndex]; // ÃÖ°í Å¬¸®¾îµÈ ·¹º§±îÁö¸¸ È°¼ºÈ­
-            buttons[j].GetComponentInChildren<TextMeshProUGUI>().text = $"´øÀü LEVEL {level}"; // ·¹º§ ¹øÈ£ Ç¥½Ã
+            int level = j + 1; // ë ˆë²¨ì€ 1ë¶€í„° ì‹œì‘í•˜ë¯€ë¡œ j + 1ë¡œ ì„¤ì •
+            buttons[j].onClick.RemoveAllListeners(); // ì´ì „ ë¦¬ìŠ¤ë„ˆ ì œê±°
+            buttons[j].onClick.AddListener(() => OnClickStageLevelButton(tabIndex, level - 1)); // levelIndexëŠ” 0ë¶€í„° ì‹œì‘í•˜ë¯€ë¡œ level - 1
+            buttons[j].interactable = level <= highestClearedStage[tabIndex]; // ìµœê³  í´ë¦¬ì–´ëœ ë ˆë²¨ê¹Œì§€ë§Œ í™œì„±í™”
+            buttons[j].GetComponentInChildren<TextMeshProUGUI>().text = $"ë˜ì „ LEVEL {level}"; // ë ˆë²¨ ë²ˆí˜¸ í‘œì‹œ
         }
     }
 
@@ -120,16 +121,16 @@ public class DungeonPanel : MenuPanel
     {
         for (int i = 0; i < levelSelectButtons[tabIndex].Length; i++)
         {
-            int level = i + 1; // ·¹º§Àº 1ºÎÅÍ ½ÃÀÛ
+            int level = i + 1; // ë ˆë²¨ì€ 1ë¶€í„° ì‹œì‘
             UpdateStageButtons(tabIndex);
-            levelSelectButtons[tabIndex][i].GetComponentInChildren<TextMeshProUGUI>().text = $"´øÀü LEVEL {level}"; // ·¹º§ ¹øÈ£ Ç¥½Ã
+            levelSelectButtons[tabIndex][i].GetComponentInChildren<TextMeshProUGUI>().text = $"ë˜ì „ LEVEL {level}"; // ë ˆë²¨ ë²ˆí˜¸ í‘œì‹œ
         }
     }
 
     private void OnClickStageButton(int index)
     {
         SetActiveTab(index);
-        titleTexts[index].text = $"¹Ì´Ï°ÔÀÓ ´øÀü {index + 1}";
+        titleTexts[index].text = $"ë¯¸ë‹ˆê²Œì„ ë˜ì „ {index + 1}";
         UpdateTicketText(index);
     }
 
@@ -144,23 +145,23 @@ public class DungeonPanel : MenuPanel
     {
         TempDungeonStageLevel = levelIndex + 1;
         UpdateLevelSelectButtons(tabIndex);
-        titleTexts[tabIndex].text = $"¹Ì´Ï°ÔÀÓ ´øÀü {tabIndex + 1}-{TempDungeonStageLevel}";
+        titleTexts[tabIndex].text = $"ë¯¸ë‹ˆê²Œì„ ë˜ì „ {tabIndex + 1}-{TempDungeonStageLevel}";
     }
 
-    // ¹Ì´Ï°ÔÀÓ ½ÃÀÛ ¹öÆ° Å¬¸¯ ½Ã ½ÇÇà
+    // ë¯¸ë‹ˆê²Œì„ ì‹œì‘ ë²„íŠ¼ í´ë¦­ ì‹œ ì‹¤í–‰
     void OnClickMinigameButton(int index)
     {
-        // ½ºÆä¼È ½ºÅ×ÀÌÁö°¡ ÁøÇà ÁßÀÌ¸é ¹Ì´Ï°ÔÀÓÀ» ½ÃÀÛÇÏÁö ¾ÊÀ½
+        // ìŠ¤í˜ì…œ ìŠ¤í…Œì´ì§€ê°€ ì§„í–‰ ì¤‘ì´ë©´ ë¯¸ë‹ˆê²Œì„ì„ ì‹œì‘í•˜ì§€ ì•ŠìŒ
         if (GameManager.isDungeonActive)
         {
-            Debug.Log("½ºÆä¼È ½ºÅ×ÀÌÁö°¡ ½ÇÇà ÁßÀÌ¹Ç·Î ¹Ì´Ï°ÔÀÓÀ» ½ÃÀÛÇÒ ¼ö ¾ø½À´Ï´Ù.");
+            Debug.Log("ìŠ¤í˜ì…œ ìŠ¤í…Œì´ì§€ê°€ ì‹¤í–‰ ì¤‘ì´ë¯€ë¡œ ë¯¸ë‹ˆê²Œì„ì„ ì‹œì‘í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
             return;
         }
 
-        // ¹Ì´Ï°ÔÀÓÀÌ ÀÌ¹Ì ÁøÇà ÁßÀÎÁö È®ÀÎ
+        // ë¯¸ë‹ˆê²Œì„ì´ ì´ë¯¸ ì§„í–‰ ì¤‘ì¸ì§€ í™•ì¸
         if (GameManager.isMiniGameActive)
         {
-            Debug.Log("´Ù¸¥ ¹Ì´Ï°ÔÀÓÀÌ ÀÌ¹Ì ½ÇÇà ÁßÀÔ´Ï´Ù.");
+            Debug.Log("ë‹¤ë¥¸ ë¯¸ë‹ˆê²Œì„ì´ ì´ë¯¸ ì‹¤í–‰ ì¤‘ì…ë‹ˆë‹¤.");
             return;
         }
 
@@ -168,19 +169,20 @@ public class DungeonPanel : MenuPanel
         switch (index)
         {
             case 0:
-                FindObjectOfType<MiniGame1>().StartGame();
+                SceneManager.LoadScene("MiniGame1", LoadSceneMode.Additive);
+                //FindObjectOfType<MiniGame1>().StartGame();
                 GameManager.isMiniGameActive = true;
                 break;
             case 1:
                 // FindObjectOfType<MiniGame2>().StartGame();
-                Debug.Log("¹Ì´Ï°ÔÀÓ 2 ½ÃÀÛ¹öÆ°Å¬¸¯");
+                Debug.Log("ë¯¸ë‹ˆê²Œì„ 2 ì‹œì‘ë²„íŠ¼í´ë¦­");
                 break;
             case 2:
                 // FindObjectOfType<MiniGame3>().StartGame();
-                Debug.Log("¹Ì´Ï°ÔÀÓ 3 ½ÃÀÛ¹öÆ°Å¬¸¯");
+                Debug.Log("ë¯¸ë‹ˆê²Œì„ 3 ì‹œì‘ë²„íŠ¼í´ë¦­");
                 break;
             default:
-                Debug.LogWarning("¿Ã¹Ù¸£Áö ¾ÊÀº ÀÎµ¦½ºÀÔ´Ï´Ù.");
+                Debug.LogWarning("ì˜¬ë°”ë¥´ì§€ ì•Šì€ ì¸ë±ìŠ¤ì…ë‹ˆë‹¤.");
                 break;
         }
         UpdateTicketText(index);
@@ -190,7 +192,7 @@ public class DungeonPanel : MenuPanel
     {
         if (!DummyServerData.HasTicket(Player.GetUserID(), index))
         {
-            Debug.Log("ÀÔÀå±ÇÀÌ ºÎÁ·ÇÕ´Ï´Ù.");
+            Debug.Log("ì…ì¥ê¶Œì´ ë¶€ì¡±í•©ë‹ˆë‹¤.");
             return;
         }
         DungeonManager.StartDungeon(index, TempDungeonStageLevel);
@@ -202,13 +204,13 @@ public class DungeonPanel : MenuPanel
     {
         if (!DummyServerData.HasTicket(Player.GetUserID(), index))
         {
-            Debug.Log("ÀÔÀå±ÇÀÌ ºÎÁ·ÇÕ´Ï´Ù.");
+            Debug.Log("ì…ì¥ê¶Œì´ ë¶€ì¡±í•©ë‹ˆë‹¤.");
             return;
         }
         //DungeonManager.StartDungeon(index, TempDungeonStageLevel);
 
-        // ¾ÆÀÌÅÛ È¹µæ ·ÎÁ÷ Ãß°¡
-        Debug.Log("¼ÒÅÁ");
+        // ì•„ì´í…œ íšë“ ë¡œì§ ì¶”ê°€
+        Debug.Log("ì†Œíƒ•");
         highestClearedStage[index] = DungeonManager.DungeonLevels[index];
         UpdateTicketText(index);
     }
@@ -216,13 +218,13 @@ public class DungeonPanel : MenuPanel
     private void UpdateTicketText(int index)
     {
         int sweepTicketCount = DummyServerData.GetTicketCount(Player.GetUserID(), index);
-        ticketTexts[index].text = $"{index + 1}¹ø ¼ÒÅÁ±Ç °³¼ö: {sweepTicketCount}";
+        ticketTexts[index].text = $"{index + 1}ë²ˆ ì†Œíƒ•ê¶Œ ê°œìˆ˜: {sweepTicketCount}";
     }
     private void UpdateStageButtons(int tabIndex)
     {
         for (int i = 0; i < levelSelectButtons[tabIndex].Length; i++)
         {
-            // ÃÖ°í Å¬¸®¾îµÈ ½ºÅ×ÀÌÁö ÀÌÇÏÀÇ ¹öÆ°¸¸ È°¼ºÈ­
+            // ìµœê³  í´ë¦¬ì–´ëœ ìŠ¤í…Œì´ì§€ ì´í•˜ì˜ ë²„íŠ¼ë§Œ í™œì„±í™”
             levelSelectButtons[tabIndex][i].interactable = (i + 1) <= highestClearedStage[tabIndex];
         }
     }

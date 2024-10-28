@@ -18,7 +18,6 @@ public class QuestList : MonoBehaviour
 
     public void OnClickSelectQuestListButton(Button pressedButton)
     {
-        
         if (_currentPressedButton)
         {
             _currentPressedButton.interactable = true;

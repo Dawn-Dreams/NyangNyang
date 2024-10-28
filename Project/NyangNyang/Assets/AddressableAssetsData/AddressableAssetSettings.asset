@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 933ba2e0b1790284b882e1a5c632169e
   m_currentHash:
     serializedVersion: 2
-    Hash: d6d07c58341886c8e4a6c921477299a8
+    Hash: 00000000000000000000000000000000
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_BundleLocalCatalog: 0
@@ -44,11 +44,16 @@ MonoBehaviour:
   m_BuildAddressablesWithPlayerBuild: 0
   m_overridePlayerVersion: '[UnityEditor.PlayerSettings.bundleVersion]'
   m_GroupAssets:
-  - {fileID: 11400000, guid: 79c78450d9bfc9148b640b6c5bf31ac9, type: 2}
-  - {fileID: 11400000, guid: de91e23fc801fd34ea2b894d830fdc81, type: 2}
+  - {fileID: 11400000, guid: c383a0d5ee355c34380bfad3c6133a0c, type: 2}
+  - {fileID: 11400000, guid: 8333d46f8f49f394f89551b58b622a40, type: 2}
+  - {fileID: 11400000, guid: 42edf182241a3334991a91dacf7ef45a, type: 2}
+  - {fileID: 11400000, guid: 59f57a408ad35c548bd4ecedc44c959e, type: 2}
   - {fileID: 11400000, guid: 6b11de3deb3d19740858947bc0176c7a, type: 2}
   - {fileID: 11400000, guid: 27538cc3cf334f04aac84fc69a23c522, type: 2}
-  - {fileID: 11400000, guid: f8f1e51245e6f3149a445126657200ae, type: 2}
+  - {fileID: 11400000, guid: 8c8e5b66151c0f64caf9162229cba65d, type: 2}
+  - {fileID: 11400000, guid: 16ba06d4f4bc2fd43acf2f1f7cd03e07, type: 2}
+  - {fileID: 11400000, guid: 5cf9d54dad3d4a04e8902239fbc61b01, type: 2}
+  - {fileID: 11400000, guid: eac83461474fe48439d6bdb796def73a, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
@@ -91,6 +96,18 @@ MonoBehaviour:
     m_LabelNames:
     - default
     - BG
+    - Pass/Background/Open
+    - Pass/Background/Close/Gold
+    - Pass/Background/Close/Free
+    - Icon/Checkmark
+    - Icon/Lock
+    - Costume/Body
+    - Costume/Hand_R
+    - Costume/Head
+    - Sprite/Button/NotOwning
+    - Sprite/Button/Owning
+    - Sprite/Button/CurrentSelect
+    - Costume/FurSkin
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 1357d4d6892ead44d8606e168156272e, type: 2}

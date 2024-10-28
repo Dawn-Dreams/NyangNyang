@@ -74,4 +74,10 @@ public class MenuUI : MonoBehaviour
             menuPanelsForDebug[startActiveIndex].gameObject.SetActive(true);   
         }
     }
+
+    public void SetIndexBinder(int index)
+    {
+        currentActiveIndex = index;
+        SetActiveMenu(index, true);
+    }
 }

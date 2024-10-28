@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Icon
+  m_EditorClassIdentifier: 
+  m_GroupName: Icon
+  m_Data:
+    m_SerializedData: []
+  m_GUID: f5621916dba42d94b99f8f962f34da57
+  m_SerializeEntries:
+  - m_GUID: 9a8a247ba0dca4d02b349891f034076c
+    m_Address: Assets/MyAsset/CuteKawaiiGUIPack/Demo/Sprites/Common/Icons/Checkmark.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Icon/Checkmark
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a5f168a94bc404bd2a1a325e8f938cc0
+    m_Address: Assets/MyAsset/CuteKawaiiGUIPack/Demo/Sprites/Common/Icons/Lock.png
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Icon/Lock
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 5f1874fff1b70124d8333b18a2e9b4e8, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 039eed529e23b2347b13099dfd593d74, type: 2}
+    - {fileID: 11400000, guid: 022305d17a36115418ebca13a93c916f, type: 2}

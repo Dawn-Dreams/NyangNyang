@@ -1,4 +1,4 @@
-using TMPro;
+ï»¿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,78 +8,181 @@ public class SettingsMenu : MonoBehaviour
 
     public Slider bgmVolumeSlider;
     public Slider sfxVolumeSlider;
+    public Slider brightnessSlider;
+    public Toggle bgmSoundOnOffToggle; // BGM í† ê¸€ ì¶”ê°€
+    public Toggle sfxSoundOnOffToggle; // SFX í† ê¸€ ì¶”ê°€
+    public Toggle alertToggle;
+    public Toggle vibrationToggle;
     public TMP_InputField uidText;
+    public TMP_InputField nicknameText;
+    public TMP_InputField couponText;
     public Button copyUIDButton;
+    public Button changeNicknameButton;
+    public Button submitCouponButton;
+    public Button accountButton;
+    public Button termsOfServiceButton;
+    public Button makersButton;
+    public Button askButton;
 
-    private string userUID = "1234-5678-UID"; // »ç¿ëÀÚ UID
+    private string userUID = "1234-5678-UID"; // ì‚¬ìš©ì UID
+    private string userNickname = "Player";  // ê¸°ë³¸ ë‹‰ë„¤ì„
+    private string normalCoupon = "DAWNDREAMS2024";  // ì˜ˆì‹œ ì¿ í° ë²ˆí˜¸
+    private float brightness = 1f;  // ê¸°ë³¸ ë°ê¸° ê°’ (1.0 = ìµœëŒ€ ë°ê¸°)
 
     void Start()
     {
-        // ÃÊ±â ¼³Á¤
+        // ì´ˆê¸° ì„¤ì •
         bgmVolumeSlider.value = AudioManager.Instance.bgmVolume;
         sfxVolumeSlider.value = AudioManager.Instance.sfxVolume;
+        brightnessSlider.value = brightness;
+        bgmSoundOnOffToggle.isOn = bgmVolumeSlider.value > 0;
+        sfxSoundOnOffToggle.isOn = sfxVolumeSlider.value > 0;
+        alertToggle.isOn = PlayerPrefs.GetInt("notificationsEnabled", 1) == 1;
+        vibrationToggle.isOn = PlayerPrefs.GetInt("vibrationEnabled", 1) == 1;
         uidText.text = userUID;
+        nicknameText.text = userNickname;
+        couponText.text = normalCoupon;
 
-        // ÀÌº¥Æ® ¿¬°á
+        // ì´ë²¤íŠ¸ ì—°ê²°
         bgmVolumeSlider.onValueChanged.AddListener(delegate { OnBGMVolumeChanged(); });
         sfxVolumeSlider.onValueChanged.AddListener(delegate { OnSFXVolumeChanged(); });
+        brightnessSlider.onValueChanged.AddListener(delegate { OnBrightnessChanged(); });
+        bgmSoundOnOffToggle.onValueChanged.AddListener(delegate { ToggleBGSoundOnOff(); });
+        sfxSoundOnOffToggle.onValueChanged.AddListener(delegate { ToggleSFXSoundOnOff(); });
+        alertToggle.onValueChanged.AddListener(ToggleNotifications);
+        vibrationToggle.onValueChanged.AddListener(ToggleVibration);
         copyUIDButton.onClick.AddListener(CopyUIDToClipboard);
+        changeNicknameButton.onClick.AddListener(ChangeNickname);
+        submitCouponButton.onClick.AddListener(SubmitCoupon);
+
+        accountButton.onClick.AddListener(ViewAccountInfo);
+        termsOfServiceButton.onClick.AddListener(ViewTermsOfService);
+        makersButton.onClick.AddListener(ViewMakersInfo);
+        askButton.onClick.AddListener(ViewAskService);
     }
 
     public void OpenSettingsMenu()
     {
         settingsMenuCanvas.SetActive(true);
-        Time.timeScale = 0f;  // ¼³Á¤ Ã¢ÀÌ ¿­¸± ¶§ °ÔÀÓÀ» ÀÏ½ÃÁ¤Áö
+        //Time.timeScale = 0f;  // ì¼ì‹œì •ì§€
     }
 
     public void CloseSettingsMenu()
     {
         settingsMenuCanvas.SetActive(false);
-        Time.timeScale = 1f;  // ¼³Á¤ Ã¢ÀÌ ´İÈ÷¸é °ÔÀÓÀ» ´Ù½Ã Àç°³
+        //Time.timeScale = 1f;  // ì¬ê°œ
     }
 
     public void SubmitCoupon()
     {
-        // ÄíÆù ÄÚµå ÀÔ·Â ÈÄ Ã³¸® ·ÎÁ÷ Ãß°¡ ¿¹Á¤
+        Debug.Log("ì¿ í° ì œì¶œ");
+        // ì¿ í° ì½”ë“œ ì…ë ¥ í›„ ì²˜ë¦¬
     }
-
+    
     public void ViewAccountInfo()
     {
-        Debug.Log("°èÁ¤ Á¤º¸ È®ÀÎ");
-        // °èÁ¤ Á¤º¸ ·Îµå ·ÎÁ÷ Ãß°¡ ¿¹Á¤
+        Debug.Log("ê³„ì • ì •ë³´ í™•ì¸");
+        // ê³„ì • ì •ë³´ ë¡œë“œ
     }
 
     public void ViewTermsOfService()
     {
-        Debug.Log("ÀÌ¿ë ¾à°ü È®ÀÎ");
-        // ÀÌ¿ë ¾à°ü ·Îµå ·ÎÁ÷ Ãß°¡ ¿¹Á¤
+        Debug.Log("ì´ìš© ì•½ê´€ í™•ì¸");
+        // ì´ìš© ì•½ê´€ ë¡œë“œ
+    }
+
+      public void ViewMakersInfo()
+    {
+        Debug.Log("ë§Œë“ ì‚¬ëŒë“¤ í™•ì¸");
+
+    }
+
+    public void ViewAskService()
+    {
+        Debug.Log("ë¬¸ì˜ ì‚¬í•­ í™•ì¸");
+
     }
 
     public void ToggleNotifications(bool isOn)
     {
         PlayerPrefs.SetInt("notificationsEnabled", isOn ? 1 : 0);
-        Debug.Log($"¾Ë¸² ¼³Á¤: {(isOn ? "ÄÑÁü" : "²¨Áü")}");
     }
 
     public void ToggleVibration(bool isOn)
     {
         PlayerPrefs.SetInt("vibrationEnabled", isOn ? 1 : 0);
-        Debug.Log($"Áøµ¿ ¼³Á¤: {(isOn ? "ÄÑÁü" : "²¨Áü")}");
+    }
+
+    public void ToggleBGSoundOnOff()
+    {
+        if (bgmSoundOnOffToggle.isOn)
+        {
+            AudioManager.Instance.bgmVolume = 0.5f;
+        }
+        else
+        {
+            AudioManager.Instance.bgmVolume = 0.0f;
+        }
+
+        bgmVolumeSlider.value = AudioManager.Instance.bgmVolume;
+    }
+
+    public void ToggleSFXSoundOnOff()
+    {
+        if (sfxSoundOnOffToggle.isOn)
+        {
+            AudioManager.Instance.sfxVolume = 0.5f;
+        }
+        else
+        {
+            AudioManager.Instance.sfxVolume = 0.0f;
+        }
+
+        sfxVolumeSlider.value = AudioManager.Instance.sfxVolume;
     }
 
     public void OnBGMVolumeChanged()
     {
         AudioManager.Instance.bgmVolume = bgmVolumeSlider.value;
+        if (bgmVolumeSlider.value != 0.0f)
+        {
+            bgmSoundOnOffToggle.isOn = true;
+        }
+        else
+        {
+            bgmSoundOnOffToggle.isOn = false;
+        }
     }
 
     public void OnSFXVolumeChanged()
     {
         AudioManager.Instance.sfxVolume = sfxVolumeSlider.value;
+        if (sfxVolumeSlider.value != 0.0f)
+        {
+            sfxSoundOnOffToggle.isOn = true;
+        }
+        else
+        {
+            sfxSoundOnOffToggle.isOn = false;
+        }
+    }
+
+    public void OnBrightnessChanged()
+    {
+        brightness = brightnessSlider.value;
+        Screen.brightness = brightness;
     }
 
     public void CopyUIDToClipboard()
     {
         GUIUtility.systemCopyBuffer = userUID;
-        Debug.Log($"UID {userUID} º¹»çµÊ");
+        Debug.Log($"UID {userUID} ë³µì‚¬ë¨");
+    }
+
+    public void ChangeNickname()
+    {
+        userNickname = nicknameText.text;
+        Debug.Log($"ë‹‰ë„¤ì„ì´ {userNickname}(ìœ¼)ë¡œ ë³€ê²½ë¨");
+        // ë‹‰ë„¤ì„ ë³€ê²½ í›„ ì„œë²„ì— ì €ì¥
     }
 }

@@ -12,24 +12,30 @@ public class StageManager : MonoBehaviour
     private ParallaxScrollingManager parallaxScrollingManager;
 
     [SerializeField]
+    private RoundAutoManager roundAutoManager;
+
+    [SerializeField]
     private Text ThemeUI;
     [SerializeField]
     private Text StageUI;
 
-    [SerializeField] 
+    [SerializeField]
     private StageSlider stageSlider;
 
     [SerializeField] private Button continuousCombatButton;
 
-    [SerializeField] 
+    [SerializeField]
     private Image fadeImage;
-    [SerializeField] 
+    [SerializeField]
     private float fadeTime = 0.5f;
     private float currentFadeTime = 0.0f;
     private Coroutine fadeCoroutine;
 
     [SerializeField]
     private EnemySpawnManager enemySpawnManager;  // 적 스폰 매니저 변수
+
+    [SerializeField]
+    private AnimationManager animationManager;
 
     private int originalTheme;  // 원래 테마를 저장할 변수
 
@@ -53,7 +59,7 @@ public class StageManager : MonoBehaviour
     private void SetStageUI()
     {
         ThemeUI.text = currentTheme.ToString();
-        StageUI.text = "- " +currentStage.ToString();
+        StageUI.text = "- " + currentStage.ToString();
         if (stageSlider)
         {
             stageSlider.CreateGateImage(maxGateCount);
@@ -89,7 +95,7 @@ public class StageManager : MonoBehaviour
     {
         if (stageSlider && !Player.continuousCombat)
         {
-            stageSlider.MoveToNextGate(currentGate,maxGateCount,1.0f);
+            stageSlider.MoveToNextGate(currentGate, maxGateCount, 1.0f);
         }
 
         // 유저들이 ChangeStageUI를 클릭을 하지 못하도록 fadeImage 활성화
@@ -97,7 +103,13 @@ public class StageManager : MonoBehaviour
         GameManager.GetInstance().changeStageUI.SetChangeStageButtonInteractable(false);
 
         parallaxScrollingManager.MoveBackgroundSprites(true);
-        // TODO: 고양이 걷기 애니메이션
+        roundAutoManager.RotateCircle(true);
+
+        // 애니메이션 실행
+        if (animationManager != null)
+        {
+            animationManager.PlayAnimation(AnimationManager.AnimationState.Walk);
+        }
 
         StartCoroutine(ArriveGate());
     }
@@ -118,17 +130,24 @@ public class StageManager : MonoBehaviour
         SetStageUI();
 
         RequestEnemySpawn();
+
         yield break;
     }
 
     void RequestEnemySpawn()
     {
         parallaxScrollingManager.MoveBackgroundSprites(false);
+        roundAutoManager.RotateCircle(false);
 
         // 적군 생성
         if (enemySpawnManager != null)
         {
             enemySpawnManager.OnGatePassed(currentGate == maxGateCount); // 적을 스폰하도록 적 스폰 매니저 호출
+                                                                         // 애니메이션 실행
+            if (animationManager != null)
+            {
+                animationManager.PlayAnimation(AnimationManager.AnimationState.ATK1);
+            }
         }
         else
         {
@@ -138,9 +157,11 @@ public class StageManager : MonoBehaviour
 
     private void StageClear()
     {
-
         SendStageClearDataToServer();
-
+        if (animationManager != null && currentGate == maxGateCount)
+        {
+            animationManager.PlayAnimation(AnimationManager.AnimationState.Victory);
+        }
         ChangeStage();
     }
 
@@ -171,7 +192,7 @@ public class StageManager : MonoBehaviour
             if (currentFadeTime >= fadeTime)
             {
                 FuncAfterStartFade();
-                
+
             }
             yield return null;
         }
@@ -181,6 +202,10 @@ public class StageManager : MonoBehaviour
     {
         yield return new WaitForSeconds(fadeTime);
         currentFadeTime = 0.0f;
+        if (animationManager != null)
+        {
+            animationManager.PlayAnimation(AnimationManager.AnimationState.Idle03);
+        }
         while (true)
         {
             currentFadeTime += Time.deltaTime;
@@ -202,7 +227,7 @@ public class StageManager : MonoBehaviour
     void FadeStartFuncWhileStageChange(bool addStage)
     {
         SetNewStage(addStage);
-        
+
         StopCoroutine(fadeCoroutine);
         fadeCoroutine = StartCoroutine(EndFade(FadeEndFuncWhileStageChange));
     }
@@ -247,7 +272,7 @@ public class StageManager : MonoBehaviour
         {
             SetContinuousCombat(false);
         }
-        
+
 
         SetStageUI();
     }
@@ -297,7 +322,7 @@ public class StageManager : MonoBehaviour
         int clearStageTheme = 1;
         int clearStage = 1;
         Player.GetPlayerHighestClearStageData(out clearStageTheme, out clearStage);
-        
+
         if (stageThemeNum <= clearStageTheme && stageNum <= clearStage)
         {
             SetContinuousCombat(true);
@@ -319,7 +344,11 @@ public class StageManager : MonoBehaviour
         GameManager.GetInstance().catObject.CatRespawn();
         StopCoroutine(fadeCoroutine);
         enemySpawnManager.DestroyEnemy();
-
+        // 애니메이션 실행
+        if (animationManager != null)
+        {
+            animationManager.PlayAnimation(AnimationManager.AnimationState.Alert);
+        }
         currentStage -= 1;
         if (currentStage <= 0)
         {
@@ -338,6 +367,11 @@ public class StageManager : MonoBehaviour
     }
     public void PlayerDie()
     {
+        // 애니메이션 실행
+        if (animationManager != null)
+        {
+            animationManager.PlayAnimation(AnimationManager.AnimationState.DieA);
+        }
         fadeCoroutine = StartCoroutine(StartFade(RespawnCat));
         SetContinuousCombat(true);
     }

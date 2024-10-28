@@ -23,5 +23,16 @@ public class GameManager : MonoBehaviour
 
 
         DummyQuestServer.ExecuteDummyQuestServer();
+
+        // 시작 시 서버로부터 정보 받기
+        Player.OnAwakeGetInitialDataFromServer();
+
+        Test2019180031Costume();
+    }
+
+    private void Test2019180031Costume()
+    {
+        SkinnedMeshRenderer mesh = catObject.GetComponentInChildren<SkinnedMeshRenderer>();
+        
     }
 }

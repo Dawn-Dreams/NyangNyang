@@ -10,10 +10,10 @@ public class QuestMainObject : MonoBehaviour
     [SerializeField] private List<RectTransform> questListRectTransforms;
 
     [SerializeField] private Button startQuestListSelectButton;
+    [SerializeField] private HideUi hideUI;
     private void Start()
     {
         SetInActiveQuestUIAtStart();
-        
     }
 
     void SetInActiveQuestUIAtStart()
@@ -28,7 +28,7 @@ public class QuestMainObject : MonoBehaviour
         }
         
         startQuestListSelectButton.onClick.Invoke();
-        gameObject.SetActive(false);
+        hideUI.HideUIInVisible();
     }
 
 }

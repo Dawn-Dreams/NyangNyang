@@ -160,10 +160,11 @@ public class Status
         { SnackType.Gold, 1.0f }
     };
 
+    public Dictionary<StatusLevelType, int> titleOwningEffectValue = new Dictionary<StatusLevelType, int>();
+
     // 계정 스탯 (유저 (고양이) 적용) --> 게임메니저 관리 보류
-    float goldAcquisitionPercent;    // 골드 획득량(가중치) (초기 1, value%로 적용)
-    float expAcquisitionPercent;     // 경험치 획득량(가중치) (초기 1, value%로 적용)
-    int userTouchDamage;    // 터치 당 공격력 <- TODO: 터치 말고 다른 좋은 아이디어 있는지 회의
+    float goldAcquisitionPercent = 1.0f;    // 골드 획득량(가중치) (초기 1, value%로 적용)
+    float expAcquisitionPercent = 1.0f;     // 경험치 획득량(가중치) (초기 1, value%로 적용)
 
 
 
@@ -213,24 +214,13 @@ public class Status
         UpdateStatus();
     }
 
+    // 모든 스테이터스 정보 업데이트
     private void UpdateStatus()
     {
-        // 임시 업데이트
-        float hpMulValue = snackBuffValue[SnackType.Hp];
-        hp = (int)(levelData.CalculateValueFromLevel(StatusLevelType.HP) * hpMulValue);
-        if (OnHpChange != null)
+        for (int i = 0; i < (int)StatusLevelType.COUNT; ++i)
         {
-            OnHpChange();
+            UpdateSpecificStatus((StatusLevelType)i);
         }
-
-        mp = (int)levelData.CalculateValueFromLevel(StatusLevelType.MP);
-        float attackMulValue = snackBuffValue[SnackType.Atk];
-        attackPower = (int)(levelData.CalculateValueFromLevel(StatusLevelType.STR) * attackMulValue);
-        defence = (int)levelData.CalculateValueFromLevel(StatusLevelType.DEF);
-        healHPPerSec = (int)levelData.CalculateValueFromLevel(StatusLevelType.HEAL_HP);
-        healMPPerSec = (int)levelData.CalculateValueFromLevel(StatusLevelType.HEAL_MP);
-        critPercent = levelData.CalculateValueFromLevel(StatusLevelType.CRIT);
-        attackSpeed = levelData.CalculateValueFromLevel(StatusLevelType.ATTACK_SPEED);
     }
 
     public void SetActiveSnackBuff(SnackType type, bool newActive, float mulValue = 1.0f)
@@ -245,6 +235,89 @@ public class Status
         {
             snackBuffValue[type] = 1.0f;
         }
+
         UpdateStatus();
+    }
+
+    public void SetTitleOwningEffect(List<TitleOwningEffect> titleOwningEffects)
+    {
+        titleOwningEffectValue = new Dictionary<StatusLevelType, int>();
+        foreach (TitleOwningEffect effect in titleOwningEffects)
+        {
+            StatusLevelType levelType = Enum.Parse<StatusLevelType>(effect.type);
+            if (titleOwningEffectValue.ContainsKey(levelType))
+            {
+                titleOwningEffectValue[levelType] += effect.value;
+            }
+            else
+            {
+                titleOwningEffectValue.Add(levelType,effect.value);
+            }
+        }
+
+        UpdateStatus();
+    }
+
+    public void UpdateSpecificStatus(StatusLevelType type)
+    {
+        // 임시 업데이트
+        switch (type)
+        {
+            case StatusLevelType.HP:
+                float hpMulValue = snackBuffValue[SnackType.Hp];
+                int hpAddValue = 0;
+                if (titleOwningEffectValue.ContainsKey(StatusLevelType.HP))
+                {
+                    hpAddValue += titleOwningEffectValue[StatusLevelType.HP];
+                }
+                hp = (int)((levelData.CalculateValueFromLevel(StatusLevelType.HP) + hpAddValue) * hpMulValue);
+                if (OnHpChange != null)
+                {
+                    OnHpChange();
+                }
+                break;
+
+            case StatusLevelType.MP:
+                mp = (int)levelData.CalculateValueFromLevel(StatusLevelType.MP);
+                break;
+            case StatusLevelType.STR:
+                float attackMulValue = snackBuffValue[SnackType.Atk];
+                int strAddValue = 0;
+                if (titleOwningEffectValue.ContainsKey(StatusLevelType.STR))
+                {
+                    strAddValue += titleOwningEffectValue[StatusLevelType.STR];
+                }
+                attackPower = (int)((levelData.CalculateValueFromLevel(StatusLevelType.STR) + strAddValue) * attackMulValue);
+                break;
+            case StatusLevelType.DEF:
+                defence = (int)levelData.CalculateValueFromLevel(StatusLevelType.DEF);
+                break;
+            case StatusLevelType.HEAL_HP:
+                healHPPerSec = (int)levelData.CalculateValueFromLevel(StatusLevelType.HEAL_HP);
+                break;
+            case StatusLevelType.HEAL_MP:
+                healMPPerSec = (int)levelData.CalculateValueFromLevel(StatusLevelType.HEAL_MP);
+                break;
+            case StatusLevelType.CRIT:
+                critPercent = levelData.CalculateValueFromLevel(StatusLevelType.CRIT);
+                break;
+            case StatusLevelType.ATTACK_SPEED:
+                attackSpeed = levelData.CalculateValueFromLevel(StatusLevelType.ATTACK_SPEED);
+                break;
+            case StatusLevelType.GOLD:
+                float goldAddValue = 0;
+                if (titleOwningEffectValue.ContainsKey(StatusLevelType.GOLD))
+                {
+                    goldAddValue += (float)titleOwningEffectValue[StatusLevelType.GOLD] / 100;
+                }
+                goldAcquisitionPercent = levelData.CalculateValueFromLevel(StatusLevelType.GOLD) + goldAddValue;
+                break;
+            case StatusLevelType.EXP:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(type), type, null);
+        }
+
+       
     }
 }

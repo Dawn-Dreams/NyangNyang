@@ -1,0 +1,120 @@
+{
+  "title":[
+    {
+      "id": 0,
+      "name": "타이틀0",
+      "grade": 0,
+      "effect": [
+        {
+          "type": "STR",
+          "value": 15
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "냥냥",
+      "grade": 0,
+      "effect": [
+        {
+          "type": "HP",
+          "value": 15
+        },
+        {
+          "type": "STR",
+          "value":  15
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "타이틀2",
+      "grade": 1,
+      "effect": [
+        {
+          "type": "GOLD",
+          "value": 10
+        },
+        {
+          "type": "HP",
+          "value": 100
+        },
+        {
+          "type": "STR",
+          "value": 100
+        }
+      ]
+        
+    },
+    {
+      "id": 3,
+      "name": "타이틀3",
+      "grade": 1,
+      "effect": null
+    },
+    {
+      "id": 4,
+      "name": "타이틀4",
+      "grade": 2,
+      "effect": null
+    },
+    {
+      "id": 5,
+      "name": "타이틀5",
+      "grade": 2,
+      "effect": null
+    },
+    {
+      "id": 6,
+      "name": "타이틀6",
+      "grade": 3,
+      "effect": null
+    },
+    {
+      "id": 7,
+      "name": "타이틀7",
+      "grade": 3,
+      "effect": null
+    },
+    {
+      "id": 8,
+      "name": "타이틀8",
+      "grade": 2,
+      "effect": null
+    },
+    {
+      "id": 9,
+      "name": "타이틀9",
+      "grade": 1,
+      "effect": null
+    },
+    {
+      "id": 10,
+      "name": "타이틀10",
+      "grade": 2,
+      "effect": null
+    },
+    {
+      "id": 11,
+      "name": "타이틀11",
+      "grade": 0,
+      "effect": null
+    },
+    {
+      "id": 999,
+      "name": "[ G M ]",
+      "grade": 4,
+      "effect": [
+        {
+          "type": "HP",
+          "value": 1000
+        },
+        {
+          "type": "STR",
+          "value":  2000
+        }
+
+      ]
+    }
+  ]
+}

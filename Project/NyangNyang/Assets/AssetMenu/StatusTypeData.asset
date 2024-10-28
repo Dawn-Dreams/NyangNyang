@@ -12,16 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07c7aba85b1ed9e4691973a1699ef012, type: 3}
   m_Name: StatusTypeData
   m_EditorClassIdentifier: 
-  hp_sprite: {fileID: 21300000, guid: 44ed3c6a7e910534897fe9517e1d791e, type: 3}
-  mp_sprite: {fileID: 21300000, guid: 81871fae60893e54c910632ffd2b4ebe, type: 3}
-  str_sprite: {fileID: 21300000, guid: 388f4d878f04c7449ab12e4ebba8d342, type: 3}
-  def_sprite: {fileID: 21300000, guid: 652730cb9d0d0c24e87eb7802d5a8025, type: 3}
-  heal_hp_sprite: {fileID: 21300000, guid: 5b78684315e51a040aa0689cd9f2e826, type: 3}
-  heal_mp_sprite: {fileID: 21300000, guid: a63522a4b6cdfb14fa6fcf272a6596d8, type: 3}
-  crit_sprite: {fileID: 21300000, guid: 7d35e911518b5c448b4eb6bc4e12640e, type: 3}
-  attack_speed_sprite: {fileID: 21300000, guid: f1805d0709f963a42ae6f875366b244f, type: 3}
-  gold_sprite: {fileID: 21300000, guid: 52152cf61dabea04881ed1b19877aa9b, type: 3}
-  exp_sprite: {fileID: 21300000, guid: 504ba666b97347d4aa908c175c7f2171, type: 3}
+  hp_sprite: {fileID: 21300000, guid: 791a868ce5f104a12ab736eb93aa6d30, type: 3}
+  mp_sprite: {fileID: 21300000, guid: 1892bf01aa50942dc96662e09b78e109, type: 3}
+  str_sprite: {fileID: 21300000, guid: 195599377f97b43cbb8f95766dfdb555, type: 3}
+  def_sprite: {fileID: 21300000, guid: c19afe32f601540cb8a3f525edec9109, type: 3}
+  heal_hp_sprite: {fileID: 21300000, guid: c1a721b62ba404ab58f0cdce1227dcb0, type: 3}
+  heal_mp_sprite: {fileID: 21300000, guid: 3b6f984ca2f8f4ce38e4aba9f496e4f4, type: 3}
+  crit_sprite: {fileID: 21300000, guid: 56db93cf004a74a70bcbc2aab1f4b853, type: 3}
+  attack_speed_sprite: {fileID: 21300000, guid: 04da36818b19b4166ba2db04649fe460, type: 3}
+  gold_sprite: {fileID: 21300000, guid: f2603187c560941478965651c633e5a9, type: 3}
+  exp_sprite: {fileID: 21300000, guid: 50905c4833cac480c925de1dbc497512, type: 3}
   hp_string: "\uCCB4\uB825"
   mp_string: "\uB9C8\uB825"
   str_string: "\uACF5\uACA9\uB825"
