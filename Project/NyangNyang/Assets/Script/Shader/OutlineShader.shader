@@ -52,10 +52,10 @@ Shader "Custom/EdgeDetectionShader_DepthNormal"
                 float2 uv = i.uv;
                 fixed3 color = tex2D(_MainTex, uv).rgb;
 
-                // È­¸é ÁÂÇ¥¸¦ ±â¹İÀ¸·Î ´õ Á¤È®ÇÑ ¿ÀÇÁ¼Â °è»ê
-                float2 offset = float2(0.5 / _ScreenParams.x, 0.5 / _ScreenParams.y);
+                // í™”ë©´ ì¢Œí‘œë¥¼ ê¸°ë°˜ìœ¼ë¡œ ë” ì •í™•í•œ ì˜¤í”„ì…‹ ê³„ì‚°
+                float2 offset = float2(1 / _ScreenParams.x, 1 / _ScreenParams.y);
 
-                // ¾÷µ¥ÀÌÆ®µÈ È­¸é ¿ÀÇÁ¼ÂÀ» »ç¿ëÇÏ¿© ±íÀÌ-³ë¸Ö ÅØ½ºÃ³¿¡¼­ ÁÖº¯ ÇÈ¼¿ »ùÇÃ¸µ
+                // ì—…ë°ì´íŠ¸ëœ í™”ë©´ ì˜¤í”„ì…‹ì„ ì‚¬ìš©í•˜ì—¬ ê¹Šì´-ë…¸ë©€ í…ìŠ¤ì²˜ì—ì„œ ì£¼ë³€ í”½ì…€ ìƒ˜í”Œë§
                 float3 normalTL = UnpackNormal(tex2D(_CameraDepthNormalsTexture, i.screenPos.xy + offset * float2(-1, 1)));
                 float3 normalT  = UnpackNormal(tex2D(_CameraDepthNormalsTexture, i.screenPos.xy + offset * float2( 0, 1)));
                 float3 normalTR = UnpackNormal(tex2D(_CameraDepthNormalsTexture, i.screenPos.xy + offset * float2( 1, 1)));
@@ -65,17 +65,17 @@ Shader "Custom/EdgeDetectionShader_DepthNormal"
                 float3 normalB  = UnpackNormal(tex2D(_CameraDepthNormalsTexture, i.screenPos.xy + offset * float2( 0, -1)));
                 float3 normalBR = UnpackNormal(tex2D(_CameraDepthNormalsTexture, i.screenPos.xy + offset * float2( 1, -1)));
 
-                // ¿§Áö °ËÃâÀ» À§ÇÑ ¼Òº§ ÇÊÅÍ Àû¿ë
+                // ì—£ì§€ ê²€ì¶œì„ ìœ„í•œ ì†Œë²¨ í•„í„° ì ìš©
                 float3 edgeX = -normalTL + normalTR - 2.0 * normalL + 2.0 * normalR - normalBL + normalBR;
                 float3 edgeY = normalTL + 2.0 * normalT + normalTR - normalBL - 2.0 * normalB - normalBR;
 
-                // ¼Òº§ ÇÊÅÍ °­µµ °è»ê
+                // ì†Œë²¨ í•„í„° ê°•ë„ ê³„ì‚°
                 float edgeIntensity = length(edgeX) + length(edgeY);
 
-                // ¾ÈÆ¼¾Ù¸®¾î½ÌÀ» À§ÇÑ smoothstep »ç¿ë
+                // ì•ˆí‹°ì•¨ë¦¬ì–´ì‹±ì„ ìœ„í•œ smoothstep ì‚¬ìš©
                 edgeIntensity = smoothstep(_SobelThreshold - 0.05, _SobelThreshold + 0.05, edgeIntensity);
 
-                // »ö»ó¿¡ Tint ÄÃ·¯ Àû¿ë ÈÄ ¿§Áö »ö»ó°ú È¥ÇÕ
+                // ìƒ‰ìƒì— Tint ì»¬ëŸ¬ ì ìš© í›„ ì—£ì§€ ìƒ‰ìƒê³¼ í˜¼í•©
                 color = lerp(color, color * _TintColor.rgb, _TintColor.a);
                 color = lerp(color, _EdgeColor.rgb, edgeIntensity);
 
