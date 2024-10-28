@@ -13,17 +13,17 @@ public class RequestRegist
 public class RequestLogin
 {
     [Required]
-    public int Uid { get; set; }
+    public int uid { get; set; }
 }
 
 public class ResponseRegist
 {
 
     [Required]
-    public ErrorCode Result { get; set; } = 0;
+    public ErrorCode result { get; set; } = 0;
 
     [Required]
-     public int Uid { get; set; } 
+     public int uid { get; set; } 
     //클라도 자신의 uid를 알고 클라측에서 저정해야함
 }
 
@@ -31,7 +31,7 @@ public class ResponseLogin
 {
 
     [Required]
-    public ErrorCode Result { get; set; } = 0;
+    public ErrorCode result { get; set; } = 0;
 
     public PlayerStatusData status;
     public PlayerStatusLevelData statusLv;

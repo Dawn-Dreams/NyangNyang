@@ -1,23 +1,32 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
+
 namespace APIGameServer.DTO;
 
 public class ReqEquipGacha
 {
-    public int uid;
+    [Required]
+    public int uid { get; set; }
 }
 public class ResEquipGacha
 {
-    public ErrorCode result;
-    public int itemId;
+    [Required]
+    public ErrorCode result { get; set; }
+
+    [Required]
+    public int itemId { get; set; }
 }
 
 public class ReqSkiilGacha
 {
-    public int uid;
+    [Required]
+    public int uid { get; set; }
 
 }
 public class ResSkillGacha
 {
-    public ErrorCode result;
-    public int skillId;
+    [Required]
+    public ErrorCode result { get; set; }
+    [Required]
+    public int skillId { get; set; }
 }

@@ -24,7 +24,7 @@ public class UpdatePlayerStatLvController : ControllerBase
         var temp = await _playerStat.UpdatePlayerStatusLevel(req);
         if (temp == 0)
         {
-            res.Result = ErrorCode.FailUpdatePlayerTable;
+            res.result = ErrorCode.FailUpdatePlayerTable;
         }
 
         return res;

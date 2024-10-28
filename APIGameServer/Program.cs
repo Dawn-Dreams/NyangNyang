@@ -3,6 +3,7 @@ using System.IO;
 using System.Text.Json;
 using APIGameServer.Repositories;
 using APIGameServer.Repositories.Interfaces;
+using APIGameServer.Repositoriesl;
 using APIGameServer.Repository.Interfaces;
 using APIGameServer.Services;
 using APIGameServer.Services.Interface;
@@ -25,9 +26,13 @@ builder.Services.AddControllers();
 builder.Services.AddTransient<IDreams_Inventory,Dreams_Inventory>();
 builder.Services.AddTransient<IDreams_Player, Dreams_Player>();
 builder.Services.AddTransient<IDreams_UserInfo, Dreams_UserInfo>();
+builder.Services.AddTransient<IDreams_Mailbox, Dreams_Mailbox>();
 
 builder.Services.AddTransient<IPlayerService, PlayerService>();
 builder.Services.AddTransient<IItemService, ItemService>();
+builder.Services.AddTransient<IMailService, MailService>();
+builder.Services.AddTransient<IUserService, UserService>();
+
 
 var app = builder.Build();
 

@@ -11,20 +11,22 @@ public class RequestUpdateStatLevel
 
 }
 
-
 public class ResponseUpdateStat
 {
-    public ErrorCode Result { get; set; }    
+    public ErrorCode result { get; set; }    
 }
 
 public class RequestUpdateScore
 {
+    [Required]
     public int uid {  get; set; }   
+    [Required]
     public int score {get; set; }
 }
 
 public class ResponseUpdateScore
 {
-    public ErrorCode Result { get; set; }
+    [Required]
+    public ErrorCode result { get; set; }
 
 }

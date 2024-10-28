@@ -33,30 +33,32 @@ public class RegistController : ControllerBase
         var uid = await _redis.GetNewUserUid();
         if (uid < 0)
         {
-            response.Result = ErrorCode.FailRegistByUid;
+            response.result = ErrorCode.FailRegistByUid;
             return response;
         }
 
-        response.Uid = uid;
+        response.uid = uid;
 
         var nickname = "nyang" + uid;
         //여기서 redis에 uid랑 닉네임도 pair로 저장할까?
         var res = await _userInfo.CreateUserInfo(uid, nickname);
+
+        //레디스에 닉네임도 저장해야한다. {uid} : {nickname} -> 랭킹때 써야함
         
         if(res == 0)
         {
-            response.Result = ErrorCode.FailSaveUserInfoTable;
+            response.result = ErrorCode.FailSaveUserInfoTable;
             return response;
         }
 
         var temp = await _playerServiece.CreatePlayerTables(uid);
         if (temp == 0)
         {
-            response.Result = ErrorCode.FailSavePlayerTable;
+            response.result = ErrorCode.FailSavePlayerTable;
             return response;
         }
 
-        response.Result = ErrorCode.None;
+        response.result = ErrorCode.None;
 
         return response;
 

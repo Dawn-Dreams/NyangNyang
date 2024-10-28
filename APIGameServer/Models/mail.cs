@@ -1,22 +1,38 @@
-﻿
+﻿namespace APIGameServer.Models;
 
-namespace APIGameServer.Models;
-
-public class mail
+enum MailType
 {
-    public int uid;
-    public int mail_type;
-    public string mail_content;
-    public DateTime mali_create_dt;
-    public DateTime mali_read_dt;
-    public int mail_reward_item;
-    public bool is_recived;
+    Event = 0,
+    Reward=1,
+    Friend=2
+}
+
+public class Mail
+{
+    public int uid {  get; set; }
+    public int mail_type { get; set; }
+    public int mail_reward_item { get; set; }
+    public DateTime mail_create_dt { get; set; }
+    public DateTime? mail_read_dt { get; set; }
+    public bool is_recived { get; set; }
+
+    public Mail(int uid, int type, int reward)
+    {
+        this.uid = uid;
+        this.mail_type = type;
+        this.mail_reward_item = reward;
+        this.mail_create_dt = DateTime.Now;
+        this.mail_read_dt = null;
+
+        this.is_recived = false;
+    }
+
 
 }
 
 public class ResponseMails
 {
     public ErrorCode ErrorCode {  get; set; }
-    public List<mail> mailList {  get; set; }
+    public List<Mail> mailList {  get; set; }
 }
 

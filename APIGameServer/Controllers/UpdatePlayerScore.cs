@@ -25,7 +25,7 @@ public class UpdatePlayerScore : ControllerBase
         Console.WriteLine("UID : {0}, SCORE : {1}", req.uid, req.score);
 
         //받은 uid랑 score 레디스에 저장하자.
-        res.Result = await _redisDb.UpdateUserScore(req.uid, req.score);
+        res.result = await _redisDb.UpdateUserScore(req.uid, req.score);
 
 
         return res;

@@ -40,6 +40,7 @@ public class GachaEquipmentController : ControllerBase
         if (res.result != ErrorCode.None)
         {
             //실패일때 해결책을 쓰자. 
+            res.result = ErrorCode.FailSavePlayerTable;
         }
 
 

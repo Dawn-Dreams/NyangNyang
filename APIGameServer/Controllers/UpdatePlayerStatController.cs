@@ -24,7 +24,7 @@ public class UpdatePlayerStatController : ControllerBase
         var temp = await _playerStat.UpdatePlayerStatus(req);
         if(temp == 0)
         {
-            res.Result = ErrorCode.FailUpdatePlayerTable;
+            res.result = ErrorCode.FailUpdatePlayerTable;
         }
 
         return res;

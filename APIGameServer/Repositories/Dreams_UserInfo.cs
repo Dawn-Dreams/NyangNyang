@@ -37,6 +37,7 @@ public class Dreams_UserInfo : IDreams_UserInfo
             nickname,
             regist_dt = DateTime.Now,
             recent_login_dt = DateTime.Now,
+            attendence_cnt=1,
             is_active = true
         });
     }
@@ -46,6 +47,24 @@ public class Dreams_UserInfo : IDreams_UserInfo
         return await _queryFactory.Query(_tableName).Where("uid", uid)
             .UpdateAsync(new { nickname = changeNickname });
     }
+
+    public async Task<int> UpdateRecentLoginCnt(int uid)
+    {
+        return await _queryFactory.StatementAsync($"UPDATE user_info " +
+                                              $"SET recent_login_dt = '{DateTime.Now:yyyy-MM-dd-HH:mm:ss}', " +
+                                              $"attendence_cnt = CASE " +
+                                              $"WHEN recent_login_dt < '{DateTime.Now:yyyy-MM-dd-HH:mm:ss}' " +
+                                                    $"THEN attendence_cnt+1 " +
+                                                    $"ELSE attendence_cnt END " +
+                                              $"WHERE uid = {uid}");
+    }
+    public async Task<int> GetAttendenceCnt(int uid)
+    {
+        return await _queryFactory.Query("user_info")
+            .Where("uid", uid).Select("attendence_cnt").FirstOrDefaultAsync<int>();
+
+    }
+
 
     public void Dispose()
     {
