@@ -4,7 +4,7 @@ using APIGameServer.Services.Interface;
 using System.Formats.Asn1;
 
 namespace APIGameServer.Services;
-using ErrorCode = ServerClientShare.ErrorCode;
+
 
 public class PlayerService : IPlayerService
 {
@@ -61,6 +61,8 @@ public class PlayerService : IPlayerService
         return (ErrorCode.None, status,lv, goods);
     }
 
+
+    //출석 업데이트 하자
 
 
 

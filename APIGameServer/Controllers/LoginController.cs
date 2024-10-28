@@ -29,8 +29,7 @@ public class LoginController : ControllerBase
         (response.Result, response.status, response.statusLv, response.goods) =
             await _playerService.GetPlayerTable(req.Uid);
 
-        //출석관련 코드도 추가해야한다 
-
+    
         return response;
     }
 

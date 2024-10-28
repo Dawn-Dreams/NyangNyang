@@ -10,7 +10,6 @@
         "dependencies": {
           "CloudStructures": "3.3.0",
           "MySqlConnector": "2.3.7",
-          "ServerClientShare": "1.0.0",
           "SqlKata": "2.4.0",
           "SqlKata.Execution": "2.4.0",
           "Swashbuckle.AspNetCore": "6.4.0",
@@ -319,11 +318,6 @@
             "fileVersion": "2.5.7.0"
           }
         }
-      },
-      "ServerClientShare/1.0.0": {
-        "runtime": {
-          "ServerClientShare.dll": {}
-        }
       }
     }
   },
@@ -619,11 +613,6 @@
       "sha512": "sha512-Fntjm9Ml755UHx7LopQ0NPysjTkdqeUsoLdGAZVzdeOo6YQMV0JQaivSIOTeryhBCAar6SA+zv/ZmtT1fcOtyw==",
       "path": "zlogger/2.5.7",
       "hashPath": "zlogger.2.5.7.nupkg.sha512"
-    },
-    "ServerClientShare/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
     }
   }
 }

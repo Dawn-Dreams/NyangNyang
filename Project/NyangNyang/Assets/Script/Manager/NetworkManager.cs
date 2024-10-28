@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Unity.VisualScripting;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -19,10 +20,8 @@ public class NetworkManager : MonoBehaviour
     {
         if(instance == null)
         {
-            instance = new NetworkManager();
+            instance = gameObject.AddComponent<NetworkManager>();
         }
-        //UpdatePlayerStatus(3, 1, 1, 1, 1, 21, 1, 1, 1);
-      //  UpdatePlayersRanking();
         Debug.Log("networkd instatnce  초기화..");
     }
     IEnumerator CoSendNetRequest(string url, object obj, Action<UnityWebRequest> callback)
@@ -75,7 +74,11 @@ public class NetworkManager : MonoBehaviour
 
         };
 
-        StartCoroutine(CoSendNetRequest("UpdatePlayerStat", req, UpdateStats));
+        if (req != null)
+        {
+            StartCoroutine(CoSendNetRequest("UpdatePlayerStat", req, UpdateStats));
+
+        }
     }
     public void UpdatePlayerStatusLv(int uid, int hp_lv, int mp_lv, int str_lv, int def_lv,
     int heal_hp_lv, int heal_mp_lv, int crit_lv, int attack_speed_lv,int gold_acq_lv, int exp_acq_lv)
@@ -121,12 +124,31 @@ public class NetworkManager : MonoBehaviour
 
     }
 
+    public void EquipmentGacha(int uid)
+    {
+        ReqEquipGacha req = new ReqEquipGacha { uid = uid };
+
+        Debug.Log("GachaEquipmentController");
+
+        StartCoroutine(CoSendNetRequest("GachaEquipmentController", req, GetEquipmentGacha));
+
+    }
+    public void SkillsGacha(int uid)
+    {
+        ReqSkiilGacha req = new ReqSkiilGacha { uid = uid };
+
+        Debug.Log("GachaSillsController");
+
+        StartCoroutine(CoSendNetRequest("GachaSkiilsController", req, GetSkiilGacha));
+
+    }
+
     void SettingRankData(UnityWebRequest uwr)
     {
         //랭킹리스트 받은거 사용하는 함수
         var res = JsonUtility.FromJson<ResponseRanking>(uwr.downloadHandler.text);
 
-        if (res.ErrorCode != (int)ErrorCode.None)
+        if (res.result != (int)ErrorCode.None)
         {
             Debug.Log("Failed get ranking data");
         }
@@ -145,7 +167,7 @@ public class NetworkManager : MonoBehaviour
         //서버에 DB저장요청 보내고 서버에서 받은 응답
 
         var res = JsonUtility.FromJson<ResUpdateDbData>(uwr.downloadHandler.text);
-        if(res.errorCode != (int)ErrorCode.None)
+        if(res.result != (int)ErrorCode.None)
         {
             Debug.Log("Failed saved DB");
         }
@@ -156,14 +178,40 @@ public class NetworkManager : MonoBehaviour
 
     }
 
-
-    //서버에서 DB 정보 받아올때 사용하는 함수들
-
-    // 서버로부터 특정 id의 status를 받아오는 함수
-    void RecvStatusFromServer(Status status, int id)
+    void GetEquipmentGacha(UnityWebRequest uwr)
     {
+        var res = JsonUtility.FromJson<ResEquipGacha>(uwr.downloadHandler.text);
 
+        if (res.result != ErrorCode.None)
+        {
+            Debug.Log("Failed gacha");
+        }
+        else
+        {
+            //가차 뽑기 완료됨
+
+            //res.itemId를 이용하면된다.
+
+            Debug.Log("Success gacha");
+        }
     }
 
+    void GetSkiilGacha(UnityWebRequest uwr)
+    {
+        var res = JsonUtility.FromJson<ResSkillGacha>(uwr.downloadHandler.text);
+
+        if (res.result != ErrorCode.None)
+        {
+            Debug.Log("Failed gacha");
+        }
+        else
+        {
+            //가차 뽑기 완료됨
+
+            //res.skillId 이용하면된다.
+
+            Debug.Log("Success gacha");
+        }
+    }
 
 }

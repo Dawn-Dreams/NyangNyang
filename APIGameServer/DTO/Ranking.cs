@@ -1,6 +1,4 @@
-﻿using ServerClientShare;
-
-namespace APIGameServer.DTO;
+﻿namespace APIGameServer.DTO;
 
 public class RankingData
 {

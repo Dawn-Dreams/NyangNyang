@@ -33,7 +33,7 @@ public class RegistController : ControllerBase
         var uid = await _redis.GetNewUserUid();
         if (uid < 0)
         {
-            response.Result = ServerClientShare.ErrorCode.FailRegistByUid;
+            response.Result = ErrorCode.FailRegistByUid;
             return response;
         }
 
@@ -45,18 +45,18 @@ public class RegistController : ControllerBase
         
         if(res == 0)
         {
-            response.Result = ServerClientShare.ErrorCode.FailSaveUserInfoTable;
+            response.Result = ErrorCode.FailSaveUserInfoTable;
             return response;
         }
 
         var temp = await _playerServiece.CreatePlayerTables(uid);
         if (temp == 0)
         {
-            response.Result = ServerClientShare.ErrorCode.FailSavePlayerTable;
+            response.Result = ErrorCode.FailSavePlayerTable;
             return response;
         }
 
-        response.Result = ServerClientShare.ErrorCode.None;
+        response.Result = ErrorCode.None;
 
         return response;
 

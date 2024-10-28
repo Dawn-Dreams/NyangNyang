@@ -97,7 +97,7 @@ public class RankingData
 [System.Serializable]
 public class ResponseRanking
 {
-    public ErrorCode ErrorCode;
+    public ErrorCode result;
     public List<RankingData> rankingData;
 }
 
@@ -105,7 +105,7 @@ public class ResponseRanking
 [System.Serializable]
 public class ResUpdateDbData
 {
-    public int errorCode;
+    public ErrorCode result;
 }
 //-------------------------------------------------
 
@@ -123,7 +123,34 @@ public class RequestUpdateScore
 [System.Serializable]
 public class ResponseUpdateScore
 {
-    public ErrorCode Result { get; set; }
+    public ErrorCode result { get; set; }
 
+}
+
+
+//gacha
+[System.Serializable]
+public class ReqEquipGacha
+{
+    public int uid;
+}
+[System.Serializable]
+public class ResEquipGacha
+{
+    public ErrorCode result;
+    public int itemId;
+}
+
+[System.Serializable]
+public class ReqSkiilGacha
+{
+    public int uid;
+
+}
+[System.Serializable]
+public class ResSkillGacha
+{
+    public ErrorCode result;
+    public int skillId;
 }
 

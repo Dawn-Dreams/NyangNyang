@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace APIGameServer.DTO;
 
-using ErrorCode = ServerClientShare.ErrorCode;
+
 public class RequestUpdateStatLevel
 {
     [Required]

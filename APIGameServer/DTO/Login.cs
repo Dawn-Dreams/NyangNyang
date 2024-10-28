@@ -6,8 +6,6 @@ using System;
 using System.ComponentModel.DataAnnotations;
 
 
-using ErrorCode = ServerClientShare.ErrorCode;
-
 public class RequestRegist
 {
     //클라가 처음 접속하면 이 패킷보내기 

@@ -1,5 +1,4 @@
 ﻿using APIGameServer.Repositories.Interfaces;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
 using MySqlConnector;
 using SqlKata.Execution;
@@ -7,17 +6,13 @@ using System.Data;
 
 namespace APIGameServer.Repositories;
 
-public class Dreams_Inventory : IDreams_Inventory
+public class Dreams_Attendence : IDreams_Attendence
 {
-
     readonly IOptions<DBConfig> _dbConfig;
 
     IDbConnection _dbConn;
     SqlKata.Compilers.MySqlCompiler _compiler;
-    QueryFactory _queryFactory;
-
-    string _tableName = "inventory";
-    public Dreams_Inventory(IOptions<DBConfig> dbConfing)
+    QueryFactory _queryFactory; public Dreams_Attendence(IOptions<DBConfig> dbConfing)
     {
         _dbConfig = dbConfing;
         Open();
@@ -26,15 +21,8 @@ public class Dreams_Inventory : IDreams_Inventory
         _queryFactory = new QueryFactory(_dbConn, _compiler);
 
     }
-    public async Task<int> InsertItem(int uid, int item)
-    {
-        return await _queryFactory.Query(_tableName).InsertAsync(new
-        {
-            uid=uid, 
-            item_id = item,
-            item_acquired_dt = DateTime.Now
-        });
-    }
+
+
 
     public void Dispose()
     {
@@ -50,5 +38,5 @@ public class Dreams_Inventory : IDreams_Inventory
         _dbConn.Close();
 
     }
-}
 
+}
