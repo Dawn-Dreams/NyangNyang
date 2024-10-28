@@ -30,7 +30,7 @@ public enum CatCostumePart
 public enum HeadCostumeType
 {
     NotEquip = 0, 
-    Meat, HikingHat, Grass, Glass_Red, Glass_Green, Glass_Blue, Count
+    Meat, HikingHat, Grass, Glass_Red, Count
 }
 
 // 오른손 장착 코스튬
@@ -44,7 +44,7 @@ public enum HandRCostumeType
 public enum BodyCostumeType
 {
     NotEquip = 0,
-    Bag, Fish, Pan, Butterfly, Count
+    Bag, Fish, Pan, Count
 }
 
 // !!TODO: 현재는 코스튬 매니저에서 고양이가 입은 옷을 갈아입히는 역할까지 모두 하지만,
@@ -149,6 +149,8 @@ public class CostumeManager : MonoBehaviour
 
     public string GetCostumeName(CatCostumePart part, int index, bool inKor = true)
     {
+        // TODO: inKor에 대한 처리 
+
         string retVal = "";
         switch (part)
         {

@@ -20,7 +20,9 @@ public class CostumeElement : MonoBehaviour
 
     public TextMeshProUGUI costumeNameText;
     public Button selectButton;
+    public Image owningImage;
     public TextMeshProUGUI selectButtonText;
+    public Image previewImage;
 
     private AddressableHandle<Sprite> _currentSelectSprite;
     private AddressableHandle<Sprite> _owningSprite;
@@ -28,6 +30,9 @@ public class CostumeElement : MonoBehaviour
 
     private Dictionary<OwningSelectButtonType, AddressableHandle<Sprite>> _sprites =
         new Dictionary<OwningSelectButtonType, AddressableHandle<Sprite>>();
+
+    // 프리뷰 스프라이트
+    private AddressableHandle<Sprite> _previewSprite ;
 
     private CatCostumePart _costumePart;
     private int _costumeIndex;
@@ -42,6 +47,11 @@ public class CostumeElement : MonoBehaviour
         foreach (var VARIABLE in _sprites)
         {
             VARIABLE.Value.Release();
+        }
+
+        if (_previewSprite != null)
+        {
+            _previewSprite.Release();
         }
     }
 
@@ -62,7 +72,7 @@ public class CostumeElement : MonoBehaviour
 
     public void SetSelectButtonType(OwningSelectButtonType type)
     {
-        selectButton.image.sprite = _sprites[type].obj;
+        owningImage.sprite = _sprites[type].obj;
         selectButtonText.text = buttonTypeText[type];
     }
 
@@ -74,21 +84,24 @@ public class CostumeElement : MonoBehaviour
         // 이름 변경
         SetNameText(CostumeManager.GetInstance().GetCostumeName(_costumePart, _costumeIndex));
 
-
-        // 프리뷰 오브젝트 변경
-        GameObject prefab = CostumeManager.GetInstance().GetCatCostumePrefab(_costumePart, _costumeIndex);
-        if (prefab)
+        // 프리뷰 스프라이트 설정
+        if (_previewSprite != null)
         {
-            GameObject obj = Instantiate(prefab, transform);
-            obj.transform.localScale = new Vector3(200, 200, 200);
-            obj.layer = LayerMask.NameToLayer("UI");
-            foreach (Transform child in obj.transform)
-            {
-                child.gameObject.layer = LayerMask.NameToLayer("UI");
-            }
+            _previewSprite.Release();
+            _previewSprite = null;
         }
-        
-        //// UI 레이어로 변경
+        _previewSprite = new AddressableHandle<Sprite>();
+        _previewSprite.Load("Sprite/Costume/" + catCostumePart + "/" +
+                            CostumeManager.GetInstance().GetCostumeName(catCostumePart, index, false));
+        if (_previewSprite.obj != null)
+        {
+            previewImage.gameObject.SetActive(true);
+            previewImage.sprite = _previewSprite.obj;
+        }
+        else
+        {
+            previewImage.gameObject.SetActive(false);
+        }
         
 
         // 보유중인지 변경
