@@ -11,6 +11,7 @@ public class RedisDatabase : IRedisDatabase
 {
     public RedisConnection _redisCon;
     private readonly IDatabase _redisDb;
+    private string allnicknameKey = "nicknames";
 
     public RedisDatabase(IOptions<DBConfig> dbCon)
     {
@@ -29,8 +30,29 @@ public class RedisDatabase : IRedisDatabase
 
     public async Task<bool> SaveUserNickname(int uid, string nickname)
     {
-        return await _redisDb.StringSetAsync(uid.ToString(), nickname);
+        if(await _redisDb.StringSetAsync(uid.ToString(), nickname))
+        {
+            return await _redisDb.SetAddAsync(allnicknameKey, nickname);
+        }
+
+        return false;
     }
+
+    public async Task<ErrorCode> ChangeNickname(int uid,string oldNickname, string newNickname)
+    {
+        //먼저 있는지를 찾아보자.
+        if(await _redisDb.SetContainsAsync(allnicknameKey, newNickname))
+        {
+            //사용중이다. 사용중이라는 에러값 내보내면될듯
+        }
+
+        //없다면 이제 기존값을 삭제하고 새롭게 추가하자.
+        var res = await _redisDb.SetRemoveAsync(allnicknameKey, oldNickname);
+        res =await SaveUserNickname(uid, newNickname);
+
+        return ErrorCode.None;
+    }
+
     public async Task<bool> CheckUserUid(int uid)
     {
         return await _redisDb.KeyExistsAsync(uid.ToString());

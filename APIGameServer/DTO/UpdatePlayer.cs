@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace APIGameServer.DTO;
 
-
 public class RequestUpdateStatLevel
 {
     [Required]
@@ -29,4 +28,17 @@ public class ResponseUpdateScore
     [Required]
     public ErrorCode result { get; set; }
 
+}
+public class ResponsChangeNickname
+{
+    public ErrorCode result { get; set; }
+}
+public class RequestChangeNickname
+{
+    [Required]
+    public int uid { get; set; }
+    [Required]
+    public string oldNickname {  get; set; }
+    [Required]
+    public string newNickname {  get; set; }
 }

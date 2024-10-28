@@ -64,9 +64,13 @@ public class Dreams_UserInfo : IDreams_UserInfo
             .Where("uid", uid).Select("attendence_cnt").FirstOrDefaultAsync<int>();
 
     }
+    public async Task<int> ChangeUserNickname(int uid, string nickname)
+    {
+        return await _queryFactory.Query("user_info")
+            .Where("uid", uid).UpdateAsync(nickname);
+    }
 
-
-    public void Dispose()
+        public void Dispose()
     {
         Close();
     }
