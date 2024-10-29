@@ -73,3 +73,9 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 /Project/NyangNyang/Library
 /Project/NyangNyang/Logs
+
+# 에셋스토어 파일 제외
+/Assets/MyAsset/PartyMonsterDuo
+/Assets/ScreenshotUtillity
+/[Pp]ackages/com.rito.play-mode-saver
+/[Pp]ackages/com.modoium.service/
