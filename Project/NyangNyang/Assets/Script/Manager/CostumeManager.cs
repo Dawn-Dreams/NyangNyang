@@ -30,7 +30,7 @@ public enum CatCostumePart
 public enum HeadCostumeType
 {
     NotEquip = 0, 
-    Meat, HikingHat, Grass, Glass_Red, Glass_Green, Glass_Blue, Count
+    Meat, HikingHat, Grass, Glass_Red, Count
 }
 
 // 오른손 장착 코스튬
@@ -44,7 +44,7 @@ public enum HandRCostumeType
 public enum BodyCostumeType
 {
     NotEquip = 0,
-    Bag, Fish, Pan, Butterfly, Count
+    Bag, Fish, Pan, Count
 }
 
 // !!TODO: 현재는 코스튬 매니저에서 고양이가 입은 옷을 갈아입히는 역할까지 모두 하지만,
@@ -57,6 +57,16 @@ public class CostumeManager : MonoBehaviour
     {
         return _instance;
     }
+    // * Awake시 서버로부터 데이터를 받아 에셋을 연결하는데,
+    // 해당 프레임에 CostumeManager 가 AssetLoad를 진행하지않아 에셋을 찾을 수 없는 현상을 해결하기 위해 따로 설정
+    public static void SetInstance(CostumeManager cm)
+    {
+        if (_instance == null)
+        {
+            _instance = cm;
+        }
+        cm.AssetLoad();
+    }
 
     // 고양이 털 스킨 머테리얼 에셋 관리 변수
     private List<AddressableHandle<Material>> _catFurMaterials = new List<AddressableHandle<Material>>();
@@ -67,11 +77,11 @@ public class CostumeManager : MonoBehaviour
     void Awake()
     {
         AssetLoad();
-
         if (_instance == null)
         {
             _instance = this;
         }
+        
     }
 
     void OnDestroy()
@@ -90,6 +100,12 @@ public class CostumeManager : MonoBehaviour
     // Addressable 에셋 로드
     private void AssetLoad()
     {
+        if (_catFurMaterials.Count != 0)
+        {
+            // 이미 로드가 완료됨
+            return;
+        }
+
         // 고양이 털 스킨 머테리얼 로드
         for (int i = 0; i < (int)CatFurSkin.Count; i++)
         {
@@ -149,6 +165,8 @@ public class CostumeManager : MonoBehaviour
 
     public string GetCostumeName(CatCostumePart part, int index, bool inKor = true)
     {
+        // TODO: inKor에 대한 처리 
+
         string retVal = "";
         switch (part)
         {

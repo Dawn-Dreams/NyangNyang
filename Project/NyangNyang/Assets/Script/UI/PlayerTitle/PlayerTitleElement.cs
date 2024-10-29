@@ -32,9 +32,7 @@ public class PlayerTitleElement : MonoBehaviour
         titleNameText.text = titleInfo.name;
         titleNameText.color = TitleDataManager.titleGradeColors[(TitleGrade)titleInfo.grade];
 
-        
 
-        //TODO: 보유 효과 작성하기
     }
 
     public void SetIsOwning(bool newOwning)
@@ -42,7 +40,7 @@ public class PlayerTitleElement : MonoBehaviour
         selectTitleButton.interactable = false;
         if (newOwning)
         {
-            if (titleInfo.id == Player.PlayerCurrentTitleID)
+            if (titleInfo.id == PlayerTitle.PlayerCurrentTitleID)
             {
                 selectTitleButtonImage.sprite = _selectedSprite.obj;
                 selectTitleText.text = "착용중";

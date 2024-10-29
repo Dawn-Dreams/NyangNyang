@@ -32,7 +32,7 @@ public abstract class AchievementQuestData : QuestDataBase
             QuestComp.mainQuestText.color = TitleDataManager.titleGradeColors[(TitleGrade)titleInfo.grade];
         }
 
-        Player.OnOwningTitleChange += CheckIsOwningTitle;
+        PlayerTitle.OnOwningTitleChange += CheckIsOwningTitle;
 
         // 현재 칭호를 보유중인지에 따라 퀘스트 클리어 유무를 적용
         CheckIsOwningTitle();
@@ -41,7 +41,7 @@ public abstract class AchievementQuestData : QuestDataBase
 
     public void CheckIsOwningTitle()
     {
-        foreach (int titleID in Player.playerOwningTitles)
+        foreach (int titleID in PlayerTitle.playerOwningTitles)
         {
             if (titleID == rewardTitleID)
             {
@@ -58,7 +58,7 @@ public abstract class AchievementQuestData : QuestDataBase
     {
         Debug.Log($"유저가 타이틀 ID: {rewardTitleID} 타이틀을 흭득하였습니다.");
         DummyPlayerTitleServer.UserRequestAcquireTitle(Player.GetUserID(), rewardTitleID);
-        Player.AcquireTitle(rewardTitleID);
+        PlayerTitle.AcquireTitle(rewardTitleID);
 
         GetReward = true;
         CheckIsOwningTitle();

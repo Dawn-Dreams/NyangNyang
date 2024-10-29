@@ -38,7 +38,7 @@ MonoBehaviour:
     m_Id: 
   m_RemoteCatalogLoadPath:
     m_Id: 
-  m_ContentStateBuildPathProfileVariableName: 
+  m_ContentStateBuildPathProfileVariableName: <default settings path>
   m_CustomContentStateBuildPath: 
   m_ContentStateBuildPath: 
   m_BuildAddressablesWithPlayerBuild: 0
@@ -47,6 +47,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c383a0d5ee355c34380bfad3c6133a0c, type: 2}
   - {fileID: 11400000, guid: 8333d46f8f49f394f89551b58b622a40, type: 2}
   - {fileID: 11400000, guid: 42edf182241a3334991a91dacf7ef45a, type: 2}
+  - {fileID: 11400000, guid: fa435302156216445ba83df0739ad6bb, type: 2}
   - {fileID: 11400000, guid: 59f57a408ad35c548bd4ecedc44c959e, type: 2}
   - {fileID: 11400000, guid: 6b11de3deb3d19740858947bc0176c7a, type: 2}
   - {fileID: 11400000, guid: 27538cc3cf334f04aac84fc69a23c522, type: 2}
@@ -57,7 +58,7 @@ MonoBehaviour:
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
     m_CleanupStreamingAssetsAfterBuilds: 1
-    m_LogResourceManagerExceptions: 1
+    m_LogResourceManagerExceptions: 0
     m_BundleBuildPath: Temp/com.unity.addressables/AssetBundles
   m_ProfileSettings:
     m_Profiles:
@@ -108,6 +109,7 @@ MonoBehaviour:
     - Sprite/Button/Owning
     - Sprite/Button/CurrentSelect
     - Costume/FurSkin
+    - Sprite/Button/CurrentPreview
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 1357d4d6892ead44d8606e168156272e, type: 2}

@@ -6,24 +6,6 @@ public class Player : MonoBehaviour
 {
     private static int userID = 0;
     public static string PlayerName;
-    private static int _playerCurrentTitleID;
-
-    public static int PlayerCurrentTitleID
-    {
-        get { return _playerCurrentTitleID; }
-        set
-        {
-            if (value == _playerCurrentTitleID) return;
-            _playerCurrentTitleID = value;
-
-            if (OnSelectTitleChange != null)
-            {
-                OnSelectTitleChange();
-            }
-        }
-    }
-    public static List<int> playerOwningTitles = new List<int>();
-
 
     public static Status playerStatus;
     private static CurrencyData playerCurrency;
@@ -64,12 +46,6 @@ public class Player : MonoBehaviour
     public delegate void OnHPStatusLevelChangeDelegate();
     public static event OnHPStatusLevelChangeDelegate OnHPLevelChange;
 
-    // 유저 착용 칭호 변경 델리게이트
-    public delegate void OnSelectTitleChangeDelegate();
-    public static event OnSelectTitleChangeDelegate OnSelectTitleChange;
-    // 유저 보유 칭호 변경 델리게이트
-    public delegate void OnOwningTitleChangeDelegate();
-    public static event OnOwningTitleChangeDelegate OnOwningTitleChange;
 
     // 한 스테이지 내에서 반복 전투를 진행하는 것에 대한 변수
     public static bool continuousCombat = false;
@@ -170,12 +146,9 @@ public class Player : MonoBehaviour
             GetExpDataFromServer();
         }
 
-        OnOwningTitleChange += SetTitleOwningEffectToStatus;
 
         // 서버로부터 받기
         PlayerName = "냥냥이";
-        PlayerCurrentTitleID = DummyPlayerTitleServer.UserRequestCurrentSelectedTitleID(userID);
-        playerOwningTitles = DummyPlayerTitleServer.UserRequestOwningTitles(userID);
 
     }
 
@@ -326,36 +299,7 @@ public class Player : MonoBehaviour
     }
     // =================
 
-    // 관련 ==
-    public static void AcquireTitle(int titleID)
-    {
-        if (!playerOwningTitles.Contains(titleID))
-        {
-            playerOwningTitles.Add(titleID);
-
-            if (OnOwningTitleChange != null)
-            {
-                OnOwningTitleChange();
-            }
-        }
-    }
-    public static void SetTitleOwningEffectToStatus()
-    {
-        if (!TitleDataManager.GetInstance())
-        {
-            return;
-        }
-        List<TitleOwningEffect> titleOwningEffects = new List<TitleOwningEffect>();
-        foreach (int owningTitleID in playerOwningTitles)
-        {
-            TitleInfo titleInfo = TitleDataManager.GetInstance().titleInfoDic[owningTitleID];
-            foreach (TitleOwningEffect owningEffect in titleInfo.effect)
-            {
-                titleOwningEffects.Add(owningEffect);
-            }
-        }
-        playerStatus.SetTitleOwningEffect(titleOwningEffects);
-    }
+    
     // =====================
 
 }

@@ -18,9 +18,9 @@ public class PlayerTitleUI : MonoBehaviour
     void Start()
     {
         OnStartCreateTitleInfoElementObj();
-        SortingTitleElements();
 
-        Player.OnOwningTitleChange += SortingTitleElements;
+        PlayerTitle.OnOwningTitleChange += SortingTitleElements;
+        SortingTitleElements();
     }
 
     // TitleElement의 자식 순서를 변경하는 함수
@@ -32,7 +32,7 @@ public class PlayerTitleUI : MonoBehaviour
         }
 
         // 보유 -> 미보유 / ID 오름차 순으로 정렬
-        List<int> currentOwningTitles =  new List<int>(Player.playerOwningTitles);
+        List<int> currentOwningTitles =  new List<int>(PlayerTitle.playerOwningTitles);
 
         List<int> notOwningTitles = new List<int>();
         // 추후 NotOwningTitles 추출 방식 변경
@@ -71,7 +71,7 @@ public class PlayerTitleUI : MonoBehaviour
         }
 
         // 보유중인 타이틀에 대해서 보유중으로 바꿈, // 내부에서 플레이어가 선택중 임을 확인
-        foreach (var titleID in Player.playerOwningTitles)
+        foreach (var titleID in PlayerTitle.playerOwningTitles)
         {
             _titleElements[titleID].SetIsOwning(true);
         }
@@ -115,7 +115,7 @@ public class PlayerTitleUI : MonoBehaviour
     void OnClickSelectTitleButton(int titleID)
     {
         // 플레이어 타이틀 아이디 교체
-        Player.PlayerCurrentTitleID = titleID;
+        PlayerTitle.PlayerCurrentTitleID = titleID;
         // 서버에 해당 플레이어가 장착중인 타이틀 아이디 변경 요청
         DummyPlayerTitleServer.UserRequestEquipTitle(Player.GetUserID(), titleID);
 

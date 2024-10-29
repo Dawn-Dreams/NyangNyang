@@ -2,12 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using JetBrains.Annotations;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.AddressableAssets.ResourceLocators;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceLocations;
 using UnityEngine.U2D;
 
 public class AddressableHandle<T>
@@ -19,6 +22,11 @@ public class AddressableHandle<T>
     {
         handle = Addressables.LoadAssetAsync<T>(key);
         handle.WaitForCompletion();
+        if (handle.Status != AsyncOperationStatus.Succeeded)
+        {
+            //Debug.Log("key is not valid [" + key + "] but it can be on null like \"NotEquip\"");
+            return this;
+        }
         obj = handle.Result;
 
         return this;
@@ -65,7 +73,6 @@ public class AddressableHandleAssets<T> where T : UnityEngine.Object
             }
         });
         assetsHandle.WaitForCompletion();
-
     }
 
     public void Release()
@@ -77,3 +84,29 @@ public class AddressableHandleAssets<T> where T : UnityEngine.Object
     }
 
 }
+
+//public class AddressableManager
+//{
+//    //https://discussions.unity.com/t/can-i-ask-addressables-if-a-specified-key-addressable-name-is-valid/719356/2
+//    private static Dictionary<string, IResourceLocator> _locators;
+//
+//    public static bool AddressableResourceExists(string locatorKey, string key)
+//    {
+//        if (!_locators.ContainsKey(locatorKey))
+//        {
+//            ResourceLocatorInfo locatorInfo = Addressables.GetLocatorInfo(locatorKey);
+//            if (locatorInfo != null)
+//            {
+//                _locators.Add(locatorKey, locatorInfo.Locator);
+//            }
+//        }
+//
+//        IList<IResourceLocation> location;
+//        if (_locators[locatorKey].Locate(key, null, out location))
+//        {
+//            return true;
+//        }
+//
+//        return false;
+//    }
+//}

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public enum OwningSelectButtonType
 {
-    NotOwning, Owning, CurrentSelect, Count
+    NotOwning, Owning, CurrentSelect, CurrentPreview, Count
 }
 
 public class CostumeElement : MonoBehaviour
@@ -15,12 +15,15 @@ public class CostumeElement : MonoBehaviour
         {
             { OwningSelectButtonType.NotOwning, "미보유" },
             { OwningSelectButtonType.Owning, "보유중" },
-            { OwningSelectButtonType.CurrentSelect, "선택중" }
+            { OwningSelectButtonType.CurrentSelect, "선택중" },
+            { OwningSelectButtonType.CurrentPreview , "미리보기" }
         };
 
     public TextMeshProUGUI costumeNameText;
     public Button selectButton;
+    public Image owningImage;
     public TextMeshProUGUI selectButtonText;
+    public Image previewImage;
 
     private AddressableHandle<Sprite> _currentSelectSprite;
     private AddressableHandle<Sprite> _owningSprite;
@@ -28,6 +31,9 @@ public class CostumeElement : MonoBehaviour
 
     private Dictionary<OwningSelectButtonType, AddressableHandle<Sprite>> _sprites =
         new Dictionary<OwningSelectButtonType, AddressableHandle<Sprite>>();
+
+    // 프리뷰 스프라이트
+    private AddressableHandle<Sprite> _previewSprite ;
 
     private CatCostumePart _costumePart;
     private int _costumeIndex;
@@ -43,13 +49,24 @@ public class CostumeElement : MonoBehaviour
         {
             VARIABLE.Value.Release();
         }
+
+        if (_previewSprite != null)
+        {
+            _previewSprite.Release();
+        }
     }
 
     private void AssetLoad()
     {
-        _sprites.Add(OwningSelectButtonType.CurrentSelect, new AddressableHandle<Sprite>().Load("Sprite/Button/CurrentSelect"));
-        _sprites.Add(OwningSelectButtonType.Owning, new AddressableHandle<Sprite>().Load("Sprite/Button/Owning"));
-        _sprites.Add(OwningSelectButtonType.NotOwning, new AddressableHandle<Sprite>().Load("Sprite/Button/NotOwning"));
+        for (int i = 0; i < (int)OwningSelectButtonType.Count; ++i)
+        {
+            OwningSelectButtonType type = (OwningSelectButtonType)i;
+            _sprites.Add(type,new AddressableHandle<Sprite>().Load("Sprite/Button/"+type));
+        }
+        //_sprites.Add(OwningSelectButtonType.CurrentSelect, new AddressableHandle<Sprite>().Load("Sprite/Button/CurrentSelect"));
+        //_sprites.Add(OwningSelectButtonType.Owning, new AddressableHandle<Sprite>().Load("Sprite/Button/Owning"));
+        //_sprites.Add(OwningSelectButtonType.NotOwning, new AddressableHandle<Sprite>().Load("Sprite/Button/NotOwning"));
+        
     }
 
     public void SetNameText(string nameString)
@@ -62,8 +79,13 @@ public class CostumeElement : MonoBehaviour
 
     public void SetSelectButtonType(OwningSelectButtonType type)
     {
-        selectButton.image.sprite = _sprites[type].obj;
+        owningImage.sprite = _sprites[type].obj;
         selectButtonText.text = buttonTypeText[type];
+        
+        // 보유중/선택중 버튼은 선택 가능하게, (미리보기로 인해 선택중도 추가)
+        bool selectable = (type == OwningSelectButtonType.Owning || type == OwningSelectButtonType.CurrentSelect);
+        selectButton.interactable = selectable;
+        
     }
 
     public void SetCostumeData(CatCostumePart catCostumePart, int index)
@@ -74,25 +96,24 @@ public class CostumeElement : MonoBehaviour
         // 이름 변경
         SetNameText(CostumeManager.GetInstance().GetCostumeName(_costumePart, _costumeIndex));
 
-
-        // 프리뷰 오브젝트 변경
-        GameObject prefab = CostumeManager.GetInstance().GetCatCostumePrefab(_costumePart, _costumeIndex);
-        if (prefab)
+        // 프리뷰 스프라이트 설정
+        if (_previewSprite != null)
         {
-            GameObject obj = Instantiate(prefab, transform);
-            obj.transform.localScale = new Vector3(200, 200, 200);
-            obj.layer = LayerMask.NameToLayer("UI");
-            foreach (Transform child in obj.transform)
-            {
-                child.gameObject.layer = LayerMask.NameToLayer("UI");
-            }
+            _previewSprite.Release();
+            _previewSprite = null;
+        }
+        _previewSprite = new AddressableHandle<Sprite>();
+        _previewSprite.Load("Sprite/Costume/" + catCostumePart + "/" +
+                            CostumeManager.GetInstance().GetCostumeName(catCostumePart, index, false));
+        if (_previewSprite.obj != null)
+        {
+            previewImage.gameObject.SetActive(true);
+            previewImage.sprite = _previewSprite.obj;
+        }
+        else
+        {
+            previewImage.gameObject.SetActive(false);
         }
         
-        //// UI 레이어로 변경
-        
-
-        // 보유중인지 변경
-        // TODO: 10/27 임시코드. 추후 서버에서 보유중인 코스튬 정보를 받아와 갱신 예정
-        SetSelectButtonType(OwningSelectButtonType.Owning);
     }
 }

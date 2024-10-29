@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
     public BaseStoryQuest storyQuestObject;
     public ChangeStageUI changeStageUI;
 
+    [SerializeField] private CostumeManager costumeManager;
+
     private void Awake()
     {
         if (Instance == null)
@@ -27,12 +29,10 @@ public class GameManager : MonoBehaviour
         // 시작 시 서버로부터 정보 받기
         Player.OnAwakeGetInitialDataFromServer();
 
-        Test2019180031Costume();
+        // CostumeManager.SetInstance 내에 해당 함수를 이렇게 작성한 이유를 메모
+        CostumeManager.SetInstance(costumeManager);
+
+        PlayerCostume.OnAwake_CallInGameManager();
     }
 
-    private void Test2019180031Costume()
-    {
-        SkinnedMeshRenderer mesh = catObject.GetComponentInChildren<SkinnedMeshRenderer>();
-        
-    }
 }
