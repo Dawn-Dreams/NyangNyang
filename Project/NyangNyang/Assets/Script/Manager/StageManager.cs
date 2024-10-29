@@ -293,6 +293,11 @@ public class StageManager : MonoBehaviour
         return currentStage;
     }
 
+    public int GetCurrentGate()
+    {
+        return currentGate;
+    }
+
     public void SetContinuousCombat(bool activeContinuousCombat)
     {
         Player.continuousCombat = activeContinuousCombat;

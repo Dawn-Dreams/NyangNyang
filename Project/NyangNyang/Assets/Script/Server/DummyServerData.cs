@@ -6,25 +6,17 @@ using System.Linq;
 using System.Numerics;
 using UnityEngine;
 
-public enum MonsterType
-{
-    A_Monster,
-    B_Monster,
-    C_Monster,
-    D_Monster,
-    E_Monster,
-    F_Monster,
-    G_Monster
-};
 public class MonsterData
-{  
-    public MonsterType monsterType;
+{
+    public int enemyCount;
+    public List<EnemyMonsterType> monsterTypes;
     public StatusLevelData monsterStatus;
     public EnemyDropData enemyDropData;
-
-    public MonsterData SetMonsterData(StatusLevelData status, EnemyDropData dropData, MonsterType type = MonsterType.A_Monster)
+    
+    public MonsterData SetMonsterData(StatusLevelData status, EnemyDropData dropData, List<EnemyMonsterType> types, int initialEnemyCount = 1)
     {
-        monsterType = type;
+        enemyCount = initialEnemyCount;
+        monsterTypes = new List<EnemyMonsterType>(types);
         monsterStatus = new StatusLevelData(status);
         enemyDropData = ScriptableObject.CreateInstance<EnemyDropData>().SetEnemyDropData(dropData);
         return this;
@@ -32,7 +24,7 @@ public class MonsterData
 
     public MonsterData SetMonsterData(MonsterData monsterData)
     {
-        SetMonsterData(monsterData.monsterStatus, monsterData.enemyDropData, monsterData.monsterType);
+        SetMonsterData(monsterData.monsterStatus, monsterData.enemyDropData, monsterData.monsterTypes, monsterData.enemyCount);
         return this;
     }
 
@@ -65,7 +57,10 @@ public class DummyServerData : MonoBehaviour
 
     protected static MonsterData[] enemyDatas = new MonsterData[]
     {
-        new MonsterData().SetMonsterData(new StatusLevelData(1, 1, 1,1,1,1,1,1), ScriptableObject.CreateInstance<EnemyDropData>().SetEnemyDropData(1000, 1000)),
+        // 임시 일반 몬스터 데이터
+        new MonsterData().SetMonsterData(new StatusLevelData(1, 1, 1,1,1,1,1,1), ScriptableObject.CreateInstance<EnemyDropData>().SetEnemyDropData(1000, 1000), new List<EnemyMonsterType>{EnemyMonsterType.StarFish, EnemyMonsterType.Octopus, EnemyMonsterType.Krake, EnemyMonsterType.Puffe,EnemyMonsterType.Shellfish}, 5),
+        // 임시 보스몬스터 데이터
+        new MonsterData().SetMonsterData(new StatusLevelData(1, 1, 1,1,1,1,1,1), ScriptableObject.CreateInstance<EnemyDropData>().SetEnemyDropData(1000, 1000), new List<EnemyMonsterType>{EnemyMonsterType.Octopus}),
     };
 
     // 유저 재화(골드+보석+티켓) 데이터
@@ -366,13 +361,16 @@ public class DummyServerData : MonoBehaviour
         clearStage = playerClearStageData[userID, 1];
     }
 
-    public static MonsterData GetEnemyData(int themeNumber, int stageNumber, int maxStage)
+    public static MonsterData GetEnemyData(int themeNumber, int stageNumber, int maxStage, int currentGate, int maxGate)
     {
-        MonsterData firstStageMonsterData = enemyDatas[0];
+        // TODO 10/30 임시, 일반몬스터 - 0 , 보스몬스터 - 1
+        int monsterID = currentGate == maxGate? 1 : 0;
+        
+        MonsterData firstStageMonsterData = enemyDatas[monsterID];
         //TODO: 현재는 더미 서버라서 한개의 개체 정보만 저장했으나 추후엔 제안한 DB 구조로 테마-스테이지 정보에 맞춰 제공받기
-        MonsterType monsterType = (MonsterType)((themeNumber - 1) / 5 % 5);
+        //EnemyMonsterType monsterType = (MonsterType)((themeNumber - 1) / 5 % 5);
         MonsterData returnData = new MonsterData().SetMonsterData(firstStageMonsterData);
-        returnData.monsterType = monsterType;
+        //returnData.monsterType = monsterType;
         // 스테이지마다 n(default: 1.3) 추가
         // ex) 1-1 : 1 / 1-2 : 1 + n / 1-3 : 1 + 2n / ...
         // 보스 몬스터의 경우 자체적으로 2배 추가
