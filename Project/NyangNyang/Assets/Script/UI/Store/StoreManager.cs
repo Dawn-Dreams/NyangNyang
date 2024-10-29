@@ -24,9 +24,6 @@ public class StoreManager : MonoBehaviour
 
     public void OnClickedWeaponGachaNavButton()
     {
-
-
-        NetworkManager.GetStatusManager().UserRegister();
         Debug.Log("¹«±â »Ì±â");
         if (curPanel != 1)
         {

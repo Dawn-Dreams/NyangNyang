@@ -20,9 +20,9 @@ public class ChangeNicknameController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ResponsChangeNickname> Create([FromBody] RequestChangeNickname req)
+    public async Task<ResChangeNickname> Create([FromBody] ReqChangeNickname req)
     {
-        ResponsChangeNickname res = new ResponsChangeNickname();
+        ResChangeNickname res = new ResChangeNickname();
 
    
         res.result = await _userService.ChanegeUserNickname(req.uid,

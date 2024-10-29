@@ -29,11 +29,11 @@ public class ResponseUpdateScore
     public ErrorCode result { get; set; }
 
 }
-public class ResponsChangeNickname
+public class ResChangeNickname
 {
     public ErrorCode result { get; set; }
 }
-public class RequestChangeNickname
+public class ReqChangeNickname
 {
     [Required]
     public int uid { get; set; }

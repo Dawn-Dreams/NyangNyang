@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace APIGameServer.DTO;
 
-public class ReqEquipGacha
+public class ReqWeaponGacha
 {
     [Required]
     public int uid { get; set; }
 }
-public class ResEquipGacha
+public class ResWeaponGacha
 {
     [Required]
     public ErrorCode result { get; set; }

@@ -73,6 +73,35 @@ public class NetworkManager : MonoBehaviour
             callback.Invoke(uwr);
         }
     }
+    public void ReqUserRegist()
+    {
+        Debug.Log("UserRegister");
+
+        ReqRegist req = new ReqRegist();
+        StartCoroutine(CoSendNetRequest("Regist", req, GetUserId));
+
+
+    }
+
+    public void UserLogin()
+    {
+        Debug.Log("User Login");
+        
+        //api서버에서 로그인 관련 정리되면 추가
+
+        //ReqRegist req = new ReqRegist();
+        //StartCoroutine(CoSendNetRequest("Regist", req, GetUserId));
+
+    }
+
+    public void ChangeNickname(int uid, string oldNickname, string newNickname)
+    {
+        ReqChangeNickname req = new ReqChangeNickname(uid, oldNickname, newNickname);
+
+        StartCoroutine(CoSendNetRequest("ChangeNickname", req,
+            (result) => SetNewNickname(result, newNickname)));
+
+    }
 
     //DB에 플레이어 정보 업데이트시 사용하는 함수 
     public void UpdatePlayerStatus(int uid, int hp, int mp, int attack_power, int def,
@@ -123,15 +152,7 @@ public class NetworkManager : MonoBehaviour
         StartCoroutine(CoSendNetRequest("UpdatePlayerStatLv", req, UpdateStats));
     }
     
-    public void UserRegister()
-    {
-        Debug.Log("UserRegister");
 
-        ResquestRegist req = new ResquestRegist();
-        StartCoroutine(CoSendNetRequest("Regist", req, GetUserId));
-
-
-    }
     public void UpdatePlayerScore(int uid, int score)
     {
         Debug.Log("Update Player Score To server");
@@ -155,7 +176,7 @@ public class NetworkManager : MonoBehaviour
 
     public void EquipmentGacha(int uid)
     {
-        ReqEquipGacha req = new ReqEquipGacha { uid = uid };
+        ReqWeaponGacha req = new ReqWeaponGacha { uid = uid };
 
         Debug.Log("GachaEquipmentController");
 
@@ -174,7 +195,7 @@ public class NetworkManager : MonoBehaviour
 
     void GetUserId(UnityWebRequest uwr)
     {
-        var res = JsonUtility.FromJson<ResponseRegist>(uwr.downloadHandler.text);
+        var res = JsonUtility.FromJson<ResRegist>(uwr.downloadHandler.text);
 
         if (res.result != (int)ErrorCode.None)
         {
@@ -184,7 +205,7 @@ public class NetworkManager : MonoBehaviour
         {
             Debug.Log(string.Format("Register Success User ID {0}", res.uid));
 
-            Player.SetUserId(res.uid);
+            //Player.SetUserId(res.uid);
         }
 
     }
@@ -223,9 +244,19 @@ public class NetworkManager : MonoBehaviour
 
     }
 
+    void SetNewNickname(UnityWebRequest uwr, string nichname)
+    {
+        var res = JsonUtility.FromJson<ResChangeNickname>(uwr.downloadHandler.text);
+        if(res.result!=ErrorCode.None)
+        {
+            //닉네임변경해줘야한다.
+            nichname = nichname+"변경해부면됨~~";
+        }
+    }
+
     void GetEquipmentGacha(UnityWebRequest uwr)
     {
-        var res = JsonUtility.FromJson<ResEquipGacha>(uwr.downloadHandler.text);
+        var res = JsonUtility.FromJson<ResWeaponGacha>(uwr.downloadHandler.text);
 
         if (res.result != ErrorCode.None)
         {

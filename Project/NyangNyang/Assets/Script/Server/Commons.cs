@@ -5,30 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-public enum ErrorCode : int
-{
-    None = 0,
-
-    //서버 초기화 엥러
-    FailRedisInit = 1,
-    FailConnectDB = 2,
-
-
-    //DB관련 에러
-    FailSaveUserInfoTable = 1001,
-    FailSavePlayerTable = 1002,
-    FailSaveInventoryTable = 1003,
-    FailUpdatePlayerTable = 1004,
-
-    //회원가입 및 로그인 관련 에러코드
-    FailRegistByUid = 2001,
-
-}
-
-
-//-------------------------------------------------
-//DB에서 긁어올 내용들
-
 [System.Serializable]
 public class ReqUpdateStatusData
 {
@@ -60,7 +36,6 @@ public class ReqUpdateStatusLvData
 }
 
 [System.Serializable]
-
 public class mail
 {
     public int uid;
@@ -101,6 +76,21 @@ public class mail
 //-------------------------------------------------
 
 
+//Req -서버한테 요청할 요청패킷)
+//Res - 서버한테 받은 응답패킷)
+
+//랭킹관련 패킷 
+[System.Serializable]
+public class ResUpdateDbData
+{
+    public ErrorCode result;
+}
+[System.Serializable]
+public class ResponseRanking
+{
+    public ErrorCode result;
+    public List<RankingData> rankingData;
+}
 
 [System.Serializable]
 public class RankingData
@@ -118,25 +108,6 @@ public class RankingData
     }
 }
 
-
-[System.Serializable]
-public class ResponseRanking
-{
-    public ErrorCode result;
-    public List<RankingData> rankingData;
-}
-
-
-[System.Serializable]
-public class ResUpdateDbData
-{
-    public ErrorCode result;
-}
-//-------------------------------------------------
-
-
-
-//-------------------------------------------------
 //스코어 업데이트
 [System.Serializable]
 public class RequestUpdateScore
@@ -152,24 +123,44 @@ public class ResponseUpdateScore
 
 }
 
+//회원가입 요청 -> uid 처음발급받을때
+public class ReqRegist { }
 [System.Serializable]
-public class ResponseRegist
+public class ResRegist
 {
     public ErrorCode result;
     public int uid;
 }
-public class ResquestRegist
-{
-    
-}
-//gacha
+
+//닉네임변경
 [System.Serializable]
-public class ReqEquipGacha
+public class ResChangeNickname
+{
+    public ErrorCode result;
+}
+[System.Serializable]
+public class ReqChangeNickname
+{
+    public int uid;
+    public string oldNickname;
+    public string newNickname;
+
+    public ReqChangeNickname(int uid, string oldNickname, string newNickname)
+    {
+        this.uid = uid;
+        this.oldNickname = oldNickname;
+        this.newNickname = newNickname;
+    }
+}
+
+//gacha 관련 패킷
+[System.Serializable]
+public class ReqWeaponGacha
 {
     public int uid;
 }
 [System.Serializable]
-public class ResEquipGacha
+public class ResWeaponGacha
 {
     public ErrorCode result;
     public int itemId;
