@@ -152,7 +152,16 @@ public class ResponseUpdateScore
 
 }
 
-
+[System.Serializable]
+public class ResponseRegist
+{
+    public ErrorCode result;
+    public int uid;
+}
+public class ResquestRegist
+{
+    
+}
 //gacha
 [System.Serializable]
 public class ReqEquipGacha

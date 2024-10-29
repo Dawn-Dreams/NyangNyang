@@ -81,7 +81,7 @@ public class PlayerBar : MonoBehaviour
     void OnClickMenuButton()
     {
         Debug.Log("Menu Button Click");
-        //NetworkManager.GetInstance().TestFunc();
+
 
         /*
          * * GetInstance는 NetworkManager 내에

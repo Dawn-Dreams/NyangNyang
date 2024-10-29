@@ -50,13 +50,6 @@ public class Dreams_UserInfo : IDreams_UserInfo
 
     public async Task<int> UpdateRecentLoginCnt(int uid)
     {
-        //return await _queryFactory.StatementAsync($"UPDATE user_info " +
-        //                                      $"SET recent_login_dt = '{DateTime.Now:yyyy-MM-dd-HH:mm:ss}', " +
-        //                                      $"attendence_cnt = CASE " +
-        //                                      $"WHEN recent_login_dt < '{DateTime.Now:yyyy-MM-dd-HH:mm:ss}' " +
-        //                                            $"THEN attendence_cnt+1 " +
-        //                                            $"ELSE attendence_cnt END " +
-        //                                      $"WHERE uid = {uid}");
         return await _queryFactory.StatementAsync($"UPDATE user_info " +
                                         $"SET attendence_cnt = CASE " +
                                         $"WHEN recent_login_dt < '{DateTime.Now:yyyy-MM-dd-HH:mm:ss}' " +

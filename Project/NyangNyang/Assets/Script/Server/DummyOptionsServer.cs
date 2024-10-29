@@ -208,22 +208,7 @@ public class FriendData
         this.friendName = name;
         this.friendLevel = level;
     }
-}
-
-//[System.Serializable]
-//public class RankingData
-//{
-//    public int uid;
-//    public string nickname;
-//    public int score;
-
-//    public RankingData(int uid, string name, int score)
-//    {
-//        this.uid = uid;
-//        this.nickname = name;
-//        this.score = score;
-//    }
-//}
+}     
 
 [System.Serializable]
 public class BoardData

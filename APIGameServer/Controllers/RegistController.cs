@@ -53,14 +53,14 @@ public class RegistController : ControllerBase
         }
 
         var temp = await _playerServiece.CreatePlayerTables(uid);
-        if (temp == 0)
+        if (temp != ErrorCode.None)
         {
             response.result = ErrorCode.FailSavePlayerTable;
             return response;
         }
 
         response.result = ErrorCode.None;
-
+        Console.WriteLine("로그인 완료 {0}", uid);
         return response;
 
     }

@@ -22,23 +22,28 @@ public class NetworkManager : MonoBehaviour
     
     private List<string> _mailTitle = new List<string>();
 
-    public static NetworkManager GetStatusManager() { return instance; }
+    public static NetworkManager GetStatusManager() 
+    {
+        return instance; 
+    }
     string _baseUrl = "http://127.0.0.1:11500";
 
+    
     private void Start()
     {
         if (instance == null)
         {
             instance = gameObject.AddComponent<NetworkManager>();
 
-            _mailTitle[(int)MailType.Event] = "이벤트 우편";
-            _mailTitle[(int)MailType.Reward] = "보상 우편";
-            _mailTitle[(int)MailType.Friend] = "친구신청";
-
+            _mailTitle.Add("이벤트 우편");
+            _mailTitle.Add("보상 우편");
+            _mailTitle.Add("친구 신청");
         }
 
         Debug.Log("networkd instatnce  초기화..");
     }
+
+
     IEnumerator CoSendNetRequest(string url, object obj, Action<UnityWebRequest> callback)
     {
         string sendUrl = $"{_baseUrl}/{url}";
@@ -117,7 +122,16 @@ public class NetworkManager : MonoBehaviour
 
         StartCoroutine(CoSendNetRequest("UpdatePlayerStatLv", req, UpdateStats));
     }
+    
+    public void UserRegister()
+    {
+        Debug.Log("UserRegister");
 
+        ResquestRegist req = new ResquestRegist();
+        StartCoroutine(CoSendNetRequest("Regist", req, GetUserId));
+
+
+    }
     public void UpdatePlayerScore(int uid, int score)
     {
         Debug.Log("Update Player Score To server");
@@ -158,6 +172,22 @@ public class NetworkManager : MonoBehaviour
 
     }
 
+    void GetUserId(UnityWebRequest uwr)
+    {
+        var res = JsonUtility.FromJson<ResponseRegist>(uwr.downloadHandler.text);
+
+        if (res.result != (int)ErrorCode.None)
+        {
+            Debug.Log("Failed get register data");
+        }
+        else
+        {
+            Debug.Log(string.Format("Register Success User ID {0}", res.uid));
+
+            Player.SetUserId(res.uid);
+        }
+
+    }
     void SettingRankData(UnityWebRequest uwr)
     {
         //랭킹리스트 받은거 사용하는 함수

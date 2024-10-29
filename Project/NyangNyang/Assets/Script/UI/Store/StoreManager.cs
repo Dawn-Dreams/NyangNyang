@@ -11,6 +11,7 @@ public class StoreManager : MonoBehaviour
 
     public void OnClickedSkillGachaNavButton()
     {
+
         Debug.Log("스킬 뽑기");
 
         if ( curPanel != 0)
@@ -23,6 +24,9 @@ public class StoreManager : MonoBehaviour
 
     public void OnClickedWeaponGachaNavButton()
     {
+
+
+        NetworkManager.GetStatusManager().UserRegister();
         Debug.Log("무기 뽑기");
         if (curPanel != 1)
         {
@@ -34,6 +38,7 @@ public class StoreManager : MonoBehaviour
 
     public void OnClickedGoldNavButton()
     {
+
         Debug.Log("재화 상점");
         if (curPanel != 2)
         {
