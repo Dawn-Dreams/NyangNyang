@@ -80,7 +80,7 @@ crashlytics-build.properties
 /[Pp]ackages/com.rito.play-mode-saver
 
 # Mooium 관련 패키지 파일 추적 제외
-Project/NyangNyang/Packages/com.mooium.service/
+Project/NyangNyang/Packages/com.modoium.service/
 
 # Mooium 폴더 내 모든 파일 포함
-!Project/NyangNyang/Packages/com.mooium.service/**
+!Project/NyangNyang/Packages/com.modoium.service/**
