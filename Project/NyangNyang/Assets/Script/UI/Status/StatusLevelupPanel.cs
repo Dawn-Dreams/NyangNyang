@@ -9,7 +9,17 @@ using UnityEngine.UI;
 
 public class StatusLevelupPanel : MonoBehaviour
 {
-    [SerializeField]
+    // 스탯 별 레벨에 따른 추가되는 골드에 대한 dictionary
+    private static Dictionary<StatusLevelType, int> _statusLevelUpCostDict = new Dictionary<StatusLevelType, int>
+    {
+        { StatusLevelType.HP, 100 }, { StatusLevelType.MP, 100 },
+        { StatusLevelType.STR, 100 }, { StatusLevelType.DEF, 100 },
+        { StatusLevelType.HEAL_HP, 300 }, { StatusLevelType.HEAL_MP, 300 },
+        { StatusLevelType.CRIT, 50000 }, { StatusLevelType.ATTACK_SPEED, 10000 },
+        { StatusLevelType.GOLD, 100000 }, { StatusLevelType.EXP, 100000 }
+    };
+
+[SerializeField]
     private StatusLevelType statusLevelType;
     [SerializeField] 
     private StatusLevelupData statusData;
@@ -24,18 +34,13 @@ public class StatusLevelupPanel : MonoBehaviour
     [SerializeField] 
     private TextMeshProUGUI goldCostText;
 
-    private int startGoldCost;
-    private int goldCostAddValue;
+    private int startGoldCost = 100;
 
     // 레벨업 배수 버튼
     public int levelUpMultiplyValue = 1;
 
     public void Start()
     {
-        // 서버로부터 비용 정보 받기
-        startGoldCost = DummyServerData.GetStartGoldCost();
-        goldCostAddValue = DummyServerData.GetGoldCostAddValueFromType(statusLevelType);
-
         Player.OnGoldChange += SetGoldCostText;
         Player.OnStatusLevelChange += Initialize;
         Initialize(statusLevelType);
@@ -66,7 +71,7 @@ public class StatusLevelupPanel : MonoBehaviour
     {
         // n ~ m 레벨 계산 ((n부터 m까지의 갯수) * (n+m) / 2 )
         BigInteger levelUpValue = (levelUpMultiplyValue) * (currentLevel + (currentLevel + levelUpMultiplyValue)) / 2;
-        BigInteger goldCost = goldCostAddValue * (levelUpValue);
+        BigInteger goldCost = _statusLevelUpCostDict[statusLevelType] * (levelUpValue);
 
         return goldCost;
     }
@@ -79,7 +84,7 @@ public class StatusLevelupPanel : MonoBehaviour
     void SetGoldCostText(BigInteger playerGold)
     {
         BigInteger currentStatusLevel = Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType];
-        BigInteger goldCost = CalculateGoldCost(startGoldCost,goldCostAddValue,currentStatusLevel);
+        BigInteger goldCost = CalculateGoldCost(startGoldCost, _statusLevelUpCostDict[statusLevelType], currentStatusLevel);
         if (playerGold >= goldCost)
         {
             goldCostText.color = new Color(0, 0, 255);
@@ -99,12 +104,27 @@ public class StatusLevelupPanel : MonoBehaviour
     void LevelUpStatus()
     {
         BigInteger currentStatusLevel = Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType];
-        // TODO: 서버에서 작동되도록 구현하기
-        if (DummyServerData.UserStatusLevelUp(Player.GetUserID(), statusLevelType, currentStatusLevel, levelUpMultiplyValue))
+        BigInteger goldCost = CalculateGoldCost(statusLevelType, currentStatusLevel, levelUpMultiplyValue);
+        if (Player.Gold >= goldCost)
         {
-            // TODO: 서버에서 성공 패킷을 받을 경우 실행하기
-            LevelUpSuccess();
+            Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] += levelUpMultiplyValue;
+
+            Player.Gold -= goldCost;
+
+            DummyServerData.UserStatusLevelUp(Player.GetUserID(), statusLevelType, currentStatusLevel,
+                levelUpMultiplyValue);
+
+            Player.UpdatePlayerStatusLevelByType(statusLevelType, Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType]);
         }
+    }
+    public static BigInteger CalculateGoldCost(StatusLevelType type, BigInteger currentLevel, int levelUpMultiplyValue)
+    {
+        int goldAddValue = _statusLevelUpCostDict[type];
+        // n ~ m 레벨 계산 ((n부터 m까지의 갯수) * (n+m) / 2 )
+        BigInteger levelUpValue = (levelUpMultiplyValue) * (currentLevel + (currentLevel + levelUpMultiplyValue)) / 2;
+        BigInteger goldCost = goldAddValue * (levelUpValue);
+
+        return goldCost;
     }
 
     // TODO: 서버에서 레벨업 성공 했을 때 받은 패킷에서 실행시킬 함수
@@ -112,8 +132,6 @@ public class StatusLevelupPanel : MonoBehaviour
     {
         Player.GetGoldDataFromServer();
 
-        BigInteger newLevelValue = DummyServerData.GetUserStatusLevelFromType(Player.GetUserID(), statusLevelType);
-        Player.UpdatePlayerStatusLevelByType(statusLevelType, newLevelValue);
     }
 
     public void ChangeMultiplyValue(int newValue)
@@ -132,6 +150,6 @@ public class StatusLevelupPanel : MonoBehaviour
 
         currentLevelText.text = 5.ToString();
 
-        goldCostText.text = DummyServerData.GetStartGoldCost().ToString();
+        goldCostText.text = "100";
     }
 }

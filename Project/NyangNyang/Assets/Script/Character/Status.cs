@@ -10,7 +10,7 @@ public enum StatusLevelType
 {
     HP = 0, MP, STR, DEF, HEAL_HP, HEAL_MP, CRIT, ATTACK_SPEED, GOLD, EXP, COUNT
 }
-
+[Serializable]
 public class StatusLevelData
 {
     public BigInteger[] statusLevels = new BigInteger[(int)StatusLevelType.COUNT];

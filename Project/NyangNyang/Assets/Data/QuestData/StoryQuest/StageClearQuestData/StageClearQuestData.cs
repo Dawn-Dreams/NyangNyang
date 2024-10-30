@@ -61,14 +61,15 @@ public class StageClearQuestData : QuestDataBase
         Player.OnStageClear -= GetDataFromServer;
     }
 
+    // TODO 10.30 해당 서버 내에 델리게이트를 삭제함으로서 클라에서 관리해야하므로 추후 확인.
     public override void BindDelegateOnServer()
     {
-        DummyServerData.OnUserStageClear += DummyStoryQuestServer.SendStageClearQuestDataToUser;
+        //DummyServerData.OnUserStageClear += DummyStoryQuestServer.SendStageClearQuestDataToUser;
     }
 
     public override void UnBindDelegateOnServer()
     {
-        DummyServerData.OnUserStageClear -= DummyStoryQuestServer.SendStageClearQuestDataToUser;
+        //DummyServerData.OnUserStageClear -= DummyStoryQuestServer.SendStageClearQuestDataToUser;
     }
 
 

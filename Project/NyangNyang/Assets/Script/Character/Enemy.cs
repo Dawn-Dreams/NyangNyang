@@ -118,7 +118,6 @@ public class Enemy : Character
 {
     public GameObject floatingDamage;
     [SerializeField] private StageManager stageManager;
-    protected EnemyDropData DropData = null;
 
     [SerializeField] private GameObject[] dummyEnemyObj;
     private List<DummyEnemy> _dummyEnemies;
@@ -134,7 +133,7 @@ public class Enemy : Character
     private Character catObject;
 
     // 몬스터 정보에 대한 변수
-    private MonsterData monsterData;
+    public MonsterData monsterData;
 
     protected override void Awake()
     {
@@ -151,9 +150,6 @@ public class Enemy : Character
         int currentStage = GameManager.GetInstance().stageManager.GetCurrentStage();
         int currentGate = GameManager.GetInstance().stageManager.GetCurrentGate();
         int maxGate = GameManager.GetInstance().stageManager.maxGateCount;
-        monsterData = new MonsterData().SetMonsterData(DummyServerData.GetEnemyData(currentTheme, currentStage,
-            GameManager.GetInstance().stageManager.maxStageCount,currentGate, maxGate));
-        DropData = monsterData.enemyDropData;
 
         SetNumberOfEnemyInGroup(monsterData.enemyCount);
         status = new Status();
@@ -164,7 +160,7 @@ public class Enemy : Character
         // stage manager 
         if (stageManager == null)
         {
-            stageManager = FindObjectOfType<StageManager>();
+            stageManager = GameManager.GetInstance().stageManager;
         }
 
         // ~~enemy drop data 받기~~  몬스터 정보 받기에서 진행
@@ -318,9 +314,9 @@ public class Enemy : Character
 
     protected override void Death()
     {
-        if (DropData)
+        if (monsterData.enemyDropData)
         {
-            DropData.GiveItemToPlayer();
+            monsterData.enemyDropData.GiveItemToPlayer();
         }
 
         if (stageManager)

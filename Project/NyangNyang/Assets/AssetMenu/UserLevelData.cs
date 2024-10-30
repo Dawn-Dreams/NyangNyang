@@ -15,9 +15,7 @@ public class UserLevelData : ScriptableObject
     [SerializeField] private static GameObject _levelUpIconObject;
 
     public static BigInteger CalculateExp(int userCurrentLevel)
-    {
-        addExpPerLevel = DummyServerData.GetAddExpPerLevelValue();
-
+    { 
         return userCurrentLevel * addExpPerLevel;
     }
 
