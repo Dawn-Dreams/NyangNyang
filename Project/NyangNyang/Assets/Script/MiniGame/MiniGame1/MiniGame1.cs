@@ -304,8 +304,8 @@ public class MiniGame1 : MonoBehaviour
         {
             if (tile != null) // null 검사
             {
-                grid[tile.x, tile.y] = null;  // 그리드에서 타일 제거
                 tile.SetMerged();             // 타일의 삭제 효과 처리 (타일 비활성화 등)
+                grid[tile.x, tile.y] = null;  // 그리드에서 타일 제거
             }
         }
 

@@ -15,10 +15,12 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUp
 
     private Image image;  // 타일의 이미지 컴포넌트
     private Vector2 startDragPosition;
+    private Animator animator;
 
     private void Awake()
     {
         image = GetComponent<Image>();
+        animator = GetComponent<Animator>();
         transform.localScale = Vector3.one;
 
         if (GetComponent<Collider2D>() == null)
@@ -96,28 +98,45 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUp
         if (!isMerged)
         {
             isMerged = true;
+            if (animator != null)
+                animator.enabled = false; // 애니메이터 비활성화
+
             StartCoroutine(MergeEffect());
         }
     }
 
+    // 병합 시 애니메이션 + 삭제 코루틴
     public IEnumerator MergeEffect()
     {
-        float duration = 0.5f;
-        float elapsedTime = 0f;
-        Vector3 originalScale = transform.localScale;
 
-        while (elapsedTime < duration)
+        float growDuration = 0.2f;
+        float shrinkDuration = 0.3f;
+        float elapsedTime = 0f;
+
+        Vector3 originalScale = gameObject.transform.localScale;
+        Vector3 expandedScale = originalScale * 1.2f;
+
+        // 타일이 살짝 커지는 효과
+        while (elapsedTime < growDuration)
         {
-            float t = elapsedTime / duration;
-            transform.localScale = Vector3.Lerp(originalScale, Vector3.zero, t);
-            image.color = Color.Lerp(tileType.tileColor, Color.clear, t);
+            gameObject.transform.localScale = Vector3.Lerp(originalScale, expandedScale, elapsedTime / growDuration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        transform.localScale = Vector3.zero; // 크기를 완전히 줄임
-        gameObject.SetActive(false); // 애니메이션 완료 후 타일 비활성화
-    }
 
+        // 빠르게 줄어드는 효과
+        elapsedTime = 0f;
+        while (elapsedTime < shrinkDuration)
+        {
+            gameObject.transform.localScale = Vector3.Lerp(expandedScale, Vector3.zero, elapsedTime / shrinkDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // 애니메이션 완료 후 타일 비활성화
+        gameObject.transform.localScale = Vector3.zero;
+        gameObject.SetActive(false);
+    }
 }
 
 public enum Direction
