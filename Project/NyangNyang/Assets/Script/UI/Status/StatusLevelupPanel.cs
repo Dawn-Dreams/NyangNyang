@@ -103,7 +103,7 @@ public class StatusLevelupPanel : MonoBehaviour
 
     void LevelUpStatus()
     {
-        BigInteger currentStatusLevel = Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType];
+        int currentStatusLevel = Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType];
         BigInteger goldCost = CalculateGoldCost(statusLevelType, currentStatusLevel, levelUpMultiplyValue);
         if (Player.Gold >= goldCost)
         {
@@ -125,13 +125,6 @@ public class StatusLevelupPanel : MonoBehaviour
         BigInteger goldCost = goldAddValue * (levelUpValue);
 
         return goldCost;
-    }
-
-    // TODO: 서버에서 레벨업 성공 했을 때 받은 패킷에서 실행시킬 함수
-    void LevelUpSuccess()
-    {
-        Player.GetGoldDataFromServer();
-
     }
 
     public void ChangeMultiplyValue(int newValue)

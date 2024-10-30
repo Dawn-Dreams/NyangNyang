@@ -137,6 +137,12 @@ public class Enemy : Character
 
     protected override void Awake()
     {
+        // stage manager 
+        if (stageManager == null)
+        {
+            stageManager = GameManager.GetInstance().stageManager;
+        }
+
         DummyEnemy.SetFloatingDamage(floatingDamage);
         _dummyEnemies = new List<DummyEnemy>();
 
@@ -151,17 +157,11 @@ public class Enemy : Character
         int currentGate = GameManager.GetInstance().stageManager.GetCurrentGate();
         int maxGate = GameManager.GetInstance().stageManager.maxGateCount;
 
-        SetNumberOfEnemyInGroup(monsterData.enemyCount);
-        status = new Status();
-        status.SetStatusLevelData(monsterData.monsterStatus);
+        status = new Status(monsterData.monsterStatus);
 
         base.Awake();
         
-        // stage manager 
-        if (stageManager == null)
-        {
-            stageManager = GameManager.GetInstance().stageManager;
-        }
+        SetNumberOfEnemyInGroup(monsterData.enemyCount);
 
         // ~~enemy drop data 받기~~  몬스터 정보 받기에서 진행
         //if (DropData == null)

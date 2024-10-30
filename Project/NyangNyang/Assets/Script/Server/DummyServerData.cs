@@ -19,9 +19,6 @@ public class DummyServerData : MonoBehaviour
     {
         new StatusLevelData(0,0,0,0,0),
         new StatusLevelData(10,0,5,0),
-        new StatusLevelData(),
-        new StatusLevelData(),
-        new StatusLevelData(),
     };
 
     // MonsterData 에서 관리
@@ -107,7 +104,7 @@ public class DummyServerData : MonoBehaviour
         return -1;
     }
 
-    public static bool UserStatusLevelUp(int userID,StatusLevelType type, BigInteger newLevel, BigInteger currentGold)
+    public static bool UserStatusLevelUp(int userID,StatusLevelType type, int newLevel, BigInteger currentGold)
     {
         // 골드 정보 및 스탯 레벨 정보 갱신
         // 클라의 정보는 클라에서 갱신
@@ -142,14 +139,14 @@ public class DummyServerData : MonoBehaviour
 
 
 
-    public static BigInteger GetUserGoldData(int userId)
+    public static CurrencyData GetUserGoldData(int userId)
     {
         CurrencyData userData = GetUserCurrencyData(userId);
         if (userData == null)
         {
             Debug.Log("Error - DummyServerData.GetUserGoldData");
         }
-        return userData.gold;
+        return userData;
     }
 
     public static void UserLevelUp(int userID, int levelUpCount, BigInteger addExp)
@@ -180,7 +177,7 @@ public class DummyServerData : MonoBehaviour
         if (userCurrencyData)
         {
             userCurrencyData.gold += addGoldValue;
-            Player.GetGoldDataFromServer();
+            Player.GetCurrencyDataFromServer();
             return true;
         }
 

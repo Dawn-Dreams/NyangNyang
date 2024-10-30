@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Numerics;
+using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -60,7 +61,7 @@ public class Player : MonoBehaviour
 
     // 한 스테이지 내에서 반복 전투를 진행하는 것에 대한 변수
     public static bool continuousCombat = false;
-
+    // 최대 클리어 스테이지 정보
     public static int[] playerHighestClearStageData = new int[2];
 
    
@@ -93,27 +94,20 @@ public class Player : MonoBehaviour
         }
     }
 
+    // 게임 매니저 내에서 실행
     public static void OnAwakeGetInitialDataFromServer()
     {
         // 서버로부터 user id 받기
         userID = 0;
         if (playerStatus == null)
         {
-            playerStatus = new Status();
-            playerStatus.GetStatusFromServer(userID);
+            playerStatus = new Status(DummyServerData.GetUserStatusLevelData(userID));
             // 플레이어는 디폴트 스탯 버프
             playerStatus.BuffPlayerStatusDefaultValue(5);
         }
-        if (playerCurrency == null)
-        {
-            playerCurrency = ScriptableObject.CreateInstance<CurrencyData>().SetCurrencyData(DummyServerData.GetUserCurrencyData(userID));
-        }
-        if (playerLevelData == null)
-        {
-            GetExpDataFromServer();
-        }
-
-
+        GetCurrencyDataFromServer();
+        GetExpDataFromServer();
+        
         // 서버로부터 받기
         PlayerName = "냥냥이";
 
@@ -146,11 +140,6 @@ public class Player : MonoBehaviour
             // 다이아 지급
             Diamond += 100;
         }
-
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            GameManager.GetInstance().stageManager.GoToSpecificStage(20,3);
-        }
     }
 
     public static int GetUserID()
@@ -158,9 +147,15 @@ public class Player : MonoBehaviour
         return userID;
     }
 
-    public static void GetGoldDataFromServer()
+    public static void GetCurrencyDataFromServer()
     {
-        Gold = DummyServerData.GetUserGoldData(userID);
+        if (playerCurrency == null)
+        {
+            playerCurrency = ScriptableObject.CreateInstance<CurrencyData>();
+        }
+        CurrencyData data = DummyServerData.GetUserGoldData(userID);
+        Gold = data.gold;
+        Diamond = data.diamond;
     }
 
     public static void GetExpDataFromServer()
@@ -207,7 +202,7 @@ public class Player : MonoBehaviour
             OnTicketChange(playerCurrency.ticket);
     }
 
-    public static void UpdatePlayerStatusLevelByType(StatusLevelType type, BigInteger newValue)
+    public static void UpdatePlayerStatusLevelByType(StatusLevelType type, int newValue)
     {
         playerStatus.UpdateStatusLevelByType(type, newValue);
         if (OnStatusLevelChange != null)
