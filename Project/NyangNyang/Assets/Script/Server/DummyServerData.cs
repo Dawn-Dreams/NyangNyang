@@ -14,7 +14,7 @@ public class DummyServerData : MonoBehaviour
     // ===============
     // 데이터 시작
 
-    // 유저 스탯 레벨 데이터
+    // 각 유저 스탯 레벨 데이터
     protected static StatusLevelData[] usersStatusLevelData = new StatusLevelData[]
     {
         new StatusLevelData(0,0,0,0,0),
@@ -37,7 +37,7 @@ public class DummyServerData : MonoBehaviour
     //    // 임시 일반 몬스터 데이터
     //    };
 
-    // 유저 재화(골드+보석+티켓) 데이터
+    // 각 유저 재화(골드+보석+티켓) 데이터
     protected static CurrencyData[] usersCurrencyData = new CurrencyData[]
     {
         ScriptableObject.CreateInstance<CurrencyData>().SetCurrencyData(1_000_000_000,3,new int[] {5,5,5}),
@@ -57,25 +57,10 @@ public class DummyServerData : MonoBehaviour
         ScriptableObject.CreateInstance<UserLevelData>(),
     };
 
-    // 스텟 레벨업 계산식 데이터
-    protected static int statusStartGoldCost = 100;
-    protected static int[] statusGoldCostAddValue = new int[]
-    {
-        // StatusLevelType enum
-        // HP, MP, STR, DEF, HEAL_HP, HEAL_MP, CRIT, ATTACK_SPEED, GOLD, EXP
-        100, 100, 100, 100, 300, 300, 50000, 10000, 100000,100000
-    };
-    // 경험치 레벨업 계산식 데이터
-    protected static int addExpPerLevel = 500;
+   
 
-    protected static EnemyDropData[] enemyDropData = new EnemyDropData[]
-    {
-        ScriptableObject.CreateInstance<EnemyDropData>().SetEnemyDropData(1_000_000, 777_777),
-        ScriptableObject.CreateInstance<EnemyDropData>(),
-        ScriptableObject.CreateInstance<EnemyDropData>()
-    };
 
-    // 스테이지 테마와 스테이지 정보만 관리
+    // 각 유저의 클리어 스테이지 정보 // 스테이지 테마와 스테이지 정보만 관리
     protected static int[,] playerClearStageData = new int[,]
     {
         { 1,0 },        // 0번 유저
@@ -83,17 +68,6 @@ public class DummyServerData : MonoBehaviour
     };
 
     // 데이터 종료
-    // ================== 
-    // 델리게이트 시작
-
-    public delegate void OnUserGoldSpendingDelegate(int userID,  BigInteger spendingAmount);
-    public static OnUserGoldSpendingDelegate OnUserGoldSpending;
-    public delegate void OnUserStatusLevelUpDelegate(int userID, StatusLevelType type);
-    public static OnUserStatusLevelUpDelegate OnUserStatusLevelUp;
-    public delegate void OnUserStageClearDelegate(int userID);
-    public static OnUserStageClearDelegate OnUserStageClear;
-
-    // 델리게이트 종료
     // ==================
     // 함수 시작
 
@@ -133,43 +107,15 @@ public class DummyServerData : MonoBehaviour
         return -1;
     }
 
-    public static int GetStartGoldCost()
+    public static bool UserStatusLevelUp(int userID,StatusLevelType type, BigInteger newLevel, BigInteger currentGold)
     {
-        return statusStartGoldCost;
-    }
-
-    public static int GetGoldCostAddValueFromType(StatusLevelType type)
-    {
-        return statusGoldCostAddValue[(int)type];
-    }
-
-    public static bool UserStatusLevelUp(int userID,StatusLevelType type, BigInteger currentLevel,  int value)
-    {
-        // 소지한 골드가 정상적인지 체크
-        BigInteger goldCost = CalculateGoldCost(type, currentLevel, value);
-        if (GetUserCurrencyData(userID).gold >= goldCost)
-        {
-            GetUserStatusLevelData(userID).AddLevel(type, value);
-            GetUserCurrencyData(userID).gold -= goldCost;
-
-            if (OnUserGoldSpending != null)
-            {
-                OnUserGoldSpending(userID, goldCost);
-            }
-
-            if (OnUserStatusLevelUp != null)
-            {
-                OnUserStatusLevelUp(userID, type);
-            }
-            
-
-            return true;
-        }
+        // 골드 정보 및 스탯 레벨 정보 갱신
+        // 클라의 정보는 클라에서 갱신
+        GetUserCurrencyData(userID).gold = currentGold;
+        GetUserStatusLevelData(userID).statusLevels[(int)type] = newLevel;
 
         // TODO: 클라의 패킷이 정상적이지 않은 데이터를 담을 경우 false 리턴 or false 되는 패킷 전송
-        return false;
-
-        
+        return true;
     }
 
     public static CurrencyData GetUserCurrencyData(int userID)
@@ -204,24 +150,6 @@ public class DummyServerData : MonoBehaviour
             Debug.Log("Error - DummyServerData.GetUserGoldData");
         }
         return userData.gold;
-    }
-
-
-    // 서버 내 골드 계산 검증 함수
-    public static BigInteger CalculateGoldCost(StatusLevelType type, BigInteger currentLevel, int levelUpMultiplyValue)
-    {
-        int goldAddValue = statusGoldCostAddValue[(int)type];
-        // n ~ m 레벨 계산 ((n부터 m까지의 갯수) * (n+m) / 2 )
-        BigInteger levelUpValue = (levelUpMultiplyValue) * (currentLevel + (currentLevel + levelUpMultiplyValue)) / 2;
-        BigInteger goldCost = goldAddValue * (levelUpValue);
-
-        return goldCost;
-    }
-
-    public static int GetAddExpPerLevelValue()
-    {
-        return addExpPerLevel;
-
     }
 
     public static void UserLevelUp(int userID, int levelUpCount, BigInteger addExp)
@@ -356,11 +284,6 @@ public class DummyServerData : MonoBehaviour
         // *스테이지가 하나 차이인지도 추후 확인해야함
         playerClearStageData[userID, 0] = clearTheme;
         playerClearStageData[userID, 1] = clearStage;
-
-        if (OnUserStageClear != null)
-        {
-            OnUserStageClear(userID);
-        }
     }
 
     public static void GiveUserDiamondAndSendData(int userID, BigInteger addDiamond)

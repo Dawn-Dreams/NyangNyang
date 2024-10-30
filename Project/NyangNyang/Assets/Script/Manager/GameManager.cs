@@ -23,9 +23,6 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
             Instance = this;
 
-
-        DummyQuestServer.ExecuteDummyQuestServer();
-
         // 시작 시 서버로부터 정보 받기
         Player.OnAwakeGetInitialDataFromServer();
 

@@ -62,14 +62,15 @@ public class LevelUpStatusQuestData : QuestDataBase
         Player.OnLevelUpStatusQuestChange -= GetDataFromServer;
     }
 
+    // tODO: 10.30 서버 내에서 계산하던 방식을 삭제하였으므로 추후 확인
     public override void BindDelegateOnServer()
     {
-        DummyServerData.OnUserStatusLevelUp += DummyStoryQuestServer.SendLevelUpStatusQuestDataToUser;
+        //DummyServerData.OnUserStatusLevelUp += DummyStoryQuestServer.SendLevelUpStatusQuestDataToUser;
     }
 
     public override void UnBindDelegateOnServer()
     {
-        DummyServerData.OnUserStatusLevelUp -= DummyStoryQuestServer.SendLevelUpStatusQuestDataToUser;
+       //DummyServerData.OnUserStatusLevelUp -= DummyStoryQuestServer.SendLevelUpStatusQuestDataToUser;
     }
 
 
