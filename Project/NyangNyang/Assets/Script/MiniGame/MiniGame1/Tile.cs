@@ -11,6 +11,7 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUp
     public TileType tileType;  // 타일의 타입
     public bool isMerged;      // 타일이 병합되었는지 여부
     public event Action<Direction, int, int> OnTileDragged;  // 드래그 이벤트
+    public event Action<int, int> OnTileTouched;  // 터치 이벤트
 
     private Image image;  // 타일의 이미지 컴포넌트
     private Vector2 startDragPosition;
@@ -63,6 +64,7 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUp
     public void OnPointerDown(PointerEventData eventData)
     {
         startDragPosition = eventData.position; // 드래그 시작 위치 저장
+        OnTileTouched?.Invoke(x, y);
     }
 
     // 드래그 중 호출

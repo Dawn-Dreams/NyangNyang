@@ -85,6 +85,7 @@ public class MiniGame1 : MonoBehaviour
         tilesList.Add(tile);
 
         SetTilePosition(tile, x, y);
+        tile.OnTileTouched += OnTileTouched;
         tile.OnTileDragged += (direction, startX, startY) => OnTileDragged(startX, startY, direction);
     }
 
@@ -98,6 +99,8 @@ public class MiniGame1 : MonoBehaviour
 
     private void OnTileDragged(int startX, int startY, Direction direction)
     {
+        if (isProcessing || selectedTile==null)
+            return;
         int targetX = startX;
         int targetY = startY;
 
@@ -116,7 +119,6 @@ public class MiniGame1 : MonoBehaviour
         // 인접한 타일과 교환
         if (Mathf.Abs(startX - targetX) + Mathf.Abs(startY - targetY) == 1)
         {
-
             StartCoroutine(SwapTilesCoroutine(startX, startY, targetX, targetY));
             CheckAndRemoveMatches();
             selectedTile = null;
