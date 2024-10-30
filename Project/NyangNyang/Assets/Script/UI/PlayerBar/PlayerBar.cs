@@ -23,14 +23,16 @@ public class PlayerBar : MonoBehaviour
 
     void Start()
     {
+        // 골드, 다이아 변화 핸들러
         GoldTextChangeHandler(Player.Gold);
-        Player.OnGoldChange += GoldTextChangeHandler;
-
-        ExpChangeHandler(Player.UserLevel);
-        Player.OnExpChange += ExpChangeHandler;
-
+        Player.playerCurrency.OnGoldChange += GoldTextChangeHandler;
         DiamondTextChangeHandler(Player.Diamond);
-        Player.OnDiamondChange += DiamondTextChangeHandler;
+        Player.playerCurrency.OnDiamondChange += DiamondTextChangeHandler;
+
+        // 레벨(경험치) 변화 핸들러
+        ExpChangeHandler(Player.UserLevel);
+        Player.UserLevel.OnExpChange += ExpChangeHandler;
+
         
 
         menuButton.onClick.AddListener(OnClickMenuButton);
@@ -45,7 +47,7 @@ public class PlayerBar : MonoBehaviour
         }
     }
 
-    private void DiamondTextChangeHandler(BigInteger newDiamondValue)
+    private void DiamondTextChangeHandler(int newDiamondValue)
     {
         string text = newDiamondValue.ToString();
         if (diamondText != null)

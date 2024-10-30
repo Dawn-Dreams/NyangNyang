@@ -163,8 +163,9 @@ public class Status
     public Dictionary<StatusLevelType, int> titleOwningEffectValue = new Dictionary<StatusLevelType, int>();
 
     // 계정 스탯 (유저 (고양이) 적용) --> 게임메니저 관리 보류
-    float goldAcquisitionPercent = 1.0f;    // 골드 획득량(가중치) (초기 1, value%로 적용)
-    float expAcquisitionPercent = 1.0f;     // 경험치 획득량(가중치) (초기 1, value%로 적용)
+    // 적군을 잡을 때에 받는 경우에만 해당
+    public float goldAcquisitionPercent = 1.0f;    // 골드 획득량(가중치) (초기 1, value%로 적용)
+    public float expAcquisitionPercent = 1.0f;     // 경험치 획득량(가중치) (초기 1, value%로 적용)
 
 
 

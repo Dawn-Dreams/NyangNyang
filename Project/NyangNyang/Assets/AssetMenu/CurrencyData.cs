@@ -7,10 +7,18 @@ using UnityEngine;
 public class CurrencyData : ScriptableObject
 {
     public BigInteger gold;
-    public BigInteger diamond;
+    public int diamond;
     public int[] ticket = {0,0,0};
 
-    public CurrencyData SetCurrencyData(BigInteger getGold, BigInteger getDiamond, int[] getTicket)
+    // 골드 변화 델리게이트 이벤트
+    public delegate void OnGoldChangeDelegate(BigInteger newGoldVal);
+    public event OnGoldChangeDelegate OnGoldChange;
+
+    // 다이아 변화 델리게이트 이벤트
+    public delegate void OnDiamondChangeDelegate(int newDiamondValue);
+    public event OnDiamondChangeDelegate OnDiamondChange;
+
+    public CurrencyData SetCurrencyData(BigInteger getGold, int getDiamond, int[] getTicket)
     {
         gold = getGold;
         diamond = getDiamond;
@@ -25,6 +33,25 @@ public class CurrencyData : ScriptableObject
         ticket = otherData.ticket; 
         return this;
     }
+
+    public void SetGold(BigInteger newGold)
+    {
+        gold = newGold;
+        if (OnGoldChange != null)
+        {
+            OnGoldChange(newGold);
+        }
+    }
+
+    public void SetDiamond(int newDiamond)
+    {
+        diamond = newDiamond;
+        if (OnDiamondChange != null)
+        {
+            OnDiamondChange(newDiamond);
+        }
+    }
+
 
     public void RequestAddGold(BigInteger addGoldValue)
     {

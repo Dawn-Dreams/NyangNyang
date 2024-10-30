@@ -157,8 +157,9 @@ public class DummyServerData : MonoBehaviour
         GetUserLevelData(userID).currentExp += addExp;
         GetUserLevelData(userID).currentLevel += levelUpCount;
 
+        // 10.31 클라에서 서버에 정보를 보내면서 클라에서도 레벨업을 처리하도록 진행
         // 서버로부터 정보를 받도록 패킷 전송
-        Player.GetExpDataFromServer();
+        //Player.GetExpDataFromServer();
     }
 
     // MonsterData 내에 추가
@@ -288,8 +289,11 @@ public class DummyServerData : MonoBehaviour
 
     public static void GiveUserDiamondAndSendData(int userID, BigInteger addDiamond)
     {
+        // 다이아몬드는 int 범위 내에서 해결 가능하지만, Gold(BigInteger)와 Action으로 한번에 묶여서 관리할 일이 있어
+        // 해당 함수는 BigInteger로 인자를 받도록 진행
+
         //범위 체크 생략
-        usersCurrencyData[userID].diamond += addDiamond;
+        usersCurrencyData[userID].diamond += (int)addDiamond;
         
         // 강제로 플레이어에게 주입
         Player.Diamond = usersCurrencyData[userID].diamond;

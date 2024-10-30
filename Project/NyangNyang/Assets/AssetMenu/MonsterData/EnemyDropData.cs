@@ -36,8 +36,8 @@ public class EnemyDropData : ScriptableObject
 
     public void GiveItemToPlayer()
     {
-        Player.AddGold(_gold);
-        Player.AddExp(_exp);
+        Player.AddGold(_gold, true);
+        Player.AddExp(_exp, true);
 
         _gold = 0;
         _exp = 0;

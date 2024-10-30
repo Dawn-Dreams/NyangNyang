@@ -41,7 +41,7 @@ public class StatusLevelupPanel : MonoBehaviour
 
     public void Start()
     {
-        Player.OnGoldChange += SetGoldCostText;
+        Player.playerCurrency.OnGoldChange += SetGoldCostText;
         Player.OnStatusLevelChange += Initialize;
         Initialize(statusLevelType);
 

@@ -87,7 +87,7 @@ public class MyBigIntegerMath : MonoBehaviour
         return (float)dividendInt / divisorInt;
     }
 
-    public static BigInteger MultiplyWithFloat(BigInteger left, float right, int precisionDigit)
+    public static BigInteger MultiplyWithFloat(BigInteger left, float right, int precisionDigit = 5)
     {
         // BigInteger.Multiply는 큰 수 * float로 인해 float에 대한 곱셈은 존재하지않음
         // 따라서 근삿값을 구할 수 있도록 left 의 앞 {precisionDigit} 자리 만큼의 숫자를 float와 곱셈 후
