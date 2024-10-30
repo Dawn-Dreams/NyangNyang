@@ -196,6 +196,7 @@ MonoBehaviour:
   stageManager: {fileID: 0}
   dummyEnemyObj:
   - {fileID: 2490322000326804637}
+  monsterData: {fileID: 11400000, guid: 1eadb22145895a145b97ec801fe45e1c, type: 2}
 --- !u!1 &7228152591552623041
 GameObject:
   m_ObjectHideFlags: 0
