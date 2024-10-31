@@ -32,7 +32,7 @@ public class MiniGame1 : MonoBehaviour
         CheckAndRemoveMatches();
     }
 
-    private void ResetGrid()
+    public void ResetGrid()
     {
         foreach (var tile in tilesList)
         {
@@ -353,8 +353,46 @@ public class MiniGame1 : MonoBehaviour
             }
         }
 
+        DropTiles();
+
         matchedTiles.Clear(); // 리스트 초기화
         return true;           // 매칭된 타일이 삭제됨을 반환
+    }
+
+    private void DropTiles()
+    {
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            int emptySpace = 0;
+
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                if (grid[x, y] == null)
+                {
+                    emptySpace++;
+                }
+                else if (emptySpace > 0)
+                {
+                    Tile tile = grid[x, y];
+                    grid[x, y] = null;
+                    grid[x, y - emptySpace] = tile;
+                    tile.SetPosition(x, y - emptySpace);
+                    SetTilePosition(tile, x, y - emptySpace);
+                }
+            }
+        }
+
+        // 새 타일을 위에서 생성하여 빈 칸 채우기
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = gridSizeY - 1; y >= 0; y--)
+            {
+                if (grid[x, y] == null)
+                {
+                    CreateTile(x, y);
+                }
+            }
+        }
     }
 
     // 재귀적으로 인접한 같은 타입의 타일을 찾는 함수
@@ -373,6 +411,85 @@ public class MiniGame1 : MonoBehaviour
         if (y > 0) FindConnectedTiles(grid[x, y - 1], type, connectedTiles); // Down
         if (y < gridSizeY - 1) FindConnectedTiles(grid[x, y + 1], type, connectedTiles); // Up
     }
+    
+    public void StartMatchCheckAndAnimate()
+    {
+        // 매칭이 발생한 경우 애니메이션 코루틴 실행
+        if (CheckAndRemoveMatches())
+        {
+            StartCoroutine(AnimateMatchAndDrop());
+        }
+    }
+
+    private IEnumerator AnimateMatchAndDrop()
+    {
+        // 매칭된 타일 삭제 애니메이션
+        foreach (Tile tile in matchedTiles)
+        {
+            if (tile != null)
+            {
+                tile.SetMerged(); // 삭제 애니메이션
+                grid[tile.x, tile.y] = null;
+            }
+        }
+
+        yield return new WaitForSeconds(0.3f); // 삭제 애니메이션 대기
+
+        // 타일 내려오는 애니메이션
+        yield return StartCoroutine(DropTilesWithAnimation());
+
+        // 내려온 타일로 새로운 매칭 검사
+        StartMatchCheckAndAnimate();
+    }
+
+    // ------------------- 애니메이션 ---------------------
+
+    private IEnumerator DropTilesWithAnimation()
+    {
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            int emptySpace = 0;
+
+            for (int y = 0; y < gridSizeY - 1; y++)
+            {
+                if (grid[x, y] == null)
+                {
+                    emptySpace++;
+                }
+                else if (emptySpace > 0)
+                {
+                    Tile tile = grid[x, y];
+                    grid[x, y] = null;
+                    grid[x, y - emptySpace] = tile;
+
+                    StartCoroutine(SlideTile(tile, x, y, x, y - emptySpace));
+                }
+            }
+        }
+
+        yield return new WaitForSeconds(slideDuration); // 모든 타일이 내려오기를 기다림
+    }
+
+    private IEnumerator SlideTile(Tile tile, int startX, int startY, int targetX, int targetY)
+    {
+        Vector2 startPos = tile.transform.localPosition;
+        Vector2 endPos = new Vector2(
+            -(gridSizeX - 1) * tilePrefab.GetComponent<RectTransform>().rect.width / 2 + targetX * tilePrefab.GetComponent<RectTransform>().rect.width,
+            -(gridSizeY - 1) * tilePrefab.GetComponent<RectTransform>().rect.height / 2 + targetY * tilePrefab.GetComponent<RectTransform>().rect.height);
+
+        float elapsedTime = 0f;
+
+        while (elapsedTime < slideDuration)
+        {
+            tile.transform.localPosition = Vector2.Lerp(startPos, endPos, elapsedTime / slideDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        tile.SetPosition(targetX, targetY);
+        tile.transform.localPosition = endPos; // 최종 위치 설정
+    }
+
 
     private void EndGameLogic()
     {
