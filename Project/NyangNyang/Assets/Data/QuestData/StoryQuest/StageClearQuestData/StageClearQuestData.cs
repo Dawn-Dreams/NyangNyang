@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-
+[CreateAssetMenu(fileName = "StageClearQuestData", menuName = "ScriptableObjects/QuestData/StoryQuest/StageClearQuestData", order = 1)]
 public class StageClearQuestData : QuestDataBase
 {
     public int targetTheme;
@@ -15,32 +15,19 @@ public class StageClearQuestData : QuestDataBase
     private int _currentClearStage;
     private bool _isQuestClear;
 
-    // 서버 내 생성할 때 사용
-    public QuestDataBase QuestInitialize(QuestCategory questCategory, int getTargetTheme, int getTargetStage, int getRewardCount = 100)
-    {
-        base.questCategory = questCategory;
-        targetTheme = getTargetTheme;
-        targetStage = getTargetStage;
-
-        mainQuestTitle = getTargetTheme + " - " + getTargetStage + " 스테이지 클리어";
-        
-        rewardCount = getRewardCount;
-        rewardType = RewardType.Diamond;
-
-        return this;
-    }
     
 
     public override void QuestActing(BaseQuest quest)
     {
+        mainQuestTitle = targetTheme + " - " + targetStage + " 스테이지 클리어";
         questType = QuestType.StageClear;
-        
+        Player.GetPlayerHighestClearStageData(out _currentClearTheme, out _currentClearStage);
+
         base.QuestActing(quest);
     }
 
     public override void RequestQuestData()
     {
-        DummyStoryQuestServer.SendStageClearQuestDataToUser(Player.GetUserID());
     }
 
 
@@ -53,12 +40,12 @@ public class StageClearQuestData : QuestDataBase
 
     protected override void BindDelegate()
     {
-        Player.OnStageClear += GetDataFromServer;
+        GameManager.GetInstance().stageManager.OnStageClear += ChangeQuestData;
     }
 
     protected override void UnBindDelegate()
     {
-        Player.OnStageClear -= GetDataFromServer;
+        GameManager.GetInstance().stageManager.OnStageClear -= ChangeQuestData;
     }
 
     public override int GetRequireCount()
@@ -71,19 +58,8 @@ public class StageClearQuestData : QuestDataBase
         throw new System.NotImplementedException();
     }
 
-    // TODO 10.30 해당 서버 내에 델리게이트를 삭제함으로서 클라에서 관리해야하므로 추후 확인.
-    public override void BindDelegateOnServer()
-    {
-        //DummyServerData.OnUserStageClear += DummyStoryQuestServer.SendStageClearQuestDataToUser;
-    }
 
-    public override void UnBindDelegateOnServer()
-    {
-        //DummyServerData.OnUserStageClear -= DummyStoryQuestServer.SendStageClearQuestDataToUser;
-    }
-
-
-    public void GetDataFromServer(int clearTheme, int clearStage)
+    public void ChangeQuestData(int clearTheme, int clearStage)
     {
         _currentClearTheme = clearTheme;
         _currentClearStage = clearStage;
@@ -99,5 +75,12 @@ public class StageClearQuestData : QuestDataBase
     {
         _isQuestClear = (_currentClearTheme > targetTheme) || ((_currentClearTheme == targetTheme) && _currentClearStage >= targetStage);
         QuestComp.SetRewardButtonInteractable(_isQuestClear, "");
+    }
+
+    public override void RequestQuestReward()
+    {
+        DummyStoryQuestServer.UserSendStoryQuestClear(Player.GetUserID(), this);
+        BaseStoryQuest.GetInstance().ClearStoryQuest(); 
+        QuestComp.rewardButton.onClick.RemoveListener(RequestQuestReward);
     }
 }

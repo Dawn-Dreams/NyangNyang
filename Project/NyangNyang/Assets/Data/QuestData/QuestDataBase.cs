@@ -52,6 +52,7 @@ public abstract class QuestDataBase : ScriptableObject
         //DummyQuestServer.SendQuestDataToPlayer(Player.GetUserID(), QuestType);
 
         QuestComp.rewardButton.onClick.AddListener(RequestQuestReward);
+        CheckQuestClear();
     }
 
     public void RemoveQuest()
@@ -120,16 +121,6 @@ public abstract class QuestDataBase : ScriptableObject
     protected virtual void SendDataToServer()
     {
         DummyQuestServer.GetQuestDataFromClient(Player.GetUserID(), questCategory, questType, GetCurrentQuestCount());
-    }
-
-    public virtual void BindDelegateOnServer()
-    {
-        // 서버에서 델리게이트 연결
-    }
-
-    public virtual void UnBindDelegateOnServer()
-    {
-        //....
     }
 
     protected void LoadRewardImage(RewardType type)

@@ -134,8 +134,11 @@ public class Status
 {
     private StatusLevelData levelData;
 
-    public delegate void OnHpChangeDelegate();
-    public event OnHpChangeDelegate OnHpChange;
+
+    // 스테이터스 레벨 변화 델리게이트
+    public delegate void OnStatusLevelChangeDelegate(StatusLevelType type);
+
+    public event OnStatusLevelChangeDelegate OnStatusLevelChange;
 
     // 개인 스탯 (유저 / 적 적용)
     public int hp;             // 체력
@@ -246,6 +249,11 @@ public class Status
 
     public void UpdateSpecificStatus(StatusLevelType type)
     {
+        if (OnStatusLevelChange != null)
+        {
+            OnStatusLevelChange(type);
+        }
+
         // 임시 업데이트
         switch (type)
         {
@@ -257,10 +265,6 @@ public class Status
                     hpAddValue += titleOwningEffectValue[StatusLevelType.HP];
                 }
                 hp = (int)((levelData.CalculateValueFromLevel(StatusLevelType.HP) + hpAddValue) * hpMulValue);
-                if (OnHpChange != null)
-                {
-                    OnHpChange();
-                }
                 break;
 
             case StatusLevelType.MP:

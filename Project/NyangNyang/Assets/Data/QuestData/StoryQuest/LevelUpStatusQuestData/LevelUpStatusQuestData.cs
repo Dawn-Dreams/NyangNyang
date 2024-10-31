@@ -5,34 +5,28 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-
+[CreateAssetMenu(fileName = "LevelUpStatusQuestData", menuName = "ScriptableObjects/QuestData/StoryQuest/LevelUpStatusQuestData", order = 1)]
 public class LevelUpStatusQuestData : QuestDataBase
 {
-    private BigInteger currentStatusLevel = 0;
+    private int currentStatusLevel = 0;
 
     public int requireStatusLevel;
 
     public StatusLevelType questStatusType;
 
     // 서버 내 생성할 때 사용
-    public QuestDataBase QuestInitialize(QuestCategory questCategory, StatusLevelType statusType, int targetLevel, int diamondRewardCount = 100)
+    public QuestDataBase QuestInitialize()
     {
-        base.questCategory = questCategory;
-        questStatusType = statusType;
-
-        mainQuestTitle = statusType.ToString() + " 스탯 레벨" + targetLevel + "달성";
-        rewardCount = diamondRewardCount;
-
-        rewardType = RewardType.Diamond;
-
-        requireStatusLevel = targetLevel;
-
+        mainQuestTitle = questStatusType.ToString() + " 스탯 레벨" + requireStatusLevel + "달성";
+        currentStatusLevel = Player.playerStatus.GetStatusLevelData().statusLevels[(int)questStatusType];
         return this;
     }
     
 
     public override void QuestActing(BaseQuest quest)
     {
+        QuestInitialize();
+
         questType = QuestType.LevelUpStatus;
         
         base.QuestActing(quest);
@@ -41,9 +35,9 @@ public class LevelUpStatusQuestData : QuestDataBase
 
     public override void RequestQuestData()
     {
-        DummyStoryQuestServer.SendLevelUpStatusQuestDataToUser(Player.GetUserID(), questStatusType);
     }
 
+    
 
     protected override void SetRequireText()
     {
@@ -54,12 +48,12 @@ public class LevelUpStatusQuestData : QuestDataBase
 
     protected override void BindDelegate()
     {
-        Player.OnLevelUpStatusQuestChange += GetDataFromServer;
+        Player.playerStatus.OnStatusLevelChange += ChangeQuestData;
     }
 
     protected override void UnBindDelegate()
     {
-        Player.OnLevelUpStatusQuestChange -= GetDataFromServer;
+        Player.playerStatus.OnStatusLevelChange -= ChangeQuestData;
     }
 
     public override int GetRequireCount()
@@ -73,30 +67,23 @@ public class LevelUpStatusQuestData : QuestDataBase
         return 0;
     }
 
-
-    // tODO: 10.30 서버 내에서 계산하던 방식을 삭제하였으므로 추후 확인
-    public override void BindDelegateOnServer()
+    public void ChangeQuestData(StatusLevelType type)
     {
-        //DummyServerData.OnUserStatusLevelUp += DummyStoryQuestServer.SendLevelUpStatusQuestDataToUser;
-    }
-
-    public override void UnBindDelegateOnServer()
-    {
-       //DummyServerData.OnUserStatusLevelUp -= DummyStoryQuestServer.SendLevelUpStatusQuestDataToUser;
-    }
-
-
-    public void GetDataFromServer(StatusLevelType type, BigInteger newQuestDataValue)
-    {
-        currentStatusLevel = newQuestDataValue;
+        if (type != questStatusType)
+        {
+            return;
+        }
+        currentStatusLevel = Player.playerStatus.GetStatusLevelData().statusLevels[(int)type];
         float currentValue = MyBigIntegerMath.DivideToFloat(currentStatusLevel, requireStatusLevel, 5);
 
         QuestComp.SetSliderValue(currentValue);
-        
+
         SetRequireText();
 
         CheckQuestClear();
     }
+
+   
 
     protected override void CheckQuestClear()
     {
@@ -109,5 +96,12 @@ public class LevelUpStatusQuestData : QuestDataBase
         {
             QuestComp.SetRewardButtonInteractable(false, "진행중");
         }
+    }
+
+    public override void RequestQuestReward()
+    {
+        DummyStoryQuestServer.UserSendStoryQuestClear(Player.GetUserID(),this);
+        BaseStoryQuest.GetInstance().ClearStoryQuest();
+        QuestComp.rewardButton.onClick.RemoveListener(RequestQuestReward);
     }
 }

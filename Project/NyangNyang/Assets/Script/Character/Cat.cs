@@ -13,15 +13,17 @@ public class Cat : Character
         characterID = Player.GetUserID();
         status = Player.playerStatus;
 
-        Player.OnHPLevelChange += HPLevelChanged;
-        Player.playerStatus.OnHpChange += HPLevelChanged;
+        Player.playerStatus.OnStatusLevelChange += HPLevelChanged;
+        
         base.Awake();
     }
 
-
-
-    public void HPLevelChanged()
+    public void HPLevelChanged(StatusLevelType type)
     {
+        if (type != StatusLevelType.HP)
+        {
+            return;
+        }
         BigInteger hpDifference = Player.playerStatus.hp - maxHP;
         maxHP = Player.playerStatus.hp;
         CurrentHP += hpDifference;
