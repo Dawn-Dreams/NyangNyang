@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainQuestTitle: "\uACE8\uB4DC \uC18C\uBAA8"
   subQuestTitle: "\uACE8\uB4DC\uB97C 1 b \uC18C\uBAA8\uD558\uC138\uC694."
-  rewardCount: 1
-  QuestType: 0
-  QuestCategory: 1
+  rewardCount: 100
+  questType: 0
+  questCategory: 1
   rewardType: 1
+  sendQuestDataToServerDelayTime: 5
   requireSpendingGold: 1000000

@@ -171,18 +171,6 @@ public class DummyServerData : MonoBehaviour
     //    return enemyDropData[characterID];
     //}
 
-    public static bool AddGoldOnServer(int userID, BigInteger addGoldValue)
-    {
-        CurrencyData userCurrencyData = GetUserCurrencyData(userID);
-        if (userCurrencyData)
-        {
-            userCurrencyData.gold += addGoldValue;
-            Player.GetCurrencyDataFromServer();
-            return true;
-        }
-
-        return false;
-    }
 
     // 티켓이 있는지 확인하는 함수 (유저 ID, 티켓 종류)
     public static bool HasTicket(int userID, int index)

@@ -36,6 +36,7 @@ public class EnemyDropData : ScriptableObject
 
     public void GiveItemToPlayer()
     {
+        //Player.Gold += MyBigIntegerMath.MultiplyWithFloat(_gold ,Player.playerStatus.goldAcquisitionPercent); 
         Player.AddGold(_gold, true);
         Player.AddExp(_exp, true);
 

@@ -11,19 +11,6 @@ public class GoldSpendingQuestData : QuestDataBase
     protected BigInteger spendingGold = 0;
 
     public int requireSpendingGold;
-
-    public QuestDataBase QuestInitialize(QuestCategory questCategory, int getRequireSpendingGold, int getRewardCount = 1)
-    {
-        base.questCategory = questCategory;
-        mainQuestTitle = "골드 소모";
-        subQuestTitle = "골드를 " + MyBigIntegerMath.GetAbbreviationFromBigInteger(getRequireSpendingGold) + "소모하세요.";
-        requireSpendingGold = getRequireSpendingGold;
-
-        rewardType = RewardType.Diamond;
-        rewardCount = getRewardCount;
-        return this;
-    }
-
     public override void QuestActing(BaseQuest quest)
     {
         questType = QuestType.GoldSpending;
@@ -46,11 +33,13 @@ public class GoldSpendingQuestData : QuestDataBase
     protected override void BindDelegate()
     {
         Player.OnRenewGoldSpendingQuest += GetDataFromServer;
+        Player.playerCurrency.OnSpendingGold += QuestCountChange;
     }
 
     protected override void UnBindDelegate()
     {
         Player.OnRenewGoldSpendingQuest -= GetDataFromServer;
+        Player.playerCurrency.OnSpendingGold -= QuestCountChange;
     }
 
     public override int GetRequireCount()
@@ -63,9 +52,12 @@ public class GoldSpendingQuestData : QuestDataBase
         return spendingGold;
     }
 
-    public void GetDataFromServer(QuestCategory questCategory, BigInteger newQuestDataValue)
+    public void GetDataFromServer(QuestCategory dataCategory, BigInteger newQuestDataValue)
     {
-        if (questCategory != base.questCategory) return;
+        if (questCategory != dataCategory)
+        {
+            return;
+        }
         
         spendingGold = newQuestDataValue;
         float currentValue = MyBigIntegerMath.DivideToFloat(spendingGold, requireSpendingGold, 5);
@@ -76,6 +68,25 @@ public class GoldSpendingQuestData : QuestDataBase
 
         CheckQuestClear();
     }
+
+    public void QuestCountChange(BigInteger newSpendingGoldVal)
+    {
+        spendingGold += newSpendingGoldVal;
+
+        float currentValue = MyBigIntegerMath.DivideToFloat(spendingGold, requireSpendingGold, 5);
+
+        QuestComp.SetSliderValue(currentValue);
+
+        SetRequireText();
+
+        CheckQuestClear();
+
+
+        // TODO: 10.31) 추후엔 GameManager 라던가 기타 Monobehaviour 상속 클래스에서 보내도록 
+        // 코루틴 써서
+        SendDataToServer();
+    }
+
 
     protected override void CheckQuestClear()
     {

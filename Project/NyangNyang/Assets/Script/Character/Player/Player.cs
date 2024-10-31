@@ -184,7 +184,7 @@ public class Player : MonoBehaviour
         {
             addGoldValue = MyBigIntegerMath.MultiplyWithFloat(addGoldValue, playerStatus.goldAcquisitionPercent);
         }
-        playerCurrency.RequestAddGold(addGoldValue);
+        Player.Gold += addGoldValue;
     }
 
     public static void AddTickets(int[] addTicketValues)

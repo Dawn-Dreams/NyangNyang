@@ -119,8 +119,6 @@ public abstract class QuestDataBase : ScriptableObject
 
     protected virtual void SendDataToServer()
     {
-
-        Debug.Log($"{questCategory} - {questType} 정보 {GetCurrentQuestCount()} 서버로 건넴");
         DummyQuestServer.GetQuestDataFromClient(Player.GetUserID(), questCategory, questType, GetCurrentQuestCount());
     }
 

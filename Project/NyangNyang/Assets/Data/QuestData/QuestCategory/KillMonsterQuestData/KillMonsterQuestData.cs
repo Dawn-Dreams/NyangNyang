@@ -11,17 +11,6 @@ public class KillMonsterQuestData : QuestDataBase
     private long _killMonsterCount;
 
     public int requireKillMonsterCount;
-    public QuestDataBase QuestInitialize(QuestCategory questCategory, int getRequireKillMonsterCount, int getRewardCount = 1)
-    {
-        base.questCategory = questCategory;
-        mainQuestTitle = "몬스터 처치";
-        subQuestTitle = "몬스터를 " + getRequireKillMonsterCount + "처치하세요.";
-        requireKillMonsterCount = getRequireKillMonsterCount;
-
-        rewardType = RewardType.Diamond;
-        rewardCount = getRewardCount;
-        return this;
-    }
     public override void QuestActing(BaseQuest quest)
     {
         questType = QuestType.KillMonster;

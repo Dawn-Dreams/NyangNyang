@@ -14,6 +14,9 @@ public class CurrencyData : ScriptableObject
     public delegate void OnGoldChangeDelegate(BigInteger newGoldVal);
     public event OnGoldChangeDelegate OnGoldChange;
 
+    public delegate void OnSpendingGoldDelegate(BigInteger newSpendingGoldVal);
+    public event OnSpendingGoldDelegate OnSpendingGold;
+
     // 다이아 변화 델리게이트 이벤트
     public delegate void OnDiamondChangeDelegate(int newDiamondValue);
     public event OnDiamondChangeDelegate OnDiamondChange;
@@ -36,6 +39,16 @@ public class CurrencyData : ScriptableObject
 
     public void SetGold(BigInteger newGold)
     {
+        // 골드를 사용한 상황
+        if (gold >= newGold)
+        {
+            BigInteger spendingGoldVal = gold - newGold;
+            if (OnSpendingGold != null)
+            {
+                OnSpendingGold(spendingGoldVal);
+            }
+        }
+        
         gold = newGold;
         if (OnGoldChange != null)
         {
@@ -52,9 +65,4 @@ public class CurrencyData : ScriptableObject
         }
     }
 
-
-    public void RequestAddGold(BigInteger addGoldValue)
-    {
-        DummyServerData.AddGoldOnServer(Player.GetUserID(), addGoldValue);
-    }
 }
