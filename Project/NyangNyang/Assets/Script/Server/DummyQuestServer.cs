@@ -7,14 +7,14 @@ using System.Runtime.InteropServices;
 using Unity.Collections.LowLevel.Unsafe;
 using Unity.VisualScripting;
 using UnityEngine;
-
+[Serializable]
 public enum QuestType
 {
     GoldSpending, KillMonster,
     FirstTime,
     LevelUpStatus, StageClear,
 }
-
+[Serializable]
 public enum QuestCategory
 {
     Repeat,
@@ -23,7 +23,7 @@ public enum QuestCategory
     Achievement,
     Story
 }
-
+[Serializable]
 public enum RewardType
 {
     Gold, Diamond
@@ -37,55 +37,7 @@ public class DummyQuestServer : DummyServerData
     // ex) 1002003 -> 001/ 002 / 003
 
 
-    // 퀘스트의 요구 수치 데이터
-    private static Dictionary<QuestCategory, Dictionary<QuestType,int>> _questRequireValueData = new Dictionary<QuestCategory, Dictionary<QuestType, int>>
-    {
-        // 반복 퀘스트
-        { QuestCategory.Repeat , new Dictionary<QuestType, int>
-        {
-            { QuestType.GoldSpending , 500_000},
-            { QuestType.KillMonster , 3}
-        }},
-        
-        // 일일 퀘스트
-        { QuestCategory.Daily , new Dictionary<QuestType, int>
-        {
-            { QuestType.GoldSpending , 1_000_000},
-        }}
-    };
 
-    // 퀘스트 데이터 변수
-    private static Dictionary<QuestCategory, Dictionary<QuestType, QuestDataBase>> questDataBases =
-        new Dictionary<QuestCategory, Dictionary<QuestType, QuestDataBase>>
-        {
-            // 반복 퀘스트
-            {
-                QuestCategory.Repeat, new Dictionary<QuestType, QuestDataBase>
-                {
-                    {
-                        QuestType.GoldSpending,
-                        ScriptableObject.CreateInstance<GoldSpendingQuestData>().QuestInitialize(QuestCategory.Repeat,
-                            _questRequireValueData[QuestCategory.Repeat][QuestType.GoldSpending])
-                    },
-                    {
-                        QuestType.KillMonster,
-                        ScriptableObject.CreateInstance<KillMonsterQuestData>().QuestInitialize(QuestCategory.Repeat,
-                            _questRequireValueData[QuestCategory.Repeat][QuestType.KillMonster])
-                    },
-                }
-            },
-            // 일일 퀘스트 ====================================
-            {
-                QuestCategory.Daily, new Dictionary<QuestType, QuestDataBase>
-                {
-                    {
-                        QuestType.GoldSpending, 
-                        ScriptableObject.CreateInstance<GoldSpendingQuestData>().QuestInitialize(QuestCategory.Daily,
-                            _questRequireValueData[QuestCategory.Daily][QuestType.GoldSpending], 200)
-                    },
-                }
-            }
-        };
     // 유저가 퀘스트 보상을 받았는지에 대한 변수
     private static Dictionary<QuestCategory, Dictionary<QuestType, List<int>>> _getRewardUsersID =
         new Dictionary<QuestCategory, Dictionary<QuestType, List<int>>>
@@ -94,9 +46,18 @@ public class DummyQuestServer : DummyServerData
             {
                 QuestCategory.Daily, new Dictionary<QuestType, List<int>>
                 {
-                    { QuestType.GoldSpending, new List<int>() }
+                    { QuestType.GoldSpending, new List<int>() },
+                    {QuestType.KillMonster, new List<int>()},
                 }
             },
+            // 주간 퀘스트
+            {
+                QuestCategory.Weekly, new Dictionary<QuestType, List<int>>
+                {
+                    {QuestType.KillMonster, new List<int>()}
+                }
+            }
+            // 업적 퀘스트는 클라 내에서 해당 칭호를 가지고 있는지로 파악 하여 진행 예정
         };
 
 
@@ -143,6 +104,22 @@ public class DummyQuestServer : DummyServerData
                             {1, 0}
                         }
                     },
+                    // 일일 퀘스트
+                    {
+                        QuestCategory.Daily, new Dictionary<int, BigInteger>
+                        {
+                            {0, 30},
+                            {1, 0}
+                        }
+                    },
+                    // 주간 퀘스트
+                    {
+                        QuestCategory.Weekly, new Dictionary<int, BigInteger>
+                        {
+                            {0, 70},
+                            {1, 0}
+                        }
+                    }
                 }
             }
         };
@@ -151,11 +128,12 @@ public class DummyQuestServer : DummyServerData
     // DummyServer라서 시작 시 초기화를 해당 함수에서 진행 (GameManager내에서 호출)
     // <- 해당 방식 사용하지 않으므로 삭제 해도 됨.
 
-    public static QuestDataBase SendQuestInfoToUser(int userID, QuestCategory questCategory, QuestType questType)
-    {
-        // TODO: 해당 플레이어에게 보낼 수 있도록
-        return GetQuestInfo(questCategory, questType);
-    }
+    // 10.31 클라에서 관리하도록 리팩토링 진행
+    //public static QuestDataBase SendQuestInfoToUser(int userID, QuestCategory questCategory, QuestType questType)
+    //{
+    //    // TODO: 해당 플레이어에게 보낼 수 있도록
+    //    return GetQuestInfo(questCategory, questType);
+    //}
 
     // 유저가 일일/주간/업적 퀘스트 등에서 보상을 받은 적 있는지의 정보를 전송해주는 함수
     public static bool SendRewardInfoToUser(int userID, QuestCategory questCategory, QuestType questType)
@@ -170,16 +148,17 @@ public class DummyQuestServer : DummyServerData
     }
 
     // 서버 내 저장된 BaseQuestData 정보에 대한 Get함수
-    public static QuestDataBase GetQuestInfo(QuestCategory questCategory, QuestType questType)
-    {
-        return questDataBases[questCategory][questType];
-    }
+    // 10.31 클라에서 관리하도록 변경
+    //public static QuestDataBase GetQuestInfo(QuestCategory questCategory, QuestType questType)
+    //{
+    //    return questDataBases[questCategory][questType];
+    //}
 
     // userID 유저가 요구한 QuestCategory,QuestType의 퀘스트에서 사용되는 데이터 전송
     public static void SendQuestDataToPlayer(int userID, QuestCategory questCategory,QuestType questType)
     {
         // 범위 체크 생략 
-
+    
         // 더미 서버이므로 현재는 강제로 플레이어에게 주입
         switch (questType)
         {
@@ -188,24 +167,32 @@ public class DummyQuestServer : DummyServerData
                 Player.RecvGoldSpendingDataFromServer(userQuestProgressData[questType][questCategory][userID], questCategory);
                 break;
             case QuestType.KillMonster:
-                Player.RecvMonsterKillDataFromServer((long)userQuestProgressData[questType][questCategory][userID]);
+                Player.RecvMonsterKillDataFromServer(questCategory,(long)userQuestProgressData[questType][questCategory][userID]);
                 break;
-
+    
             // 스토리 퀘스트
             case QuestType.LevelUpStatus:
             // Flow
             case QuestType.StageClear:
                 DummyStoryQuestServer.SendNewQuestDataToUser(userID);
                 break;
-
+    
             default:
                 break;
         }
-        
+    }
+
+    public static void GetQuestDataFromClient(int userID, QuestCategory questCategory, QuestType questType,
+        BigInteger newValue)
+    {
+        if (userQuestProgressData.ContainsKey(questType) && userQuestProgressData[questType].ContainsKey(questCategory))
+        {
+            userQuestProgressData[questType][questCategory][userID] = newValue;
+        }
     }
 
     // 유저가 보상 흭득을 요구하는 함수
-    public static void UserRequestReward(int userID,QuestCategory questCategory,  QuestType questType, QuestDataBase  questInfo)
+    public static void UserRequestReward(int userID, QuestDataBase questInfo)
     {
         // 서버의 퀘스트 정보를 쓰려했으나 스토리 퀘스트 서버가 분리되어 적용 불가, 추후 개선 예정
         //QuestDataBase questInfo = GetQuestInfo(questCategory, questType);
@@ -225,36 +212,39 @@ public class DummyQuestServer : DummyServerData
                     giveUserCurrencyAction += DummyServerData.GiveUserDiamondAndSendData;
                     break;
             }
-
-            
         }
         
         {
             // TODO: 유저의 데이터가 퀘스트 클리어 가능한지 체크
             // 안될 시 잘못된 정보라는 패킷 전송
             //유저가 daily/weekly/achievement 퀘스트 등 일회성 퀘스트를 달성했었는지에 대한 체크
-            if (!questInfo.IsRewardRepeatable() && _getRewardUsersID.ContainsKey(questInfo.GetQuestCategory()) && _getRewardUsersID[questCategory][questType].Contains(userID))
+            if (!questInfo.IsRewardRepeatable() && _getRewardUsersID.ContainsKey(questInfo.GetQuestCategory()) && _getRewardUsersID[questInfo.questCategory][questInfo.questType].Contains(userID))
             {
                 Debug.Log($"{userID} 유저가 이미 클리어한 퀘스트를 클리어하겠다고 요청함 확인 필요");
                 return;
             }
         }
 
+        // 10.31 추가 서버내에서 따로 값을 관리하는 것이 아닌 클라이언트의 값을 그대로 덮는, 저장방식으로 진행하도록 수정
+        if (userQuestProgressData.ContainsKey(questInfo.questType) && userQuestProgressData[questInfo.questType].ContainsKey(questInfo.questCategory))
+        {
+            userQuestProgressData[questInfo.questType][questInfo.questCategory][userID] = questInfo.GetCurrentQuestCount();
+        }
+        
         
         // 보상 갯수 계산
         int clearCount = 1;
         if (questInfo.IsRewardRepeatable())
         {
-            clearCount = (int)BigInteger.Divide(userQuestProgressData[questType][questCategory][userID],
-                _questRequireValueData[questCategory][questType]);
-            
+            clearCount = (int)BigInteger.Divide(userQuestProgressData[questInfo.questType][questInfo.questCategory][userID],
+                questInfo.GetRequireCount());
         }
 
         // 필요 시 퀘스트의 데이터를 감소시키는 코드 진행
-        if (userQuestProgressData.ContainsKey(questType) && userQuestProgressData[questType].ContainsKey(questCategory))
+        if (userQuestProgressData.ContainsKey(questInfo.questType) && userQuestProgressData[questInfo.questType].ContainsKey(questInfo.questCategory))
         {
-            userQuestProgressData[questType][questCategory][userID] -=
-                clearCount * _questRequireValueData[questCategory][questType];
+            userQuestProgressData[questInfo.questType][questInfo.questCategory][userID] -=
+                clearCount * questInfo.GetRequireCount();
         }
         
 
@@ -268,7 +258,9 @@ public class DummyQuestServer : DummyServerData
         }
 
         // 퀘스트 정보 다시 전송하여 퀘스트 정보 초기화
-        SendQuestDataToPlayer(userID,questCategory, questType);
+        // TODO: READ) @정가온 10.31) 해당부분에 대한 처리에 대해 서버개발자에게 요청
+        SendQuestDataToPlayer(userID, questInfo.questCategory, questInfo.questType);
+
 
     }
 
@@ -286,14 +278,6 @@ public class DummyQuestServer : DummyServerData
         // 범위 체크 생략
 
         RenewalUserQuestProgressData(userID, QuestType.GoldSpending, spendingAmount);
-    }
-
-    public static void UserMonsterKill(int userID, int monsterKillCount)
-    {
-        // 범위 체크 생략
-
-
-        RenewalUserQuestProgressData(userID,QuestType.KillMonster,monsterKillCount);
     }
 
     protected static void RenewalUserQuestProgressData(int userID, QuestType questType, BigInteger newAddVal)

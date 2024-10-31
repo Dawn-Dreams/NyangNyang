@@ -7,9 +7,9 @@ public class MyBigIntegerMath : MonoBehaviour
 {
     public static string GetAbbreviationFromBigInteger(BigInteger value)
     {
-        if (value == 0)
+        if (value <= 1000)
         {
-            return "0";
+            return value.ToString();
         }
         string retStr = "";
 

@@ -9,7 +9,7 @@ public class BaseStoryQuest : BaseQuest
 
     protected override void Start()
     {
-        RecvQuestDataFromServer();
+        //RecvQuestDataFromServer();
         //base.Start();
     }
 
@@ -21,16 +21,16 @@ public class BaseStoryQuest : BaseQuest
         storyQuestClearPanel.SetActive(newActive);
     }
 
-    public void RecvQuestDataFromServer()
-    {
-        questData = DummyStoryQuestServer.SendQuestInfoDataToUser(Player.GetUserID());
-        if (questData == null)
-        {
-            gameObject.SetActive(false);
-        }
-        else
-        {
-            LoadQuest();
-        }
-    }
+    //public void RecvQuestDataFromServer()
+    //{
+    //    questData = DummyStoryQuestServer.SendQuestInfoDataToUser(Player.GetUserID());
+    //    if (questData == null)
+    //    {
+    //        gameObject.SetActive(false);
+    //    }
+    //    else
+    //    {
+    //        LoadQuest();
+    //    }
+    //}
 }

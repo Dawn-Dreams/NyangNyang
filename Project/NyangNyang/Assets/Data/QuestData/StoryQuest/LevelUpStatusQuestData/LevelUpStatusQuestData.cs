@@ -10,17 +10,17 @@ public class LevelUpStatusQuestData : QuestDataBase
 {
     private BigInteger currentStatusLevel = 0;
 
-    public BigInteger requireStatusLevel;
+    public int requireStatusLevel;
 
     public StatusLevelType questStatusType;
 
     // 서버 내 생성할 때 사용
-    public QuestDataBase QuestInitialize(QuestCategory questCategory, StatusLevelType statusType, BigInteger targetLevel, int diamondRewardCount = 100)
+    public QuestDataBase QuestInitialize(QuestCategory questCategory, StatusLevelType statusType, int targetLevel, int diamondRewardCount = 100)
     {
-        QuestCategory = questCategory;
+        base.questCategory = questCategory;
         questStatusType = statusType;
 
-        mainQuestTitle = statusType.ToString() + " 스탯 레벨" + MyBigIntegerMath.GetAbbreviationFromBigInteger(targetLevel) + "달성";
+        mainQuestTitle = statusType.ToString() + " 스탯 레벨" + targetLevel + "달성";
         rewardCount = diamondRewardCount;
 
         rewardType = RewardType.Diamond;
@@ -33,7 +33,7 @@ public class LevelUpStatusQuestData : QuestDataBase
 
     public override void QuestActing(BaseQuest quest)
     {
-        QuestType = QuestType.LevelUpStatus;
+        questType = QuestType.LevelUpStatus;
         
         base.QuestActing(quest);
 
@@ -61,6 +61,18 @@ public class LevelUpStatusQuestData : QuestDataBase
     {
         Player.OnLevelUpStatusQuestChange -= GetDataFromServer;
     }
+
+    public override int GetRequireCount()
+    {
+        // 썌얘 : 스토리 관련은 전부 다시 수정하기
+        return 0;
+    }
+
+    public override BigInteger GetCurrentQuestCount()
+    {
+        return 0;
+    }
+
 
     // tODO: 10.30 서버 내에서 계산하던 방식을 삭제하였으므로 추후 확인
     public override void BindDelegateOnServer()

@@ -84,6 +84,6 @@ public class DummyStoryQuestServer : DummyQuestServer
         //QuestDataBase newQuestInfo = QuestData[currentUserQuestID];
         //newQuestInfo.BindDelegateOnServer();
 
-        GameManager.GetInstance().storyQuestObject.RecvQuestDataFromServer();
+        //GameManager.GetInstance().storyQuestObject.RecvQuestDataFromServer();
     }
 }

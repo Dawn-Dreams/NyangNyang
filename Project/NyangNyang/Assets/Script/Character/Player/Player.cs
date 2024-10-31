@@ -42,7 +42,7 @@ public class Player : MonoBehaviour
     // 플레이어 퀘스트 델리게이트
     public delegate void OnGoldSpendingQuestDelegate(QuestCategory questCategory, BigInteger newQuestData);
     public static event OnGoldSpendingQuestDelegate OnRenewGoldSpendingQuest;
-    public delegate void OnMonsterKillQuestDelegate(long monsterKillCount);
+    public delegate void OnMonsterKillQuestDelegate(QuestCategory category, long monsterKillCount);
     public static event OnMonsterKillQuestDelegate OnMonsterKillQuestChange;
     public delegate void OnLevelUpStatusQuestDelegate(StatusLevelType type, BigInteger newVal);
     public static event OnLevelUpStatusQuestDelegate OnLevelUpStatusQuestChange;
@@ -184,7 +184,7 @@ public class Player : MonoBehaviour
         {
             addGoldValue = MyBigIntegerMath.MultiplyWithFloat(addGoldValue, playerStatus.goldAcquisitionPercent);
         }
-        playerCurrency.RequestAddGold(addGoldValue);
+        Player.Gold += addGoldValue;
     }
 
     public static void AddTickets(int[] addTicketValues)
@@ -236,11 +236,11 @@ public class Player : MonoBehaviour
         }
     }
 
-    public static void RecvMonsterKillDataFromServer(long newVal)
+    public static void RecvMonsterKillDataFromServer(QuestCategory questCategory, long newVal)
     {
         if (OnMonsterKillQuestChange != null)
         {
-            OnMonsterKillQuestChange(newVal);
+            OnMonsterKillQuestChange(questCategory, newVal);
         }
     }
 

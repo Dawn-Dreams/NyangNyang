@@ -32,16 +32,11 @@ public class BaseQuest : MonoBehaviour
 
     protected virtual void Start()
     {
-        LoadQuest();
     }
 
-    protected void LoadQuest()
+    public void LoadQuest(QuestDataBase newQuestData)
     {
-        if (!questData)
-        {
-            questData = DummyQuestServer.SendQuestInfoToUser(Player.GetUserID(), requestQuestCategory, requestQuestType);
-        }
-
+        questData = newQuestData;
         questData.QuestActing(this);
     }
 
