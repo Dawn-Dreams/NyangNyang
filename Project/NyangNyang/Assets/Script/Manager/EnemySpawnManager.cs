@@ -24,12 +24,12 @@ public class EnemySpawnManager : MonoBehaviour
         {
             if (isFinalStage)
             {
-                SpawnEnemy(bossEnemyPrefab, 1);
+                SpawnEnemy(bossEnemyPrefab);
             }
             else
             {
                 // TODO: 임시 무리 수, 추후 서버에서 정보를 받아올 예정
-                SpawnEnemy(enemyPrefab,3);
+                SpawnEnemy(enemyPrefab);
             }
         }
     }
@@ -39,13 +39,12 @@ public class EnemySpawnManager : MonoBehaviour
     // StageManager내에서 호출 (고양이가 입장 or 이전 전투 승리 시)
 
     // 새로운 적을 소환하는 메서드
-    void SpawnEnemy(GameObject enemyPrefab, int numOfEnemy)
+    void SpawnEnemy(GameObject prefab)
     {
         Cat cat = GameManager.GetInstance().catObject;
 
         // 적 스폰
-        currentEnemy = Instantiate(enemyPrefab, enemySpawnPosition).GetComponent<Enemy>();
-        currentEnemy.SetNumberOfEnemyInGroup(3);
+        currentEnemy = Instantiate(prefab, enemySpawnPosition).GetComponent<Enemy>();
         currentEnemy.GoToCombatArea(cat, enemyCombatPosition.position);
     }
 

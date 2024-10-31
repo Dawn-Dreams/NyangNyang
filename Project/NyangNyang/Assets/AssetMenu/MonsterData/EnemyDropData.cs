@@ -1,13 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "EnemyDropData", menuName = "ScriptableObjects/EnemyDropData", order = 1)]
+[Serializable]
+[CreateAssetMenu(fileName = "EnemyDropData", menuName = "ScriptableObjects/Enemy/EnemyDropData", order = 1)]
 public class EnemyDropData : ScriptableObject
 {
-    private BigInteger _gold;
-    private BigInteger _exp;
+    [SerializeField] private BigInteger _gold = 1000;
+    [SerializeField] private BigInteger _exp = 50;
 
     //TODO: 장비 등 기타 드랍 아이템이 있을 경우 해당 클래스에 추가
 
@@ -34,8 +36,8 @@ public class EnemyDropData : ScriptableObject
 
     public void GiveItemToPlayer()
     {
-        Player.AddGold(_gold);
-        Player.AddExp(_exp);
+        Player.AddGold(_gold, true);
+        Player.AddExp(_exp, true);
 
         _gold = 0;
         _exp = 0;

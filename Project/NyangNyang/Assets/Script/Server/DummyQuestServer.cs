@@ -149,10 +149,7 @@ public class DummyQuestServer : DummyServerData
     // =========================
 
     // DummyServer라서 시작 시 초기화를 해당 함수에서 진행 (GameManager내에서 호출)
-    public static void ExecuteDummyQuestServer()
-    {
-        OnUserGoldSpending += UserGoldSpending;
-    }
+    // <- 해당 방식 사용하지 않으므로 삭제 해도 됨.
 
     public static QuestDataBase SendQuestInfoToUser(int userID, QuestCategory questCategory, QuestType questType)
     {
@@ -225,7 +222,7 @@ public class DummyQuestServer : DummyServerData
                     // TODO: DummyServerData 내 제공하는 함수 제작 후 연결 진행
                     break;
                 case RewardType.Diamond:
-                     giveUserCurrencyAction += DummyServerData.GiveUserDiamondAndSendData;
+                    giveUserCurrencyAction += DummyServerData.GiveUserDiamondAndSendData;
                     break;
             }
 

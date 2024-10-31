@@ -10,24 +10,16 @@ public enum StatusLevelType
 {
     HP = 0, MP, STR, DEF, HEAL_HP, HEAL_MP, CRIT, ATTACK_SPEED, GOLD, EXP, COUNT
 }
-
+[Serializable]
 public class StatusLevelData
 {
-    public BigInteger[] statusLevels = new BigInteger[(int)StatusLevelType.COUNT];
+    public int[] statusLevels = new int[(int)StatusLevelType.COUNT];
 
 
     private int HP_DEFAULT_VALUE = 50;
     private int MP_DEFAULT_VALUE = 10;
     private int STR_DEFAULT_VALUE = 5;
     //private static int MAX_ATTACK_SPEED = 10000;
-
-
-
-    // 09.13. Temp Constructor 
-    public StatusLevelData()
-    {
-
-    }
 
     public StatusLevelData(int hpLevel, int mpLevel, int strLevel, int defenceLevel = 0, int healHpLevel = 0, int healMpLevel = 0, int critLevel = 0, int attackSpeedLevel = 0, int goldAcquisition = 0, int expAcquisition = 0)
     {
@@ -120,14 +112,16 @@ public class StatusLevelData
         statusLevels[(int)type] += value;
     }
 
+    // 적군의 스탯은 스테이지에 따라 배수로 적용 되는 상황에서 사용
     public void MultipleLevel(float mulValue)
     {
         for (int i = 0; i < (int)StatusLevelType.COUNT; ++i)
         {
-            statusLevels[i] = MyBigIntegerMath.MultiplyWithFloat(statusLevels[i], mulValue, 5);
+            statusLevels[i] = (int)(statusLevels[i] * mulValue);
         }
     }
 
+    // 플레이어의 스탯의 디폴트 효과를 배로 적용시켜주는 함수
     public void BuffDefaultValue(int buffValue)
     {
         HP_DEFAULT_VALUE *= buffValue;
@@ -163,20 +157,18 @@ public class Status
     public Dictionary<StatusLevelType, int> titleOwningEffectValue = new Dictionary<StatusLevelType, int>();
 
     // 계정 스탯 (유저 (고양이) 적용) --> 게임메니저 관리 보류
-    float goldAcquisitionPercent = 1.0f;    // 골드 획득량(가중치) (초기 1, value%로 적용)
-    float expAcquisitionPercent = 1.0f;     // 경험치 획득량(가중치) (초기 1, value%로 적용)
-
-
+    // 적군을 잡을 때에 받는 경우에만 해당
+    public float goldAcquisitionPercent = 1.0f;    // 골드 획득량(가중치) (초기 1, value%로 적용)
+    public float expAcquisitionPercent = 1.0f;     // 경험치 획득량(가중치) (초기 1, value%로 적용)
 
     public Status()
     {
 
     }
 
-    public void GetStatusFromServer(int id)
+    public Status(StatusLevelData data)
     {
-        // TODO : 서버에서 StatusLevelData 받아오기 // UserID 추후 더미서버에 추가
-        levelData = new StatusLevelData(DummyServerData.GetUserStatusLevelData(id));
+        levelData = new StatusLevelData(data);
         UpdateStatus();
     }
 
@@ -196,22 +188,16 @@ public class Status
         return levelData;
     }
 
-    public void SetStatusLevelData(StatusLevelData newData)
-    {
-        levelData = newData;
-        UpdateStatus();
-    }
-
     public void BuffPlayerStatusDefaultValue(int buffMulValue = 5)
     {
         levelData.BuffDefaultValue(buffMulValue);
         UpdateStatus();
     }
 
-    public void UpdateStatusLevelByType(StatusLevelType type, BigInteger newLevel)
+    public void UpdateStatusLevelByType(StatusLevelType type, int newLevel)
     {
         levelData.statusLevels[(int)type] = newLevel;
-        UpdateStatus();
+        UpdateSpecificStatus(type);
     }
 
     // 모든 스테이터스 정보 업데이트

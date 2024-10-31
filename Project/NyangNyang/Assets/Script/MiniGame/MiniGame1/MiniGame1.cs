@@ -85,6 +85,7 @@ public class MiniGame1 : MonoBehaviour
         tilesList.Add(tile);
 
         SetTilePosition(tile, x, y);
+        tile.OnTileTouched += OnTileTouched;
         tile.OnTileDragged += (direction, startX, startY) => OnTileDragged(startX, startY, direction);
     }
 
@@ -98,6 +99,8 @@ public class MiniGame1 : MonoBehaviour
 
     private void OnTileDragged(int startX, int startY, Direction direction)
     {
+        if (isProcessing || selectedTile==null)
+            return;
         int targetX = startX;
         int targetY = startY;
 
@@ -116,7 +119,6 @@ public class MiniGame1 : MonoBehaviour
         // 인접한 타일과 교환
         if (Mathf.Abs(startX - targetX) + Mathf.Abs(startY - targetY) == 1)
         {
-
             StartCoroutine(SwapTilesCoroutine(startX, startY, targetX, targetY));
             CheckAndRemoveMatches();
             selectedTile = null;
@@ -155,6 +157,49 @@ public class MiniGame1 : MonoBehaviour
 
         SetTilePosition(tile1, x2, y2);
         SetTilePosition(tile2, x1, y1);
+
+        bool isMatched = CheckAndRemoveMatches();
+
+        // 매칭된 타일이 삭제된 경우 원래 위치로 돌아가지 않음
+        if (isMatched)
+        {
+            // 타일 삭제 효과를 적용
+            foreach (Tile matchedTile in matchedTiles)
+            {
+                if (matchedTile != null)
+                {
+                    matchedTile.SetMerged();
+                    grid[matchedTile.x, matchedTile.y] = null;
+                }
+            }
+
+            // ----------------타일 떨어지는 적용 로직 호출 예정
+        }
+        else
+        {
+            // 매칭된 타일이 없는 경우 원래 위치로 복귀
+            elapsedTime = 0f;
+            while (elapsedTime < slideDuration)
+            {
+                float t = elapsedTime / slideDuration;
+                tile1.transform.localPosition = Vector2.Lerp(originalPos2, originalPos1, t);
+                tile2.transform.localPosition = Vector2.Lerp(originalPos1, originalPos2, t);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            // 위치를 원래대로 복구
+            grid[x1, y1] = tile1;
+            grid[x2, y2] = tile2;
+
+            tile1.SetPosition(x1, y1);
+            tile2.SetPosition(x2, y2);
+
+            SetTilePosition(tile1, x1, y1);
+            SetTilePosition(tile2, x2, y2);
+        }
+
+        matchedTiles.Clear(); // 매칭 리스트 초기화
         isProcessing = false;
     }
 
@@ -213,7 +258,7 @@ public class MiniGame1 : MonoBehaviour
 
     private List<Tile> matchedTiles = new List<Tile>(); // 삭제할 타일들을 저장할 리스트
 
-    private void CheckAndRemoveMatches()
+    private bool CheckAndRemoveMatches()
     {
         matchedTiles.Clear();
 
@@ -302,13 +347,14 @@ public class MiniGame1 : MonoBehaviour
         {
             if (tile != null) // null 검사
             {
-                grid[tile.x, tile.y] = null;  // 그리드에서 타일 제거
                 tile.SetMerged();             // 타일의 삭제 효과 처리 (타일 비활성화 등)
+                grid[tile.x, tile.y] = null;  // 그리드에서 타일 제거
+                return true;
             }
         }
 
         matchedTiles.Clear(); // 리스트 초기화
-
+        return false;
     }
 
     // 재귀적으로 인접한 같은 타입의 타일을 찾는 함수

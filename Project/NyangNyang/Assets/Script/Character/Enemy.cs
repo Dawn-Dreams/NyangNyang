@@ -10,6 +10,20 @@ using Quaternion = UnityEngine.Quaternion;
 using Transform = UnityEngine.Transform;
 using Vector3 = UnityEngine.Vector3;
 
+public enum EnemyMonsterType
+{
+    Null = 0,
+    // 숲
+
+    // 바다
+    StarFish, Octopus, Puffe, Shellfish, Krake,
+    // 사막
+    // 얼음
+    // 하늘
+
+    Count
+}
+
 public class DummyEnemy
 {
     static GameObject floatingDamage;
@@ -19,18 +33,31 @@ public class DummyEnemy
     private TextMesh hpText;
 
     public AnimationManager animationManager;
+    public EnemyMonsterType monsterType;
+
+    private AddressableHandle<GameObject> _enemyMonsterPrefab;
+
     
-    public DummyEnemy(GameObject dummyObject, BigInteger maxHP)
+    public DummyEnemy(GameObject dummyObject, EnemyMonsterType type, BigInteger maxHP)
     {
         this.dummyGameObject = dummyObject;
-        // TODO: 10/27. 수정하기
-        animationManager = dummyGameObject.GetComponentInChildren<AnimationManager>();
+
+        monsterType = type;
+
+        LoadEnemyMonsterAsset();
 
         this.currentHP = this.maxHP = maxHP;
 
         hpText = dummyObject.GetComponentInChildren<TextMesh>();
         hpText.text = currentHP + " / " + maxHP;
     }
+
+    private void LoadEnemyMonsterAsset()
+    {
+        _enemyMonsterPrefab = new AddressableHandle<GameObject>().Load("Enemy/"+monsterType);
+        animationManager = GameObject.Instantiate(_enemyMonsterPrefab.obj, dummyGameObject.transform).GetComponent<AnimationManager>();
+    }
+
 
     public BigInteger TakeDamage(BigInteger getDamage)
     {
@@ -91,7 +118,6 @@ public class Enemy : Character
 {
     public GameObject floatingDamage;
     [SerializeField] private StageManager stageManager;
-    protected EnemyDropData DropData = null;
 
     [SerializeField] private GameObject[] dummyEnemyObj;
     private List<DummyEnemy> _dummyEnemies;
@@ -106,8 +132,17 @@ public class Enemy : Character
     private float currentMoveTime = 0.0f;
     private Character catObject;
 
+    // 몬스터 정보에 대한 변수
+    public MonsterData monsterData;
+
     protected override void Awake()
     {
+        // stage manager 
+        if (stageManager == null)
+        {
+            stageManager = GameManager.GetInstance().stageManager;
+        }
+
         DummyEnemy.SetFloatingDamage(floatingDamage);
         _dummyEnemies = new List<DummyEnemy>();
 
@@ -115,22 +150,18 @@ public class Enemy : Character
         characterID = 0;
         IsEnemy = true;
 
-        // 몬스터 정보 받기 (임시 코드 & 서버에서 미리 받아서 적용될 수 있도록 or SpawnerManager 에서 할 수 있도록 )
+        // --몬스터 정보 받기 (임시 코드 & 서버에서 미리 받아서 적용될 수 있도록 or SpawnerManager 에서 할 수 있도록 )--
+        // TODO : 10/30. 몬스터 정보 클라에서 관리
         int currentTheme= GameManager.GetInstance().stageManager.GetCurrentTheme();
         int currentStage = GameManager.GetInstance().stageManager.GetCurrentStage();
-        MonsterData monsterData = new MonsterData().SetMonsterData(DummyServerData.GetEnemyData(currentTheme, currentStage,
-            GameManager.GetInstance().stageManager.maxStageCount));
-        DropData = monsterData.enemyDropData;
-        status = new Status();
-        status.SetStatusLevelData(monsterData.monsterStatus);
+        int currentGate = GameManager.GetInstance().stageManager.GetCurrentGate();
+        int maxGate = GameManager.GetInstance().stageManager.maxGateCount;
+
+        status = new Status(monsterData.monsterStatus);
 
         base.Awake();
         
-        // stage manager 
-        if (stageManager == null)
-        {
-            stageManager = FindObjectOfType<StageManager>();
-        }
+        SetNumberOfEnemyInGroup(monsterData.enemyCount);
 
         // ~~enemy drop data 받기~~  몬스터 정보 받기에서 진행
         //if (DropData == null)
@@ -155,7 +186,7 @@ public class Enemy : Character
             // active dummy enemy
             if (i < numOfEnemy)
             {
-                _dummyEnemies.Add(new DummyEnemy(dummyEnemyObj[i], dummyMaxHp));
+                _dummyEnemies.Add(new DummyEnemy(dummyEnemyObj[i], monsterData.monsterTypes[i], dummyMaxHp));
             }
             else
             {
@@ -283,9 +314,9 @@ public class Enemy : Character
 
     protected override void Death()
     {
-        if (DropData)
+        if (monsterData.enemyDropData)
         {
-            DropData.GiveItemToPlayer();
+            monsterData.enemyDropData.GiveItemToPlayer();
         }
 
         if (stageManager)

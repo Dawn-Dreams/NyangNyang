@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Numerics;
+using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -8,20 +9,31 @@ public class Player : MonoBehaviour
     public static string PlayerName;
 
     public static Status playerStatus;
-    private static CurrencyData playerCurrency;
+
+    // ===== 플레이어 재화 =====
+    public static CurrencyData playerCurrency;
+    public static BigInteger Gold
+    {
+        get => playerCurrency.gold;
+        set => playerCurrency.SetGold(value);
+    }
+
+    public static int Diamond
+    {
+        get => playerCurrency.diamond;
+        set => playerCurrency.SetDiamond(value);
+    }
+    // ========================
+    // ===== 플레이어 경험치 =====
     private static UserLevelData playerLevelData;
+    public static UserLevelData UserLevel
+    {
+        get => playerLevelData;
+        set => playerLevelData.SetUserLevelData(value.currentLevel, value.currentExp);
+    }
 
-    // 골드 변화 델리게이트 이벤트
-    public delegate void OnGoldChangeDelegate(BigInteger newGoldVal);
-    public static event OnGoldChangeDelegate OnGoldChange;
+    // ==========================
 
-    // 다이아 변화 델리게이트 이벤트
-    public delegate void OnDiamondChangeDelegate(BigInteger newDiamondValue);
-    public static event OnDiamondChangeDelegate OnDiamondChange;
-
-    // 경험치 변화 델리게이트 이벤트
-    public delegate void OnExpChangeDelegate(UserLevelData newLevelData);
-    public static event OnExpChangeDelegate OnExpChange;
 
     // 티켓 변화 델리게이트 이벤트
     public delegate void OnTicketChangeDelegate(int[] newTicketVal);
@@ -49,38 +61,10 @@ public class Player : MonoBehaviour
 
     // 한 스테이지 내에서 반복 전투를 진행하는 것에 대한 변수
     public static bool continuousCombat = false;
-
+    // 최대 클리어 스테이지 정보
     public static int[] playerHighestClearStageData = new int[2];
 
-    public static BigInteger Gold
-    {
-        get { return playerCurrency.gold; }
-        set
-        {
-            if (playerCurrency.gold == value) return;
-
-            
-            playerCurrency.gold = value;
-
-            if(OnGoldChange != null)
-                OnGoldChange(playerCurrency.gold);
-        }
-    }
-
-    public static BigInteger Diamond
-    {
-        get { return playerCurrency.diamond; }
-        set
-        {
-            if (value == playerCurrency.diamond) return;
-            playerCurrency.diamond = value;
-
-            if (OnDiamondChange != null)
-            {
-                OnDiamondChange(playerCurrency.diamond);
-            }
-        }
-    }
+   
 
     public static int[] Ticket
     {
@@ -110,43 +94,20 @@ public class Player : MonoBehaviour
         }
     }
 
-    public static UserLevelData UserLevel
-    {
-        get
-        {
-            return playerLevelData;
-        }
-        set
-        {
-            if (playerLevelData.currentExp == value.currentExp
-                && playerLevelData.currentLevel == value.currentLevel) return;
-            playerLevelData = value;
-
-            if (OnExpChange != null)
-                OnExpChange(playerLevelData);
-        }
-    }
+    // 게임 매니저 내에서 실행
     public static void OnAwakeGetInitialDataFromServer()
     {
         // 서버로부터 user id 받기
         userID = 0;
         if (playerStatus == null)
         {
-            playerStatus = new Status();
-            playerStatus.GetStatusFromServer(userID);
+            playerStatus = new Status(DummyServerData.GetUserStatusLevelData(userID));
             // 플레이어는 디폴트 스탯 버프
             playerStatus.BuffPlayerStatusDefaultValue(5);
         }
-        if (playerCurrency == null)
-        {
-            playerCurrency = ScriptableObject.CreateInstance<CurrencyData>().SetCurrencyData(DummyServerData.GetUserCurrencyData(userID));
-        }
-        if (playerLevelData == null)
-        {
-            GetExpDataFromServer();
-        }
-
-
+        GetCurrencyDataFromServer();
+        GetExpDataFromServer();
+        
         // 서버로부터 받기
         PlayerName = "냥냥이";
 
@@ -179,11 +140,6 @@ public class Player : MonoBehaviour
             // 다이아 지급
             Diamond += 100;
         }
-
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            GameManager.GetInstance().stageManager.GoToSpecificStage(20,3);
-        }
     }
 
     public static int GetUserID()
@@ -191,34 +147,44 @@ public class Player : MonoBehaviour
         return userID;
     }
 
-    public static void GetGoldDataFromServer()
+    public static void GetCurrencyDataFromServer()
     {
-        Gold = DummyServerData.GetUserGoldData(userID);
-        //OnGoldChange(Gold);
-        if(OnGoldChange != null)
-            OnGoldChange(Gold);
+        if (playerCurrency == null)
+        {
+            playerCurrency = ScriptableObject.CreateInstance<CurrencyData>();
+        }
+        CurrencyData data = DummyServerData.GetUserGoldData(userID);
+        Gold = data.gold;
+        Diamond = data.diamond;
     }
 
     public static void GetExpDataFromServer()
     {
-        // 해당 방식으로 저장될 경우 래퍼런스 타입을 가짐
-        //playerLevelData = DummyServerData.GetUserLevelData(userID);
-        playerLevelData = UserLevelData.GetNewDataFromSource(DummyServerData.GetUserLevelData(userID));
+        if (UserLevel == null)
+        {
+            playerLevelData = ScriptableObject.CreateInstance<UserLevelData>();
+        }
+        UserLevelData data = UserLevelData.GetNewDataFromSource(DummyServerData.GetUserLevelData(userID));
+        UserLevel.SetUserLevelData(data.currentLevel, data.currentExp);
 
-
-        if (OnExpChange != null)
-            OnExpChange(playerLevelData);
     }
 
-    public static void AddExp(BigInteger addExpValue)
+    public static void AddExp(BigInteger addExpValue, bool applyExpBuff = false)
     {
+        if (applyExpBuff)
+        {
+            addExpValue = MyBigIntegerMath.MultiplyWithFloat(addExpValue, playerStatus.expAcquisitionPercent);
+        }
         playerLevelData.AddExp(addExpValue);
     }
 
-    public static void AddGold(BigInteger addGoldValue)
+    public static void AddGold(BigInteger addGoldValue, bool applyGoldBuff = false)
     {
+        if (applyGoldBuff)
+        {
+            addGoldValue = MyBigIntegerMath.MultiplyWithFloat(addGoldValue, playerStatus.goldAcquisitionPercent);
+        }
         playerCurrency.RequestAddGold(addGoldValue);
-        // Gold += addGoldValue;
     }
 
     public static void AddTickets(int[] addTicketValues)
@@ -236,7 +202,7 @@ public class Player : MonoBehaviour
             OnTicketChange(playerCurrency.ticket);
     }
 
-    public static void UpdatePlayerStatusLevelByType(StatusLevelType type, BigInteger newValue)
+    public static void UpdatePlayerStatusLevelByType(StatusLevelType type, int newValue)
     {
         playerStatus.UpdateStatusLevelByType(type, newValue);
         if (OnStatusLevelChange != null)
