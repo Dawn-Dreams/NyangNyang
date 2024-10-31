@@ -32,9 +32,9 @@ public class SettingsMenu : MonoBehaviour
 
     void Start()
     {
-        
+
         //흠냐흠냐~
-        userUID = Player.GetUserID().ToString() + "-UID";
+        userUID = FormatUID(Player.GetUserID().ToString());
         changeNickname = Player.GetNickname();
         
         
@@ -192,12 +192,27 @@ public class SettingsMenu : MonoBehaviour
     public void ChangeNickname()
     {
         changeNickname = nicknameText.text;
-        int uid;
-        int.TryParse(userUID, out uid);
-
         NetworkManager.GetStatusManager().ChangeNickname(Player.GetUserID(), Player.GetNickname(), changeNickname);
 
         Debug.Log($"닉네임이 {changeNickname}(으)로 변경됨");
         // 닉네임 변경 후 서버에 저장
+    }
+
+    public string FormatUID(string uid)
+    {
+        // UID가 null이거나 비어있으면 기본값 반환
+        if (string.IsNullOrEmpty(uid))
+        {
+            return "0000-0000-0000-UID";
+        }
+
+        // UID를 0000-0000-0000-UID 형식으로 포맷팅
+        // UID의 길이가 12보다 작으면 앞에 0을 추가
+        string formattedUID = uid.PadLeft(12, '0');
+
+        // 형식에 맞게 하이픈 추가
+        formattedUID = $"{formattedUID.Substring(0, 4)}-{formattedUID.Substring(4, 4)}-{formattedUID.Substring(8, 4)}-{uid}";
+        return $"{formattedUID.Substring(0, 4)}-{formattedUID.Substring(4, 4)}-{formattedUID.Substring(8, 4)}-{formattedUID.Substring(8)}";
+       // return formattedUID;
     }
 }

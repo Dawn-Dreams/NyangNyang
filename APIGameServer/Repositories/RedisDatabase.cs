@@ -104,12 +104,14 @@ public class RedisDatabase : IRedisDatabase
                 count= 1;
                 score = (int)rankdata.Score;
             }
+            string nickname = await _redisDb.StringGetAsync(rankdata.Value.ToString());
 
             ranking.Add(new RankingData
             {
                 rank = rank,
                 uid =rankdata.Value,
-                nickname = "일단 몰라~",
+
+                nickname = nickname,
                 score = score,
 
             });
