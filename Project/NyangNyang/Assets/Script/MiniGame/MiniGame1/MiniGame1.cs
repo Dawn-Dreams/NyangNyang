@@ -6,7 +6,7 @@ using UnityEngine;
 public class MiniGame1 : MonoBehaviour
 {
     public int gridSizeX = 7;   // 그리드의 가로 크기
-    public int gridSizeY = 7;   // 그리드의 세로 크기
+    public int gridSizeY = 7+1;   // 그리드의 세로 크기 + 최상단
     public GameObject tilePrefab; // 타일 프리팹
     public Transform gridParent;  // 타일이 배치될 부모 오브젝트
     public TileType[] possibleTileTypes; // 생성 가능한 타일의 종류들
@@ -37,6 +37,7 @@ public class MiniGame1 : MonoBehaviour
         foreach (var tile in tilesList)
         {
             Destroy(tile.gameObject);
+            Debug.Log("ResetGrid");
         }
 
         tilesList.Clear();
@@ -169,6 +170,7 @@ public class MiniGame1 : MonoBehaviour
                 if (matchedTile != null)
                 {
                     matchedTile.SetMerged();
+                    Debug.Log("SwapTilesCoroutine");
                     grid[matchedTile.x, matchedTile.y] = null;
                 }
             }
@@ -283,8 +285,8 @@ public class MiniGame1 : MonoBehaviour
                     }
                     else break;
                 }
-                if (horizontalMatch.Count >= 3)
-                    matchedTiles.AddRange(horizontalMatch.Where(tile => tile != null)); // null 검사 후 추가
+                if (horizontalMatch.Count >= matchCount) // 필요한 매칭 개수 확인
+                    matchedTiles.AddRange(horizontalMatch);
 
                 // 세로 체크
                 List<Tile> verticalMatch = new List<Tile> { currentTile };
@@ -297,50 +299,17 @@ public class MiniGame1 : MonoBehaviour
                     }
                     else break;
                 }
-                if (verticalMatch.Count >= 3)
-                    matchedTiles.AddRange(verticalMatch.Where(tile => tile != null)); // null 검사 후 추가;
-            }
-        }
-
-        // 2x2 모양 체크
-        for (int x = 0; x < gridSizeX - 1; x++)
-        {
-            for (int y = 0; y < gridSizeY - 1; y++)
-            {
-                Tile tile1 = grid[x, y];
-                Tile tile2 = grid[x + 1, y];
-                Tile tile3 = grid[x, y + 1];
-                Tile tile4 = grid[x + 1, y + 1];
-
-                // null 체크 추가
-                if (tile1 != null && tile2 != null && tile3 != null && tile4 != null &&
-                    tile1.tileType == tile2.tileType &&
-                    tile1.tileType == tile3.tileType &&
-                    tile1.tileType == tile4.tileType)
-                {
-                    matchedTiles.Add(tile1);
-                    matchedTiles.Add(tile2);
-                    matchedTiles.Add(tile3);
-                    matchedTiles.Add(tile4);
-                }
+                if (verticalMatch.Count >= matchCount)
+                    matchedTiles.AddRange(verticalMatch);
             }
         }
 
         // 중복 타일 제거
         matchedTiles = matchedTiles.Distinct().ToList();
 
-        // 인접한 같은 타입 타일도 찾음
-        List<Tile> additionalMatches = new List<Tile>();
-        foreach (Tile tile in matchedTiles)
-        {
-            // null 검사
-            if (tile != null)
-            {
-                FindConnectedTiles(tile, tile.tileType, additionalMatches);
-            }
-        }
-        matchedTiles.AddRange(additionalMatches);
-        matchedTiles = matchedTiles.Distinct().ToList(); // 중복 제거
+        // 매칭된 타일이 없으면 false 반환
+        if (matchedTiles.Count == 0)
+            return false;
 
         // 삭제 수행
         foreach (Tile tile in matchedTiles)
@@ -349,12 +318,11 @@ public class MiniGame1 : MonoBehaviour
             {
                 tile.SetMerged();             // 타일의 삭제 효과 처리 (타일 비활성화 등)
                 grid[tile.x, tile.y] = null;  // 그리드에서 타일 제거
-                return true;
             }
         }
 
         matchedTiles.Clear(); // 리스트 초기화
-        return false;
+        return true;           // 매칭된 타일이 삭제됨을 반환
     }
 
     // 재귀적으로 인접한 같은 타입의 타일을 찾는 함수
