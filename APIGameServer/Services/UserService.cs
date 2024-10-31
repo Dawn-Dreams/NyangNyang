@@ -45,7 +45,7 @@ public class UserService : IUserService
  
         if (attendence != 0 && rewards[attendence] >=0 )
         {
-            await _mailService.AddRewardinMailbox(uid, (int)MailType.Reward,rewards[attendence]);
+            await _mailService.AddRewardinMailbox(uid, (int)mailType.Reward,rewards[attendence]);
         }
         return rewards[attendence];
     }

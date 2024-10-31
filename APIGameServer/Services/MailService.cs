@@ -19,7 +19,7 @@ public class MailService : IMailService
     public async Task<ErrorCode> AddRewardinMailbox(int uid,int type, int reward)
     {
 
-        var res = await _mailbox.InsertMailbox(new Mail(uid, type, reward));
+        var res = await _mailbox.InsertMailbox(new mail(uid, type, reward));
         if(res == 0)
         {
             //잘못된거임 에러코드를 어쩌구해야한다.
@@ -32,11 +32,11 @@ public class MailService : IMailService
         return ErrorCode.None;
     }
 
-    public async Task<(ErrorCode, List<Mail>)> GetMailList(int uid )
+    public async Task<(ErrorCode, List<mail>)> GetMailList(int uid )
     {
 
         //db에서 가져와야함
-        List<Mail> mails = await _mailbox.GetAllMailList(uid);
+        List<mail> mails = await _mailbox.GetAllMailList(uid);
 
        if(mails.Count == 0)
         {

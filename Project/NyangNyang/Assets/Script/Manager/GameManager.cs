@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,12 +25,17 @@ public class GameManager : MonoBehaviour
             Instance = this;
 
         // 시작 시 서버로부터 정보 받기
-        Player.OnAwakeGetInitialDataFromServer();
+      //  Player.OnAwakeGetInitialDataFromServer();
 
         // CostumeManager.SetInstance 내에 해당 함수를 이렇게 작성한 이유를 메모
         CostumeManager.SetInstance(costumeManager);
 
         PlayerCostume.OnAwake_CallInGameManager();
+
+        Debug.Log("GameManager instatnce  초기화");
+
     }
+
+
 
 }

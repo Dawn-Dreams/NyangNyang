@@ -38,7 +38,7 @@ public class ResponseLogin
     public PlayerGoodsData goods {  get; set; }
 
     //메일리스트도 같이 받자. 
-    public List<Mail> mailList { get; set; }
+    public List<mail> mailList { get; set; }
 
 
 }

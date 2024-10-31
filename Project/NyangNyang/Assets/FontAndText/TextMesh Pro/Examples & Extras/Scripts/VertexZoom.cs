@@ -71,6 +71,7 @@ namespace TMPro.Examples
 
             while (true)
             {
+
                 // Allocate new vertices 
                 if (hasTextChanged)
                 {

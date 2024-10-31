@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -6,6 +7,7 @@ using UnityEngine.UI;
 
 public class OptionMenuManager : MonoBehaviour
 {
+    private static OptionMenuManager instance;
     public GameObject toggleParentObject;   // Toggle들을 담고 있는 부모 오브젝트
     public GameObject panelParentObject;    // 패널들을 담고 있는 부모 오브젝트
 
@@ -17,9 +19,17 @@ public class OptionMenuManager : MonoBehaviour
 
     private Toggle[] toggles;               // 동적으로 찾은 Toggle들을 저장할 배열
     private GameObject[] panels;            // 동적으로 찾은 패널들을 저장할 배열
+    
+    private List<RankingData> rankList;
 
+    public static OptionMenuManager GetOptionManager()
+    {
+        return instance;
+    }
     private void Start()
     {
+
+        if (instance == null) instance = this;
         FindTogglesAndPanels();
 
         for (int i = 0; i < toggles.Length; i++)
@@ -49,6 +59,7 @@ public class OptionMenuManager : MonoBehaviour
 
     void FindTogglesAndPanels()
     {
+
         toggles = toggleParentObject.GetComponentsInChildren<Toggle>();
         panels = new GameObject[panelParentObject.transform.childCount];
 
@@ -60,6 +71,8 @@ public class OptionMenuManager : MonoBehaviour
 
     void OpenPanel(int index)
     {
+
+
         foreach (GameObject panel in panels)
         {
             panel.SetActive(false);
@@ -146,17 +159,10 @@ public class OptionMenuManager : MonoBehaviour
     }
 
     // 랭킹
-    void OpenRankingPanel()
+    public void SetRankList(List<RankingData> ranks)
     {
-        List<RankingData> rankList = DummyOptionsServer.GetRankingData();
+        rankList = ranks;
         GameObject contentObj = GameObject.Find("RankUI/Viewport/Content");
-
-        // 기존에 생성된 요소들을 모두 제거
-        foreach (Transform child in contentObj.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
         if (rankList.Count > 0)
         {
             foreach (RankingData rankData in rankList)
@@ -176,6 +182,19 @@ public class OptionMenuManager : MonoBehaviour
         {
             Debug.LogWarning("랭킹 데이터가 없습니다.");
         }
+
+    }
+    void OpenRankingPanel()
+    {
+
+        GameObject contentObj = GameObject.Find("RankUI/Viewport/Content");
+        // 기존에 생성된 요소들을 모두 제거
+        foreach (Transform child in contentObj.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        NetworkManager.GetStatusManager().UpdatePlayersRanking(rankList);
+
     }
 
     // 게시판

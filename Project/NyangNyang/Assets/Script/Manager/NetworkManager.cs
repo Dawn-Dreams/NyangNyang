@@ -19,7 +19,6 @@ enum MailType
 public class NetworkManager : MonoBehaviour
 {
     private static NetworkManager instance;
-    
     private List<string> _mailTitle = new List<string>();
 
     public static NetworkManager GetStatusManager() 
@@ -28,20 +27,24 @@ public class NetworkManager : MonoBehaviour
     }
     string _baseUrl = "http://127.0.0.1:11500";
 
-    
     private void Start()
     {
-        if (instance == null)
+        if (instance == null) 
         {
-            instance = gameObject.AddComponent<NetworkManager>();
+            instance = this;
+            DontDestroyOnLoad(gameObject);
 
             _mailTitle.Add("이벤트 우편");
             _mailTitle.Add("보상 우편");
             _mailTitle.Add("친구 신청");
-        }
 
-        Debug.Log("networkd instatnce  초기화..");
+            UserLogin(5);
+        }
+    
+
+        Debug.Log("networkd instatnce  초기화");
     }
+
 
 
     IEnumerator CoSendNetRequest(string url, object obj, Action<UnityWebRequest> callback)
@@ -83,15 +86,34 @@ public class NetworkManager : MonoBehaviour
 
     }
 
-    public void UserLogin()
+    public void UserLogin(int uid)
     {
         Debug.Log("User Login");
-        
+
         //api서버에서 로그인 관련 정리되면 추가
 
-        //ReqRegist req = new ReqRegist();
-        //StartCoroutine(CoSendNetRequest("Regist", req, GetUserId));
+        RequestLogin req = new RequestLogin
+        {
+            uid = uid
+        };
+        StartCoroutine(CoSendNetRequest("Login", req, GetPlayerGameData));
 
+    }
+    void GetPlayerGameData(UnityWebRequest uwr)
+    {
+        var res = JsonUtility.FromJson<ResponseLogin>(uwr.downloadHandler.text);
+
+        if (res.result != ErrorCode.None)
+        {
+            
+            Debug.Log("Failed gacha");
+        }
+        else
+        {
+            Player.SetPlayerNickname("nayeng5");
+            Player.SetUserId(5);
+            Debug.Log("Success Login");
+        }
     }
 
     public void ChangeNickname(int uid, string oldNickname, string newNickname)
@@ -99,8 +121,23 @@ public class NetworkManager : MonoBehaviour
         ReqChangeNickname req = new ReqChangeNickname(uid, oldNickname, newNickname);
 
         StartCoroutine(CoSendNetRequest("ChangeNickname", req,
-            (result) => SetNewNickname(result, newNickname)));
+            (result) => ChangePlayerNickname(result, newNickname)));
 
+    }
+
+    void ChangePlayerNickname(UnityWebRequest uwr, string nichname)
+    {
+        var res = JsonUtility.FromJson<ResChangeNickname>(uwr.downloadHandler.text);
+        if (res.result != ErrorCode.None)
+        {
+            //플레이어 닉네임 변경해야한다.
+            Player.SetPlayerNickname(nichname);
+
+        }
+        else
+        {
+            //중복된 플레이어가 있는거임 변경 막야아한다.
+        }
     }
 
     //DB에 플레이어 정보 업데이트시 사용하는 함수 
@@ -109,7 +146,7 @@ public class NetworkManager : MonoBehaviour
     {
         Debug.Log("Update Player Status in DB");
 
-        ReqUpdateStatusData req = new ReqUpdateStatusData
+        PlayerStatusData req = new PlayerStatusData
         {
             uid = uid,
             hp = hp,
@@ -134,7 +171,7 @@ public class NetworkManager : MonoBehaviour
     {
         Debug.Log("Update Player Status Lv in DB");
 
-        ReqUpdateStatusLvData req = new ReqUpdateStatusLvData
+        PlayerStatusLevelData req = new PlayerStatusLevelData
         {
             uid = uid,
             hp_lv = hp_lv,
@@ -166,47 +203,14 @@ public class NetworkManager : MonoBehaviour
 
     }
 
-    public void UpdatePlayersRanking()
+    public void UpdatePlayersRanking(List<RankingData> rankList)
     {
+        RequestUpdateScore req = new RequestUpdateScore();
+
         //서버에 랭킹 업데이트 요청 -> 랭킹ui누를때 부르면될듯?
-        StartCoroutine(CoSendNetRequest("UpdateRanking", null, SettingRankData));
-        Debug.Log("UpdatePlayersRanking");
-
-    }
-
-    public void EquipmentGacha(int uid)
-    {
-        ReqWeaponGacha req = new ReqWeaponGacha { uid = uid };
-
-        Debug.Log("GachaEquipmentController");
-
-        StartCoroutine(CoSendNetRequest("GachaEquipment", req, GetEquipmentGacha));
-
-    }
-    public void SkillsGacha(int uid)
-    {
-        ReqSkiilGacha req = new ReqSkiilGacha { uid = uid };
-
-        Debug.Log("GachaSillsController");
-
-        StartCoroutine(CoSendNetRequest("GachaSkiils", req, GetSkiilGacha));
-
-    }
-
-    void GetUserId(UnityWebRequest uwr)
-    {
-        var res = JsonUtility.FromJson<ResRegist>(uwr.downloadHandler.text);
-
-        if (res.result != (int)ErrorCode.None)
-        {
-            Debug.Log("Failed get register data");
-        }
-        else
-        {
-            Debug.Log(string.Format("Register Success User ID {0}", res.uid));
-
-            //Player.SetUserId(res.uid);
-        }
+        StartCoroutine(CoSendNetRequest("UpdateRanking", null, 
+            (result) => SettingRankData(result)));
+        Debug.Log("SettingRankData");
 
     }
     void SettingRankData(UnityWebRequest uwr)
@@ -220,40 +224,20 @@ public class NetworkManager : MonoBehaviour
         }
         else
         {
-            //일단 받아오는거까지 완료.
-            foreach (RankingData rank in res.rankingData)
-            {
-                Debug.Log(string.Format("UID : {0}, SCORE : {1}", rank.uid, rank.score));
 
-            }
+            OptionMenuManager.GetOptionManager().SetRankList(res.rankingData);
+
         }
     }
-    void UpdateStats(UnityWebRequest uwr)
+    public void EquipmentGacha(int uid)
     {
-        //서버에 DB저장요청 보내고 서버에서 받은 응답
+        ReqWeaponGacha req = new ReqWeaponGacha { uid = uid };
 
-        var res = JsonUtility.FromJson<ResUpdateDbData>(uwr.downloadHandler.text);
-        if (res.result != (int)ErrorCode.None)
-        {
-            Debug.Log("Failed saved DB");
-        }
-        else
-        {
-            Debug.Log("Success saved DB");
-        }
+        Debug.Log("GachaEquipmentController");
+
+        StartCoroutine(CoSendNetRequest("GachaEquipment", req, GetEquipmentGacha));
 
     }
-
-    void SetNewNickname(UnityWebRequest uwr, string nichname)
-    {
-        var res = JsonUtility.FromJson<ResChangeNickname>(uwr.downloadHandler.text);
-        if(res.result!=ErrorCode.None)
-        {
-            //닉네임변경해줘야한다.
-            nichname = nichname+"변경해부면됨~~";
-        }
-    }
-
     void GetEquipmentGacha(UnityWebRequest uwr)
     {
         var res = JsonUtility.FromJson<ResWeaponGacha>(uwr.downloadHandler.text);
@@ -271,7 +255,15 @@ public class NetworkManager : MonoBehaviour
             Debug.Log("Success gacha");
         }
     }
+    public void SkillsGacha(int uid)
+    {
+        ReqSkiilGacha req = new ReqSkiilGacha { uid = uid };
 
+        Debug.Log("GachaSillsController");
+
+        StartCoroutine(CoSendNetRequest("GachaSkiils", req, GetSkiilGacha));
+
+    }
     void GetSkiilGacha(UnityWebRequest uwr)
     {
         var res = JsonUtility.FromJson<ResSkillGacha>(uwr.downloadHandler.text);
@@ -289,5 +281,46 @@ public class NetworkManager : MonoBehaviour
             Debug.Log("Success gacha");
         }
     }
+
+    void GetUserId(UnityWebRequest uwr) //유저처음입장할때
+    {
+        var res = JsonUtility.FromJson<ResRegist>(uwr.downloadHandler.text);
+
+        if (res.result != (int)ErrorCode.None)
+        {
+            Debug.Log("Failed get register data");
+        }
+        else
+        {
+            Debug.Log(string.Format("Register Success User ID {0}", res.uid));
+
+            Player.SetUserId(res.uid);
+            Debug.Log(string.Format("Register ger userId {0}", Player.GetUserID()));
+
+        }
+
+    }
+  
+    void UpdateStats(UnityWebRequest uwr)
+    {
+        //서버에 DB저장요청 보내고 서버에서 받은 응답
+
+        var res = JsonUtility.FromJson<ResUpdateDbData>(uwr.downloadHandler.text);
+        if (res.result != (int)ErrorCode.None)
+        {
+            Debug.Log("Failed saved DB");
+        }
+        else
+        {
+            Debug.Log("Success saved DB");
+        }
+
+    }
+
+  
+
+
+
+
 
 }

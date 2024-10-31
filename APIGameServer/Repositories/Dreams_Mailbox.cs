@@ -25,17 +25,17 @@ public class Dreams_Mailbox : IDreams_Mailbox
 
     }
 
-    public async Task<int> InsertMailbox(Mail mail)
+    public async Task<int> InsertMailbox(mail mail)
     {
         return await _queryFactory.Query("mailbox").InsertAsync(mail);
     }
 
-    public async Task<List<Mail>> GetAllMailList(int uid)
+    public async Task<List<mail>> GetAllMailList(int uid)
     {
         var result = await _queryFactory.Query("mailbox")
             .Where("uid", uid)
             .Select()
-            .GetAsync<Mail>();
+            .GetAsync<mail>();
 
         return result.ToList();
 

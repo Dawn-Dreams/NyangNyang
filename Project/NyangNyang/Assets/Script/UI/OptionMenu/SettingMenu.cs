@@ -1,4 +1,5 @@
 ﻿using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,12 +26,18 @@ public class SettingsMenu : MonoBehaviour
     public Button askButton;
 
     private string userUID = "1234-5678-UID"; // 사용자 UID
-    private string userNickname = "Player";  // 기본 닉네임
+    private string changeNickname = "Player";  // 기본 닉네임
     private string normalCoupon = "DAWNDREAMS2024";  // 예시 쿠폰 번호
     private float brightness = 1f;  // 기본 밝기 값 (1.0 = 최대 밝기)
 
     void Start()
     {
+        
+        //흠냐흠냐~
+        userUID = Player.GetUserID().ToString() + "-UID";
+        changeNickname = Player.GetNickname();
+        
+        
         // 초기 설정
         bgmVolumeSlider.value = AudioManager.Instance.bgmVolume;
         sfxVolumeSlider.value = AudioManager.Instance.sfxVolume;
@@ -41,7 +48,7 @@ public class SettingsMenu : MonoBehaviour
         alertToggle.isOn = PlayerPrefs.GetInt("notificationsEnabled", 1) == 1;
         vibrationToggle.isOn = PlayerPrefs.GetInt("vibrationEnabled", 1) == 1;
         uidText.text = userUID;
-        nicknameText.text = userNickname;
+        nicknameText.text = changeNickname;
         couponText.text = normalCoupon;
 
         // 이벤트 연결
@@ -64,6 +71,8 @@ public class SettingsMenu : MonoBehaviour
 
     public void OpenSettingsMenu()
     {
+
+
         settingsMenuCanvas.SetActive(true);
         //Time.timeScale = 0f;  // 일시정지
     }
@@ -182,8 +191,13 @@ public class SettingsMenu : MonoBehaviour
 
     public void ChangeNickname()
     {
-        userNickname = nicknameText.text;
-        Debug.Log($"닉네임이 {userNickname}(으)로 변경됨");
+        changeNickname = nicknameText.text;
+        int uid;
+        int.TryParse(userUID, out uid);
+
+        NetworkManager.GetStatusManager().ChangeNickname(Player.GetUserID(), Player.GetNickname(), changeNickname);
+
+        Debug.Log($"닉네임이 {changeNickname}(으)로 변경됨");
         // 닉네임 변경 후 서버에 저장
     }
 }

@@ -8,6 +8,6 @@ public interface IMailService : IDisposable
 
     public Task<ErrorCode> RemoveinMailbox(string uid, int type, int reward);
 
-    public Task<(ErrorCode, List<Mail>)> GetMailList(int uid);
+    public Task<(ErrorCode, List<mail>)> GetMailList(int uid);
 
 }

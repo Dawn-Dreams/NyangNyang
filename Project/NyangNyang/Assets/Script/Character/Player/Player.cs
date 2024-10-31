@@ -97,8 +97,8 @@ public class Player : MonoBehaviour
     // 게임 매니저 내에서 실행
     public static void OnAwakeGetInitialDataFromServer()
     {
-        // 서버로부터 user id 받기
-        userID = 0;
+        // 서버로부터 user id 제공하면 data 받기 -> 일단 test로 4번유저로 함
+
         if (playerStatus == null)
         {
             playerStatus = new Status(DummyServerData.GetUserStatusLevelData(userID));
@@ -108,9 +108,25 @@ public class Player : MonoBehaviour
         GetCurrencyDataFromServer();
         GetExpDataFromServer();
         
-        // 서버로부터 받기
-        PlayerName = "냥냥이";
 
+        PlayerName = "nyang"+userID;
+
+    }
+    public static void SetUserId(int id)
+    {
+        userID = id;
+    }
+
+    //test loging 진행함수
+    public static void SetPlayerStats(StatusLevelData status)
+    {
+        playerStatus = new Status(status);
+
+    }
+
+    public static void SetPlayerNickname(string nickname)
+    {
+        PlayerName = nickname;
     }
 
     void Update()
@@ -146,6 +162,12 @@ public class Player : MonoBehaviour
     {
         return userID;
     }
+    public static string GetNickname()
+    {
+        return PlayerName;
+    }
+
+   
 
     public static void GetCurrencyDataFromServer()
     {

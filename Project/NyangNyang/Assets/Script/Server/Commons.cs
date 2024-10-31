@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 
 [System.Serializable]
-public class ReqUpdateStatusData
+public class PlayerStatusData
 {
     public int uid;
     public int hp;
@@ -20,7 +20,7 @@ public class ReqUpdateStatusData
 }
 
 [System.Serializable]
-public class ReqUpdateStatusLvData
+public class PlayerStatusLevelData
 {
     public int uid;
     public int hp_lv;
@@ -34,6 +34,16 @@ public class ReqUpdateStatusLvData
     public int gold_acq_lv;
     public int exp_acq_lv;
 }
+[System.Serializable]
+public class PlayerGoodsData
+{
+    public int uid;
+    public int gold;
+    public int jewerly;
+    public int ticket;
+
+}
+
 
 [System.Serializable]
 public class mail
@@ -46,6 +56,21 @@ public class mail
     public DateTime mali_read_dt;
     public bool is_recived;
 
+}
+[System.Serializable]
+public class ResponseLogin
+{
+    public ErrorCode result;
+    public PlayerStatusData status;
+    public PlayerStatusLevelData statusLv;
+    public PlayerGoodsData goods;
+    public List<mail> mailList;
+
+}
+[System.Serializable]
+public class RequestLogin
+{
+    public int uid;
 }
 
 
