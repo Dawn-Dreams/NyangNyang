@@ -4,6 +4,16 @@ using UnityEngine;
 
 public class EnemySpawnManager : MonoBehaviour
 {
+    private static EnemySpawnManager _instance;
+
+    public static EnemySpawnManager GetInstance()
+    {
+        return _instance;
+    }
+
+    public delegate void OnEnemyDeathDelegate(int enemyCount);
+    public event OnEnemyDeathDelegate OnEnemyDeath;
+
     public GameObject enemyPrefab;
     public GameObject bossEnemyPrefab;
 
@@ -12,8 +22,15 @@ public class EnemySpawnManager : MonoBehaviour
 
     private Enemy currentEnemy; // 현재 적을 저장하는 변수
 
+    
+
     void Start()
     {
+        if (_instance == null)
+        {
+            _instance = this;
+        }
+
         OnGatePassed(false);
     }
 
@@ -59,8 +76,13 @@ public class EnemySpawnManager : MonoBehaviour
 
         currentEnemy = null;
         cat.SetEnemy(null);
+    }
 
-
-
+    public void EnemyDeath(int enemyCount)
+    {
+        if (OnEnemyDeath != null)
+        {
+            OnEnemyDeath(enemyCount);
+        }
     }
 }

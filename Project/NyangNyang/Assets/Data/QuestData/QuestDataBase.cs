@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 
@@ -20,8 +22,8 @@ public abstract class QuestDataBase : ScriptableObject
 
     // 퀘스트 컴퍼넌트
     protected BaseQuest QuestComp;
-    protected QuestType QuestType;
-    protected QuestCategory QuestCategory;
+    public QuestType questType;
+    public QuestCategory questCategory;
 
     public RewardType rewardType = RewardType.Diamond;
 
@@ -31,9 +33,13 @@ public abstract class QuestDataBase : ScriptableObject
     protected bool CanRepeatReward = false;
     protected bool GetReward = false;
 
+    // 퀘스트 값에 갱신이 발생하였을 경우 n초 뒤에 값을 보냄
+    public float sendQuestDataToServerDelayTime = 5.0f;
+    protected Coroutine SendQuestDataToServerCoroutine;
+
     public virtual void QuestActing(BaseQuest quest)
     {
-        if (QuestCategory == QuestCategory.Repeat)
+        if (questCategory == QuestCategory.Repeat)
         {
             CanRepeatReward = true;
         }
@@ -77,14 +83,14 @@ public abstract class QuestDataBase : ScriptableObject
 
     public virtual void RequestQuestData()
     {
-        DummyQuestServer.SendQuestDataToPlayer(Player.GetUserID(), QuestCategory, QuestType);
+        DummyQuestServer.SendQuestDataToPlayer(Player.GetUserID(), questCategory, questType);
     }
 
     
 
     public virtual void RequestQuestReward()
     {
-        DummyQuestServer.UserRequestReward(Player.GetUserID(),QuestCategory,  QuestType, this);
+        DummyQuestServer.UserRequestReward(Player.GetUserID(), this);
         if (!CanRepeatReward)
         {
             QuestComp.rewardButton.onClick.RemoveListener(RequestQuestReward);
@@ -97,6 +103,26 @@ public abstract class QuestDataBase : ScriptableObject
 
     protected abstract void BindDelegate();
     protected abstract void UnBindDelegate();
+
+    public abstract int GetRequireCount();
+    public abstract BigInteger GetCurrentQuestCount();
+
+    protected IEnumerator SendCurrentQuestDataToServer()
+    {
+        Debug.Log($"{questCategory} - {questType} 전송 대기중");
+        yield return new WaitForSeconds(sendQuestDataToServerDelayTime);
+
+        Debug.Log($"{questCategory} - {questType} 전송 완료");
+        SendDataToServer();
+        
+    }
+
+    protected virtual void SendDataToServer()
+    {
+
+        Debug.Log($"{questCategory} - {questType} 정보 {GetCurrentQuestCount()} 서버로 건넴");
+        DummyQuestServer.GetQuestDataFromClient(Player.GetUserID(), questCategory, questType, GetCurrentQuestCount());
+    }
 
     public virtual void BindDelegateOnServer()
     {
@@ -126,7 +152,6 @@ public abstract class QuestDataBase : ScriptableObject
         {
             RewardSpriteHandle.Release();
         }
-        
     }
 
     public bool IsRewardRepeatable()
@@ -141,17 +166,17 @@ public abstract class QuestDataBase : ScriptableObject
 
     public void RequestHasReceivedRewardToServer()
     {
-        bool isGetReward = DummyQuestServer.SendRewardInfoToUser(Player.GetUserID(), QuestCategory, QuestType);
+        bool isGetReward = DummyQuestServer.SendRewardInfoToUser(Player.GetUserID(), questCategory, questType);
         GetReward = isGetReward;
     }
 
     public QuestCategory GetQuestCategory()
     {
-        return QuestCategory;
+        return questCategory;
     }
 
     public QuestType GetQuestType()
     {
-        return QuestType;
+        return questType;
     }
 }

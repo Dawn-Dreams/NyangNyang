@@ -18,7 +18,7 @@ public class StageClearQuestData : QuestDataBase
     // 서버 내 생성할 때 사용
     public QuestDataBase QuestInitialize(QuestCategory questCategory, int getTargetTheme, int getTargetStage, int getRewardCount = 100)
     {
-        QuestCategory = questCategory;
+        base.questCategory = questCategory;
         targetTheme = getTargetTheme;
         targetStage = getTargetStage;
 
@@ -33,7 +33,7 @@ public class StageClearQuestData : QuestDataBase
 
     public override void QuestActing(BaseQuest quest)
     {
-        QuestType = QuestType.StageClear;
+        questType = QuestType.StageClear;
         
         base.QuestActing(quest);
     }
@@ -59,6 +59,16 @@ public class StageClearQuestData : QuestDataBase
     protected override void UnBindDelegate()
     {
         Player.OnStageClear -= GetDataFromServer;
+    }
+
+    public override int GetRequireCount()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override BigInteger GetCurrentQuestCount()
+    {
+        throw new System.NotImplementedException();
     }
 
     // TODO 10.30 해당 서버 내에 델리게이트를 삭제함으로서 클라에서 관리해야하므로 추후 확인.
