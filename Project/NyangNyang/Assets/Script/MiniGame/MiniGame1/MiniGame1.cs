@@ -114,7 +114,7 @@ public class MiniGame1 : MonoBehaviour
         }
 
         // 그리드 범위 확인
-        if (targetX < 0 || targetX >= gridSizeX || targetY < 0 || targetY >= gridSizeY)
+        if (targetX < 0 || targetX >= gridSizeX || targetY < 0 || targetY >= gridSizeY - 1)
             return;
 
         // 인접한 타일과 교환
@@ -267,7 +267,7 @@ public class MiniGame1 : MonoBehaviour
         // 가로/세로로 3개 이상 인접한 같은 타입의 타일을 찾음
         for (int x = 0; x < gridSizeX; x++)
         {
-            for (int y = 0; y < gridSizeY; y++)
+            for (int y = 0; y < gridSizeY-1; y++)
             {
                 Tile currentTile = grid[x, y];
 
@@ -290,7 +290,7 @@ public class MiniGame1 : MonoBehaviour
 
                 // 세로 체크
                 List<Tile> verticalMatch = new List<Tile> { currentTile };
-                for (int i = 1; y + i < gridSizeY; i++)
+                for (int i = 1; y + i < gridSizeY-1; i++)
                 {
                     Tile nextTile = grid[x, y + i];
                     if (nextTile != null && nextTile.tileType == currentTile.tileType)
@@ -303,6 +303,38 @@ public class MiniGame1 : MonoBehaviour
                     matchedTiles.AddRange(verticalMatch);
             }
         }
+
+        // 2x2 모양 체크
+        for (int x = 0; x < gridSizeX-1; x++)
+        {
+            for (int y = 0; y < gridSizeY - 1; y++)
+            {
+                Tile tile1 = grid[x, y];
+                Tile tile2 = grid[x + 1, y];
+                Tile tile3 = grid[x, y + 1];
+                Tile tile4 = grid[x + 1, y + 1];
+
+                // null 체크 추가
+                if (tile1 != null && tile2 != null && tile3 != null && tile4 != null &&
+                    tile1.tileType == tile2.tileType &&
+                    tile1.tileType == tile3.tileType &&
+                    tile1.tileType == tile4.tileType)
+                {
+                    matchedTiles.Add(tile1);
+                    matchedTiles.Add(tile2);
+                    matchedTiles.Add(tile3);
+                    matchedTiles.Add(tile4);
+                }
+            }
+        }
+
+        // 인접한 같은 타입 타일도 찾음
+        List<Tile> additionalMatches = new List<Tile>();
+        foreach (Tile tile in matchedTiles)
+        {
+            FindConnectedTiles(tile, tile.tileType, additionalMatches);
+        }
+        matchedTiles.AddRange(additionalMatches);
 
         // 중복 타일 제거
         matchedTiles = matchedTiles.Distinct().ToList();
