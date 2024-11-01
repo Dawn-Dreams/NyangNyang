@@ -17,6 +17,7 @@ public class MiniGame1 : MonoBehaviour
     private bool isProcessing;  // 병합 처리 중 여부
     private Tile selectedTile;  // 현재 선택된 타일
     public float slideDuration = 0.3f;
+    private List<Tile> matchedTiles = new List<Tile>(); // 삭제할 타일들을 저장할 리스트
 
     private void Start()
     {
@@ -36,10 +37,12 @@ public class MiniGame1 : MonoBehaviour
     {
         foreach (var tile in tilesList)
         {
-            Destroy(tile.gameObject);
-            Debug.Log("ResetGrid");
+            if (tile != null)
+            {
+                Destroy(tile.gameObject);
+                Debug.Log("ResetGrid");
+            }
         }
-
         tilesList.Clear();
         InitializeGrid();
     }
@@ -89,6 +92,47 @@ public class MiniGame1 : MonoBehaviour
         tile.OnTileTouched += OnTileTouched;
         tile.OnTileDragged += (direction, startX, startY) => OnTileDragged(startX, startY, direction);
     }
+    private void SetTilePosition(Tile tile, int x, int y)
+    {
+        RectTransform tileRect = tilePrefab.GetComponent<RectTransform>();
+        float tileWidth = tileRect.rect.width;
+        float tileHeight = tileRect.rect.height;
+
+        float startX = -(gridSizeX - 1) * tileWidth / 2;
+        float startY = -(gridSizeY - 1) * tileHeight / 2;
+
+        Vector2 tilePosition = new Vector2(startX + x * tileWidth, startY + y * tileHeight);
+        tile.transform.localPosition = tilePosition;
+    }
+    private void AssignTileIndices()
+    {
+        for (int i = 0; i < tilesList.Count; i++)
+        {
+            var tile = tilesList[i];
+            tile.SetPosition(i % gridSizeX, i / gridSizeX); // 순서대로 재설정
+            SetTilePosition(tile, tile.x, tile.y); // 위치 재배치
+        }
+    }
+    private void ShuffleTiles()
+    {
+        // 타일 목록 랜덤
+        for (int i = 0; i < tilesList.Count; i++)
+        {
+            int randomIndex = Random.Range(i, tilesList.Count);
+            SwapTilesInList(i, randomIndex);
+        }
+
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                Tile tile = tilesList[x + y * gridSizeX];
+                grid[x, y] = tile;
+                tile.SetPosition(x, y);
+                SetTilePosition(tile, x, y);
+            }
+        }
+    }
 
     public void OnTileTouched(int x, int y)
     {
@@ -100,7 +144,7 @@ public class MiniGame1 : MonoBehaviour
 
     private void OnTileDragged(int startX, int startY, Direction direction)
     {
-        if (isProcessing || selectedTile==null)
+        if (isProcessing || selectedTile == null)
             return;
         int targetX = startX;
         int targetY = startY;
@@ -205,60 +249,12 @@ public class MiniGame1 : MonoBehaviour
         isProcessing = false;
     }
 
-    private void SetTilePosition(Tile tile, int x, int y)
-    {
-        RectTransform tileRect = tilePrefab.GetComponent<RectTransform>();
-        float tileWidth = tileRect.rect.width;
-        float tileHeight = tileRect.rect.height;
-
-        float startX = -(gridSizeX - 1) * tileWidth / 2;
-        float startY = -(gridSizeY - 1) * tileHeight / 2;
-
-        Vector2 tilePosition = new Vector2(startX + x * tileWidth, startY + y * tileHeight);
-        tile.transform.localPosition = tilePosition;
-    }
-
-    // 모든 타일의 인덱스를 다시 설정하는 메서드
-    private void AssignTileIndices()
-    {
-        for (int i = 0; i < tilesList.Count; i++)
-        {
-            var tile = tilesList[i];
-            tile.SetPosition(i % gridSizeX, i / gridSizeX); // 순서대로 재설정
-            SetTilePosition(tile, tile.x, tile.y); // 위치 재배치
-        }
-    }
-
     private void SwapTilesInList(int indexA, int indexB)
     {
         Tile temp = tilesList[indexA];
         tilesList[indexA] = tilesList[indexB];
         tilesList[indexB] = temp;
     }
-
-
-    private void ShuffleTiles()
-    {
-        // 타일 목록 랜덤
-        for (int i = 0; i < tilesList.Count; i++)
-        {
-            int randomIndex = Random.Range(i, tilesList.Count);
-            SwapTilesInList(i, randomIndex);
-        }
-
-        for (int x = 0; x < gridSizeX; x++)
-        {
-            for (int y = 0; y < gridSizeY; y++)
-            {
-                Tile tile = tilesList[x + y * gridSizeX];
-                grid[x, y] = tile;
-                tile.SetPosition(x, y);
-                SetTilePosition(tile, x, y);
-            }
-        }
-    }
-
-    private List<Tile> matchedTiles = new List<Tile>(); // 삭제할 타일들을 저장할 리스트
 
     private bool CheckAndRemoveMatches()
     {
@@ -267,7 +263,7 @@ public class MiniGame1 : MonoBehaviour
         // 가로/세로로 3개 이상 인접한 같은 타입의 타일을 찾음
         for (int x = 0; x < gridSizeX; x++)
         {
-            for (int y = 0; y < gridSizeY-1; y++)
+            for (int y = 0; y < gridSizeY - 1; y++)
             {
                 Tile currentTile = grid[x, y];
 
@@ -290,7 +286,7 @@ public class MiniGame1 : MonoBehaviour
 
                 // 세로 체크
                 List<Tile> verticalMatch = new List<Tile> { currentTile };
-                for (int i = 1; y + i < gridSizeY-1; i++)
+                for (int i = 1; y + i < gridSizeY - 1; i++)
                 {
                     Tile nextTile = grid[x, y + i];
                     if (nextTile != null && nextTile.tileType == currentTile.tileType)
@@ -305,7 +301,7 @@ public class MiniGame1 : MonoBehaviour
         }
 
         // 2x2 모양 체크
-        for (int x = 0; x < gridSizeX-1; x++)
+        for (int x = 0; x < gridSizeX - 1; x++)
         {
             for (int y = 0; y < gridSizeY - 1; y++)
             {
@@ -353,10 +349,38 @@ public class MiniGame1 : MonoBehaviour
             }
         }
 
+        StartCoroutine(WaitAndDropTiles()); // 애니메이션과 드롭 로직 시작
+        matchedTiles.Clear();
+        return true; 
+    }
+
+    // 재귀적으로 인접한 같은 타입의 타일을 찾는 함수
+    private void FindConnectedTiles(Tile tile, TileType type, List<Tile> connectedTiles)
+    {
+        if (tile == null || tile.tileType != type || connectedTiles.Contains(tile)) return;
+
+        connectedTiles.Add(tile);
+
+        int x = tile.x;
+        int y = tile.y;
+
+        // 인접한 4방향 검사
+        if (x > 0) FindConnectedTiles(grid[x - 1, y], type, connectedTiles); // Left
+        if (x < gridSizeX - 1) FindConnectedTiles(grid[x + 1, y], type, connectedTiles); // Right
+        if (y > 0) FindConnectedTiles(grid[x, y - 1], type, connectedTiles); // Down
+        if (y < gridSizeY - 1) // 최상단 줄을 제외하고 Up 방향 검사
+            FindConnectedTiles(grid[x, y + 1], type, connectedTiles); // Up
+    }
+
+    private IEnumerator WaitAndDropTiles()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        yield return StartCoroutine(DropTilesWithAnimation());
         DropTiles();
 
-        matchedTiles.Clear(); // 리스트 초기화
-        return true;           // 매칭된 타일이 삭제됨을 반환
+        yield return new WaitForSeconds(0.5f);
+        CheckAndRemoveMatches();
     }
 
     private void DropTiles()
@@ -395,23 +419,8 @@ public class MiniGame1 : MonoBehaviour
         }
     }
 
-    // 재귀적으로 인접한 같은 타입의 타일을 찾는 함수
-    private void FindConnectedTiles(Tile tile, TileType type, List<Tile> connectedTiles)
-    {
-        if (tile == null || tile.tileType != type || connectedTiles.Contains(tile)) return;
+    // ------------------- 애니메이션 ---------------------
 
-        connectedTiles.Add(tile);
-
-        int x = tile.x;
-        int y = tile.y;
-
-        // 인접한 4방향 검사
-        if (x > 0) FindConnectedTiles(grid[x - 1, y], type, connectedTiles); // Left
-        if (x < gridSizeX - 1) FindConnectedTiles(grid[x + 1, y], type, connectedTiles); // Right
-        if (y > 0) FindConnectedTiles(grid[x, y - 1], type, connectedTiles); // Down
-        if (y < gridSizeY - 1) FindConnectedTiles(grid[x, y + 1], type, connectedTiles); // Up
-    }
-    
     public void StartMatchCheckAndAnimate()
     {
         // 매칭이 발생한 경우 애니메이션 코루틴 실행
@@ -441,8 +450,6 @@ public class MiniGame1 : MonoBehaviour
         // 내려온 타일로 새로운 매칭 검사
         StartMatchCheckAndAnimate();
     }
-
-    // ------------------- 애니메이션 ---------------------
 
     private IEnumerator DropTilesWithAnimation()
     {

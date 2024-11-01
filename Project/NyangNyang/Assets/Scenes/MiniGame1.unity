@@ -1816,7 +1816,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1286633817}
-  - component: {fileID: 1286633820}
   - component: {fileID: 1286633819}
   - component: {fileID: 1286633818}
   m_Layer: 5
@@ -1886,22 +1885,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1286633816}
   m_CullTransparentMesh: 1
---- !u!114 &1286633820
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1286633816}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d156cd2424b5b2458a9fbce89c479cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _alwaysOnTop: 1
-  _activated: 1
-  _targetList:
-  - {fileID: 1286633817}
 --- !u!1 &1397596581
 GameObject:
   m_ObjectHideFlags: 0
@@ -1989,7 +1972,6 @@ GameObject:
   - component: {fileID: 1436427709}
   - component: {fileID: 1436427708}
   - component: {fileID: 1436427707}
-  - component: {fileID: 1436427706}
   m_Layer: 5
   m_Name: SuffleButton
   m_TagString: Untagged
@@ -2017,19 +1999,6 @@ RectTransform:
   m_AnchoredPosition: {x: -3.2041168, y: -646.2121}
   m_SizeDelta: {x: 272.3502, y: 298.8788}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1436427706
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1436427704}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4ed37529b4c1be41ba2fd7574de3418, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  deleteButton: {fileID: 1436427707}
 --- !u!114 &1436427707
 MonoBehaviour:
   m_ObjectHideFlags: 0

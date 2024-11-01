@@ -136,6 +136,7 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUp
         // 애니메이션 완료 후 타일 비활성화
         gameObject.transform.localScale = Vector3.zero;
         gameObject.SetActive(false);
+        Destroy(gameObject, 0.5f);
     }
 }
 
