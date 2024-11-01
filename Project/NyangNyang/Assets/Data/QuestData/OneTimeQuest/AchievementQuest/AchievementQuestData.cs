@@ -19,11 +19,11 @@ public abstract class AchievementQuestData : QuestDataBase
         return this;
     }
 
-    public override void QuestActing(BaseQuest quest)
+    public override void QuestActing(BaseQuest quest, QuestType type)
     {
         QuestInitialize(rewardTitleID);
         
-        base.QuestActing(quest);
+        base.QuestActing(quest, type);
 
         // 등급에 맞게 칭호 이름 색상 변경
         if (QuestComp.mainQuestText)

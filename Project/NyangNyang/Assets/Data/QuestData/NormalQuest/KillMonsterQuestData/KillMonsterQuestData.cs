@@ -11,12 +11,9 @@ public class KillMonsterQuestData : QuestDataBase
     private long _killMonsterCount;
 
     public int requireKillMonsterCount;
-    public override void QuestActing(BaseQuest quest)
+    public override void QuestActing(BaseQuest quest, QuestType type)
     {
-        questType = QuestType.KillMonster;
-
-        base.QuestActing(quest);
-
+        base.QuestActing(quest, QuestType.KillMonster);
     }
 
 
@@ -39,6 +36,16 @@ public class KillMonsterQuestData : QuestDataBase
         EnemySpawnManager.GetInstance().OnEnemyDeath -= QuestCountChange;
     }
 
+    protected override void RenewalUIAfterChangeQuestValue()
+    {
+        float newValue = Mathf.Min(1.0f, (float)_killMonsterCount / requireKillMonsterCount);
+        QuestComp.SetSliderValue(newValue);
+
+        SetRequireText();
+
+        CheckQuestClear();
+    }
+
     public override int GetRequireCount()
     {
         return requireKillMonsterCount;
@@ -58,13 +65,7 @@ public class KillMonsterQuestData : QuestDataBase
         }
 
         _killMonsterCount = newQuestDataValue;
-
-        float newValue = Mathf.Min(1.0f, (float)_killMonsterCount / requireKillMonsterCount);
-        QuestComp.SetSliderValue(newValue);
-
-        SetRequireText();
-
-        CheckQuestClear();
+        RenewalUIAfterChangeQuestValue();
     }
 
     public void QuestCountChange(int killEnemyCount)

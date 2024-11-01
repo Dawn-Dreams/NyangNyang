@@ -14,26 +14,16 @@ public class LevelUpStatusQuestData : QuestDataBase
 
     public StatusLevelType questStatusType;
 
-    // 서버 내 생성할 때 사용
-    public QuestDataBase QuestInitialize()
+    public override void QuestActing(BaseQuest quest, QuestType type)
     {
         mainQuestTitle = questStatusType.ToString() + " 스탯 레벨" + requireStatusLevel + "달성";
         currentStatusLevel = Player.playerStatus.GetStatusLevelData().statusLevels[(int)questStatusType];
-        return this;
-    }
-    
 
-    public override void QuestActing(BaseQuest quest)
-    {
-        QuestInitialize();
-
-        questType = QuestType.LevelUpStatus;
-        
-        base.QuestActing(quest);
+        base.QuestActing(quest, QuestType.LevelUpStatus);
 
     }
 
-    public override void RequestQuestData()
+    public override void RequestCurrentUserQuestProgress()
     {
     }
 
@@ -56,6 +46,17 @@ public class LevelUpStatusQuestData : QuestDataBase
         Player.playerStatus.OnStatusLevelChange -= ChangeQuestData;
     }
 
+    protected override void RenewalUIAfterChangeQuestValue()
+    {
+        float currentValue = MyBigIntegerMath.DivideToFloat(currentStatusLevel, requireStatusLevel, 5);
+
+        QuestComp.SetSliderValue(currentValue);
+
+        SetRequireText();
+
+        CheckQuestClear();
+    }
+
     public override int GetRequireCount()
     {
         // 썌얘 : 스토리 관련은 전부 다시 수정하기
@@ -74,13 +75,7 @@ public class LevelUpStatusQuestData : QuestDataBase
             return;
         }
         currentStatusLevel = Player.playerStatus.GetStatusLevelData().statusLevels[(int)type];
-        float currentValue = MyBigIntegerMath.DivideToFloat(currentStatusLevel, requireStatusLevel, 5);
-
-        QuestComp.SetSliderValue(currentValue);
-
-        SetRequireText();
-
-        CheckQuestClear();
+        RenewalUIAfterChangeQuestValue();
     }
 
    
