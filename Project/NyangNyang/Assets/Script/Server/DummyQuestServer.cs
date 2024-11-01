@@ -145,7 +145,6 @@ public class DummyQuestServer : DummyServerData
         // 더미 서버이므로 현재는 강제로 플레이어에게 주입
         switch (questType)
         {
-            // 반복 퀘스트
             case QuestType.GoldSpending:
                 Player.RecvGoldSpendingDataFromServer(userQuestProgressData[questType][questCategory][userID], questCategory);
                 break;

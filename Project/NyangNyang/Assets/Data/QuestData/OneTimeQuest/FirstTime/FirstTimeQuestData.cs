@@ -6,7 +6,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "FirstTimeQuestData", menuName = "ScriptableObjects/QuestData/AchievementQuest/FirstTimeQuestData", order = 1)]
 public class FirstTimeQuestData : AchievementQuestData
 {
-    public override void RequestQuestData()
+    /*
+     * 업적퀘스트 등 클라이언트 내에서 클리어를 체크하는 퀘스트들에 대한 클래스
+     */
+    public override void RequestCurrentUserQuestProgress()
     {
         // 클라에서 퀘스트 정보 체크
     }
@@ -33,6 +36,11 @@ public class FirstTimeQuestData : AchievementQuestData
 
     protected override void UnBindDelegate()
     {
+    }
+
+    protected override void RenewalUIAfterChangeQuestValue()
+    {
+        throw new System.NotImplementedException();
     }
 
     public override int GetRequireCount()

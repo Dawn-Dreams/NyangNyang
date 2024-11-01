@@ -17,16 +17,15 @@ public class StageClearQuestData : QuestDataBase
 
     
 
-    public override void QuestActing(BaseQuest quest)
+    public override void QuestActing(BaseQuest quest, QuestType type)
     {
         mainQuestTitle = targetTheme + " - " + targetStage + " 스테이지 클리어";
-        questType = QuestType.StageClear;
         Player.GetPlayerHighestClearStageData(out _currentClearTheme, out _currentClearStage);
 
-        base.QuestActing(quest);
+        base.QuestActing(quest, QuestType.StageClear);
     }
 
-    public override void RequestQuestData()
+    public override void RequestCurrentUserQuestProgress()
     {
     }
 
@@ -48,6 +47,13 @@ public class StageClearQuestData : QuestDataBase
         GameManager.GetInstance().stageManager.OnStageClear -= ChangeQuestData;
     }
 
+    protected override void RenewalUIAfterChangeQuestValue()
+    {
+
+        QuestComp.SetSliderValue(_isQuestClear ? 1.0f : 0.0f);
+        SetRequireText();
+    }
+
     public override int GetRequireCount()
     {
         throw new System.NotImplementedException();
@@ -63,11 +69,9 @@ public class StageClearQuestData : QuestDataBase
     {
         _currentClearTheme = clearTheme;
         _currentClearStage = clearStage;
+        RenewalUIAfterChangeQuestValue();
 
         CheckQuestClear();
-        
-        QuestComp.SetSliderValue( _isQuestClear? 1.0f : 0.0f );
-        SetRequireText();
 
     }
 

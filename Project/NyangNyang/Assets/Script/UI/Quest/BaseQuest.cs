@@ -37,7 +37,7 @@ public class BaseQuest : MonoBehaviour
     public void LoadQuest(QuestDataBase newQuestData)
     {
         questData = newQuestData;
-        questData.QuestActing(this);
+        questData.QuestActing(this, newQuestData.questType);
     }
 
     public void SetRequireText(string newText)

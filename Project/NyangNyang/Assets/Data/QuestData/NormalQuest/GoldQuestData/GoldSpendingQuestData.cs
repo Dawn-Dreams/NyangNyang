@@ -11,14 +11,12 @@ public class GoldSpendingQuestData : QuestDataBase
     protected BigInteger spendingGold = 0;
 
     public int requireSpendingGold;
-    public override void QuestActing(BaseQuest quest)
+    public override void QuestActing(BaseQuest quest, QuestType type)
     {
-        questType = QuestType.GoldSpending;
-        
-        base.QuestActing(quest);
+        base.QuestActing(quest, QuestType.GoldSpending);
     }
 
-    public override void RequestQuestData()
+    public override void RequestCurrentUserQuestProgress()
     {
         DummyQuestServer.SendQuestDataToPlayer(Player.GetUserID(), questCategory, questType);
     }
@@ -52,41 +50,37 @@ public class GoldSpendingQuestData : QuestDataBase
         return spendingGold;
     }
 
+    // 서버로부터 데이터 값을 받아올 때
     public void GetDataFromServer(QuestCategory dataCategory, BigInteger newQuestDataValue)
     {
         if (questCategory != dataCategory)
         {
             return;
         }
-        
         spendingGold = newQuestDataValue;
-        float currentValue = MyBigIntegerMath.DivideToFloat(spendingGold, requireSpendingGold, 5);
-
-        QuestComp.SetSliderValue(currentValue);
-        
-        SetRequireText();
-
-        CheckQuestClear();
+        RenewalUIAfterChangeQuestValue();
     }
-
+    // 퀘스트를 수행하여 값이 바뀌었을 때,
     public void QuestCountChange(BigInteger newSpendingGoldVal)
     {
         spendingGold += newSpendingGoldVal;
-
-        float currentValue = MyBigIntegerMath.DivideToFloat(spendingGold, requireSpendingGold, 5);
-
-        QuestComp.SetSliderValue(currentValue);
-
-        SetRequireText();
-
-        CheckQuestClear();
-
+        RenewalUIAfterChangeQuestValue();
 
         // TODO: 10.31) 추후엔 GameManager 라던가 기타 Monobehaviour 상속 클래스에서 보내도록 
         // 코루틴 써서
         SendDataToServer();
     }
+    
+    protected override void RenewalUIAfterChangeQuestValue()
+    {
+        float currentValue = MyBigIntegerMath.DivideToFloat(spendingGold, requireSpendingGold, 5);
 
+        QuestComp.SetSliderValue(currentValue);
+
+        SetRequireText();
+
+        CheckQuestClear();
+    }
 
     protected override void CheckQuestClear()
     {
@@ -94,7 +88,6 @@ public class GoldSpendingQuestData : QuestDataBase
         {
             int clearCount = (int)MyBigIntegerMath.DivideToFloat(spendingGold, requireSpendingGold, 5);
             QuestComp.SetRewardButtonInteractable(true, "보상받기");
-
             QuestComp.SetRewardCountText(rewardCount, clearCount, CanRepeatReward);
         }
         else
