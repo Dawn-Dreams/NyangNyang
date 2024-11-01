@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ccd22ee9ec17a994dadcc1f977b2984e, type: 3}
+  m_Script: {fileID: 11500000, guid: dd7d5beff0183b642a53bab634ce90c1, type: 3}
   m_Name: StageClearQuestData 4
   m_EditorClassIdentifier: 
   mainQuestTitle: 
   subQuestTitle: 
-  rewardCount: 50
+  rewardCount: 100
   questType: 4
   questCategory: 4
   rewardType: 1

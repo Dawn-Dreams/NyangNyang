@@ -1,13 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using System.Numerics;
-using System.Runtime.CompilerServices;
-using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 
 
 public abstract class QuestDataBase : ScriptableObject
@@ -30,7 +25,6 @@ public abstract class QuestDataBase : ScriptableObject
     // 보상 리워드 리소스 Addressable
     protected AsyncOperationHandle<Sprite> RewardSpriteHandle;
 
-    protected bool CanRepeatReward = false;
     protected bool GetReward = false;
 
     // 퀘스트 값에 갱신이 발생하였을 경우 n초 뒤에 값을 보냄
@@ -39,18 +33,10 @@ public abstract class QuestDataBase : ScriptableObject
 
     public virtual void QuestActing(BaseQuest quest, QuestType type)
     {
-        if (questCategory == QuestCategory.Repeat)
-        {
-            CanRepeatReward = true;
-        }
         QuestComp = quest;
         questType = type;
         
         QuestDataInitialize();
-
-        // 서버로부터 정보 요청
-        RequestCurrentUserQuestProgress();
-        //DummyQuestServer.SendQuestDataToPlayer(Player.GetUserID(), QuestType);
 
         QuestComp.rewardButton.onClick.AddListener(RequestQuestReward);
         CheckQuestClear();
@@ -83,17 +69,9 @@ public abstract class QuestDataBase : ScriptableObject
         BindDelegate();
     }
 
-    public virtual void RequestCurrentUserQuestProgress()
-    {
-        DummyQuestServer.SendQuestDataToPlayer(Player.GetUserID(), questCategory, questType);
-    }
-
-    
-
     public virtual void RequestQuestReward()
     {
-        DummyQuestServer.UserRequestReward(Player.GetUserID(), this);
-        if (!CanRepeatReward)
+        if (!IsRewardRepeatable())
         {
             QuestComp.rewardButton.onClick.RemoveListener(RequestQuestReward);
         }
@@ -111,27 +89,6 @@ public abstract class QuestDataBase : ScriptableObject
 
     // UI들을 바뀐 퀘스트 값에 맞게 리뉴얼하는 함수
     protected abstract void RenewalUIAfterChangeQuestValue();
-
-    // == (서버 : 반복퀘스트 클리어 체크 시) / (클라 : 서버에 현재 QuestValue 보낼 때 사용) ==
-    public abstract int GetRequireCount();
-    public abstract BigInteger GetCurrentQuestCount();
-    // ===============================================
-
-    // (클라->서버) 퀘스트 정보에 변화가 있을 경우 n 초 뒤 변경된 값을 보내는 함수
-    protected IEnumerator SendCurrentQuestDataToServer()
-    {
-        Debug.Log($"{questCategory} - {questType} 전송 대기중");
-        yield return new WaitForSeconds(sendQuestDataToServerDelayTime);
-
-        Debug.Log($"{questCategory} - {questType} 전송 완료");
-        SendDataToServer();
-        
-    }
-
-    protected virtual void SendDataToServer()
-    {
-        DummyQuestServer.GetQuestDataFromClient(Player.GetUserID(), questCategory, questType, GetCurrentQuestCount());
-    }
 
     // Addressable 을 통해 보상에 대한 이미지를 로드하는 함수
     protected void LoadRewardImage(RewardType type)

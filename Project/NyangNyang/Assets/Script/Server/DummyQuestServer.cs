@@ -166,7 +166,7 @@ public class DummyQuestServer : DummyServerData
     }
 
     // 유저가 보상 흭득을 요구하는 함수
-    public static void UserRequestReward(int userID, QuestDataBase questInfo)
+    public static void UserRequestReward(int userID, NormalQuestDataBase questInfo)
     {
         // 서버의 퀘스트 정보를 쓰려했으나 스토리 퀘스트 서버가 분리되어 적용 불가, 추후 개선 예정
         //QuestDataBase questInfo = GetQuestInfo(questCategory, questType);
