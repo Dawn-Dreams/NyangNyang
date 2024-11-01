@@ -16,6 +16,7 @@ public class QuestDataManager : MonoBehaviour
     public List<QuestDataBase> dailyQuestData;
     public List<QuestDataBase> weeklyQuestData;
     public List<QuestDataBase> achievementQuestData;
+    public List<QuestDataBase> storyQuestData;
 
     public List<List<QuestDataBase>> questDataList;
 
@@ -27,6 +28,7 @@ public class QuestDataManager : MonoBehaviour
             dailyQuestData,
             weeklyQuestData,
             achievementQuestData,
+            storyQuestData,
         };
 
 
@@ -37,40 +39,4 @@ public class QuestDataManager : MonoBehaviour
     }
 
 
-    /*
-     *
-     *
-       // 퀘스트 데이터 변수
-       private static Dictionary<QuestCategory, Dictionary<QuestType, QuestDataBase>> questDataBases =
-           new Dictionary<QuestCategory, Dictionary<QuestType, QuestDataBase>>
-           {
-               // 반복 퀘스트
-               {
-                   QuestCategory.Repeat, new Dictionary<QuestType, QuestDataBase>
-                   {
-                       {
-                           QuestType.GoldSpending,
-                           ScriptableObject.CreateInstance<GoldSpendingQuestData>().QuestInitialize(QuestCategory.Repeat,
-                               _questRequireValueData[QuestCategory.Repeat][QuestType.GoldSpending])
-                       },
-                       {
-                           QuestType.KillMonster,
-                           ScriptableObject.CreateInstance<KillMonsterQuestData>().QuestInitialize(QuestCategory.Repeat,
-                               _questRequireValueData[QuestCategory.Repeat][QuestType.KillMonster])
-                       },
-                   }
-               },
-               // 일일 퀘스트 ====================================
-               {
-                   QuestCategory.Daily, new Dictionary<QuestType, QuestDataBase>
-                   {
-                       {
-                           QuestType.GoldSpending, 
-                           ScriptableObject.CreateInstance<GoldSpendingQuestData>().QuestInitialize(QuestCategory.Daily,
-                               _questRequireValueData[QuestCategory.Daily][QuestType.GoldSpending], 200)
-                       },
-                   }
-               }
-           };
-     */
 }

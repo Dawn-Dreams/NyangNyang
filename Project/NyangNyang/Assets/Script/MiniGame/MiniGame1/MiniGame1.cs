@@ -6,7 +6,7 @@ using UnityEngine;
 public class MiniGame1 : MonoBehaviour
 {
     public int gridSizeX = 7;   // 그리드의 가로 크기
-    public int gridSizeY = 7;   // 그리드의 세로 크기
+    public int gridSizeY = 7+1;   // 그리드의 세로 크기 + 최상단
     public GameObject tilePrefab; // 타일 프리팹
     public Transform gridParent;  // 타일이 배치될 부모 오브젝트
     public TileType[] possibleTileTypes; // 생성 가능한 타일의 종류들
@@ -32,11 +32,12 @@ public class MiniGame1 : MonoBehaviour
         CheckAndRemoveMatches();
     }
 
-    private void ResetGrid()
+    public void ResetGrid()
     {
         foreach (var tile in tilesList)
         {
             Destroy(tile.gameObject);
+            Debug.Log("ResetGrid");
         }
 
         tilesList.Clear();
@@ -113,7 +114,7 @@ public class MiniGame1 : MonoBehaviour
         }
 
         // 그리드 범위 확인
-        if (targetX < 0 || targetX >= gridSizeX || targetY < 0 || targetY >= gridSizeY)
+        if (targetX < 0 || targetX >= gridSizeX || targetY < 0 || targetY >= gridSizeY - 1)
             return;
 
         // 인접한 타일과 교환
@@ -169,6 +170,7 @@ public class MiniGame1 : MonoBehaviour
                 if (matchedTile != null)
                 {
                     matchedTile.SetMerged();
+                    Debug.Log("SwapTilesCoroutine");
                     grid[matchedTile.x, matchedTile.y] = null;
                 }
             }
@@ -265,7 +267,7 @@ public class MiniGame1 : MonoBehaviour
         // 가로/세로로 3개 이상 인접한 같은 타입의 타일을 찾음
         for (int x = 0; x < gridSizeX; x++)
         {
-            for (int y = 0; y < gridSizeY; y++)
+            for (int y = 0; y < gridSizeY-1; y++)
             {
                 Tile currentTile = grid[x, y];
 
@@ -283,12 +285,12 @@ public class MiniGame1 : MonoBehaviour
                     }
                     else break;
                 }
-                if (horizontalMatch.Count >= 3)
-                    matchedTiles.AddRange(horizontalMatch.Where(tile => tile != null)); // null 검사 후 추가
+                if (horizontalMatch.Count >= matchCount) // 필요한 매칭 개수 확인
+                    matchedTiles.AddRange(horizontalMatch);
 
                 // 세로 체크
                 List<Tile> verticalMatch = new List<Tile> { currentTile };
-                for (int i = 1; y + i < gridSizeY; i++)
+                for (int i = 1; y + i < gridSizeY-1; i++)
                 {
                     Tile nextTile = grid[x, y + i];
                     if (nextTile != null && nextTile.tileType == currentTile.tileType)
@@ -297,13 +299,13 @@ public class MiniGame1 : MonoBehaviour
                     }
                     else break;
                 }
-                if (verticalMatch.Count >= 3)
-                    matchedTiles.AddRange(verticalMatch.Where(tile => tile != null)); // null 검사 후 추가;
+                if (verticalMatch.Count >= matchCount)
+                    matchedTiles.AddRange(verticalMatch);
             }
         }
 
         // 2x2 모양 체크
-        for (int x = 0; x < gridSizeX - 1; x++)
+        for (int x = 0; x < gridSizeX-1; x++)
         {
             for (int y = 0; y < gridSizeY - 1; y++)
             {
@@ -326,21 +328,20 @@ public class MiniGame1 : MonoBehaviour
             }
         }
 
-        // 중복 타일 제거
-        matchedTiles = matchedTiles.Distinct().ToList();
-
         // 인접한 같은 타입 타일도 찾음
         List<Tile> additionalMatches = new List<Tile>();
         foreach (Tile tile in matchedTiles)
         {
-            // null 검사
-            if (tile != null)
-            {
-                FindConnectedTiles(tile, tile.tileType, additionalMatches);
-            }
+            FindConnectedTiles(tile, tile.tileType, additionalMatches);
         }
         matchedTiles.AddRange(additionalMatches);
-        matchedTiles = matchedTiles.Distinct().ToList(); // 중복 제거
+
+        // 중복 타일 제거
+        matchedTiles = matchedTiles.Distinct().ToList();
+
+        // 매칭된 타일이 없으면 false 반환
+        if (matchedTiles.Count == 0)
+            return false;
 
         // 삭제 수행
         foreach (Tile tile in matchedTiles)
@@ -349,12 +350,49 @@ public class MiniGame1 : MonoBehaviour
             {
                 tile.SetMerged();             // 타일의 삭제 효과 처리 (타일 비활성화 등)
                 grid[tile.x, tile.y] = null;  // 그리드에서 타일 제거
-                return true;
             }
         }
 
+        DropTiles();
+
         matchedTiles.Clear(); // 리스트 초기화
-        return false;
+        return true;           // 매칭된 타일이 삭제됨을 반환
+    }
+
+    private void DropTiles()
+    {
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            int emptySpace = 0;
+
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                if (grid[x, y] == null)
+                {
+                    emptySpace++;
+                }
+                else if (emptySpace > 0)
+                {
+                    Tile tile = grid[x, y];
+                    grid[x, y] = null;
+                    grid[x, y - emptySpace] = tile;
+                    tile.SetPosition(x, y - emptySpace);
+                    SetTilePosition(tile, x, y - emptySpace);
+                }
+            }
+        }
+
+        // 새 타일을 위에서 생성하여 빈 칸 채우기
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = gridSizeY - 1; y >= 0; y--)
+            {
+                if (grid[x, y] == null)
+                {
+                    CreateTile(x, y);
+                }
+            }
+        }
     }
 
     // 재귀적으로 인접한 같은 타입의 타일을 찾는 함수
@@ -373,6 +411,85 @@ public class MiniGame1 : MonoBehaviour
         if (y > 0) FindConnectedTiles(grid[x, y - 1], type, connectedTiles); // Down
         if (y < gridSizeY - 1) FindConnectedTiles(grid[x, y + 1], type, connectedTiles); // Up
     }
+    
+    public void StartMatchCheckAndAnimate()
+    {
+        // 매칭이 발생한 경우 애니메이션 코루틴 실행
+        if (CheckAndRemoveMatches())
+        {
+            StartCoroutine(AnimateMatchAndDrop());
+        }
+    }
+
+    private IEnumerator AnimateMatchAndDrop()
+    {
+        // 매칭된 타일 삭제 애니메이션
+        foreach (Tile tile in matchedTiles)
+        {
+            if (tile != null)
+            {
+                tile.SetMerged(); // 삭제 애니메이션
+                grid[tile.x, tile.y] = null;
+            }
+        }
+
+        yield return new WaitForSeconds(0.3f); // 삭제 애니메이션 대기
+
+        // 타일 내려오는 애니메이션
+        yield return StartCoroutine(DropTilesWithAnimation());
+
+        // 내려온 타일로 새로운 매칭 검사
+        StartMatchCheckAndAnimate();
+    }
+
+    // ------------------- 애니메이션 ---------------------
+
+    private IEnumerator DropTilesWithAnimation()
+    {
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            int emptySpace = 0;
+
+            for (int y = 0; y < gridSizeY - 1; y++)
+            {
+                if (grid[x, y] == null)
+                {
+                    emptySpace++;
+                }
+                else if (emptySpace > 0)
+                {
+                    Tile tile = grid[x, y];
+                    grid[x, y] = null;
+                    grid[x, y - emptySpace] = tile;
+
+                    StartCoroutine(SlideTile(tile, x, y, x, y - emptySpace));
+                }
+            }
+        }
+
+        yield return new WaitForSeconds(slideDuration); // 모든 타일이 내려오기를 기다림
+    }
+
+    private IEnumerator SlideTile(Tile tile, int startX, int startY, int targetX, int targetY)
+    {
+        Vector2 startPos = tile.transform.localPosition;
+        Vector2 endPos = new Vector2(
+            -(gridSizeX - 1) * tilePrefab.GetComponent<RectTransform>().rect.width / 2 + targetX * tilePrefab.GetComponent<RectTransform>().rect.width,
+            -(gridSizeY - 1) * tilePrefab.GetComponent<RectTransform>().rect.height / 2 + targetY * tilePrefab.GetComponent<RectTransform>().rect.height);
+
+        float elapsedTime = 0f;
+
+        while (elapsedTime < slideDuration)
+        {
+            tile.transform.localPosition = Vector2.Lerp(startPos, endPos, elapsedTime / slideDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        tile.SetPosition(targetX, targetY);
+        tile.transform.localPosition = endPos; // 최종 위치 설정
+    }
+
 
     private void EndGameLogic()
     {

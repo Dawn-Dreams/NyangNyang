@@ -125,16 +125,6 @@ public class DummyQuestServer : DummyServerData
         };
     // =========================
 
-    // DummyServer라서 시작 시 초기화를 해당 함수에서 진행 (GameManager내에서 호출)
-    // <- 해당 방식 사용하지 않으므로 삭제 해도 됨.
-
-    // 10.31 클라에서 관리하도록 리팩토링 진행
-    //public static QuestDataBase SendQuestInfoToUser(int userID, QuestCategory questCategory, QuestType questType)
-    //{
-    //    // TODO: 해당 플레이어에게 보낼 수 있도록
-    //    return GetQuestInfo(questCategory, questType);
-    //}
-
     // 유저가 일일/주간/업적 퀘스트 등에서 보상을 받은 적 있는지의 정보를 전송해주는 함수
     public static bool SendRewardInfoToUser(int userID, QuestCategory questCategory, QuestType questType)
     {
@@ -146,13 +136,6 @@ public class DummyQuestServer : DummyServerData
         }
         return isUserGetReward;
     }
-
-    // 서버 내 저장된 BaseQuestData 정보에 대한 Get함수
-    // 10.31 클라에서 관리하도록 변경
-    //public static QuestDataBase GetQuestInfo(QuestCategory questCategory, QuestType questType)
-    //{
-    //    return questDataBases[questCategory][questType];
-    //}
 
     // userID 유저가 요구한 QuestCategory,QuestType의 퀘스트에서 사용되는 데이터 전송
     public static void SendQuestDataToPlayer(int userID, QuestCategory questCategory,QuestType questType)
@@ -169,14 +152,6 @@ public class DummyQuestServer : DummyServerData
             case QuestType.KillMonster:
                 Player.RecvMonsterKillDataFromServer(questCategory,(long)userQuestProgressData[questType][questCategory][userID]);
                 break;
-    
-            // 스토리 퀘스트
-            case QuestType.LevelUpStatus:
-            // Flow
-            case QuestType.StageClear:
-                DummyStoryQuestServer.SendNewQuestDataToUser(userID);
-                break;
-    
             default:
                 break;
         }
@@ -272,13 +247,6 @@ public class DummyQuestServer : DummyServerData
         }
     }
 
-
-    public static void UserGoldSpending(int userID, BigInteger spendingAmount)
-    {
-        // 범위 체크 생략
-
-        RenewalUserQuestProgressData(userID, QuestType.GoldSpending, spendingAmount);
-    }
 
     protected static void RenewalUserQuestProgressData(int userID, QuestType questType, BigInteger newAddVal)
     {

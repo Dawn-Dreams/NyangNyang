@@ -44,19 +44,9 @@ public class Player : MonoBehaviour
     public static event OnGoldSpendingQuestDelegate OnRenewGoldSpendingQuest;
     public delegate void OnMonsterKillQuestDelegate(QuestCategory category, long monsterKillCount);
     public static event OnMonsterKillQuestDelegate OnMonsterKillQuestChange;
-    public delegate void OnLevelUpStatusQuestDelegate(StatusLevelType type, BigInteger newVal);
-    public static event OnLevelUpStatusQuestDelegate OnLevelUpStatusQuestChange;
-    public delegate void OnStageClearQuestDelegate(int clearTheme, int clearStage);
-    public static event OnStageClearQuestDelegate OnStageClear;
 
 
-    // 스테이터스 레벨 변화 델리게이트
-    public delegate void OnStatusLevelChangeDelegate(StatusLevelType type);
-    public static event OnStatusLevelChangeDelegate OnStatusLevelChange;
 
-    // 스테이터스중 체력 변화 시 실행될 델리게이트 (캐릭터 체력 변경, 체력바 UI 기능 등)
-    public delegate void OnHPStatusLevelChangeDelegate();
-    public static event OnHPStatusLevelChangeDelegate OnHPLevelChange;
 
 
     // 한 스테이지 내에서 반복 전투를 진행하는 것에 대한 변수
@@ -227,15 +217,7 @@ public class Player : MonoBehaviour
     public static void UpdatePlayerStatusLevelByType(StatusLevelType type, int newValue)
     {
         playerStatus.UpdateStatusLevelByType(type, newValue);
-        if (OnStatusLevelChange != null)
-        {
-            OnStatusLevelChange(type);
-        }
 
-        if (type == StatusLevelType.HP && OnHPLevelChange != null)
-        {
-            OnHPLevelChange();
-        }
     }
 
     public static void GetPlayerHighestClearStageData(out int themeData, out int stageData)
@@ -269,23 +251,6 @@ public class Player : MonoBehaviour
     // ================
     // ===========
 
-    // 스토리 퀘스트
-    public static void RecvStatusDataFromServer(StatusLevelType type, BigInteger newValue)
-    {
-        if (OnLevelUpStatusQuestChange != null)
-        {
-            OnLevelUpStatusQuestChange(type, newValue);
-        }
-    }
-
-    public static void RecvStageClearDataFromServer(int clearTheme, int clearStage)
-    {
-        if (OnStageClear != null)
-        {
-            OnStageClear(clearTheme, clearStage);
-        }
-    }
-    // =================
 
     
     // =====================

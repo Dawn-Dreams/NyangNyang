@@ -48,6 +48,10 @@ public class StageManager : MonoBehaviour
     public int maxGateCount = 3;
     public int maxStageCount = 5;
 
+    // 스토리 퀘스트 내에서 스테이지 클리어를 판단하기 위한 이벤트 델리게이트
+    public delegate void OnStageClearDelegate(int clearTheme, int clearStage);
+    public event OnStageClearDelegate OnStageClear;
+
     void Start()
     {
         //SetStageUI();
@@ -158,6 +162,13 @@ public class StageManager : MonoBehaviour
     private void StageClear()
     {
         SendStageClearDataToServer();
+
+        // 스테이지 관련 퀘스트에서 사용되는 델리게이트
+        if (OnStageClear != null)
+        {
+            OnStageClear(currentTheme, currentStage);
+        }
+
         if (animationManager != null && currentGate == maxGateCount)
         {
             animationManager.PlayAnimation(AnimationManager.AnimationState.Victory);
