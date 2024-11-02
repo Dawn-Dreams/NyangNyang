@@ -5,6 +5,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
 
 public class MiniGame1 : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class MiniGame1 : MonoBehaviour
     public float slideDuration = 0.3f;
     private List<Tile> matchedTiles = new List<Tile>(); // 삭제할 타일들을 저장할 리스트
 
+    private bool isOnGame = true;
 
     public float gameTime = 60.0f; // 기본 60초 제한시간
     private float tempTimer = 0.0f; // 현재 시간
@@ -34,6 +36,7 @@ public class MiniGame1 : MonoBehaviour
     private void Start()
     {
         StartGameLogic();
+        isOnGame = true;
         tempTimer = 0.0f;
         timerSlider.maxValue = gameTime;
         timerSlider.value = gameTime;
@@ -41,7 +44,15 @@ public class MiniGame1 : MonoBehaviour
 
     private void Update()
     {
-        CheckAndRemoveMatches();
+        if (isOnGame)
+        {
+            CheckAndRemoveMatches();
+        }
+        else
+        {
+            
+        }
+
         if (tempTimer < gameTime)
         {
             tempTimer += Time.deltaTime;
@@ -398,112 +409,44 @@ public class MiniGame1 : MonoBehaviour
 
     private IEnumerator WaitAndDropTiles()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f); // 병합 후 1초 대기
 
-        yield return StartCoroutine(DropTilesWithAnimation());
-        DropTiles();
-
-        yield return new WaitForSeconds(0.5f);
-        CheckAndRemoveMatches();
-    }
-
-    private void DropTiles()
-    {
         for (int x = 0; x < gridSizeX; x++)
         {
-            int emptySpace = 0;
+            int emptyCount = 0; // 빈 타일 개수
 
+            // 아래에서 위로 검사하면서 빈 타일을 확인
             for (int y = 0; y < gridSizeY; y++)
             {
                 if (grid[x, y] == null)
                 {
-                    emptySpace++;
+                    emptyCount++;
                 }
-                else if (emptySpace > 0)
+                else if (emptyCount > 0)
                 {
-                    Tile tile = grid[x, y];
+                    // 타일이 내려오면서 빈 공간을 채우도록 위치 변경
+                    grid[x, y - emptyCount] = grid[x, y];
                     grid[x, y] = null;
-                    grid[x, y - emptySpace] = tile;
-                    tile.SetPosition(x, y - emptySpace);
-                    SetTilePosition(tile, x, y - emptySpace);
+                    grid[x, y - emptyCount].SetPosition(x, y - emptyCount);
+                    SetTilePosition(grid[x, y - emptyCount], x, y - emptyCount);
                 }
             }
-        }
 
-        // 새 타일을 위에서 생성하여 빈 칸 채우기
-        for (int x = 0; x < gridSizeX; x++)
-        {
-            for (int y = gridSizeY - 1; y >= 0; y--)
+            // 최상단에 새 타일 생성
+            for (int y = gridSizeY - emptyCount; y < gridSizeY; y++)
             {
-                if (grid[x, y] == null)
-                {
-                    CreateTile(x, y);
-                }
+                CreateTile(x, y);
             }
         }
+        yield return new WaitForSeconds(0.5f); // 타일이 내려오는 애니메이션 대기
+        CheckAndRemoveMatches(); // 새로운 매칭 체크
     }
 
     // ------------------- 애니메이션 ---------------------
 
-    public void StartMatchCheckAndAnimate()
-    {
-        // 매칭이 발생한 경우 애니메이션 코루틴 실행
-        if (CheckAndRemoveMatches())
-        {
-            StartCoroutine(AnimateMatchAndDrop());
-        }
-    }
-
-    private IEnumerator AnimateMatchAndDrop()
-    {
-        // 매칭된 타일 삭제 애니메이션
-        foreach (Tile tile in matchedTiles)
-        {
-            if (tile != null)
-            {
-                tile.SetMerged(); // 삭제 애니메이션
-                grid[tile.x, tile.y] = null;
-            }
-        }
-
-        yield return new WaitForSeconds(0.3f); // 삭제 애니메이션 대기
-
-        // 타일 내려오는 애니메이션
-        yield return StartCoroutine(DropTilesWithAnimation());
-
-        // 내려온 타일로 새로운 매칭 검사
-        StartMatchCheckAndAnimate();
-    }
-
-    private IEnumerator DropTilesWithAnimation()
-    {
-        for (int x = 0; x < gridSizeX; x++)
-        {
-            int emptySpace = 0;
-
-            for (int y = 0; y < gridSizeY - 1; y++)
-            {
-                if (grid[x, y] == null)
-                {
-                    emptySpace++;
-                }
-                else if (emptySpace > 0)
-                {
-                    Tile tile = grid[x, y];
-                    grid[x, y] = null;
-                    grid[x, y - emptySpace] = tile;
-
-                    StartCoroutine(SlideTile(tile, x, y, x, y - emptySpace));
-                }
-            }
-        }
-
-        yield return new WaitForSeconds(slideDuration); // 모든 타일이 내려오기를 기다림
-    }
-
     private IEnumerator SlideTile(Tile tile, int startX, int startY, int targetX, int targetY)
     {
-        if(tile == null)
+        if (tile == null)
             yield return null;
 
         Vector2 startPos = tile.transform.localPosition;
@@ -532,6 +475,7 @@ public class MiniGame1 : MonoBehaviour
 
     private void EndGameLogic()
     {
+        isOnGame = false;
         Debug.Log("Game 종료");
     }
 }
