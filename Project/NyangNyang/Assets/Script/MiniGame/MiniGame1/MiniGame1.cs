@@ -1,12 +1,15 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MiniGame1 : MonoBehaviour
 {
     public int gridSizeX = 7;   // 그리드의 가로 크기
-    public int gridSizeY = 7+1;   // 그리드의 세로 크기 + 최상단
+    public int gridSizeY = 7 + 1;   // 그리드의 세로 크기 + 최상단
     public GameObject tilePrefab; // 타일 프리팹
     public Transform gridParent;  // 타일이 배치될 부모 오브젝트
     public TileType[] possibleTileTypes; // 생성 가능한 타일의 종류들
@@ -19,18 +22,38 @@ public class MiniGame1 : MonoBehaviour
     public float slideDuration = 0.3f;
     private List<Tile> matchedTiles = new List<Tile>(); // 삭제할 타일들을 저장할 리스트
 
+
+    public float gameTime = 60.0f; // 기본 60초 제한시간
+    private float tempTimer = 0.0f; // 현재 시간
+    public int score = 0;  // 점수 -> 추후 재화와 비례 하도록
+    private int scorePerTile = 10; // 타일 하나 당 점수
+
+    public Slider timerSlider;
+    public TextMeshProUGUI scoreText;
+
     private void Start()
     {
         StartGameLogic();
+        tempTimer = 0.0f;
+        timerSlider.maxValue = gameTime;
+        timerSlider.value = gameTime;
     }
 
     private void Update()
     {
+        CheckAndRemoveMatches();
+        if (tempTimer < gameTime)
+        {
+            tempTimer += Time.deltaTime;
+            timerSlider.value = tempTimer;
+        }
+        else
+            EndGameLogic();
+
         if (Input.GetKeyDown(KeyCode.F5))
         {
             ResetGrid();
         }
-        CheckAndRemoveMatches();
     }
 
     public void ResetGrid()
@@ -81,8 +104,7 @@ public class MiniGame1 : MonoBehaviour
         if (tile == null)
             return;
 
-
-        TileType randomType = possibleTileTypes[Random.Range(0, possibleTileTypes.Length)];
+        TileType randomType = possibleTileTypes[UnityEngine.Random.Range(0, possibleTileTypes.Length)];
         tile.Initialize(x, y, randomType);
 
         grid[x, y] = tile;
@@ -118,7 +140,7 @@ public class MiniGame1 : MonoBehaviour
         // 타일 목록 랜덤
         for (int i = 0; i < tilesList.Count; i++)
         {
-            int randomIndex = Random.Range(i, tilesList.Count);
+            int randomIndex = UnityEngine.Random.Range(i, tilesList.Count);
             SwapTilesInList(i, randomIndex);
         }
 
@@ -348,10 +370,12 @@ public class MiniGame1 : MonoBehaviour
                 grid[tile.x, tile.y] = null;  // 그리드에서 타일 제거
             }
         }
+        score += matchedTiles.Count * scorePerTile; // 삭제된 타일 개수 당 점수 추가
+        scoreText.text = "Score: " + score;
 
         StartCoroutine(WaitAndDropTiles()); // 애니메이션과 드롭 로직 시작
         matchedTiles.Clear();
-        return true; 
+        return true;
     }
 
     // 재귀적으로 인접한 같은 타입의 타일을 찾는 함수
@@ -479,6 +503,9 @@ public class MiniGame1 : MonoBehaviour
 
     private IEnumerator SlideTile(Tile tile, int startX, int startY, int targetX, int targetY)
     {
+        if(tile == null)
+            yield return null;
+
         Vector2 startPos = tile.transform.localPosition;
         Vector2 endPos = new Vector2(
             -(gridSizeX - 1) * tilePrefab.GetComponent<RectTransform>().rect.width / 2 + targetX * tilePrefab.GetComponent<RectTransform>().rect.width,
@@ -498,8 +525,13 @@ public class MiniGame1 : MonoBehaviour
     }
 
 
+    private void ClearGame()
+    {
+        Debug.Log("Game Clear");    // 현재 이 게임은 클리어가 존재 하지 않지만, 일단 생성
+    }
+
     private void EndGameLogic()
     {
-        Debug.Log("Game Over");
+        Debug.Log("Game 종료");
     }
 }
