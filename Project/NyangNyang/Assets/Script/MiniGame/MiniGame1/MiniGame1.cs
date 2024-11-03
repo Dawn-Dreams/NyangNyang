@@ -125,6 +125,7 @@ public class MiniGame1 : MonoBehaviour
         tile.OnTileTouched += OnTileTouched;
         tile.OnTileDragged += (direction, startX, startY) => OnTileDragged(startX, startY, direction);
     }
+
     private void SetTilePosition(Tile tile, int x, int y)
     {
         RectTransform tileRect = tilePrefab.GetComponent<RectTransform>();
@@ -137,6 +138,7 @@ public class MiniGame1 : MonoBehaviour
         Vector2 tilePosition = new Vector2(startX + x * tileWidth, startY + y * tileHeight);
         tile.transform.localPosition = tilePosition;
     }
+
     private void AssignTileIndices()
     {
         for (int i = 0; i < tilesList.Count; i++)
@@ -427,6 +429,8 @@ public class MiniGame1 : MonoBehaviour
                     // 타일이 내려오면서 빈 공간을 채우도록 위치 변경
                     grid[x, y - emptyCount] = grid[x, y];
                     grid[x, y] = null;
+                    grid[x, y - emptyCount].MoveDownByCells(emptyCount);
+                    yield return new WaitForSeconds(0.5f);
                     grid[x, y - emptyCount].SetPosition(x, y - emptyCount);
                     SetTilePosition(grid[x, y - emptyCount], x, y - emptyCount);
                 }
@@ -443,30 +447,6 @@ public class MiniGame1 : MonoBehaviour
     }
 
     // ------------------- 애니메이션 ---------------------
-
-    private IEnumerator SlideTile(Tile tile, int startX, int startY, int targetX, int targetY)
-    {
-        if (tile == null)
-            yield return null;
-
-        Vector2 startPos = tile.transform.localPosition;
-        Vector2 endPos = new Vector2(
-            -(gridSizeX - 1) * tilePrefab.GetComponent<RectTransform>().rect.width / 2 + targetX * tilePrefab.GetComponent<RectTransform>().rect.width,
-            -(gridSizeY - 1) * tilePrefab.GetComponent<RectTransform>().rect.height / 2 + targetY * tilePrefab.GetComponent<RectTransform>().rect.height);
-
-        float elapsedTime = 0f;
-
-        while (elapsedTime < slideDuration)
-        {
-            tile.transform.localPosition = Vector2.Lerp(startPos, endPos, elapsedTime / slideDuration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        tile.SetPosition(targetX, targetY);
-        tile.transform.localPosition = endPos; // 최종 위치 설정
-    }
-
 
     private void ClearGame()
     {
