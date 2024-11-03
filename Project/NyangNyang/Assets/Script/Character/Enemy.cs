@@ -122,7 +122,7 @@ public class Enemy : Character
     [SerializeField] private GameObject[] dummyEnemyObj;
     private List<DummyEnemy> _dummyEnemies;
 
-    private int initialNumOfDummyEnemy = 0;
+    public int initialNumOfDummyEnemy = 0;
 
     // 전투 위치와 관련된 변수들
     private Vector3 spawnPosition;
@@ -231,9 +231,10 @@ public class Enemy : Character
             {
                 dummyEnemy.animationManager.PlayAnimation(AnimationManager.AnimationState.IdleA);
             }
-            
         }
         
+        CombatManager.GetInstance().EnemyArriveCombatArea(this);
+
         if (moveToCombatAreaCoroutine != null)
         {
             StopCoroutine(moveToCombatAreaCoroutine);
@@ -319,12 +320,7 @@ public class Enemy : Character
             monsterData.enemyDropData.GiveItemToPlayer();
         }
 
-        if (stageManager)
-        {
-            stageManager.GateClearAfterEnemyDeath(0.5f);
-        }
-
-        EnemySpawnManager.GetInstance().EnemyDeath(initialNumOfDummyEnemy);
+        CombatManager.GetInstance().CurrentEnemyDeath(this);
 
         base.Death();
     }

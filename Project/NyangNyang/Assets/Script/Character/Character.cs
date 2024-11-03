@@ -84,12 +84,18 @@ public class Character : MonoBehaviour
 
     protected IEnumerator AttackEnemy()
     {
-        yield return new WaitForSeconds(0.25f);
         while (true)
         {
-            Attack();
-            
-            yield return new WaitForSeconds(0.5f);
+            if (CombatManager.GetInstance().canFight)
+            {
+                Attack();
+            }
+            else
+            {
+                Debug.Log("전투를 진행할 수 없어야하는데.");
+            }
+            // TODO: 공격속도 기반 전투 딜레이 적용
+            yield return new WaitForSeconds(1f);
         }
     }
 
@@ -174,9 +180,6 @@ public class Character : MonoBehaviour
         {
             enemyObject.SetEnemy(null);
         }
-
-        // TODO: 임시 사망 처리
-        gameObject.SetActive(false);
     }
 }
 

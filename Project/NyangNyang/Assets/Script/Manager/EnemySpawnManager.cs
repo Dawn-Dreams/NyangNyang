@@ -65,13 +65,15 @@ public class EnemySpawnManager : MonoBehaviour
         currentEnemy.GoToCombatArea(cat, enemyCombatPosition.position);
     }
 
-    public void DestroyEnemy()
+    public void DestroyEnemy(float waitTime = 0.0f)
     {
+        Debug.Log($"몬스터 destroy, {waitTime}");
+
         Cat cat = GameManager.GetInstance().catObject;
 
         if (currentEnemy)
         {
-            Destroy(currentEnemy.gameObject);
+            Destroy(currentEnemy.gameObject, waitTime);
         }
 
         currentEnemy = null;
