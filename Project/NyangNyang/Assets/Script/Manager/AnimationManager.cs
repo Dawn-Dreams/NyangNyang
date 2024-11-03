@@ -4,10 +4,10 @@ public class AnimationManager : MonoBehaviour
 {
     private Animator animator;
 
-    // ¾Ö´Ï¸ŞÀÌ¼Ç »óÅÂ Enum
+    // ì• ë‹ˆë©”ì´ì…˜ ìƒíƒœ Enum
     public enum AnimationState
     {
-        // IdleAºÎÅÍ ½Ã°è¹æÇâ
+        // IdleAë¶€í„° ì‹œê³„ë°©í–¥
         None,
         IdleA,
         Alert,
@@ -64,20 +64,34 @@ public class AnimationManager : MonoBehaviour
 
     void Awake()
     {
-        // Animator ÄÄÆ÷³ÍÆ® °¡Á®¿À±â
+        // Animator ì»´í¬ë„ŒíŠ¸ ê°€ì ¸ì˜¤ê¸°
         animator = GetComponent<Animator>();
     }
 
-    // ¾Ö´Ï¸ŞÀÌ¼Ç ½ÇÇà ¸Ş¼­µå
-    public void PlayAnimation(AnimationState state)
+    // ì• ë‹ˆë©”ì´ì…˜ ì‹¤í–‰ ë©”ì„œë“œ
+    public void PlayAnimation(AnimationState state, bool playOnce = false)
     {
         if (animator != null)
         {
-            animator.SetInteger("animation", (int)state);
+            if (playOnce)
+            {
+                animator.Play(state.ToString());
+            }
+            else
+            {
+                animator.SetInteger("animation", (int)state);
+            }
+
+
         }
         else
         {
-            Debug.LogWarning("Animator°¡ ¼³Á¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+            Debug.LogWarning("Animatorê°€ ì„¤ì •ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
         }
+    }
+
+    public Animator GetAnimator()
+    {
+        return animator;
     }
 }

@@ -67,8 +67,6 @@ public class EnemySpawnManager : MonoBehaviour
 
     public void DestroyEnemy(float waitTime = 0.0f)
     {
-        Debug.Log($"몬스터 destroy, {waitTime}");
-
         Cat cat = GameManager.GetInstance().catObject;
 
         if (currentEnemy)

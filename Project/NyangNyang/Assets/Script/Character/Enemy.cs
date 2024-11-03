@@ -71,13 +71,6 @@ public class DummyEnemy
 
         hpText.text = currentHP + " / " + maxHP;
 
-        // 피격 애니메이션
-        if (animationManager)
-        {
-            animationManager.PlayAnimation(AnimationManager.AnimationState.Damage);
-        }
-        
-
         // 대미지 출력
         // TODO 오브젝트 풀링 방식으로 바꾸기
         GameObject textObject = (GameObject)GameObject.Instantiate(floatingDamage,
@@ -95,11 +88,7 @@ public class DummyEnemy
 
     public void DestroyDummyEnemy()
     {
-        // TODO : 임시 사망 코드 추후 애니메이션으로 변경 및 ...
-        if (animationManager)
-        {
-            animationManager.PlayAnimation(AnimationManager.AnimationState.DieA);
-        }
+        EnemyPlayAnimation(AnimationManager.AnimationState.DieA);
         
         //dummyGameObject.GetComponent<SpriteRenderer>().color = new Color(0.25f, 0.25f, 0.25f);
         hpText.gameObject.SetActive(false);
@@ -111,6 +100,11 @@ public class DummyEnemy
         {
             floatingDamage = getFloatingDamage;
         }
+    }
+
+    public void EnemyPlayAnimation(AnimationManager.AnimationState state, bool playOnce = false)
+    {
+        animationManager.PlayAnimation(state, playOnce);
     }
 }
 
@@ -227,10 +221,7 @@ public class Enemy : Character
     {
         foreach (var dummyEnemy in _dummyEnemies)
         {
-            if (dummyEnemy.animationManager)
-            {
-                dummyEnemy.animationManager.PlayAnimation(AnimationManager.AnimationState.IdleA);
-            }
+            dummyEnemy.EnemyPlayAnimation(AnimationManager.AnimationState.IdleA);
         }
         
         CombatManager.GetInstance().EnemyArriveCombatArea(this);
@@ -261,13 +252,9 @@ public class Enemy : Character
     protected override void Attack()
     {
         base.Attack();
-
         foreach (var dummyEnemy in _dummyEnemies)
         {
-            if (dummyEnemy.animationManager)
-            {
-                dummyEnemy.animationManager.PlayAnimation(AnimationManager.AnimationState.ATK1);
-            }
+            dummyEnemy.EnemyPlayAnimation(AnimationManager.AnimationState.ATK1, true);
         }
     }
 

@@ -241,6 +241,7 @@ public class StageManager : MonoBehaviour
     void FadeEndFuncWhileStageChange()
     {
         StopCoroutine(fadeCoroutine);
+        CombatManager.GetInstance().CatArriveNewGate(currentGate == maxGateCount);
     }
 
     void SetNewStage(bool addStage)
@@ -264,6 +265,7 @@ public class StageManager : MonoBehaviour
         parallaxScrollingManager.ChangeIndexNumberBackgroundImage(currentTheme);
 
         GameManager.GetInstance().catObject.CatRespawn();
+        GameManager.GetInstance().catObject.animationManager.PlayAnimation(AnimationManager.AnimationState.IdleA);
 
         // 현재 스테이지가 최고 스테이지가 아니라면 반복 사냥 진행
         int clearThemeData = 0;

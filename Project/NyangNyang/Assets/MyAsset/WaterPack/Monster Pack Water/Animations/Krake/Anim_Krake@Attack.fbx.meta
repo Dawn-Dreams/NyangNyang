@@ -1,125 +1,353 @@
 fileFormatVersion: 2
 guid: 8a3f1156c63975c49874854e2fe71c11
 ModelImporter:
-  serializedVersion: 23
-  fileIDToRecycleName:
-    100000: //RootNode
-    100002: center
-    100004: cloth1
-    100006: cloth2
-    100008: cloth3
-    100010: cloth4
-    100012: head
-    100014: head_end
-    100016: joint10
-    100018: joint11
-    100020: joint12
-    100022: joint13
-    100024: joint14
-    100026: joint15
-    100028: joint16
-    100030: joint17
-    100032: joint18
-    100034: joint19
-    100036: joint20
-    100038: joint21
-    100040: joint22
-    100042: joint23
-    100044: joint24
-    100046: joint25
-    100048: joint26
-    100050: joint27
-    100052: joint28
-    100054: joint29
-    100056: joint3
-    100058: joint30
-    100060: joint31
-    100062: joint32
-    100064: joint33
-    100066: joint34
-    100068: joint35
-    100070: joint36
-    100072: joint37
-    100074: joint38
-    100076: joint39
-    100078: joint4
-    100080: joint40
-    100082: joint41
-    100084: joint42
-    100086: joint43
-    100088: joint44
-    100090: joint45
-    100092: joint46
-    100094: joint47
-    100096: joint48
-    100098: joint5
-    100100: joint6
-    100102: joint7
-    100104: joint8
-    100106: joint9
-    100108: root
-    100110: spine1
-    400000: //RootNode
-    400002: center
-    400004: cloth1
-    400006: cloth2
-    400008: cloth3
-    400010: cloth4
-    400012: head
-    400014: head_end
-    400016: joint10
-    400018: joint11
-    400020: joint12
-    400022: joint13
-    400024: joint14
-    400026: joint15
-    400028: joint16
-    400030: joint17
-    400032: joint18
-    400034: joint19
-    400036: joint20
-    400038: joint21
-    400040: joint22
-    400042: joint23
-    400044: joint24
-    400046: joint25
-    400048: joint26
-    400050: joint27
-    400052: joint28
-    400054: joint29
-    400056: joint3
-    400058: joint30
-    400060: joint31
-    400062: joint32
-    400064: joint33
-    400066: joint34
-    400068: joint35
-    400070: joint36
-    400072: joint37
-    400074: joint38
-    400076: joint39
-    400078: joint4
-    400080: joint40
-    400082: joint41
-    400084: joint42
-    400086: joint43
-    400088: joint44
-    400090: joint45
-    400092: joint46
-    400094: joint47
-    400096: joint48
-    400098: joint5
-    400100: joint6
-    400102: joint7
-    400104: joint8
-    400106: joint9
-    400108: root
-    400110: spine1
-    7400000: Attack
-    9500000: //RootNode
+  serializedVersion: 22200
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: //RootNode
+  - first:
+      1: 100002
+    second: center
+  - first:
+      1: 100004
+    second: cloth1
+  - first:
+      1: 100006
+    second: cloth2
+  - first:
+      1: 100008
+    second: cloth3
+  - first:
+      1: 100010
+    second: cloth4
+  - first:
+      1: 100012
+    second: head
+  - first:
+      1: 100014
+    second: head_end
+  - first:
+      1: 100016
+    second: joint10
+  - first:
+      1: 100018
+    second: joint11
+  - first:
+      1: 100020
+    second: joint12
+  - first:
+      1: 100022
+    second: joint13
+  - first:
+      1: 100024
+    second: joint14
+  - first:
+      1: 100026
+    second: joint15
+  - first:
+      1: 100028
+    second: joint16
+  - first:
+      1: 100030
+    second: joint17
+  - first:
+      1: 100032
+    second: joint18
+  - first:
+      1: 100034
+    second: joint19
+  - first:
+      1: 100036
+    second: joint20
+  - first:
+      1: 100038
+    second: joint21
+  - first:
+      1: 100040
+    second: joint22
+  - first:
+      1: 100042
+    second: joint23
+  - first:
+      1: 100044
+    second: joint24
+  - first:
+      1: 100046
+    second: joint25
+  - first:
+      1: 100048
+    second: joint26
+  - first:
+      1: 100050
+    second: joint27
+  - first:
+      1: 100052
+    second: joint28
+  - first:
+      1: 100054
+    second: joint29
+  - first:
+      1: 100056
+    second: joint3
+  - first:
+      1: 100058
+    second: joint30
+  - first:
+      1: 100060
+    second: joint31
+  - first:
+      1: 100062
+    second: joint32
+  - first:
+      1: 100064
+    second: joint33
+  - first:
+      1: 100066
+    second: joint34
+  - first:
+      1: 100068
+    second: joint35
+  - first:
+      1: 100070
+    second: joint36
+  - first:
+      1: 100072
+    second: joint37
+  - first:
+      1: 100074
+    second: joint38
+  - first:
+      1: 100076
+    second: joint39
+  - first:
+      1: 100078
+    second: joint4
+  - first:
+      1: 100080
+    second: joint40
+  - first:
+      1: 100082
+    second: joint41
+  - first:
+      1: 100084
+    second: joint42
+  - first:
+      1: 100086
+    second: joint43
+  - first:
+      1: 100088
+    second: joint44
+  - first:
+      1: 100090
+    second: joint45
+  - first:
+      1: 100092
+    second: joint46
+  - first:
+      1: 100094
+    second: joint47
+  - first:
+      1: 100096
+    second: joint48
+  - first:
+      1: 100098
+    second: joint5
+  - first:
+      1: 100100
+    second: joint6
+  - first:
+      1: 100102
+    second: joint7
+  - first:
+      1: 100104
+    second: joint8
+  - first:
+      1: 100106
+    second: joint9
+  - first:
+      1: 100108
+    second: root
+  - first:
+      1: 100110
+    second: spine1
+  - first:
+      4: 400000
+    second: //RootNode
+  - first:
+      4: 400002
+    second: center
+  - first:
+      4: 400004
+    second: cloth1
+  - first:
+      4: 400006
+    second: cloth2
+  - first:
+      4: 400008
+    second: cloth3
+  - first:
+      4: 400010
+    second: cloth4
+  - first:
+      4: 400012
+    second: head
+  - first:
+      4: 400014
+    second: head_end
+  - first:
+      4: 400016
+    second: joint10
+  - first:
+      4: 400018
+    second: joint11
+  - first:
+      4: 400020
+    second: joint12
+  - first:
+      4: 400022
+    second: joint13
+  - first:
+      4: 400024
+    second: joint14
+  - first:
+      4: 400026
+    second: joint15
+  - first:
+      4: 400028
+    second: joint16
+  - first:
+      4: 400030
+    second: joint17
+  - first:
+      4: 400032
+    second: joint18
+  - first:
+      4: 400034
+    second: joint19
+  - first:
+      4: 400036
+    second: joint20
+  - first:
+      4: 400038
+    second: joint21
+  - first:
+      4: 400040
+    second: joint22
+  - first:
+      4: 400042
+    second: joint23
+  - first:
+      4: 400044
+    second: joint24
+  - first:
+      4: 400046
+    second: joint25
+  - first:
+      4: 400048
+    second: joint26
+  - first:
+      4: 400050
+    second: joint27
+  - first:
+      4: 400052
+    second: joint28
+  - first:
+      4: 400054
+    second: joint29
+  - first:
+      4: 400056
+    second: joint3
+  - first:
+      4: 400058
+    second: joint30
+  - first:
+      4: 400060
+    second: joint31
+  - first:
+      4: 400062
+    second: joint32
+  - first:
+      4: 400064
+    second: joint33
+  - first:
+      4: 400066
+    second: joint34
+  - first:
+      4: 400068
+    second: joint35
+  - first:
+      4: 400070
+    second: joint36
+  - first:
+      4: 400072
+    second: joint37
+  - first:
+      4: 400074
+    second: joint38
+  - first:
+      4: 400076
+    second: joint39
+  - first:
+      4: 400078
+    second: joint4
+  - first:
+      4: 400080
+    second: joint40
+  - first:
+      4: 400082
+    second: joint41
+  - first:
+      4: 400084
+    second: joint42
+  - first:
+      4: 400086
+    second: joint43
+  - first:
+      4: 400088
+    second: joint44
+  - first:
+      4: 400090
+    second: joint45
+  - first:
+      4: 400092
+    second: joint46
+  - first:
+      4: 400094
+    second: joint47
+  - first:
+      4: 400096
+    second: joint48
+  - first:
+      4: 400098
+    second: joint5
+  - first:
+      4: 400100
+    second: joint6
+  - first:
+      4: 400102
+    second: joint7
+  - first:
+      4: 400104
+    second: joint8
+  - first:
+      4: 400106
+    second: joint9
+  - first:
+      4: 400108
+    second: root
+  - first:
+      4: 400110
+    second: spine1
+  - first:
+      74: 7400000
+    second: ATK1
+  - first:
+      95: 9500000
+    second: //RootNode
   externalObjects: {}
   materials:
-    importMaterials: 1
+    materialImportMode: 1
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -128,6 +356,7 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
     motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: 
@@ -146,8 +375,9 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Attack
+      name: ATK1
       takeName: Anim_Krake@Attack
+      internalID: 0
       firstFrame: 31
       lastFrame: 46
       wrapMode: 0
@@ -180,25 +410,36 @@ ModelImporter:
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    nodeNameCollisionStrategy: 0
+    fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    bakeAxisConversion: 0
     preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 0
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 0.01
-    hasPreviousCalculatedGlobalScale: 1
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -207,10 +448,10 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 1
-  copyAvatar: 0
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human: []
     skeleton: []
     armTwist: 0.5
@@ -220,13 +461,19 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
+  avatarSetup: 1
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  importBlendShapeDeformPercent: 0
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 

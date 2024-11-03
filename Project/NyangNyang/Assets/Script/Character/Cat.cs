@@ -35,8 +35,9 @@ public class Cat : Character
     {
         base.Attack();
 
-        animationManager.PlayAnimation(AnimationManager.AnimationState.ATK1);
+        animationManager.PlayAnimation(AnimationManager.AnimationState.ATK1,true);
     }
+
 
     public void CatRespawn()
     {

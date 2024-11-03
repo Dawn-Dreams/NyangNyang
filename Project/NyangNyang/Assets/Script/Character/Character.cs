@@ -90,10 +90,6 @@ public class Character : MonoBehaviour
             {
                 Attack();
             }
-            else
-            {
-                Debug.Log("전투를 진행할 수 없어야하는데.");
-            }
             // TODO: 공격속도 기반 전투 딜레이 적용
             yield return new WaitForSeconds(1f);
         }

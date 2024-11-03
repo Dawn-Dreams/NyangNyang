@@ -118,7 +118,6 @@ public class PlayerCostumeUI : MonoBehaviour
             return;
         }
 
-        Debug.Log($"{profileCatCostume.GetCurrentCostumeIndex(part)} , {costumeIndex}");
         if (profileCatCostume.GetCurrentCostumeIndex(part) == costumeIndex)
         {
             return;

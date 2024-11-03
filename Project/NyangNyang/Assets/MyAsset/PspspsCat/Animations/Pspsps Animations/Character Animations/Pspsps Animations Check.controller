@@ -4416,7 +4416,7 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: -1352661633043279864, guid: 0b0e30f6b54bf444cbf4bfffcc60dd50, type: 3}
-  m_Tag: 
+  m_Tag: ATK1
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
