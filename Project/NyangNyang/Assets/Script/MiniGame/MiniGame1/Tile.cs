@@ -141,11 +141,14 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUp
 
     public IEnumerator MoveDownByCells(int cells)
     {
+        if (animator != null)
+            animator.enabled = false;
+
         Vector3 startPos = transform.localPosition;
-        Vector3 endPos = new Vector3(transform.localPosition.x, transform.localPosition.y - cells, transform.localPosition.z);
-        float duration = 0.3f * cells; // 이동 애니메이션 시간 (칸 수에 비례)
+        Vector3 endPos = new Vector3(transform.localPosition.x, transform.localPosition.y - (cells* 100), transform.localPosition.z);
+        float duration = 0.1f * cells; // 이동 애니메이션 시간 (칸 수에 비례)
         float elapsedTime = 0f;
-        
+
         // 애니메이션 진행
         while (elapsedTime < duration)
         {
@@ -156,7 +159,7 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUp
 
         // 최종 위치 설정
         transform.localPosition = endPos;
-        y += cells; // 타일의 y 좌표 업데이트
+        y -= cells; // 타일의 y 좌표 업데이트
     }
 
 }

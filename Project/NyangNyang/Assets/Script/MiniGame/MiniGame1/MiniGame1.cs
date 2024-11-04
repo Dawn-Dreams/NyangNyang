@@ -44,15 +44,7 @@ public class MiniGame1 : MonoBehaviour
 
     private void Update()
     {
-        if (isOnGame)
-        {
-            CheckAndRemoveMatches();
-        }
-        else
-        {
-            
-        }
-
+       
         if (tempTimer < gameTime)
         {
             tempTimer += Time.deltaTime;
@@ -74,7 +66,6 @@ public class MiniGame1 : MonoBehaviour
             if (tile != null)
             {
                 Destroy(tile.gameObject);
-                Debug.Log("ResetGrid");
             }
         }
         tilesList.Clear();
@@ -147,6 +138,7 @@ public class MiniGame1 : MonoBehaviour
             tile.SetPosition(i % gridSizeX, i / gridSizeX); // 순서대로 재설정
             SetTilePosition(tile, tile.x, tile.y); // 위치 재배치
         }
+        CheckAndRemoveMatches();
     }
     private void ShuffleTiles()
     {
@@ -243,18 +235,7 @@ public class MiniGame1 : MonoBehaviour
         // 매칭된 타일이 삭제된 경우 원래 위치로 돌아가지 않음
         if (isMatched)
         {
-            // 타일 삭제 효과를 적용
-            foreach (Tile matchedTile in matchedTiles)
-            {
-                if (matchedTile != null)
-                {
-                    matchedTile.SetMerged();
-                    Debug.Log("SwapTilesCoroutine");
-                    grid[matchedTile.x, matchedTile.y] = null;
-                }
-            }
 
-            // ----------------타일 떨어지는 적용 로직 호출 예정
         }
         else
         {
@@ -405,9 +386,11 @@ public class MiniGame1 : MonoBehaviour
         if (x > 0) FindConnectedTiles(grid[x - 1, y], type, connectedTiles); // Left
         if (x < gridSizeX - 1) FindConnectedTiles(grid[x + 1, y], type, connectedTiles); // Right
         if (y > 0) FindConnectedTiles(grid[x, y - 1], type, connectedTiles); // Down
-        if (y < gridSizeY - 1) // 최상단 줄을 제외하고 Up 방향 검사
+        if (y < gridSizeY - 2) // 최상단 줄을 제외하고 Up 방향 검사
             FindConnectedTiles(grid[x, y + 1], type, connectedTiles); // Up
     }
+
+    private int movingTilesCount = 0; // 애니메이션 중인 타일 개수를 추적
 
     private IEnumerator WaitAndDropTiles()
     {
@@ -426,27 +409,55 @@ public class MiniGame1 : MonoBehaviour
                 }
                 else if (emptyCount > 0)
                 {
-                    // 타일이 내려오면서 빈 공간을 채우도록 위치 변경
-                    grid[x, y - emptyCount] = grid[x, y];
+                    // 타일이 내려오도록 MoveDownByCells 호출
+                    Tile tile = grid[x, y];
+                    grid[x, y - emptyCount] = tile;
                     grid[x, y] = null;
-                    grid[x, y - emptyCount].MoveDownByCells(emptyCount);
-                    yield return new WaitForSeconds(0.5f);
-                    grid[x, y - emptyCount].SetPosition(x, y - emptyCount);
-                    SetTilePosition(grid[x, y - emptyCount], x, y - emptyCount);
+
+                    // 코루틴 호출로 타일 이동 애니메이션 실행 및 이동 중인 타일 개수 증가
+                    movingTilesCount++;
+                    StartCoroutine(MoveTileWithTracking(tile, emptyCount));
                 }
             }
-
-            // 최상단에 새 타일 생성
-            for (int y = gridSizeY - emptyCount; y < gridSizeY; y++)
-            {
-                CreateTile(x, y);
-            }
         }
-        yield return new WaitForSeconds(0.5f); // 타일이 내려오는 애니메이션 대기
-        CheckAndRemoveMatches(); // 새로운 매칭 체크
+
+        // 모든 타일이 내려올 때까지 대기
+        while (movingTilesCount > 0)
+        {
+            yield return null;
+        }
+
+        yield return StartCoroutine(SpawnNewTiles());
     }
 
-    // ------------------- 애니메이션 ---------------------
+    // 이동 중인 타일 개수를 추적하면서 타일 이동
+    private IEnumerator MoveTileWithTracking(Tile tile, int cells)
+    {
+        yield return tile.MoveDownByCells(cells);
+        movingTilesCount--; // 이동이 끝난 후 타일 개수 감소
+    }
+
+
+    // 삭제 후 새 타일을 생성하는 코루틴
+    private IEnumerator SpawnNewTiles()
+    {
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            int emptyCount = 0;
+            for (int y = gridSizeY - 1; y >= 0; y--)
+            {
+                if (grid[x, y] == null)
+                {
+                    CreateTile(x, y);
+                    emptyCount++;
+                }
+            }
+        }
+
+        CheckAndRemoveMatches(); // 매칭 체크
+        
+        yield return new WaitForSeconds(0.1f);
+    }
 
     private void ClearGame()
     {
