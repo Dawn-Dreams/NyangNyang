@@ -5,9 +5,8 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.Rendering.DebugUI;
 
-public class MiniGame1 : MonoBehaviour
+public class MiniGame1 : MiniGameBase
 {
     public int gridSizeX = 7;   // 그리드의 가로 크기
     public int gridSizeY = 7 + 1;   // 그리드의 세로 크기 + 최상단
@@ -32,10 +31,38 @@ public class MiniGame1 : MonoBehaviour
 
     public Slider timerSlider;
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI countdownText;
+    
+    protected override void StartGameLogic()
+    {
+        InitializeGrid();
+    }
+
+    protected override void EndGameLogic()
+    {
+        isOnGame = false;
+        countdownText.gameObject.SetActive(true);
+        countdownText.text = "TIME OVER!!";
+        Debug.Log("Game 종료");
+    }
 
     private void Start()
     {
-        StartGameLogic();
+        StartCoroutine(CountdownAndStartGame());
+    }
+
+    private IEnumerator CountdownAndStartGame()
+    {
+        countdownText.gameObject.SetActive(true); // 카운트다운 텍스트 표시
+
+        for (int i = 3; i > 0; i--)
+        {
+            countdownText.text = i.ToString(); // 텍스트 업데이트
+            yield return new WaitForSeconds(1); // 1초 대기
+        }
+
+        countdownText.gameObject.SetActive(false); // 카운트다운 숨기기
+        StartGameLogic(); // 게임 시작 로직 호출
         isOnGame = true;
         tempTimer = 0.0f;
         timerSlider.maxValue = gameTime;
@@ -44,7 +71,7 @@ public class MiniGame1 : MonoBehaviour
 
     private void Update()
     {
-       
+
         if (tempTimer < gameTime)
         {
             tempTimer += Time.deltaTime;
@@ -69,11 +96,6 @@ public class MiniGame1 : MonoBehaviour
             }
         }
         tilesList.Clear();
-        InitializeGrid();
-    }
-
-    private void StartGameLogic()
-    {
         InitializeGrid();
     }
 
@@ -455,18 +477,7 @@ public class MiniGame1 : MonoBehaviour
         }
 
         CheckAndRemoveMatches(); // 매칭 체크
-        
+
         yield return new WaitForSeconds(0.1f);
-    }
-
-    private void ClearGame()
-    {
-        Debug.Log("Game Clear");    // 현재 이 게임은 클리어가 존재 하지 않지만, 일단 생성
-    }
-
-    private void EndGameLogic()
-    {
-        isOnGame = false;
-        Debug.Log("Game 종료");
     }
 }
