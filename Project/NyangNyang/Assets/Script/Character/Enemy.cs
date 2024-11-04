@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
@@ -8,6 +9,7 @@ using UnityEngine.UI;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 using Quaternion = UnityEngine.Quaternion;
 using Transform = UnityEngine.Transform;
+using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
 public enum EnemyMonsterType
@@ -36,11 +38,13 @@ public class DummyEnemy
     public EnemyMonsterType monsterType;
 
     private AddressableHandle<GameObject> _enemyMonsterPrefab;
-
+    private Slider _slider;
     
-    public DummyEnemy(GameObject dummyObject, EnemyMonsterType type, BigInteger maxHP)
+    public DummyEnemy(GameObject dummyObject, Slider slider, EnemyMonsterType type, BigInteger maxHP)
     {
         this.dummyGameObject = dummyObject;
+
+        _slider = slider;
 
         monsterType = type;
 
@@ -69,7 +73,9 @@ public class DummyEnemy
         }
         currentHP = currentHP - getDamage;
 
+        // TODO: 나중에 지우기
         hpText.text = currentHP + " / " + maxHP;
+        _slider.value = MyBigIntegerMath.DivideToFloat(currentHP, maxHP, 5);
 
         // 대미지 출력
         // TODO 오브젝트 풀링 방식으로 바꾸기
@@ -106,6 +112,18 @@ public class DummyEnemy
     {
         animationManager.PlayAnimation(state, playOnce);
     }
+
+    public void EnemyArriveAtCombatArea()
+    {
+        EnemyPlayAnimation(AnimationManager.AnimationState.IdleA);
+        _slider.gameObject.SetActive(true);
+        if (Camera.main != null)
+        {
+            _slider.transform.position = Camera.main.WorldToScreenPoint(dummyGameObject.transform.position);
+        }
+        
+        _slider.value = 1f;
+    }
 }
 
 public class Enemy : Character
@@ -129,12 +147,21 @@ public class Enemy : Character
     // 몬스터 정보에 대한 변수
     public MonsterData monsterData;
 
+    // 몬스터들의 체력을 나타내는 Slider
+    [SerializeField] private List<Slider> sliders;
+
+
     protected override void Awake()
     {
         // stage manager 
         if (stageManager == null)
         {
             stageManager = GameManager.GetInstance().stageManager;
+        }
+
+        foreach (var slider in sliders)
+        {
+            slider.gameObject.SetActive(false);
         }
 
         DummyEnemy.SetFloatingDamage(floatingDamage);
@@ -180,11 +207,12 @@ public class Enemy : Character
             // active dummy enemy
             if (i < numOfEnemy)
             {
-                _dummyEnemies.Add(new DummyEnemy(dummyEnemyObj[i], monsterData.monsterTypes[i], dummyMaxHp));
+                _dummyEnemies.Add(new DummyEnemy(dummyEnemyObj[i], sliders[i], monsterData.monsterTypes[i], dummyMaxHp));
             }
             else
             {
                 dummyEnemyObj[i].SetActive(false);
+                sliders[i].gameObject.SetActive(false);
             }
         }
 
@@ -221,7 +249,7 @@ public class Enemy : Character
     {
         foreach (var dummyEnemy in _dummyEnemies)
         {
-            dummyEnemy.EnemyPlayAnimation(AnimationManager.AnimationState.IdleA);
+            dummyEnemy.EnemyArriveAtCombatArea();
         }
         
         CombatManager.GetInstance().EnemyArriveCombatArea(this);
