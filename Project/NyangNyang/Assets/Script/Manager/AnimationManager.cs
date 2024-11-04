@@ -89,7 +89,6 @@ public class AnimationManager : MonoBehaviour
 
     public void SetIdleAnimAfterAttack()
     {
-        Debug.Log($"{gameObject.name} - 잘 실행됨");
         if (animator != null)
         {
             animator.SetInteger("animation", (int)AnimationState.IdleA);

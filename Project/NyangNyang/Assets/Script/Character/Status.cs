@@ -121,6 +121,11 @@ public class StatusLevelData
         }
     }
 
+    public void MultipleStatusLevelByType(float mulValue, StatusLevelType type)
+    {
+        statusLevels[(int)type] = (int)(statusLevels[(int)type] * mulValue);
+    }
+
     // 플레이어의 스탯의 디폴트 효과를 배로 적용시켜주는 함수
     public void BuffDefaultValue(int buffValue)
     {

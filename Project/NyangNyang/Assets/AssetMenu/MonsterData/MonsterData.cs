@@ -11,6 +11,15 @@ public class MonsterData : ScriptableObject
     public StatusLevelData monsterStatus;
     public EnemyDropData enemyDropData;
 
+    public MonsterData SetMonsterDataFromOther(MonsterData other)
+    {
+        enemyCount = other.enemyCount;
+        monsterTypes = other.monsterTypes;
+        monsterStatus = new StatusLevelData(other.monsterStatus);
+        enemyDropData = ScriptableObject.CreateInstance<EnemyDropData>().SetEnemyDropData(other.enemyDropData);
+        return this;
+    }
+    
     public void InitializeMonsterStatus(int themeNumber, int stageNumber, int maxStage)
     {
         // 스테이지마다 n(default: 0.5) 추가
@@ -22,6 +31,8 @@ public class MonsterData : ScriptableObject
         // ex) (20 스테이지 기준) 1-1 : 0 + 1 // 2-2 : 20 + 1 + n // 3-2 : 80 + 1 + n // 4-2 : 180 + 1 + n
 
         float stageBuffValue = 0.5f;
+        // TODO: 11.04 테스트를 위해 임시 조정
+        stageBuffValue = 500f;
         float levelMulValue = maxStage * Mathf.Pow((themeNumber - 1), 2) + (stageNumber + 1) * stageBuffValue;
         monsterStatus.MultipleLevel(levelMulValue);
         
@@ -32,13 +43,3 @@ public class MonsterData : ScriptableObject
     }
 }
 
-/*
- *
- *new MonsterData().SetMonsterData(new StatusLevelData(1, 1, 1,1,1,1,1,1), ScriptableObject.CreateInstance<EnemyDropData>().SetEnemyDropData(1000, 1000), new List<EnemyMonsterType>{EnemyMonsterType.StarFish, EnemyMonsterType.Octopus, EnemyMonsterType.Krake, EnemyMonsterType.Puffe,EnemyMonsterType.Shellfish}, 5),
-   // 임시 보스몬스터 데이터
-   new MonsterData().SetMonsterData(new StatusLevelData(1, 1, 1,1,1,1,1,1), ScriptableObject.CreateInstance<EnemyDropData>().SetEnemyDropData(1000, 1000), new List<EnemyMonsterType>{EnemyMonsterType.Octopus}),
-    
-
-
-
- */

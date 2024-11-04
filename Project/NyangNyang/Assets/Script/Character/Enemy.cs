@@ -145,7 +145,8 @@ public class Enemy : Character
     private Character catObject;
 
     // 몬스터 정보에 대한 변수
-    public MonsterData monsterData;
+    public MonsterData monsterDataTemplate;
+    private MonsterData _monsterData;
 
     // 몬스터들의 체력을 나타내는 Slider
     [SerializeField] private List<Slider> sliders;
@@ -171,18 +172,16 @@ public class Enemy : Character
         characterID = 0;
         IsEnemy = true;
 
-        // --몬스터 정보 받기 (임시 코드 & 서버에서 미리 받아서 적용될 수 있도록 or SpawnerManager 에서 할 수 있도록 )--
-        // TODO : 10/30. 몬스터 정보 클라에서 관리
+        _monsterData = ScriptableObject.CreateInstance<MonsterData>().SetMonsterDataFromOther(monsterDataTemplate);
         int currentTheme= GameManager.GetInstance().stageManager.GetCurrentTheme();
         int currentStage = GameManager.GetInstance().stageManager.GetCurrentStage();
-        int currentGate = GameManager.GetInstance().stageManager.GetCurrentGate();
-        int maxGate = GameManager.GetInstance().stageManager.maxGateCount;
-
-        status = new Status(monsterData.monsterStatus);
+        int maxStage = GameManager.GetInstance().stageManager.maxStageCount;
+        _monsterData.InitializeMonsterStatus(currentTheme,currentStage, maxStage);
+        status = new Status(_monsterData.monsterStatus);
 
         base.Awake();
         
-        SetNumberOfEnemyInGroup(monsterData.enemyCount);
+        SetNumberOfEnemyInGroup(_monsterData.enemyCount);
 
         // ~~enemy drop data 받기~~  몬스터 정보 받기에서 진행
         //if (DropData == null)
@@ -207,7 +206,7 @@ public class Enemy : Character
             // active dummy enemy
             if (i < numOfEnemy)
             {
-                _dummyEnemies.Add(new DummyEnemy(dummyEnemyObj[i], sliders[i], monsterData.monsterTypes[i], dummyMaxHp));
+                _dummyEnemies.Add(new DummyEnemy(dummyEnemyObj[i], sliders[i], _monsterData.monsterTypes[i], dummyMaxHp));
             }
             else
             {
@@ -330,9 +329,9 @@ public class Enemy : Character
 
     protected override void Death()
     {
-        if (monsterData.enemyDropData)
+        if (_monsterData.enemyDropData)
         {
-            monsterData.enemyDropData.GiveItemToPlayer();
+            _monsterData.enemyDropData.GiveItemToPlayer();
         }
 
         CombatManager.GetInstance().CurrentEnemyDeath(this);

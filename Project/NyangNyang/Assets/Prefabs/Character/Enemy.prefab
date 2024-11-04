@@ -628,7 +628,7 @@ MonoBehaviour:
   - {fileID: 3046654298694143425}
   - {fileID: 6376011621515299061}
   initialNumOfDummyEnemy: 0
-  monsterData: {fileID: 11400000, guid: 0b25bb281776b0242974f3f98f5ed216, type: 2}
+  monsterDataTemplate: {fileID: 11400000, guid: 0b25bb281776b0242974f3f98f5ed216, type: 2}
   sliders:
   - {fileID: 1767382125118903549}
   - {fileID: 4537105837806198254}

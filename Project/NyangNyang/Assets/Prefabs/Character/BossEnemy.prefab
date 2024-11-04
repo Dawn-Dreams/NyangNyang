@@ -300,7 +300,7 @@ MonoBehaviour:
   dummyEnemyObj:
   - {fileID: 2490322000326804637}
   initialNumOfDummyEnemy: 0
-  monsterData: {fileID: 11400000, guid: 1eadb22145895a145b97ec801fe45e1c, type: 2}
+  monsterDataTemplate: {fileID: 11400000, guid: 1eadb22145895a145b97ec801fe45e1c, type: 2}
   sliders:
   - {fileID: 2489312905288866942}
 --- !u!1 &7228152591552623041
