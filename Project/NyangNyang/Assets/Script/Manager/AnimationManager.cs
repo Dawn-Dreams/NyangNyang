@@ -1,3 +1,4 @@
+using UnityEditor.EditorTools;
 using UnityEngine;
 
 public class AnimationManager : MonoBehaviour
@@ -69,20 +70,11 @@ public class AnimationManager : MonoBehaviour
     }
 
     // 애니메이션 실행 메서드
-    public void PlayAnimation(AnimationState state, bool playOnce = false)
+    public void PlayAnimation(AnimationState state)
     {
         if (animator != null)
         {
-            if (playOnce)
-            {
-                animator.Play(state.ToString());
-            }
-            else
-            {
-                animator.SetInteger("animation", (int)state);
-            }
-
-
+            animator.SetInteger("animation", (int)state);
         }
         else
         {
@@ -93,5 +85,14 @@ public class AnimationManager : MonoBehaviour
     public Animator GetAnimator()
     {
         return animator;
+    }
+
+    public void SetIdleAnimAfterAttack()
+    {
+        Debug.Log($"{gameObject.name} - 잘 실행됨");
+        if (animator != null)
+        {
+            animator.SetInteger("animation", (int)AnimationState.IdleA);
+        }
     }
 }

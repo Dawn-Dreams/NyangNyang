@@ -39,6 +39,7 @@ public class CombatManager : MonoBehaviour
 
         // 고양이 캐릭터 승리 애니메이션
         GameManager.GetInstance().catObject.animationManager.PlayAnimation(AnimationManager.AnimationState.Victory);
+        GameManager.GetInstance().catObject.SetEnemy(null);
         
         // 아이템 드랍(currentEnemy의 monsterData.enemyDropData 참조)
         Debug.Log("적군에게서 아이템 드랍");

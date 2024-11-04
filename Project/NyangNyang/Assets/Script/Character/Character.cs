@@ -162,12 +162,17 @@ public class Character : MonoBehaviour
             if (attackCoroutine != null)
             {
                 StopCoroutine(attackCoroutine);
+                attackCoroutine = null;
             }
             
             return;
         }
         enemyObject = targetObject;
-        attackCoroutine = StartCoroutine(AttackEnemy());
+        if (attackCoroutine == null)
+        {
+            attackCoroutine = StartCoroutine(AttackEnemy());
+        }
+        
     }
 
     protected virtual void Death()
@@ -177,6 +182,7 @@ public class Character : MonoBehaviour
             enemyObject.SetEnemy(null);
         }
     }
+
 }
 
 //Character -> Cat / Enemy

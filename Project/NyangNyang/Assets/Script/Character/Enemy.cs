@@ -108,9 +108,9 @@ public class DummyEnemy
         }
     }
 
-    public void EnemyPlayAnimation(AnimationManager.AnimationState state, bool playOnce = false)
+    public void EnemyPlayAnimation(AnimationManager.AnimationState state)
     {
-        animationManager.PlayAnimation(state, playOnce);
+        animationManager.PlayAnimation(state);
     }
 
     public void EnemyArriveAtCombatArea()
@@ -282,7 +282,7 @@ public class Enemy : Character
         base.Attack();
         foreach (var dummyEnemy in _dummyEnemies)
         {
-            dummyEnemy.EnemyPlayAnimation(AnimationManager.AnimationState.ATK1, true);
+            dummyEnemy.EnemyPlayAnimation(AnimationManager.AnimationState.ATK1);
         }
     }
 
