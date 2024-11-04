@@ -70,8 +70,22 @@ public class CombatManager : MonoBehaviour
     {
         canFight = false;
 
-        GameManager.GetInstance().catObject.animationManager.PlayAnimation(AnimationManager.AnimationState.DieA);
-        
+        Cat catObject = GameManager.GetInstance().catObject;
+        catObject.animationManager.PlayAnimation(AnimationManager.AnimationState.DieA);
+        if (catObject.enemyObject)
+        {
+            catObject.enemyObject.SetEnemy(null);
+        }
+        catObject.SetEnemy(null);
+
+        StartCoroutine(SetStagePlayerDie());
+    }
+
+    IEnumerator SetStagePlayerDie()
+    {
+        Debug.Log("고양이 사망, 여기에서 사운드 + 사망 UI 출력");
+        yield return new WaitForSeconds(3.0f);
+
         StageManager.GetInstance().PlayerDie();
     }
 

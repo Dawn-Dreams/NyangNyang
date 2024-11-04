@@ -350,13 +350,9 @@ public class StageManager : MonoBehaviour
     void RespawnCat()
     {
         GameManager.GetInstance().catObject.CatRespawn();
+        GameManager.GetInstance().catObject.animationManager.PlayAnimation(AnimationManager.AnimationState.IdleA);
         StopCoroutine(fadeCoroutine);
         enemySpawnManager.DestroyEnemy();
-        // 애니메이션 실행
-        if (catAnimationManager != null)
-        {
-            catAnimationManager.PlayAnimation(AnimationManager.AnimationState.Alert);
-        }
         currentStage -= 1;
         if (currentStage <= 0)
         {
