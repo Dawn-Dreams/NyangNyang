@@ -43,6 +43,7 @@ public class MiniGame1 : MiniGameBase
         isOnGame = false;
         countdownText.gameObject.SetActive(true);
         countdownText.text = "TIME OVER!!";
+        GameManager.isMiniGameActive = false;
         Debug.Log("Game 종료");
     }
 

@@ -34,6 +34,7 @@ public class MiniGameScene : MonoBehaviour
         if (SceneManager.GetSceneByName("MiniGame1").isLoaded)
         {
             SceneManager.UnloadSceneAsync("MiniGame1");
+            GameManager.isMiniGameActive = false;
         }
         else
         {

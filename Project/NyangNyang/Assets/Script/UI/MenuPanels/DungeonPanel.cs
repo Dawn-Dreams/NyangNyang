@@ -12,7 +12,7 @@ public class DungeonPanel : MenuPanel
 
     [SerializeField]
     private GameObject[] stageTabs;
-    private Button[] minigameButtons, startButtons, sweepButtons;
+    private Button[] startButtons, sweepButtons;
     private TextMeshProUGUI[] ticketTexts, titleTexts;
     private ScrollRect[] levelScrollViews;
     private Button[][] levelSelectButtons;
@@ -58,7 +58,6 @@ public class DungeonPanel : MenuPanel
     private void InitializeTabs()
     {
         int tabCount = stageTabs.Length;
-        minigameButtons = new Button[tabCount];
         startButtons = new Button[tabCount];
         sweepButtons = new Button[tabCount];
         ticketTexts = new TextMeshProUGUI[tabCount];
@@ -68,14 +67,14 @@ public class DungeonPanel : MenuPanel
         for (int i = 0; i < tabCount; i++)
         {
             var tab = stageTabs[i].transform;
-            minigameButtons[i] = tab.Find("MiniGameStartButton").GetComponent<Button>();
+            
             startButtons[i] = tab.Find("DungeonStartButton").GetComponent<Button>();
             sweepButtons[i] = tab.Find("DungeonSweepButton").GetComponent<Button>();
             ticketTexts[i] = tab.Find("TicketText").GetComponent<TextMeshProUGUI>();
             titleTexts[i] = tab.Find("GameTitleText").GetComponent<TextMeshProUGUI>();
 
             int index = i;
-            minigameButtons[i].onClick.AddListener(() => OnClickMinigameButton(index));
+            
             startButtons[i].onClick.AddListener(() => OnClickStartButton(index));
             sweepButtons[i].onClick.AddListener(() => OnClickSweepButton(index));
 
@@ -130,7 +129,7 @@ public class DungeonPanel : MenuPanel
     private void OnClickStageButton(int index)
     {
         SetActiveTab(index);
-        titleTexts[index].text = $"미니게임 던전 {index + 1}";
+        titleTexts[index].text = $"던전 {index + 1}";
         UpdateTicketText(index);
     }
 
@@ -145,47 +144,7 @@ public class DungeonPanel : MenuPanel
     {
         TempDungeonStageLevel = levelIndex + 1;
         UpdateLevelSelectButtons(tabIndex);
-        titleTexts[tabIndex].text = $"미니게임 던전 {tabIndex + 1}-{TempDungeonStageLevel}";
-    }
-
-    // 미니게임 시작 버튼 클릭 시 실행
-    void OnClickMinigameButton(int index)
-    {
-        // 스페셜 스테이지가 진행 중이면 미니게임을 시작하지 않음
-        if (GameManager.isDungeonActive)
-        {
-            Debug.Log("스페셜 스테이지가 실행 중이므로 미니게임을 시작할 수 없습니다.");
-            return;
-        }
-
-        // 미니게임이 이미 진행 중인지 확인
-        if (GameManager.isMiniGameActive)
-        {
-            Debug.Log("다른 미니게임이 이미 실행 중입니다.");
-            return;
-        }
-
-
-        switch (index)
-        {
-            case 0:
-                SceneManager.LoadScene("MiniGame1", LoadSceneMode.Additive);
-                //FindObjectOfType<MiniGame1>().StartGame();
-                GameManager.isMiniGameActive = true;
-                break;
-            case 1:
-                // FindObjectOfType<MiniGame2>().StartGame();
-                Debug.Log("미니게임 2 시작버튼클릭");
-                break;
-            case 2:
-                // FindObjectOfType<MiniGame3>().StartGame();
-                Debug.Log("미니게임 3 시작버튼클릭");
-                break;
-            default:
-                Debug.LogWarning("올바르지 않은 인덱스입니다.");
-                break;
-        }
-        UpdateTicketText(index);
+        titleTexts[tabIndex].text = $"던전 {tabIndex + 1}-{TempDungeonStageLevel}";
     }
 
     private void OnClickStartButton(int index)
