@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class BackgroundSpritesRound
@@ -8,7 +8,6 @@ public class BackgroundSpritesRound
 
     public BackgroundSpritesRound(float getRotationSpeed)
     {
-        // Circle 오브젝트를 찾고 회전 속도를 설정합니다.
         circleObject = GameObject.Find("Circle");
         rotationSpeed = getRotationSpeed;
     }
@@ -20,6 +19,26 @@ public class BackgroundSpritesRound
         // 중심축을 기준으로 회전
         circleObject.transform.Rotate(Vector3.forward, -rotationSpeed * Time.deltaTime);
     }
+
+    // 스프라이트를 새 이미지로 교체하는 메서드
+    public void SetNewSprite(Sprite newSprite)
+    {
+        if (circleObject == null)
+        {
+            Debug.LogError("Circle 객체가 존재하지 않습니다.");
+            return;
+        }
+
+        var spriteRenderer = circleObject.GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.sprite = newSprite;
+        }
+        else
+        {
+            Debug.LogError("Circle 객체에 SpriteRenderer 컴포넌트가 없습니다.");
+        }
+    }
 }
 
 public class RoundAutoManager : MonoBehaviour
@@ -30,15 +49,23 @@ public class RoundAutoManager : MonoBehaviour
     [SerializeField]
     private bool shouldRotate = false; // 회전 여부
 
+    // 스프라이트 리스트
+    public List<Sprite> spriteList;
+    private int currentSpriteIndex = 0;
+
     void Start()
     {
-        // Circle 객체를 회전시킬 BackgroundSpritesRound 인스턴스를 초기화합니다.
         backgroundCircle = new BackgroundSpritesRound(rotateSpeed);
+
+        // 리스트가 비어있는지 확인
+        if (spriteList == null || spriteList.Count == 0)
+        {
+            Debug.LogError("spriteList에 스프라이트가 없습니다.");
+        }
     }
 
     void Update()
     {
-        // 회전을 활성화한 경우에만 Circle을 회전시킵니다.
         if (shouldRotate)
         {
             backgroundCircle.RotateCircle();
@@ -49,5 +76,27 @@ public class RoundAutoManager : MonoBehaviour
     public void RotateCircle(bool rotateBackground)
     {
         shouldRotate = rotateBackground;
+    }
+
+    // 다음 스프라이트로 교체하는 함수
+    public void ChangeToNextSprite()
+    {
+        if (spriteList == null || spriteList.Count == 0) return;
+
+        currentSpriteIndex = (currentSpriteIndex + 1) % spriteList.Count;
+        backgroundCircle.SetNewSprite(spriteList[currentSpriteIndex]);
+    }
+
+    // 특정 인덱스의 스프라이트로 교체하는 함수
+    public void ChangeSpriteByIndex(int index)
+    {
+        if (spriteList == null || index < 0 || index >= spriteList.Count)
+        {
+            Debug.LogError("유효하지 않은 인덱스입니다.");
+            return;
+        }
+
+        currentSpriteIndex = index;
+        backgroundCircle.SetNewSprite(spriteList[currentSpriteIndex]);
     }
 }

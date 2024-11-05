@@ -263,6 +263,7 @@ public class StageManager : MonoBehaviour
         }
 
         parallaxScrollingManager.ChangeIndexNumberBackgroundImage(currentTheme);
+        roundAutoManager.ChangeSpriteByIndex(currentTheme);
 
         GameManager.GetInstance().catObject.CatRespawn();
         GameManager.GetInstance().catObject.animationManager.PlayAnimation(AnimationManager.AnimationState.IdleA);
@@ -364,6 +365,7 @@ public class StageManager : MonoBehaviour
                 currentStage = 1;
             }
             parallaxScrollingManager.ChangeIndexNumberBackgroundImage(currentTheme);
+            roundAutoManager.ChangeSpriteByIndex(currentTheme);
         }
         SetStageUI();
 
