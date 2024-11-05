@@ -1,8 +1,8 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.SceneManagement;
+using System;
 
 public class DungeonPanel : MenuPanel
 {
@@ -17,10 +17,11 @@ public class DungeonPanel : MenuPanel
     private ScrollRect[] levelScrollViews;
     private Button[][] levelSelectButtons;
 
-    private DungeonManager DungeonManager;
-    //private MiniGame1 miniGame1;
+    private DungeonManager dungeonManager;
 
-    // 현재 클리어한 최고 레벨을 Player가 저장하도록 수정 필요
+    private readonly List<string> dungeonNames = new List<string> { "황야의 대지", "눈꽃 동굴", "독거미 숲" };
+    private readonly List<string> ticketNames = new List<string> { "노랑", "파랑", "빨강" };
+
     private int[] highestClearedStage = new int[3] { 1, 1, 1 };
     public int TempDungeonStageLevel { get; private set; }
     private int currentActiveTabIndex = 0;
@@ -29,13 +30,12 @@ public class DungeonPanel : MenuPanel
     {
         InitializeManagers();
         InitializeUIComponents();
-        OnClickStageButton(0); // Default tab selection
+        OnClickStageButton(0); // 기본 탭 선택
     }
 
     private void InitializeManagers()
     {
-        //miniGame1 = FindObjectOfType<MiniGame1>() ?? throw new NullReferenceException("MiniGame1이 NULL입니다.");
-        DungeonManager = FindObjectOfType<DungeonManager>() ?? throw new NullReferenceException("DungeonManager가 존재하지 않습니다.");
+        dungeonManager = FindObjectOfType<DungeonManager>() ?? throw new NullReferenceException("DungeonManager가 존재하지 않습니다.");
     }
 
     private void InitializeUIComponents()
@@ -129,7 +129,7 @@ public class DungeonPanel : MenuPanel
     private void OnClickStageButton(int index)
     {
         SetActiveTab(index);
-        titleTexts[index].text = $"던전 {index + 1}";
+        titleTexts[index].text = $"{dungeonNames[index]}";
         UpdateTicketText(index);
     }
 
@@ -144,7 +144,7 @@ public class DungeonPanel : MenuPanel
     {
         TempDungeonStageLevel = levelIndex + 1;
         UpdateLevelSelectButtons(tabIndex);
-        titleTexts[tabIndex].text = $"던전 {tabIndex + 1}-{TempDungeonStageLevel}";
+        titleTexts[tabIndex].text = $"{dungeonNames[tabIndex]} - LEVEL {TempDungeonStageLevel}";
     }
 
     private void OnClickStartButton(int index)
@@ -154,8 +154,8 @@ public class DungeonPanel : MenuPanel
             Debug.Log("입장권이 부족합니다.");
             return;
         }
-        DungeonManager.StartDungeon(index, TempDungeonStageLevel);
-        highestClearedStage[index] = DungeonManager.DungeonLevels[index];
+        dungeonManager.StartDungeon(index, TempDungeonStageLevel);
+        highestClearedStage[index] = dungeonManager.DungeonLevels[index];
         UpdateTicketText(index);
     }
 
@@ -166,24 +166,23 @@ public class DungeonPanel : MenuPanel
             Debug.Log("입장권이 부족합니다.");
             return;
         }
-        //DungeonManager.StartDungeon(index, TempDungeonStageLevel);
-
-        // 아이템 획득 로직 추가
         Debug.Log("소탕");
-        highestClearedStage[index] = DungeonManager.DungeonLevels[index];
+        highestClearedStage[index] = dungeonManager.DungeonLevels[index];
         UpdateTicketText(index);
     }
 
     private void UpdateTicketText(int index)
     {
+        string ticketName = ticketNames[index];
         int sweepTicketCount = DummyServerData.GetTicketCount(Player.GetUserID(), index);
-        ticketTexts[index].text = $"{index + 1}번 소탕권 개수: {sweepTicketCount}";
+
+        ticketTexts[index].text = $"{ticketName} 조개패 {sweepTicketCount}개";
     }
+
     private void UpdateStageButtons(int tabIndex)
     {
         for (int i = 0; i < levelSelectButtons[tabIndex].Length; i++)
         {
-            // 최고 클리어된 스테이지 이하의 버튼만 활성화
             levelSelectButtons[tabIndex][i].interactable = (i + 1) <= highestClearedStage[tabIndex];
         }
     }
