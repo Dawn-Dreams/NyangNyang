@@ -1,4 +1,4 @@
-using UnityEditor.EditorTools;
+
 using UnityEngine;
 
 public class AnimationManager : MonoBehaviour

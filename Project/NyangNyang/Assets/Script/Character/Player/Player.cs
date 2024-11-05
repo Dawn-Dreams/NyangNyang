@@ -1,6 +1,5 @@
-using System.Collections.Generic;
+
 using System.Numerics;
-using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 
 public class Player : MonoBehaviour

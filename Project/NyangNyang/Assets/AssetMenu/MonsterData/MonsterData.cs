@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "MonsterData", menuName = "ScriptableObjects/Enemy/MonsterData", order = 1)]
