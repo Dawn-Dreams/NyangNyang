@@ -38,7 +38,7 @@ public class OptionMenuManager : MonoBehaviour
         {
             panel.SetActive(false);
         }
-        
+
         // 0번 패널 활성화
         if (toggles.Length > 0 && panels.Length > 0)
         {
@@ -183,7 +183,6 @@ public class OptionMenuManager : MonoBehaviour
     {
         List<BoardData> boardList = DummyOptionsServer.GetBoardData();
         GameObject contentObj = GameObject.Find("BulletinBoardUI/Viewport/Content");
-        // Application.OpenURL("https://cafe.naver.com/nyangnyangcafeurl"); // 게시판에 커뮤니티 버튼 추가
         // 기존에 생성된 요소들을 모두 제거
         foreach (Transform child in contentObj.transform)
         {
@@ -276,9 +275,9 @@ public class OptionMenuManager : MonoBehaviour
     }
 
     // 커뮤니티
-    void OpenCommunityPanel()
+    public void OpenCommunityPanel()
     {
-        
+        Application.OpenURL("https://cafe.naver.com/nyangnyangexpedition"); // 게시판에 커뮤니티 버튼 추가
     }
 
     // 설정
