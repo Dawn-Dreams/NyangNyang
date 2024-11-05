@@ -50,7 +50,7 @@ public class RoundAutoManager : MonoBehaviour
     private bool shouldRotate = false; // 회전 여부
 
     // 스프라이트 리스트
-    public List<Sprite> spriteList;
+    public List<Sprite> spriteList; //0,1,2,3,4 index
     private int currentSpriteIndex = 0;
 
     void Start()
@@ -90,13 +90,9 @@ public class RoundAutoManager : MonoBehaviour
     // 특정 인덱스의 스프라이트로 교체하는 함수
     public void ChangeSpriteByIndex(int index)
     {
-        if (spriteList == null || index < 0 || index >= spriteList.Count)
-        {
-            Debug.LogError("유효하지 않은 인덱스입니다.");
+        if (spriteList == null || spriteList.Count == 0 || backgroundCircle == null || index > 4 || index < 0)
             return;
-        }
-
-        currentSpriteIndex = index;
+        currentSpriteIndex = (index-1) % spriteList.Count;
         backgroundCircle.SetNewSprite(spriteList[currentSpriteIndex]);
     }
 }
