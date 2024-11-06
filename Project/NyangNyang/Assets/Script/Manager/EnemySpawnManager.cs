@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemySpawnManager : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class EnemySpawnManager : MonoBehaviour
 
     private Enemy currentEnemy; // 현재 적을 저장하는 변수
 
+    public List<Slider> enemyHealthSliders;
     
 
     void Start()

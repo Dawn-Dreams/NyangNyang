@@ -38,8 +38,6 @@ public class Pet : MonoBehaviour
         {
             return;
         }
-
-        Debug.Log($"펫 - {state} 실행");
         _currentPetAnimMgr.PlayAnimation(state);
     }
 }

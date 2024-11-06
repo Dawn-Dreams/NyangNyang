@@ -119,7 +119,9 @@ public class DummyEnemy
         _slider.gameObject.SetActive(true);
         if (Camera.main != null)
         {
-            _slider.transform.position = Camera.main.WorldToScreenPoint(dummyGameObject.transform.position);
+            Vector3 point = Camera.main.WorldToScreenPoint(dummyGameObject.transform.position);
+            point.z = 0.0f;
+            _slider.gameObject.GetComponent<RectTransform>().anchoredPosition3D = point;
         }
         
         _slider.value = 1f;
@@ -151,9 +153,10 @@ public class Enemy : Character
     // 몬스터들의 체력을 나타내는 Slider
     [SerializeField] private List<Slider> sliders;
 
-
     protected override void Awake()
     {
+        sliders = EnemySpawnManager.GetInstance().enemyHealthSliders;
+
         // stage manager 
         if (stageManager == null)
         {

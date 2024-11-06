@@ -88,7 +88,7 @@ public class Character : MonoBehaviour
         {
             if (CombatManager.GetInstance().canFight)
             {
-                Attack();
+                //Attack();
             }
             // TODO: 공격속도 기반 전투 딜레이 적용
             yield return new WaitForSeconds(1f);
