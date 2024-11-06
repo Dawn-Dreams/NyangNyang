@@ -29,8 +29,6 @@ public class MonsterData : ScriptableObject
         // ex) (20 스테이지 기준) 1-1 : 0 + 1 // 2-2 : 20 + 1 + n // 3-2 : 80 + 1 + n // 4-2 : 180 + 1 + n
 
         float stageBuffValue = 0.5f;
-        // TODO: 11.04 테스트를 위해 임시 조정
-        stageBuffValue = 500f;
         float levelMulValue = maxStage * Mathf.Pow((themeNumber - 1), 2) + (stageNumber + 1) * stageBuffValue;
         monsterStatus.MultipleLevel(levelMulValue);
         

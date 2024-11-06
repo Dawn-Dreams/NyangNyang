@@ -64,6 +64,7 @@ public class CombatManager : MonoBehaviour
         
         // 고양이 IDLE 자세 설정
         GameManager.GetInstance().catObject.animationManager.PlayAnimation(AnimationManager.AnimationState.IdleA);
+        PetManager.GetInstance().playerPet.PlayPetAnim(AnimationManager.AnimationState.IdleA);
     }
 
     public void PlayerCatDeath()
@@ -72,6 +73,8 @@ public class CombatManager : MonoBehaviour
 
         Cat catObject = GameManager.GetInstance().catObject;
         catObject.animationManager.PlayAnimation(AnimationManager.AnimationState.DieA);
+        PetManager.GetInstance().playerPet.PlayPetAnim(AnimationManager.AnimationState.DieA);
+
         if (catObject.enemyObject)
         {
             catObject.enemyObject.SetEnemy(null);

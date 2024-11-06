@@ -12,9 +12,9 @@ public class PetManager : MonoBehaviour
         return _instance;
     }
 
-    private Dictionary<EnemyMonsterType, AddressableHandle<GameObject>> _petPrefabs;
-
-    public Transform testSocket;
+    public Pet playerPet;
+    
+    
 
     void Awake()
     {
@@ -23,23 +23,14 @@ public class PetManager : MonoBehaviour
             _instance = this;
         }
 
-        AssetLoad();
-
-        Instantiate(_petPrefabs[EnemyMonsterType.StarFish].obj, testSocket);
+        GetPlayerPetDataFromServer();
     }
 
-    protected void AssetLoad()
+    void GetPlayerPetDataFromServer()
     {
-        if (_petPrefabs == null)
-        {
-            _petPrefabs = new Dictionary<EnemyMonsterType, AddressableHandle<GameObject>>();
-            for (int i = 0; i < (int)EnemyMonsterType.Count; ++i)
-            {
-                EnemyMonsterType type = (EnemyMonsterType)i;
-                AddressableHandle <GameObject> petPrefab = new AddressableHandle<GameObject>();
-                petPrefab.Load("Enemy/" + type);
-                _petPrefabs.Add(type, petPrefab);
-            }
-        }
+        // TODO: 서버에 추가하기
+        EnemyMonsterType currentEnemyType = EnemyMonsterType.StarFish;
+        playerPet.SetPetType(currentEnemyType);
     }
+
 }

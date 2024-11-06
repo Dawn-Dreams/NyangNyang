@@ -129,6 +129,7 @@ public class StageManager : MonoBehaviour
 
         // 애니메이션 실행
         GameManager.GetInstance().catObject.animationManager.PlayAnimation(AnimationManager.AnimationState.Walk);
+        PetManager.GetInstance().playerPet.PlayPetAnim(AnimationManager.AnimationState.Move);
 
         StartCoroutine(ArriveGate());
     }
