@@ -20,27 +20,32 @@ MonoBehaviour:
   - m_GUID: 70673200db936c044944026ff710abd7
     m_Address: Enemy/StarFish
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Costume/Pet
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 76813b8c2fc7369408bfa1c144d4b600
     m_Address: Enemy/Shellfish
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Costume/Pet
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b565a0c0d18b42f40857944e9812f479
     m_Address: Enemy/Krake
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Costume/Pet
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e0a12ceacd3631a4da9f2e86f4cedbe7
     m_Address: Enemy/Puffe
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Costume/Pet
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fa643a5162b9f4d4682e11b1129c111e
     m_Address: Enemy/Octopus
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Costume/Pet
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5f1874fff1b70124d8333b18a2e9b4e8, type: 2}

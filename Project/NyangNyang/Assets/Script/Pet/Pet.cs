@@ -18,6 +18,11 @@ public class Pet : MonoBehaviour
 
     public void SetPetType(EnemyMonsterType type)
     {
+        if (type == EnemyMonsterType.Null || type == EnemyMonsterType.Count)
+        {
+            return;
+        }
+
         if (_currentPetAnimMgr != null)
         {
             Destroy(_currentPetAnimMgr.gameObject);

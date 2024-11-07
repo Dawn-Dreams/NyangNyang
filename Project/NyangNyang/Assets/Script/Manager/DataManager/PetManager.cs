@@ -29,8 +29,8 @@ public class PetManager : MonoBehaviour
     void GetPlayerPetDataFromServer()
     {
         // TODO: 서버에 추가하기
-        EnemyMonsterType currentEnemyType = EnemyMonsterType.StarFish;
-        playerPet.SetPetType(currentEnemyType);
+        //EnemyMonsterType currentEnemyType = EnemyMonsterType.StarFish;
+        //playerPet.SetPetType(currentEnemyType);
     }
 
 }
