@@ -7,20 +7,22 @@ public abstract class MiniGameBase : MonoBehaviour
     protected int rewardTicketIndex; // 보상으로 받을 소탕권 인덱스
     protected bool isGameCleared;    // 게임 클리어 여부
     private EventSystem mainSceneEventSystem;  // 원래 씬의 EventSystem 참조용
+    public AudioClip bgmSource;        // 각 게임별 배경음악
 
     protected void Initialize(string gameName, int rewardTicketIndex)
     {
         this.gameName = gameName;
         this.rewardTicketIndex = rewardTicketIndex;
-        GameManager.isMiniGameActive = false;
+        GameManager.isMiniGameActive = true;
         isGameCleared = false;
-
+        AudioManager.Instance.StopMiniGameBGM();
+        AudioManager.Instance.ResumeMainBGM();
         DisableMainSceneEventSystem();  // 원래 씬의 EventSystem 비활성화
     }
 
     private void OnDestroy()
     {
-        EnableMainSceneEventSystem();  // 미니게임이 종료되면 원래 씬의 EventSystem 활성화
+        
     }
 
     private void DisableMainSceneEventSystem()
@@ -54,7 +56,6 @@ public abstract class MiniGameBase : MonoBehaviour
     public void StartGame()
     {
         GameManager.isMiniGameActive = true;
-        StartGameLogic();
     }
 
     // 미니게임 클리어 처리
@@ -62,8 +63,10 @@ public abstract class MiniGameBase : MonoBehaviour
     {
         isGameCleared = true;
         GameManager.isMiniGameActive = false;
+        AudioManager.Instance.PauseMainBGM();
+        AudioManager.Instance.PlayMiniGameBGM(bgmSource);
+        EnableMainSceneEventSystem();  // 미니게임이 종료되면 원래 씬의 EventSystem 활성화
         RewardSweepTicket();
-        EndGameLogic();
     }
 
     // 클리어 시 소탕권 보상 지급
