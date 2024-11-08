@@ -23,9 +23,9 @@ public class DungeonManager : MonoBehaviour
     private bool isSuccess;
     private int gainGold = 100000;               // 기본 골드 획득량
     // 임시 객체로 사용할 cat과 enemy 프리팹
-    public Character catPrefab;
+    public Cat catPrefab;
     public DungeonEnemy enemyPrefab;
-    private Character catInstance;
+    private Cat catInstance;
     private DungeonEnemy enemyInstance;
 
     // 싱글톤 인스턴스
@@ -37,10 +37,12 @@ public class DungeonManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject); // 필요한 경우
         }
         else
         {
             Destroy(gameObject);
+            return; // 기존 인스턴스가 있으므로 초기화 코드 실행을 방지
         }
 
         // DungeonUI >> Panel >> Dungeon 하위에서 Dungeon 패널들을 동적으로 찾음
@@ -66,7 +68,15 @@ public class DungeonManager : MonoBehaviour
         }
     }
 
-    // 스페셜 스테이지 시작
+    private void InitializeClonedCat(Cat clone)
+    {
+        // 복제본 초기화 (원본 고양이의 Awake 메서드와 동일한 초기화 작업 수행)
+        clone.characterID = Player.GetUserID();
+        clone.status = Player.playerStatus;
+        Player.playerStatus.OnStatusLevelChange += clone.HPLevelChanged;
+    }
+
+        // 스페셜 스테이지 시작
     public void StartDungeon(int index, int level)
     {
         if (GameManager.isDungeonActive)
@@ -74,14 +84,11 @@ public class DungeonManager : MonoBehaviour
             Debug.Log("스페셜 스테이지가 이미 활성화되어 있습니다.");
             return;
         }
-
         if (GameManager.isMiniGameActive)
         {
             Debug.Log("미니게임이 실행 중이므로 스페셜 스테이지를 시작할 수 없습니다.");
             return;
         }
-
-        // 티켓 확인
         if (!DummyServerData.HasTicket(Player.GetUserID(), index))
         {
             Debug.Log("소탕권이 부족하여 스페셜 스테이지를 시작할 수 없습니다.");
@@ -102,18 +109,16 @@ public class DungeonManager : MonoBehaviour
         }
 
         // 프리팹 인스턴스 생성
-        catInstance = Instantiate(catPrefab, new Vector3(-10, 40, 0), Quaternion.identity).GetComponent<Character>();
-        enemyInstance = Instantiate(enemyPrefab, new Vector3(5, 40, 0), Quaternion.identity).GetComponent<DungeonEnemy>();
+        catInstance = Instantiate(catPrefab, new Vector3(-10, 40, 0), Quaternion.identity).GetComponent<Cat>();
+        enemyInstance = Instantiate(enemyPrefab, new Vector3(10, 40, 0), Quaternion.identity).GetComponent<DungeonEnemy>();
         
         // 적의 생명력, 공격력, 공격 패턴 설정 (index와 level에 따라 다르게 설정)
         enemyInstance.InitializeEnemyStats(index, level);
+        InitializeClonedCat(catInstance);
 
 
         currentDungeonIndex = index;
         DungeonUI.SetActive(true);  // UI 활성화
-
-        // 일정 시간 동안 골드를 획득하는 코루틴
-        // goldCoroutine = StartCoroutine(GainGoldOverTime(level));
 
         DummyServerData.UseTicket(Player.GetUserID(), index); // 티켓 차감
 
@@ -130,15 +135,6 @@ public class DungeonManager : MonoBehaviour
         // 전투 시작
         catInstance.SetEnemy(enemyInstance);
         enemyInstance.SetEnemy(catInstance);
-    }
-
-    private IEnumerator GainGoldOverTime(int level)
-    {
-        while (GameManager.isDungeonActive)
-        {
-            Player.AddGold(baseGoldAmount * level);
-            yield return new WaitForSeconds(gainGold);
-        }
     }
 
     // 전투 결과 체크
