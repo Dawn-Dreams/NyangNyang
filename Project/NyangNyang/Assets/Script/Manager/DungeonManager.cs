@@ -19,7 +19,6 @@ public class DungeonManager : MonoBehaviour
     public float playDuration = 10.0f;
 
     public int baseGoldAmount = 100000;
-    private Coroutine goldCoroutine;
     private bool isSuccess;
     private int gainGold = 100000;               // 기본 골드 획득량
     // 임시 객체로 사용할 cat과 enemy 프리팹
@@ -113,7 +112,7 @@ public class DungeonManager : MonoBehaviour
         enemyInstance = Instantiate(enemyPrefab, new Vector3(10, 40, 0), Quaternion.identity).GetComponent<DungeonEnemy>();
         
         // 적의 생명력, 공격력, 공격 패턴 설정 (index와 level에 따라 다르게 설정)
-        enemyInstance.InitializeEnemyStats(index, level);
+        //enemyInstance.InitializeEnemyStats(index, level);
         InitializeClonedCat(catInstance);
 
 
@@ -175,9 +174,6 @@ public class DungeonManager : MonoBehaviour
 
     public void EndDungeonStage()
     {
-        if (goldCoroutine != null)
-            StopCoroutine(goldCoroutine);
-
         // 성공 처리
         if (isSuccess)
         {
@@ -185,7 +181,10 @@ public class DungeonManager : MonoBehaviour
             {
                 DungeonLevels[currentDungeonIndex]++;
                 ShowDungeonResultText("CLEAR!!", 2);
-                Player.AddGold(DungeonLevels[currentDungeonIndex] * gainGold);
+
+                // 던전 리워드
+                DungeonRewardManager dr = new DungeonRewardManager();
+                dr.GiveDungeonReward(Player.GetUserID(), currentDungeonIndex, DungeonLevels[currentDungeonIndex]);
 
                 var DungeonPanel = FindObjectOfType<DungeonPanel>();
                 if (DungeonPanel != null)
@@ -237,9 +236,10 @@ public class DungeonManager : MonoBehaviour
         DungeonResultText.gameObject.SetActive(false);
     }
 }
+
 public class DungeonRewardManager
 {
-    public void GiveDungeonReward(string userID, int index, int level)
+    public void GiveDungeonReward(int userID, int index, int level)
     {
         int goldReward = CalculateGoldReward(index, level);
         int itemReward = CalculateItemReward(index, level);
@@ -254,7 +254,7 @@ public class DungeonRewardManager
     private int CalculateGoldReward(int index, int level)
     {
         // index와 level에 따라 보상을 다르게 설정
-        return 10000 * (index + 1) * level; // 기본 골드 보상 예시
+        return 100000000 * (index + 1) * level; // 기본 골드 보상 예시
     }
 
     private int CalculateItemReward(int index, int level)

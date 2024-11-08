@@ -67,14 +67,14 @@ public class DungeonPanel : MenuPanel
         for (int i = 0; i < tabCount; i++)
         {
             var tab = stageTabs[i].transform;
-            
+
             startButtons[i] = tab.Find("DungeonStartButton").GetComponent<Button>();
             sweepButtons[i] = tab.Find("DungeonSweepButton").GetComponent<Button>();
             ticketTexts[i] = tab.Find("TicketText").GetComponent<TextMeshProUGUI>();
             titleTexts[i] = tab.Find("GameTitleText").GetComponent<TextMeshProUGUI>();
 
             int index = i;
-            
+
             startButtons[i].onClick.AddListener(() => OnClickStartButton(index));
             sweepButtons[i].onClick.AddListener(() => OnClickSweepButton(index));
 
@@ -166,8 +166,15 @@ public class DungeonPanel : MenuPanel
             Debug.Log("입장권이 부족합니다.");
             return;
         }
+        if (dungeonManager.DungeonLevels[index] >= highestClearedStage[index])
+        {
+            Debug.Log("던전을 클리어 해야만 소탕할 수 있습니다.");
+            return;
+        }
+        DungeonRewardManager dr = new DungeonRewardManager();
+        dr.GiveDungeonReward(Player.GetUserID(), index, dungeonManager.DungeonLevels[index]);
+
         Debug.Log("소탕");
-        highestClearedStage[index] = dungeonManager.DungeonLevels[index];
         UpdateTicketText(index);
     }
 

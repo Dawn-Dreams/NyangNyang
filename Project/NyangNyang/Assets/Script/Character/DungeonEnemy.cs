@@ -48,8 +48,7 @@ public class DungeonEnemy : Character
     }
     private int CalculateHealthByIndexAndLevel(int index, int level)
     {
-        // 생명력 계산 로직 (예: index에 따라 기본 배수 적용)
-        return 900 * (index + 1) * level; // 기본값 예시
+        return 50 * (index + 1) * level; // 기본값 예시
     }
 
     private int CalculateAttackPowerByIndexAndLevel(int index, int level)
