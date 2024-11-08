@@ -51,6 +51,7 @@ MonoBehaviour:
   healthBarSlider: {fileID: 0}
   textMeshPro: {fileID: 0}
   cameraShake: {fileID: 0}
+  animationManager: {fileID: 5013470649841959327}
 --- !u!114 &2921415712782648034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67,6 +68,7 @@ MonoBehaviour:
   catHeadTransform: {fileID: 1669160620086192285}
   catBodyTransform: {fileID: 3549249163453377238}
   catHandRTransform: {fileID: 5611337233281038923}
+  petSocketTransform: {fileID: 0}
 --- !u!1001 &6851059523459533726
 PrefabInstance:
   m_ObjectHideFlags: 0

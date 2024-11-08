@@ -32,7 +32,7 @@ public class MiniGame1 : MiniGameBase
     public Slider timerSlider;
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI countdownText;
-    
+
     protected override void StartGameLogic()
     {
         InitializeGrid();
@@ -40,6 +40,7 @@ public class MiniGame1 : MiniGameBase
 
     protected override void EndGameLogic()
     {
+        base.ClearGame();
         isOnGame = false;
         countdownText.gameObject.SetActive(true);
         countdownText.text = "TIME OVER!!";
@@ -49,6 +50,7 @@ public class MiniGame1 : MiniGameBase
 
     private void Start()
     {
+        base.Initialize("MiniGame1", 0);
         StartCoroutine(CountdownAndStartGame());
     }
 

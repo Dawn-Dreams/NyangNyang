@@ -34,7 +34,6 @@ public class Cat : Character
     protected override void Attack()
     {
         base.Attack();
-
         animationManager.PlayAnimation(AnimationManager.AnimationState.ATK1);
     }
 
