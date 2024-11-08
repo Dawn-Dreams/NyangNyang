@@ -37,19 +37,19 @@ public class Gacha : MonoBehaviour
             BeforePanel.SetActive(true);
             AfterPanel.SetActive(false);
 
-            Spin();
+            Spin(n);
 
             Player.Gold -= cost * n;
         }
     }
 
-    public void Spin()
+    public void Spin(int n)
     {
         if (!m_spinning)
-            StartCoroutine(DoSpin());
+            StartCoroutine(DoSpin(n));
     }
 
-    private IEnumerator DoSpin()
+    private IEnumerator DoSpin(int n)
     {
 
         m_spinning = true;
@@ -77,5 +77,22 @@ public class Gacha : MonoBehaviour
 
         BeforePanel.SetActive(false);
         AfterPanel.SetActive(true);
+
+        if (n == 1 && curType == type.skill)
+        {
+            AfterPanel.GetComponent<PickUpSkill>().ShowPickUpSkill();
+        }
+        else if ( n == 10 && curType == type.skill)
+        {
+            AfterPanel.GetComponent<PickUpSkill>().ShowPickUpSkills();
+        }
+        else if (n == 1 && curType == type.weapon)
+        {
+            AfterPanel.GetComponent<PickUpWeapon>().ShowPickUpWeapon();
+        }
+        else if (n == 10 && curType == type.weapon)
+        {
+            AfterPanel.GetComponent<PickUpWeapon>().ShowPickUpWeapons();
+        }
     }
 }
