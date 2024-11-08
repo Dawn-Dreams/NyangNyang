@@ -40,6 +40,8 @@ namespace Ricimi
 
             transform.eulerAngles = new Vector3(0.0f, 0.0f, maxAngle + startAngle);
             m_spinning = false;
+
+
         }
     }
 }
