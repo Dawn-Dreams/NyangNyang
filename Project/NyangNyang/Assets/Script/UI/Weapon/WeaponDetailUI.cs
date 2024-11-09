@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,10 +13,10 @@ public class WeaponDetailUI : MonoBehaviour
     public GameObject detailPanel;          // 디테일 패널 자체 set active를 위함
     public GameObject weaponPanel;          // weapon 이름, 이미지, 레벨, 보유량
     public GameObject effectPanel;
-    public Text weaponCoinTxt;
+    public TextMeshProUGUI weaponCoinTxt;
     
     private Text wNameTxt;
-    private Text wPossessionTxt;
+    private TextMeshProUGUI wPossessionTxt;
     private Text wLevelTxt;
     private Image wImage;
     private Slider wPossessionSlider;
@@ -29,7 +30,7 @@ public class WeaponDetailUI : MonoBehaviour
         weaponMgrUI = gameObject.GetComponent<WeaponMgrUI>();
         
         wNameTxt = weaponPanel.transform.Find("name_txt").GetComponent<Text>();
-        wPossessionTxt = weaponPanel.transform.Find("possession_txt").GetComponent<Text>();
+        wPossessionTxt = weaponPanel.transform.Find("possession_txt").GetComponent<TextMeshProUGUI>();
         wLevelTxt = weaponPanel.transform.Find("levelNum_txt").GetComponent<Text>();
         wImage = weaponPanel.transform.Find("weapon_img").GetComponent<Image>();
         wPossessionSlider = weaponPanel.transform.Find("possession_slider").GetComponent<Slider>();
