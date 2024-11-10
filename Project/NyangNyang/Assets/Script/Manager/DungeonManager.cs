@@ -133,6 +133,8 @@ public class DungeonManager : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         // 전투 시작
+        catInstance.isIndependent = true;       // CombatManager 무관하게 작동하도록
+        enemyInstance.isIndependent = true;     
         catInstance.SetEnemy(enemyInstance);
         enemyInstance.SetEnemy(catInstance);
     }

@@ -42,9 +42,7 @@ public class DungeonEnemy : Character
     protected override void Attack()
     {
         base.Attack();
-
-        Debug.Log("DungeonEnemy Attack:" + status.attackPower);
-
+        // 애니메이션
     }
     private int CalculateHealthByIndexAndLevel(int index, int level)
     {

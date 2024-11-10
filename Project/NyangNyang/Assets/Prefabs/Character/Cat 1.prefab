@@ -1340,6 +1340,7 @@ MonoBehaviour:
   healthBarSlider: {fileID: 0}
   textMeshPro: {fileID: 0}
   cameraShake: {fileID: 0}
+  isIndependent: 0
   animationManager: {fileID: 5924976559847362780}
 --- !u!114 &7369132229985192134
 MonoBehaviour:
