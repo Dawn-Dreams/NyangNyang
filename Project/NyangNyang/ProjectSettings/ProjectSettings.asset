@@ -263,8 +263,8 @@ PlayerSettings:
   AndroidTargetDevices: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: '{dedicated}: Desktop/DawnDreams.keystore'
-  AndroidKeyaliasName: test
+  AndroidKeystoreName: C:/Users/user/Desktop/KAKAOTOK DOC/DawnDreams.keystore
+  AndroidKeyaliasName: dawndreams
   AndroidEnableArmv9SecurityFeatures: 0
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 0
