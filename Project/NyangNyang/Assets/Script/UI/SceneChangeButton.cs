@@ -20,7 +20,7 @@ public class SceneChangeButton : MonoBehaviour
         
     }
 
-    void ChangeScene()
+    public void ChangeScene()
     {
         Debug.Log("??");
         SceneManager.LoadScene(sceneName);
