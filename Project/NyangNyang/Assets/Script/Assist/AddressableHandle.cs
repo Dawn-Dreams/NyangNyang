@@ -49,6 +49,16 @@ public class AddressableHandleAssets<T> where T : UnityEngine.Object
     public AsyncOperationHandle<IList<T>> assetsHandle;
     public List<T> objs;
 
+    public void LoadAssets(string key)
+    {
+        // 리스트 할당
+        objs = new List<T>();
+
+        // 에셋 로드
+        assetsHandle = Addressables.LoadAssetsAsync<T>(key, (result) => {objs.Add(result); });
+            
+        assetsHandle.WaitForCompletion();
+    }
     // 에셋들 로드 함수
     public void LoadAssets(string key, List<string> sortStandard)
     {
@@ -63,6 +73,7 @@ public class AddressableHandleAssets<T> where T : UnityEngine.Object
         // 에셋 로드
         assetsHandle = Addressables.LoadAssetsAsync<T>(key, (result) =>
         {
+            Debug.Log($"{key} -> {result.name}");
             // TODO: 모든 string을 찾는 방법을 추후 최적화된 방법으로 교체
             for (int i = 0; i < sortStandard.Count; i++)
             {
@@ -74,6 +85,7 @@ public class AddressableHandleAssets<T> where T : UnityEngine.Object
         });
         assetsHandle.WaitForCompletion();
     }
+
 
     public void Release()
     {

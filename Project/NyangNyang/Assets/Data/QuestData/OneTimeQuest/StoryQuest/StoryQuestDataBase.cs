@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class StoryQuestDataBase : OneTimeQuestDataBase
 {
+    public int storyQuestID;
+
     public override void QuestActing(BaseQuest quest, QuestType type)
     {
         questCategory = QuestCategory.Story;

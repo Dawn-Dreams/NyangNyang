@@ -19,5 +19,6 @@ MonoBehaviour:
   questCategory: 4
   rewardType: 1
   sendQuestDataToServerDelayTime: 5
+  storyQuestID: 14
   targetTheme: 2
   targetStage: 1

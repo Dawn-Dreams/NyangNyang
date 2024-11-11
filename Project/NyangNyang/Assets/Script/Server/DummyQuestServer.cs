@@ -21,7 +21,8 @@ public enum QuestCategory
     Daily,
     Weekly,
     Achievement,
-    Story
+    Story,
+    Count
 }
 [Serializable]
 public enum RewardType

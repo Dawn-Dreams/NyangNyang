@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 933ba2e0b1790284b882e1a5c632169e
   m_currentHash:
     serializedVersion: 2
-    Hash: 69feb6dffc9fb92c2bd00e525867bf6a
+    Hash: 63856862f3c274cb702bd4612c6a3e2f
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_BundleLocalCatalog: 0
@@ -46,15 +46,17 @@ MonoBehaviour:
   m_GroupAssets:
   - {fileID: 11400000, guid: c383a0d5ee355c34380bfad3c6133a0c, type: 2}
   - {fileID: 11400000, guid: 8333d46f8f49f394f89551b58b622a40, type: 2}
-  - {fileID: 11400000, guid: 42edf182241a3334991a91dacf7ef45a, type: 2}
-  - {fileID: 11400000, guid: fa435302156216445ba83df0739ad6bb, type: 2}
+  - {fileID: 11400000, guid: a4813e4c69009dd4491c5539ccbced71, type: 2}
   - {fileID: 11400000, guid: 59f57a408ad35c548bd4ecedc44c959e, type: 2}
   - {fileID: 11400000, guid: 6b11de3deb3d19740858947bc0176c7a, type: 2}
   - {fileID: 11400000, guid: 27538cc3cf334f04aac84fc69a23c522, type: 2}
   - {fileID: 11400000, guid: 8c8e5b66151c0f64caf9162229cba65d, type: 2}
+  - {fileID: 11400000, guid: 0661936c1e0ba5e4886541eeb0be0af4, type: 2}
   - {fileID: 11400000, guid: 16ba06d4f4bc2fd43acf2f1f7cd03e07, type: 2}
   - {fileID: 11400000, guid: 5cf9d54dad3d4a04e8902239fbc61b01, type: 2}
+  - {fileID: 11400000, guid: 10cadf109ff17bb4c907214a26ce48f2, type: 2}
   - {fileID: 11400000, guid: 0a437ef0eb421144da2a40b0104a25a1, type: 2}
+  - {fileID: 11400000, guid: e8a6872cd636feb40a41eeb2d39df544, type: 2}
   - {fileID: 11400000, guid: eac83461474fe48439d6bdb796def73a, type: 2}
   m_BuildSettings:
     m_CompileScriptsInVirtualMode: 0
@@ -112,6 +114,11 @@ MonoBehaviour:
     - Costume/FurSkin
     - Sprite/Button/CurrentPreview
     - Costume/Pet
+    - QuestData/Story
+    - QuestData/Daily
+    - QuestData/Weekly
+    - QuestData/Achievement
+    - QuestData/Repeat
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 1357d4d6892ead44d8606e168156272e, type: 2}

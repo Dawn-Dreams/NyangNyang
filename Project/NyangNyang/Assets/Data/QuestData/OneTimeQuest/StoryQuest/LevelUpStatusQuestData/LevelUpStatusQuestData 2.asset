@@ -19,5 +19,6 @@ MonoBehaviour:
   questCategory: 4
   rewardType: 1
   sendQuestDataToServerDelayTime: 5
+  storyQuestID: 3
   requireStatusLevel: 30
   questStatusType: 0

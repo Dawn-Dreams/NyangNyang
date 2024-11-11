@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class QuestDataManager : MonoBehaviour
@@ -12,25 +13,11 @@ public class QuestDataManager : MonoBehaviour
         return _instance;
     }
 
-    public List<QuestDataBase> repeatQuestData;
-    public List<QuestDataBase> dailyQuestData;
-    public List<QuestDataBase> weeklyQuestData;
-    public List<QuestDataBase> achievementQuestData;
-    public List<QuestDataBase> storyQuestData;
-
-    public List<List<QuestDataBase>> questDataList;
+    public List<AddressableHandleAssets<QuestDataBase>> questDataList;
 
     void Awake()
     {
-        questDataList = new List<List<QuestDataBase>>
-        {
-            repeatQuestData,
-            dailyQuestData,
-            weeklyQuestData,
-            achievementQuestData,
-            storyQuestData,
-        };
-
+        AssetLoad();
 
         if (_instance == null)
         {
@@ -38,5 +25,26 @@ public class QuestDataManager : MonoBehaviour
         }    
     }
 
+    public void AssetLoad()
+    {
+        questDataList = new List<AddressableHandleAssets<QuestDataBase>>();
+        for (int i = 0; i < (int)QuestCategory.Story; ++i)
+        {
+            AddressableHandleAssets<QuestDataBase> questData = new AddressableHandleAssets<QuestDataBase>();
+            questData.LoadAssets("QuestData/" + (QuestCategory)i);
+            questDataList.Add(questData);
+            Debug.Log((QuestCategory)i + " " + questDataList[i].objs.Count);
+        }
 
+
+        // 스토리는 정렬방식을 다르게 진행
+        AddressableHandleAssets<QuestDataBase> storyQuestData = new AddressableHandleAssets<QuestDataBase>();
+        storyQuestData.LoadAssets("QuestData/Story");
+        storyQuestData.objs.Sort(( a, b) =>
+        {
+            return ((StoryQuestDataBase)a).storyQuestID > ((StoryQuestDataBase)b).storyQuestID ? -1 : 1;
+        });
+        questDataList.Add(storyQuestData);
+        Debug.Log((QuestCategory)4 + " " + questDataList[4].objs.Count);
+    }
 }
