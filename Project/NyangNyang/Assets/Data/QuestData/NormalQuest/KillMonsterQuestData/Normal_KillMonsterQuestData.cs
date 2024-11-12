@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-[CreateAssetMenu(fileName = "KillMonsterQuestData", menuName = "ScriptableObjects/QuestData/KillMonsterQuestData", order = 1)]
+[CreateAssetMenu(fileName = "KillMonsterQuestData", menuName = "ScriptableObjects/QuestData/Normal/KillMonsterQuestData", order = 1)]
 public class Normal_KillMonsterQuestData : NormalQuestDataBase
 {
     private long _killMonsterCount;
@@ -49,6 +49,13 @@ public class Normal_KillMonsterQuestData : NormalQuestDataBase
     public override int GetRequireCount()
     {
         return requireKillMonsterCount;
+    }
+
+    public override void ChangeCurrentProgressCountAfterReward()
+    {
+        int clearCount = (int)_killMonsterCount / requireKillMonsterCount;
+            
+        _killMonsterCount -= requireKillMonsterCount * clearCount;
     }
 
     public override BigInteger GetCurrentQuestCount()

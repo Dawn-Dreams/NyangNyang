@@ -10,7 +10,7 @@ using UnityEngine;
 [Serializable]
 public enum QuestType
 {
-    GoldSpending, KillMonster,
+    GoldSpending, KillMonster, ObtainWeapon,
     FirstTime,
     LevelUpStatus, StageClear,
 }
@@ -49,6 +49,7 @@ public class DummyQuestServer : DummyServerData
                 {
                     { QuestType.GoldSpending, new List<int>() },
                     {QuestType.KillMonster, new List<int>()},
+                    {QuestType.ObtainWeapon, new List<int>()}
                 }
             },
             // 주간 퀘스트
@@ -122,6 +123,21 @@ public class DummyQuestServer : DummyServerData
                         }
                     }
                 }
+            },
+
+            // ObtainWeapon 퀘스트
+            {
+                QuestType.ObtainWeapon, new Dictionary<QuestCategory, Dictionary<int, BigInteger>>
+                {
+                    // 일일퀘스트
+                    {
+                        QuestCategory.Daily, new Dictionary<int, BigInteger>
+                        {
+                            {0, 35}
+                        }
+                    }
+                }
+             
             }
         };
     // =========================
@@ -166,13 +182,19 @@ public class DummyQuestServer : DummyServerData
         }
     }
 
+    // TODO : SendQuestDataToPlayer와 비슷한 맥락을 하는 함수지만 바로 접근하는 함수
+    public static BigInteger SendQuestProgressDataToClient(int userID, QuestCategory questCategory, QuestType questType)
+    {
+        return userQuestProgressData[questType][questCategory][userID];
+    }
+
     // 유저가 보상 흭득을 요구하는 함수
     public static void UserRequestReward(int userID, NormalQuestDataBase questInfo)
     {
         // 서버의 퀘스트 정보를 쓰려했으나 스토리 퀘스트 서버가 분리되어 적용 불가, 추후 개선 예정
         //QuestDataBase questInfo = GetQuestInfo(questCategory, questType);
 
-
+        
         Action<int, BigInteger> giveUserCurrencyAction = null;
         BigInteger rewardCount;
         if (questInfo)
@@ -233,9 +255,8 @@ public class DummyQuestServer : DummyServerData
         }
 
         // 퀘스트 정보 다시 전송하여 퀘스트 정보 초기화
-        // TODO: READ) @정가온 10.31) 해당부분에 대한 처리에 대해 서버개발자에게 요청
-        SendQuestDataToPlayer(userID, questInfo.questCategory, questInfo.questType);
-
+        // 11.12 클라내에서도 동일하게 횟수를 깎아서 진행하기로 설정
+        //SendQuestDataToPlayer(userID, questInfo.questCategory, questInfo.questType);
 
     }
 

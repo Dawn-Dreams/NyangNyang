@@ -22,7 +22,7 @@ public class WeaponManager : MonoBehaviour
 
     public void InitializedWeapons()
     {
-        // TODO: ¼­¹ö¿¡¼­ µ¥ÀÌÅÍ ¹Ş¾Æ¿À±â
+        // TODO: ì„œë²„ì—ì„œ ë°ì´í„° ë°›ì•„ì˜¤ê¸°
 
         for (int i = 0; i < 32; ++i)
         {
@@ -85,6 +85,12 @@ public class WeaponManager : MonoBehaviour
         if (weapon != null)
         {
             weapon.AddWeapon(count);
+
+            // 11.12 ì´ìœ¤ì„ - ë¬´ê¸° íšë“ í€˜ìŠ¤íŠ¸
+            if (QuestManager.GetInstance().OnUserObtainWeapon != null)
+            {
+                QuestManager.GetInstance().OnUserObtainWeapon(count);
+            }
         }
     }
 
@@ -98,8 +104,14 @@ public class WeaponManager : MonoBehaviour
                 weapon.AddWeapon(-5);
 
                 weapon = GetWeapon(id + 1);
+                
+                // 11.12 ì´ìœ¤ì„ - ë¬´ê¸° í•©ì„± í€˜ìŠ¤íŠ¸
+                if (QuestManager.GetInstance().OnUserWeaponCombine != null)
+                {
+                    QuestManager.GetInstance().OnUserWeaponCombine(1);
+                }
 
-                if(weapon != null)
+                if (weapon != null)
                 {
                     weapon.AddWeapon(1);
                 }

@@ -44,7 +44,7 @@ public class MyBigIntegerMath : MonoBehaviour
         return retStr;
     }
 
-    public static float DivideToFloat(BigInteger dividend, BigInteger divisor, int precisionDigit)
+    public static float DivideToFloat(BigInteger dividend, BigInteger divisor, int precisionDigit = 5)
     {
         // BigInteger.Divide 는 BigInteger만 반환하므로,
         // slider 등에서 사용하기 위해 float를 반환하는 함수 제작

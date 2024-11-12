@@ -33,7 +33,6 @@ public class QuestDataManager : MonoBehaviour
             AddressableHandleAssets<QuestDataBase> questData = new AddressableHandleAssets<QuestDataBase>();
             questData.LoadAssets("QuestData/" + (QuestCategory)i);
             questDataList.Add(questData);
-            Debug.Log((QuestCategory)i + " " + questDataList[i].objs.Count);
         }
 
 
@@ -42,9 +41,8 @@ public class QuestDataManager : MonoBehaviour
         storyQuestData.LoadAssets("QuestData/Story");
         storyQuestData.objs.Sort(( a, b) =>
         {
-            return ((StoryQuestDataBase)a).storyQuestID > ((StoryQuestDataBase)b).storyQuestID ? -1 : 1;
+            return ((StoryQuestDataBase)a).storyQuestID < ((StoryQuestDataBase)b).storyQuestID ? -1 : 1;
         });
         questDataList.Add(storyQuestData);
-        Debug.Log((QuestCategory)4 + " " + questDataList[4].objs.Count);
     }
 }

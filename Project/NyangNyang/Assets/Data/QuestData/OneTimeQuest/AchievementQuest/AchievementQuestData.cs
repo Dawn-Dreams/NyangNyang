@@ -51,6 +51,9 @@ public abstract class AchievementQuestData : OneTimeQuestDataBase
         Debug.Log($"유저가 타이틀 ID: {rewardTitleID} 타이틀을 흭득하였습니다.");
         DummyPlayerTitleServer.UserRequestAcquireTitle(Player.GetUserID(), rewardTitleID);
         PlayerTitle.AcquireTitle(rewardTitleID);
+
+
         GetReward = true;
+        RenewalUIAfterChangeQuestValue();
     }
 }
