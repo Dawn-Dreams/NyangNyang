@@ -42,6 +42,8 @@ public class QuestManager : MonoBehaviour
     // 퀘스트 진행 상황 정보 델리게이트
     public delegate void OnRenewQuestProgressDataDelegate(QuestCategory questCategory, QuestType questType, BigInteger newCurrentObtainWeaponCount);
     public OnRenewQuestProgressDataDelegate OnRenewQuestProgressData;
+
+    // 서버로부터 값을 받은 후 해당 함수 호출을 통해 퀘스트의 데이터를 갱신
     public void GetQuestProgressDataFromServer(QuestCategory questCategory, QuestType questType)
     {
         // TODO: 서버로부터 값받은 이후에 사용되는 함수, 다만 현재는 바로 값을 받도록 구현

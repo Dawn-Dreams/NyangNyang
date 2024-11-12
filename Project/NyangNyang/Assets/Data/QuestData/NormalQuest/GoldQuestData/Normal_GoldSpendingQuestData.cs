@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-[CreateAssetMenu(fileName = "GoldSpendingQuestData", menuName = "ScriptableObjects/QuestData/GoldSpendingQuestData", order = 1)]
+[CreateAssetMenu(fileName = "GoldSpendingQuestData", menuName = "ScriptableObjects/QuestData/Normal/GoldSpendingQuestData", order = 1)]
 public class Normal_GoldSpendingQuestData : NormalQuestDataBase
 {
     protected BigInteger spendingGold = 0;
@@ -43,6 +43,12 @@ public class Normal_GoldSpendingQuestData : NormalQuestDataBase
     public override int GetRequireCount()
     {
         return requireSpendingGold;
+    }
+
+    public override void ChangeCurrentProgressCountAfterReward()
+    {
+        int clearCount = (int)MyBigIntegerMath.DivideToFloat(spendingGold, requireSpendingGold);
+        spendingGold -= requireSpendingGold * clearCount;
     }
 
     public override BigInteger GetCurrentQuestCount()

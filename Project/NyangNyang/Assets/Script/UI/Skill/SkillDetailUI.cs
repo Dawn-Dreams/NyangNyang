@@ -39,7 +39,7 @@ public class SkillDetailUI : MonoBehaviour
 
     private void OnEnable()
     {
-        // ½ºÅ³ ÀÎº¥ Ã¢ÀÌ ¿­¸± ¶§ active µÊ µğÅ×ÀÏ Ã¢ X
+        // ìŠ¤í‚¬ ì¸ë²¤ ì°½ì´ ì—´ë¦´ ë•Œ active ë¨ ë””í…Œì¼ ì°½ X
         choosedSkill = null;
     }
 
@@ -91,6 +91,14 @@ public class SkillDetailUI : MonoBehaviour
                 int result = SkillManager.GetInstance().LevelUpSkill(choosedSkill.GetID());
                 Player.Gold -= int.Parse(skillCoinTxt.text);
 
+
+                // 11.12 ì´ìœ¤ì„ - ìŠ¤í‚¬ ë ˆë²¨ì—… í€˜ìŠ¤íŠ¸
+                if (QuestManager.GetInstance().OnUserSkillLevelUp != null)
+                {
+                    QuestManager.GetInstance().OnUserSkillLevelUp(result);
+                }
+
+
                 if ( result == 10)
                 {
                     MaxLevelOfSKill();
@@ -108,12 +116,12 @@ public class SkillDetailUI : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("·¹º§ ¾÷¿¡ ½ÇÆĞÇß½À´Ï´Ù.");
+                    Debug.Log("ë ˆë²¨ ì—…ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.");
                 }
             }
             else
             {
-                Debug.Log("µ·ÀÌ ºÎÁ·ÇÕ´Ï´Ù.");
+                Debug.Log("ëˆì´ ë¶€ì¡±í•©ë‹ˆë‹¤.");
             }
         }
     }

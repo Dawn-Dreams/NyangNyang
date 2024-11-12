@@ -47,6 +47,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - QuestData/Achievement
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c45299d0b008b78448ae3ec6e316b5e6
+    m_Address: Assets/Data/QuestData/NormalQuest/ObtainWeaponQuestData/Normal_ObtainWeaponQuestData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - QuestData/Daily
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c96c4f1fb92fa244fa900b882f7ddf9e
     m_Address: RepeatKillMonsterQuestData
     m_ReadOnly: 0
