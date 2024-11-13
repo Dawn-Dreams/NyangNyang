@@ -5,12 +5,25 @@ using UnityEngine;
 public class EquippedItem : MonoBehaviour
 {
     Weapon EquippedWeapon;
+    Weapon SelectedWeapon;
     List<Skill> EquippedSkills;
 
-    public void OnClickedEquippedButton()
+    public void OnClickedWeaponEquippedButton()
     {
-        // 장착 디테일 창 보여주기
+        if (SelectedWeapon != null)
+        {
+            EquippedWeapon = SelectedWeapon;
+        }
     }
 
+    public void OnClickedWeapon(GameObject _obj)
+    {
+        SelectedWeapon = WeaponManager.GetInstance().GetWeapon(_obj.name);
+    }
+
+    void UpdateEquippedWeapon()
+    {
+
+    }
 
 }
