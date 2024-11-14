@@ -12,6 +12,9 @@ public class EquippedItem : MonoBehaviour
     [SerializeField]
     Image WeaponImage;
 
+    [SerializeField]
+    GameObject WeaponPopUp;
+
     public void OnClickedWeaponEquippedButton()
     {
         if (SelectedWeapon != null)
@@ -23,7 +26,7 @@ public class EquippedItem : MonoBehaviour
 
     public void OnClickedWeapon(GameObject _obj)
     {
-        if ( _obj != null)
+        if (_obj != null)
         {
             SelectedWeapon = WeaponManager.GetInstance().GetWeapon(_obj.name);
         }
@@ -32,11 +35,23 @@ public class EquippedItem : MonoBehaviour
     void UpdateEquippedWeapon()
     {
         int id = SelectedWeapon.GetID();
-        WeaponImage.sprite = WeaponManager.GetInstance().GetSprite(id);
 
-        /*
-            공격력 관련 코드 작성         
-         */
+        
+        Sprite s = WeaponManager.GetInstance().GetSprite(id);
+
+        if (s != null)
+        {
+            WeaponImage.sprite = s;
+            /*
+                공격력 관련 코드 작성         
+             */
+            
+
+            WeaponPopUp.SetActive(false);
+            SelectedWeapon = null;
+
+        }
+
     }
 
 }
