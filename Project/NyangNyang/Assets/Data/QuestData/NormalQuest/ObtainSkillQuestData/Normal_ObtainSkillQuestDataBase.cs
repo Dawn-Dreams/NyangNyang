@@ -2,55 +2,56 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-[CreateAssetMenu(fileName = "ObtainWeaponQuestDataBase", menuName = "ScriptableObjects/QuestData/Normal/ObtainWeaponQuestDataBase", order = 1)]
-public class Normal_ObtainWeaponQuestDataBase : NormalQuestDataBase
+[CreateAssetMenu(fileName = "ObtainSkillQuestDataBase", menuName = "ScriptableObjects/QuestData/Normal/ObtainSkillQuestDataBase", order = 1)]
+public class Normal_ObtainSkillQuestDataBase : NormalQuestDataBase
 {
-    protected int currentWeaponObtainCount = 0;
+    protected int currentSkillObtainCount = 0;
 
-    public int requireWeaponObtainCount;
+    public int requireSkillObtainCount;
 
     public override void QuestActing(BaseQuest quest, QuestType type)
     {
-        base.QuestActing(quest, QuestType.ObtainWeapon);
+        base.QuestActing(quest, QuestType.ObtainSkill);
     }
 
 
     protected override void SetRequireText()
     {
-        string newText = currentWeaponObtainCount + " / " +
-                         requireWeaponObtainCount;
+        string newText = currentSkillObtainCount + " / " +
+                         requireSkillObtainCount;
         QuestComp.SetRequireText(newText);
     }
 
     protected override void BindDelegate()
     {
         QuestManager.GetInstance().OnRenewQuestProgressData += GetDataFromServer;
-        QuestManager.GetInstance().OnUserObtainWeapon += QuestCountChange;
+        QuestManager.GetInstance().OnUserGetSkill += QuestCountChange;
 
     }
 
     protected override void UnBindDelegate()
     {
         QuestManager.GetInstance().OnRenewQuestProgressData -= GetDataFromServer;
-        QuestManager.GetInstance().OnUserObtainWeapon -= QuestCountChange;
+        QuestManager.GetInstance().OnUserGetSkill -= QuestCountChange;
     }
 
     public override int GetRequireCount()
     {
-        return requireWeaponObtainCount;
+        return requireSkillObtainCount;
     }
 
     public override void ChangeCurrentProgressCountAfterReward()
     {
-        int clearCount = (int)currentWeaponObtainCount / requireWeaponObtainCount;
+        int clearCount = (int)currentSkillObtainCount / requireSkillObtainCount;
 
-        currentWeaponObtainCount -= requireWeaponObtainCount * clearCount;
+        currentSkillObtainCount -= requireSkillObtainCount * clearCount;
     }
 
     public override BigInteger GetCurrentQuestCount()
     {
-        return currentWeaponObtainCount;
+        return currentSkillObtainCount;
     }
 
     // 서버로부터 데이터 값을 받아올 때
@@ -61,14 +62,14 @@ public class Normal_ObtainWeaponQuestDataBase : NormalQuestDataBase
             return;
         }
 
-        currentWeaponObtainCount = (int)newQuestDataValue;
+        currentSkillObtainCount = (int)newQuestDataValue;
 
         RenewalUIAfterChangeQuestValue();
     }
     // 퀘스트를 수행하여 값이 바뀌었을 때,
     public void QuestCountChange(int obtainWeaponCount)
     {
-        currentWeaponObtainCount += obtainWeaponCount;
+        currentSkillObtainCount += obtainWeaponCount;
         RenewalUIAfterChangeQuestValue();
 
         // TODO: 10.31) 추후엔 GameManager 라던가 기타 Monobehaviour 상속 클래스에서 보내도록 
@@ -78,7 +79,7 @@ public class Normal_ObtainWeaponQuestDataBase : NormalQuestDataBase
 
     protected override void RenewalUIAfterChangeQuestValue()
     {
-        float currentValue = (float)currentWeaponObtainCount / requireWeaponObtainCount;
+        float currentValue = (float)currentSkillObtainCount / requireSkillObtainCount;
         QuestComp.SetSliderValue(currentValue);
 
         SetRequireText();
@@ -88,9 +89,9 @@ public class Normal_ObtainWeaponQuestDataBase : NormalQuestDataBase
 
     protected override void CheckQuestClear()
     {
-        if (currentWeaponObtainCount >= requireWeaponObtainCount)
+        if (currentSkillObtainCount >= requireSkillObtainCount)
         {
-            int clearCount = currentWeaponObtainCount / requireWeaponObtainCount;
+            int clearCount = currentSkillObtainCount / requireSkillObtainCount;
             QuestComp.SetRewardButtonInteractable(true, "보상받기");
             QuestComp.SetRewardCountText(rewardCount, clearCount, IsRewardRepeatable());
         }

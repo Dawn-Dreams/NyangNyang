@@ -47,9 +47,6 @@ public class QuestManager : MonoBehaviour
     public void GetQuestProgressDataFromServer(QuestCategory questCategory, QuestType questType)
     {
         // TODO: 서버로부터 값받은 이후에 사용되는 함수, 다만 현재는 바로 값을 받도록 구현
-        // TODO 현재는 테스트를 위함이므로 값을 고정
-        questCategory = QuestCategory.Daily;
-        questType = QuestType.ObtainWeapon;
         // TODO : 나중엔 서버에서 받은 후 실행되는거니까 값 갱신 지우기
         BigInteger currentCount =
             DummyQuestServer.SendQuestProgressDataToClient(Player.GetUserID(), questCategory,

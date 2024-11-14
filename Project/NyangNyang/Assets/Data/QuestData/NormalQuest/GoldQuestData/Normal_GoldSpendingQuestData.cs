@@ -16,11 +16,6 @@ public class Normal_GoldSpendingQuestData : NormalQuestDataBase
         base.QuestActing(quest, QuestType.GoldSpending);
     }
 
-    public override void RequestCurrentUserQuestProgress()
-    {
-        DummyQuestServer.SendQuestDataToPlayer(Player.GetUserID(), questCategory, questType);
-    }
-
     protected override void SetRequireText()
     {
         string newText = MyBigIntegerMath.GetAbbreviationFromBigInteger(spendingGold) + " / " +
@@ -30,13 +25,13 @@ public class Normal_GoldSpendingQuestData : NormalQuestDataBase
 
     protected override void BindDelegate()
     {
-        Player.OnRenewGoldSpendingQuest += GetDataFromServer;
+        QuestManager.GetInstance().OnRenewQuestProgressData += GetDataFromServer;
         Player.playerCurrency.OnSpendingGold += QuestCountChange;
     }
 
     protected override void UnBindDelegate()
     {
-        Player.OnRenewGoldSpendingQuest -= GetDataFromServer;
+        QuestManager.GetInstance().OnRenewQuestProgressData -= GetDataFromServer;
         Player.playerCurrency.OnSpendingGold -= QuestCountChange;
     }
 
@@ -57,12 +52,13 @@ public class Normal_GoldSpendingQuestData : NormalQuestDataBase
     }
 
     // 서버로부터 데이터 값을 받아올 때
-    public void GetDataFromServer(QuestCategory dataCategory, BigInteger newQuestDataValue)
+    public void GetDataFromServer(QuestCategory dataCategory, QuestType type, BigInteger newQuestDataValue)
     {
-        if (questCategory != dataCategory)
+        if (questCategory != dataCategory || questType != type)
         {
             return;
         }
+
         spendingGold = newQuestDataValue;
         RenewalUIAfterChangeQuestValue();
     }

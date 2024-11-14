@@ -26,13 +26,13 @@ public class Normal_KillMonsterQuestData : NormalQuestDataBase
 
     protected override void BindDelegate()
     {
-        Player.OnMonsterKillQuestChange += GetDataFromServer;
+        QuestManager.GetInstance().OnRenewQuestProgressData += GetDataFromServer;
         EnemySpawnManager.GetInstance().OnEnemyDeath += QuestCountChange;
     }
 
     protected override void UnBindDelegate()
     {
-        Player.OnMonsterKillQuestChange -= GetDataFromServer;
+        QuestManager.GetInstance().OnRenewQuestProgressData -= GetDataFromServer;
         EnemySpawnManager.GetInstance().OnEnemyDeath -= QuestCountChange;
     }
 
@@ -64,14 +64,14 @@ public class Normal_KillMonsterQuestData : NormalQuestDataBase
     }
 
 
-    public void GetDataFromServer(QuestCategory dataCategory, long newQuestDataValue)
+    public void GetDataFromServer(QuestCategory dataCategory, QuestType type, BigInteger newQuestDataValue)
     {
-        if (questCategory != dataCategory)
+        if (questCategory != dataCategory || questType != type)
         {
             return;
         }
 
-        _killMonsterCount = newQuestDataValue;
+        _killMonsterCount = (long)newQuestDataValue;
         RenewalUIAfterChangeQuestValue();
     }
 

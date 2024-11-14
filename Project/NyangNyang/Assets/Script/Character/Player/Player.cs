@@ -38,16 +38,6 @@ public class Player : MonoBehaviour
     public delegate void OnTicketChangeDelegate(int[] newTicketVal);
     public static event OnTicketChangeDelegate OnTicketChange;
 
-    // 플레이어 퀘스트 델리게이트
-    public delegate void OnGoldSpendingQuestDelegate(QuestCategory questCategory, BigInteger newQuestData);
-    public static event OnGoldSpendingQuestDelegate OnRenewGoldSpendingQuest;
-    public delegate void OnMonsterKillQuestDelegate(QuestCategory category, long monsterKillCount);
-    public static event OnMonsterKillQuestDelegate OnMonsterKillQuestChange;
-
-
-
-
-
     // 한 스테이지 내에서 반복 전투를 진행하는 것에 대한 변수
     public static bool continuousCombat = false;
     // 최대 클리어 스테이지 정보
@@ -206,23 +196,6 @@ public class Player : MonoBehaviour
 
         themeData = playerHighestClearStageData[0];
         stageData = playerHighestClearStageData[1];
-    }
-
-    // 반복 퀘스트
-    public static void RecvGoldSpendingDataFromServer(BigInteger newVal, QuestCategory questCategory)
-    {
-        if (OnRenewGoldSpendingQuest != null)
-        {
-            OnRenewGoldSpendingQuest(questCategory, newVal);
-        }
-    }
-
-    public static void RecvMonsterKillDataFromServer(QuestCategory questCategory, long newVal)
-    {
-        if (OnMonsterKillQuestChange != null)
-        {
-            OnMonsterKillQuestChange(questCategory, newVal);
-        }
     }
 
     // ================

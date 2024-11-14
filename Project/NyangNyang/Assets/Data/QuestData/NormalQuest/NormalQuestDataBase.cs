@@ -24,7 +24,7 @@ public abstract class NormalQuestDataBase : QuestDataBase
     // 현재 유저의 퀘스트 진행 정도를 받는 함수
     public virtual void RequestCurrentUserQuestProgress()
     {
-        DummyQuestServer.SendQuestDataToPlayer(Player.GetUserID(), questCategory, questType);
+        QuestManager.GetInstance().GetQuestProgressDataFromServer(questCategory, questType);
         CheckQuestClear();
     }
 
