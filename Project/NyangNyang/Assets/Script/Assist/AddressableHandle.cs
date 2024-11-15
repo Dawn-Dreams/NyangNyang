@@ -73,7 +73,6 @@ public class AddressableHandleAssets<T> where T : UnityEngine.Object
         // 에셋 로드
         assetsHandle = Addressables.LoadAssetsAsync<T>(key, (result) =>
         {
-            Debug.Log($"{key} -> {result.name}");
             // TODO: 모든 string을 찾는 방법을 추후 최적화된 방법으로 교체
             for (int i = 0; i < sortStandard.Count; i++)
             {

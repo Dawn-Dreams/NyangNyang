@@ -139,6 +139,7 @@ public class Status
 {
     private StatusLevelData levelData;
 
+    public bool isPlayerStatus = false;
 
     // 스테이터스 레벨 변화 델리게이트
     public delegate void OnStatusLevelChangeDelegate(StatusLevelType type);
@@ -168,11 +169,6 @@ public class Status
     // 적군을 잡을 때에 받는 경우에만 해당
     public float goldAcquisitionPercent = 1.0f;    // 골드 획득량(가중치) (초기 1, value%로 적용)
     public float expAcquisitionPercent = 1.0f;     // 경험치 획득량(가중치) (초기 1, value%로 적용)
-
-    public Status()
-    {
-
-    }
 
     public Status(StatusLevelData data)
     {
@@ -313,6 +309,20 @@ public class Status
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
 
-       
+        if (isPlayerStatus)
+        {
+            CombatPowerManager.GetInstance()
+                .ChangeCurrentCombatPower(GetCurrentAttackPower(), GetCurrentDefencePower());
+        }
+
+    }
+
+    public BigInteger GetCurrentAttackPower()
+    {
+        return attackPower + (int)(critPercent * 100) + (int)(10000/attackSpeed);
+    }
+    public BigInteger GetCurrentDefencePower()
+    {
+        return defence + healHPPerSec + healMPPerSec + hp;
     }
 }

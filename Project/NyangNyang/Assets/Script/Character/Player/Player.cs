@@ -83,6 +83,7 @@ public class Player : MonoBehaviour
             playerStatus = new Status(DummyServerData.GetUserStatusLevelData(userID));
             // 플레이어는 디폴트 스탯 버프
             playerStatus.BuffPlayerStatusDefaultValue(5);
+            playerStatus.isPlayerStatus = true;
         }
         GetCurrencyDataFromServer();
         GetExpDataFromServer();

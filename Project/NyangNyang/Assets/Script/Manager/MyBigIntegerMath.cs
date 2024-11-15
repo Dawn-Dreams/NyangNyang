@@ -39,7 +39,7 @@ public class MyBigIntegerMath : MonoBehaviour
                 placeValue = Mathf.Floor(placeValue * 10.0f) / 10.0f;
             }
         }
-        retStr = placeValue.ToString() + unit.ToString();
+        retStr = placeValue.ToString() + ' ' + unit.ToString();
 
         return retStr;
     }
