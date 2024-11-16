@@ -24,9 +24,9 @@ public class DungeonManager : MonoBehaviour
     private int gainGold = 100000;               // 기본 골드 획득량
     // 임시 객체로 사용할 cat과 enemy 프리팹
     public Cat catPrefab;
-    public DungeonEnemy enemyPrefab;
+    public DungeonBossEnemy enemyPrefab;
     private Cat catInstance;
-    private DungeonEnemy enemyInstance;
+    private DungeonBossEnemy enemyInstance;
 
     // 싱글톤 인스턴스
     public static DungeonManager Instance { get; private set; }
@@ -110,7 +110,7 @@ public class DungeonManager : MonoBehaviour
 
         // 프리팹 인스턴스 생성
         catInstance = Instantiate(catPrefab, new Vector3(-10, 40, 0), Quaternion.identity).GetComponent<Cat>();
-        enemyInstance = Instantiate(enemyPrefab, new Vector3(10, 40, 0), Quaternion.identity).GetComponent<DungeonEnemy>();
+        enemyInstance = Instantiate(enemyPrefab, new Vector3(10, 40, 0), Quaternion.identity).GetComponent<DungeonBossEnemy>();
         
         // 적의 생명력, 공격력, 공격 패턴 설정 (index와 level에 따라 다르게 설정)
         enemyInstance.InitializeEnemyStats(index, level);
