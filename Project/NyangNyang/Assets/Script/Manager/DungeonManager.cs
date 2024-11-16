@@ -113,7 +113,8 @@ public class DungeonManager : MonoBehaviour
         enemyInstance = Instantiate(enemyPrefab, new Vector3(10, 40, 0), Quaternion.identity).GetComponent<DungeonBossEnemy>();
         
         // 적의 생명력, 공격력, 공격 패턴 설정 (index와 level에 따라 다르게 설정)
-        enemyInstance.InitializeEnemyStats(index, level);
+       
+        enemyInstance.InitializeBossForDungeon(index, level);
         InitializeClonedCat(catInstance);
 
 
@@ -132,6 +133,15 @@ public class DungeonManager : MonoBehaviour
     private IEnumerator StartCombatAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
+
+        // 객체 초기화 확인
+        if (catInstance == null || enemyInstance == null)
+        {
+            Debug.LogError("객체 초기화 실패! 전투를 시작할 수 없습니다.");
+            EndDungeonStage();
+            yield break;
+        }
+
         // 전투 시작
         catInstance.isIndependent = true;       // CombatManager 무관하게 작동하도록
         enemyInstance.isIndependent = true;     

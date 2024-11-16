@@ -42,6 +42,10 @@ public class DummyEnemy
     
     public DummyEnemy(GameObject dummyObject, Slider slider, EnemyMonsterType type, BigInteger maxHP)
     {
+        if (dummyObject == null || slider == null)
+        {
+            Debug.LogError("DummyEnemy: Null argument in constructor");
+        }
         this.dummyGameObject = dummyObject;
 
         _slider = slider;
@@ -126,6 +130,15 @@ public class DummyEnemy
         
         _slider.value = 1f;
     }
+
+    public void Initialize(Slider slider, EnemyMonsterType type, BigInteger maxHP)
+    {
+        this._slider = slider;
+        this.monsterType = type;
+        this.maxHP = maxHP;
+
+        Debug.Log($"DummyEnemy initialized: Type = {type}, Max HP = {maxHP}");
+    }
 }
 
 public class Enemy : Character
@@ -195,9 +208,32 @@ public class Enemy : Character
 
     public void SetNumberOfEnemyInGroup(int numOfEnemy = 1)
     {
-        if (numOfEnemy == 0)
+        // dummyEnemyObj 배열이 null이거나 비어있으면 초기화
+        if (dummyEnemyObj == null || dummyEnemyObj.Length == 0)
         {
-            numOfEnemy = 1;
+            Debug.LogWarning("dummyEnemyObj가 비어 있음. 기본값으로 초기화합니다.");
+            dummyEnemyObj = new GameObject[5];
+            for (int i = 0; i < dummyEnemyObj.Length; i++)
+            {
+                dummyEnemyObj[i] = new GameObject($"DummyEnemy_{i + 1}");
+            }
+        }
+
+        // sliders 배열이 null이거나 비어있으면 초기화
+        if (sliders == null || sliders.Count == 0)
+        {
+            Debug.LogWarning("sliders가 비어 있음. 기본값으로 초기화합니다.");
+            sliders = new List<Slider>(); // 새로운 리스트 생성
+
+            // 또는, 배열 초기화 후 리스트로 변환
+            Slider[] sliderArray = new Slider[5];
+            sliders = new List<Slider>(sliderArray);
+
+            for (int i = 0; i < sliders.Count; i++)
+            {
+                GameObject sliderObj = new GameObject($"Slider_{i + 1}");
+                sliders[i] = sliderObj.AddComponent<Slider>();
+            }
         }
 
         // 적 개체는 최소 1마리에서 최대 5마리
@@ -206,10 +242,16 @@ public class Enemy : Character
         BigInteger dummyMaxHp = BigInteger.Divide(maxHP, numOfEnemy);
         for (int i = 0; i < dummyEnemyObj.Length; ++i)
         {
-            // active dummy enemy
             if (i < numOfEnemy)
             {
-                _dummyEnemies.Add(new DummyEnemy(dummyEnemyObj[i], sliders[i], _monsterData.monsterTypes[i], dummyMaxHp));
+                if (dummyEnemyObj[i] != null && sliders[i] != null)
+                {
+                    _dummyEnemies.Add(new DummyEnemy(dummyEnemyObj[i], sliders[i], _monsterData.monsterTypes[i], dummyMaxHp));
+                }
+                else
+                {
+                    Debug.LogError($"dummyObject 또는 slider가 null입니다: Index {i}");
+                }
             }
             else
             {

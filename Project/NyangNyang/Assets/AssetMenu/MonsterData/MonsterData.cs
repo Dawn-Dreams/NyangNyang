@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "MonsterData", menuName = "ScriptableObjects/Enemy/MonsterData", order = 1)]
@@ -8,7 +9,9 @@ public class MonsterData : ScriptableObject
     public List<EnemyMonsterType> monsterTypes;
     public StatusLevelData monsterStatus;
     public EnemyDropData enemyDropData;
-
+    public int baseHP; // 체력
+    public int baseAttack; // 공격력
+    public int baseDefense; // 방어력
     public MonsterData SetMonsterDataFromOther(MonsterData other)
     {
         enemyCount = other.enemyCount;
@@ -37,5 +40,38 @@ public class MonsterData : ScriptableObject
         float dropDataMulValue = (maxStage * (themeNumber - 1) + stageNumber) * dropDataBuffPerStage;
         enemyDropData.MulDropData(dropDataMulValue);
     }
+
+  
 }
+
+[CreateAssetMenu(fileName = "BossMonsterData", menuName = "ScriptableObjects/Enemy/BossMonsterData")]
+public class BossMonsterData : ScriptableObject
+{
+    public DungeonBossEnemy.BossType bossType;
+    public int baseHP;
+    public int baseAttack;
+    public int baseDefense;
+
+    public BossMonsterData SetMonsterDataFromOther(BossMonsterData other)
+    {
+        baseHP = other.baseHP;
+        baseAttack = other.baseAttack;
+        baseDefense = other.baseDefense;
+        return this;
+    }
+
+    public void InitializeForDungeon(int dungeonIndex, int dungeonLevel)
+    {
+        // 1. 던전 배수 계산
+        float dungeonBuffValue = 1.0f + 0.2f * dungeonLevel; // 레벨당 20% 증가
+        float indexMultiplier = 1.0f + 0.1f * dungeonIndex;  // 던전 ID에 따른 추가 보정
+
+        // 2. 최종 배수 계산
+        float finalMultiplier = dungeonBuffValue * indexMultiplier;
+
+    }
+
+
+}
+
 
