@@ -149,6 +149,7 @@ public class Enemy : Character
 
     [SerializeField] private GameObject[] dummyEnemyObj;
     private List<DummyEnemy> _dummyEnemies;
+    private List<EnemyMonsterType> _dummyEnemyMonsterTypes;
 
     public int initialNumOfDummyEnemy = 0;
 
@@ -213,7 +214,7 @@ public class Enemy : Character
         initialNumOfDummyEnemy = numOfEnemy = (int)Mathf.Clamp(numOfEnemy, 1.0f, dummyEnemyObj.Length);
 
         // 더미 몬스터들의 타입을 설정
-        List<EnemyMonsterType> enemyMonsterTypes = SelectEnemyTypes(numOfEnemy, _monsterData.monsterTypes);
+        _dummyEnemyMonsterTypes = SelectEnemyTypes(numOfEnemy, _monsterData.monsterTypes);
         
 
 
@@ -226,7 +227,7 @@ public class Enemy : Character
                 if (dummyEnemyObj[i] != null && sliders[i] != null)
                 {
                     //_dummyEnemies.Add(new DummyEnemy(dummyEnemyObj[i], sliders[i], _monsterData.monsterTypes[i], dummyMaxHp));
-                    _dummyEnemies.Add(new DummyEnemy(dummyEnemyObj[i], sliders[i], enemyMonsterTypes[i], dummyMaxHp));
+                    _dummyEnemies.Add(new DummyEnemy(dummyEnemyObj[i], sliders[i], _dummyEnemyMonsterTypes[i], dummyMaxHp));
                 }
                 else
                 {
@@ -433,6 +434,15 @@ public class Enemy : Character
         if (_monsterData.enemyDropData)
         {
             _monsterData.enemyDropData.GiveItemToPlayer();
+        }
+
+        
+        for (int i = 0; i < _dummyEnemyMonsterTypes.Count; ++i)
+        {
+            if (QuestManager.GetInstance().OnUserKillEnemyType != null)
+            {
+                QuestManager.GetInstance().OnUserKillEnemyType(_dummyEnemyMonsterTypes[i]);
+            }
         }
 
         CombatManager.GetInstance().CurrentEnemyDeath(this);

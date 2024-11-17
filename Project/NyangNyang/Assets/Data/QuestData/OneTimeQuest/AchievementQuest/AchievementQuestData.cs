@@ -17,6 +17,11 @@ public abstract class AchievementQuestData : OneTimeQuestDataBase
         
         base.QuestActing(quest, type);
 
+        QuestActingAction();
+    }
+
+    protected virtual void QuestActingAction()
+    {
         // 등급에 맞게 칭호 이름 색상 변경
         if (QuestComp.mainQuestText)
         {
@@ -56,4 +61,5 @@ public abstract class AchievementQuestData : OneTimeQuestDataBase
         GetReward = true;
         RenewalUIAfterChangeQuestValue();
     }
+
 }

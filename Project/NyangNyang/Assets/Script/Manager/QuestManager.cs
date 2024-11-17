@@ -38,6 +38,10 @@ public class QuestManager : MonoBehaviour
     // 무기 합성(레벨업)
     public delegate void OnUserSkillLevelUpDelegate(int skillLevelUpCount);
     public OnUserSkillLevelUpDelegate OnUserSkillLevelUp;
+
+    // 적군 처치
+    public delegate void OnUserKillEnemyTypeDelegate(EnemyMonsterType monsterType);
+    public OnUserKillEnemyTypeDelegate OnUserKillEnemyType;
     // ============================================================
     // 퀘스트 진행 상황 정보 델리게이트
     public delegate void OnRenewQuestProgressDataDelegate(QuestCategory questCategory, QuestType questType, BigInteger newCurrentObtainWeaponCount);
