@@ -19,6 +19,7 @@ public class StatusLevelData
     private int HP_DEFAULT_VALUE = 50;
     private int MP_DEFAULT_VALUE = 10;
     private int STR_DEFAULT_VALUE = 5;
+    private float ATTACK_SPEED_DEFAULT_VALUE = 0.75f;
     //private static int MAX_ATTACK_SPEED = 10000;
 
     public StatusLevelData(int hpLevel, int mpLevel, int strLevel, int defenceLevel = 0, int healHpLevel = 0, int healMpLevel = 0, int critLevel = 0, int attackSpeedLevel = 0, int goldAcquisition = 0, int expAcquisition = 0)
@@ -83,6 +84,7 @@ public class StatusLevelData
             case StatusLevelType.ATTACK_SPEED:
                 // TODO <- 회의 필요 // 0 ~ 10000 레벨을 마스터로 1 ~ 0.25
                 //value = 0.25f + Mathf.Lerp(1.0f, MAX_ATTACK_SPEED, MAX_ATTACK_SPEED - statusLevels[(int)StatusLevelType.ATTACK_SPEED]) * 0.75f;
+                return ATTACK_SPEED_DEFAULT_VALUE;
                 return 1f;
                 //break;
             case StatusLevelType.GOLD:
@@ -132,6 +134,7 @@ public class StatusLevelData
         HP_DEFAULT_VALUE *= buffValue;
         MP_DEFAULT_VALUE *= buffValue;
         STR_DEFAULT_VALUE *= buffValue;
+        ATTACK_SPEED_DEFAULT_VALUE = 0.25f;
     }
 }
 
