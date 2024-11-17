@@ -10,9 +10,13 @@ using UnityEngine;
 [Serializable]
 public enum QuestType
 {
+    // 일반 퀘스트
     GoldSpending, KillMonster, ObtainWeapon, CombineWeapon, ObtainSkill, SkillLevelUp, 
-    FirstTime,
+    // 스토리
     LevelUpStatus, StageClear,
+    // 업적
+    FirstTime,
+    KillStarfish, KillOctopus,KillPuffe, KillShellfish, KillKrake,
 }
 [Serializable]
 public enum QuestCategory
@@ -187,6 +191,33 @@ public class DummyQuestServer : DummyServerData
                 }
 
             },
+
+            // KillStarfish 퀘스트
+            {
+                QuestType.KillStarfish, new Dictionary<QuestCategory, Dictionary<int, BigInteger>>
+                {
+                    // 업적 퀘스트
+                    {
+                        QuestCategory.Achievement, new Dictionary<int, BigInteger>
+                        {
+                            {0, 990}
+                        }
+                    }
+                }
+            },
+            // KillOctopus 퀘스트
+            {
+                QuestType.KillOctopus, new Dictionary<QuestCategory, Dictionary<int, BigInteger>>
+                {
+                    // 업적 퀘스트
+                    {
+                        QuestCategory.Achievement, new Dictionary<int, BigInteger>
+                        {
+                            {0, 990}
+                        }
+                    }
+                }
+            }
         };
     // =========================
 

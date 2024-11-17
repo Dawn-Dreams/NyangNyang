@@ -17,6 +17,12 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: d462310969d587e409c5ac580794028a
   m_SerializeEntries:
+  - m_GUID: 251b9a87bb1429a479697fee3d8a6d11
+    m_Address: Assets/Data/QuestData/OneTimeQuest/AchievementQuest/KillMonsterType/KillStarfishQuestData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - QuestData/Achievement
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3f8d7d82c32767442bd4e740f290ff49
     m_Address: RepeatGoldSpeningQuestData
     m_ReadOnly: 0
@@ -76,6 +82,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - QuestData/Repeat
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e485362e1f0324744bc48899bf6487e1
+    m_Address: Assets/Data/QuestData/OneTimeQuest/AchievementQuest/KillMonsterType/KillOctopusQuestData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - QuestData/Achievement
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5f1874fff1b70124d8333b18a2e9b4e8, type: 2}
