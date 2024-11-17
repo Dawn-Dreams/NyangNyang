@@ -16,7 +16,17 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 933ba2e0b1790284b882e1a5c632169e
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 1eadb22145895a145b97ec801fe45e1c
+    m_Address: Assets/AssetMenu/MonsterData/BossMonsterData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5f6763dd76fda9b4f940faaeb711085b
+    m_Address: Assets/AssetMenu/MonsterData/DungeonBossMonsterData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5f1874fff1b70124d8333b18a2e9b4e8, type: 2}
   m_SchemaSet:

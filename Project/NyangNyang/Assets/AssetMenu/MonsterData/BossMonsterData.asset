@@ -17,3 +17,6 @@ MonoBehaviour:
   monsterStatus:
     statusLevels: 02000000020000000200000002000000020000000200000002000000020000000200000002000000
   enemyDropData: {fileID: 11400000, guid: 7fb04559e37a5d3448b165ff059a3569, type: 2}
+  baseHP: 0
+  baseAttack: 0
+  baseDefense: 0
