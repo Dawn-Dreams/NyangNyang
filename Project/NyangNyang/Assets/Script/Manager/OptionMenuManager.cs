@@ -10,7 +10,6 @@ public class OptionMenuManager : MonoBehaviour
     public GameObject panelParentObject;    // 패널들을 담고 있는 부모 오브젝트
 
     public GameObject noticeTextPrefab;     // 공지 텍스트 프리팹
-    public GameObject rankUserButtonPrefab; // 랭킹 버튼 프리팹
     public GameObject boardButtonPrefab;    // 게시판 버튼 프리팹
     public GameObject mailButtonPrefab;     // 우편 버튼 프리팹
     public GameObject friendButtonPrefab;   // 친구 버튼 프리팹
@@ -86,18 +85,15 @@ public class OptionMenuManager : MonoBehaviour
                 OpenFriendsPanel();
                 break;
             case 2:
-                OpenRankingPanel();
-                break;
-            case 3:
                 OpenSettingsPanel();
                 break;
-            case 4:
+            case 3:
                 OpenNoticePanel();
                 break;
-            case 5:
+            case 4:
                 OpenBulletinBoardPanel();
                 break;
-            case 6:
+            case 5:
                 OpenCommunityPanel();
                 break;
             default:
@@ -142,39 +138,6 @@ public class OptionMenuManager : MonoBehaviour
         else
         {
             Debug.LogWarning("공지 데이터가 없습니다.");
-        }
-    }
-
-    // 랭킹
-    void OpenRankingPanel()
-    {
-        List<RankingData> rankList = DummyOptionsServer.GetRankingData();
-        GameObject contentObj = GameObject.Find("RankUI/Viewport/Content");
-
-        // 기존에 생성된 요소들을 모두 제거
-        foreach (Transform child in contentObj.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        if (rankList.Count > 0)
-        {
-            foreach (RankingData rankData in rankList)
-            {
-                GameObject rankUserButton = Instantiate(rankUserButtonPrefab, contentObj.transform);
-
-                TMP_Text rankNumberText = rankUserButton.transform.Find("RankNumber").GetComponent<TMP_Text>();
-                TMP_Text rankUserNameText = rankUserButton.transform.Find("RankUserName").GetComponent<TMP_Text>();
-                TMP_Text rankScoreText = rankUserButton.transform.Find("RankScore").GetComponent<TMP_Text>();
-
-                rankNumberText.text = (rankList.IndexOf(rankData) + 1).ToString();
-                rankUserNameText.text = rankData.userName;
-                rankScoreText.text = rankData.score.ToString();
-            }
-        }
-        else
-        {
-            Debug.LogWarning("랭킹 데이터가 없습니다.");
         }
     }
 
