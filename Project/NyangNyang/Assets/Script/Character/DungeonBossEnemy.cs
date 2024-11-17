@@ -64,14 +64,6 @@ public class DungeonBossEnemy : Enemy
 
         // 보스 데이터 로드
         BossMonsterData bossData = BossMonsterDataManager.GetBossDataByType(bossType);
-        if (bossData == null)
-        {
-            Debug.LogWarning("MonsterData could not be loaded. Using default values.");
-            bossData = ScriptableObject.CreateInstance<BossMonsterData>();
-            bossData.baseHP = 5000;       // 기본값 예시
-            bossData.baseAttack = 200;
-            bossData.baseDefense = 100;
-        }
 
         int hpMultiplier = dungeonLevel * 1000;   // 레벨에 따라 HP 증가
         int attackMultiplier = dungeonLevel * 50; // 레벨에 따라 공격력 증가
@@ -83,11 +75,7 @@ public class DungeonBossEnemy : Enemy
         status.defence = bossData.baseDefense + defenseMultiplier;   // 방어력 계산
 
         Debug.Log($"status.hp: {status.hp}, status.attackPower: {status.attackPower}, status.defence: {status.defence}");
-
-        // 더미 적 초기화
-        SetNumberOfEnemyInGroup(1);
-
-        Debug.Log("Boss initialized successfully.");
+        Debug.Log("Max HP : " + maxHP);
     }
 
 
