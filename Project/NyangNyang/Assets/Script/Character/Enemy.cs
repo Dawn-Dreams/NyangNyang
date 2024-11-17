@@ -8,6 +8,7 @@ using UnityEngine.Serialization;
 using UnityEngine.UI;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 using Quaternion = UnityEngine.Quaternion;
+using Random = UnityEngine.Random;
 using Transform = UnityEngine.Transform;
 using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
@@ -211,6 +212,12 @@ public class Enemy : Character
         // 적 개체는 최소 1마리에서 최대 5마리
         initialNumOfDummyEnemy = numOfEnemy = (int)Mathf.Clamp(numOfEnemy, 1.0f, dummyEnemyObj.Length);
 
+        // 더미 몬스터들의 타입을 설정
+        List<EnemyMonsterType> enemyMonsterTypes = SelectEnemyTypes(numOfEnemy, _monsterData.monsterTypes);
+        
+
+
+        // 더미 몬스터 생성
         BigInteger dummyMaxHp = BigInteger.Divide(maxHP, numOfEnemy);
         for (int i = 0; i < dummyEnemyObj.Length; ++i)
         {
@@ -218,7 +225,8 @@ public class Enemy : Character
             {
                 if (dummyEnemyObj[i] != null && sliders[i] != null)
                 {
-                    _dummyEnemies.Add(new DummyEnemy(dummyEnemyObj[i], sliders[i], _monsterData.monsterTypes[i], dummyMaxHp));
+                    //_dummyEnemies.Add(new DummyEnemy(dummyEnemyObj[i], sliders[i], _monsterData.monsterTypes[i], dummyMaxHp));
+                    _dummyEnemies.Add(new DummyEnemy(dummyEnemyObj[i], sliders[i], enemyMonsterTypes[i], dummyMaxHp));
                 }
                 else
                 {
@@ -234,6 +242,82 @@ public class Enemy : Character
 
         currentHP = maxHP = dummyMaxHp * numOfEnemy;
         ChangeHealthBar();
+    }
+
+    // 해당 적군의 몬스터 타입들을 구하는 함수
+    private List<EnemyMonsterType> SelectEnemyTypes(int numOfEnemy, List<EnemyMonsterType> monsterDataMonsterTypes)
+    {
+        /*
+           1. 최초 스테이지
+           - 정해진 형태로, AAA BB / AA BB C / D
+           2. 반복 스테이지
+           - 정해진 애들 안에서 확률에 의해 나오도록
+           ABCDE 내 50%/25%/12.5%/6.25%/3.125% / 남은 경우 A 로 해서
+           총 53.125% / 25% / 12.5% / 6.25% / 3.125% 가 되도록,
+         */
+
+        // 한마리 (보스의 경우)
+        if (numOfEnemy == 1)
+        {
+            return new List<EnemyMonsterType>() { monsterDataMonsterTypes[0] };
+        }
+
+        // 최초 스테이지일 경우
+        if (!Player.continuousCombat)
+        {
+            // 주어진 형태로,
+            if (stageManager.GetCurrentGate() == 0)
+            {
+                return new List<EnemyMonsterType>()
+                {
+                    monsterDataMonsterTypes[0], monsterDataMonsterTypes[0], monsterDataMonsterTypes[0],
+                    monsterDataMonsterTypes[1], monsterDataMonsterTypes[1]
+                };
+            }
+            else
+            {
+                return new List<EnemyMonsterType>()
+                {
+                    monsterDataMonsterTypes[0], monsterDataMonsterTypes[0], 
+                    monsterDataMonsterTypes[1], monsterDataMonsterTypes[1], monsterDataMonsterTypes[2]
+                };
+            }
+        }
+        // 반복 스테이지일 경우
+        else
+        {
+            List<EnemyMonsterType> types = new List<EnemyMonsterType>();
+            // 확률 구하기
+            List<int> enemyTypePercent = new List<int>();
+            int currentPercent = 0;
+            for (int i = 0; i < numOfEnemy; ++i)
+            {
+                int percent = (int)(100 / Mathf.Pow(2, i+1));
+                enemyTypePercent.Add(percent);
+                currentPercent += percent;
+            }
+            if (currentPercent < 100)
+            {
+                enemyTypePercent[0] += 100 - currentPercent;
+            }
+
+            // 적군 뽑기
+            for (int enemyIndex = 0; enemyIndex < numOfEnemy; ++enemyIndex)
+            {
+                int rand = Random.Range(1, 100);
+                for (int percentIndex = 0; percentIndex < enemyTypePercent.Count; ++percentIndex)
+                {
+                    if (rand > enemyTypePercent[percentIndex])
+                    {
+                        types.Add(monsterDataMonsterTypes[percentIndex]);
+                        //Debug.Log($"{enemyIndex} 번째 적은 -> {monsterDataMonsterTypes[percentIndex]} // {rand} 나오고 }");
+                        break;
+                    }
+                }
+            }
+
+            return types;
+        }
     }
 
     public void GoToCombatArea(Character enemyCat, Vector3 combatTransform)
