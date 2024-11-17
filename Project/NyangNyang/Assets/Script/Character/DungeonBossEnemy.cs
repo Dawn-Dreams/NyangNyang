@@ -35,6 +35,9 @@ public class DungeonBossEnemy : Enemy
         {
             Debug.LogWarning("DungeonBossEnemy 초기화: DummyObjectName을 찾을 수 없어 기본 설정으로 진행합니다.");
             dummyObject = new GameObject("DefaultDummyObject");
+            dummyObject.transform.SetParent(this.transform); // 보스 하위에 설정
+            dummyObject.transform.localPosition = UnityEngine.Vector3.zero; // 상대 위치를 (0,0,0)으로 설정
+
         }
 
         if (slider == null)
@@ -152,36 +155,34 @@ public class DungeonBossEnemy : Enemy
         base.Death();
     }
 }
-
 public static class BossMonsterDataManager
 {
-    private static Dictionary<BossType, BossMonsterData> bossDataDictionary = new Dictionary<BossType, BossMonsterData>
+    private static Dictionary<BossType, BossMonsterData> bossDataDictionary;
+
+    static BossMonsterDataManager()
     {
+        bossDataDictionary = new Dictionary<BossType, BossMonsterData>
         {
-            BossType.Scarecrow, new BossMonsterData
             {
-                baseHP = 10000,
-                baseAttack = 500,
-                baseDefense = 200
-            }
-        },
-        {
-            BossType.SkillOnly, new BossMonsterData
+                BossType.Scarecrow, CreateBossData(10000, 500, 200)
+            },
             {
-                baseHP = 8000,
-                baseAttack = 700,
-                baseDefense = 150
-            }
-        },
-        {
-            BossType.RoaringSkill, new BossMonsterData
+                BossType.SkillOnly, CreateBossData(8000, 700, 150)
+            },
             {
-                baseHP = 12000,
-                baseAttack = 400,
-                baseDefense = 300
+                BossType.RoaringSkill, CreateBossData(12000, 400, 300)
             }
-        }
-    };
+        };
+    }
+
+    private static BossMonsterData CreateBossData(int hp, int attack, int defense)
+    {
+        BossMonsterData data = ScriptableObject.CreateInstance<BossMonsterData>();
+        data.baseHP = hp;
+        data.baseAttack = attack;
+        data.baseDefense = defense;
+        return data;
+    }
 
     public static BossMonsterData GetBossDataByType(BossType type)
     {
@@ -190,6 +191,7 @@ public static class BossMonsterDataManager
             return data;
         }
 
+        Debug.LogError($"BossMonsterData for {type} not found.");
         return null;
     }
 }

@@ -30,20 +30,16 @@ public class DungeonManager : MonoBehaviour
 
     // 싱글톤 인스턴스
     public static DungeonManager Instance { get; private set; }
-
+   
     private void Awake()
     {
-        // 싱글톤 패턴 구현
-        if (Instance == null)
+        if (transform.parent != null)
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject); // 필요한 경우
+            // 부모가 있는 경우, 루트로 이동
+            transform.parent = null;
         }
-        else
-        {
-            Destroy(gameObject);
-            return; // 기존 인스턴스가 있으므로 초기화 코드 실행을 방지
-        }
+
+        DontDestroyOnLoad(gameObject);
 
         // DungeonUI >> Panel >> Dungeon 하위에서 Dungeon 패널들을 동적으로 찾음
         Transform panelTransform = DungeonUI.transform.Find("Panel");
