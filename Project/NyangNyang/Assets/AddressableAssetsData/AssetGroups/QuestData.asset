@@ -17,6 +17,12 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: d462310969d587e409c5ac580794028a
   m_SerializeEntries:
+  - m_GUID: 1578065f28141284eb926894f8266c6e
+    m_Address: Assets/Data/QuestData/OneTimeQuest/AchievementQuest/KillMonsterType/KillKrakeQuestData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - QuestData/Achievement
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 251b9a87bb1429a479697fee3d8a6d11
     m_Address: Assets/Data/QuestData/OneTimeQuest/AchievementQuest/KillMonsterType/KillStarfishQuestData.asset
     m_ReadOnly: 0
@@ -34,6 +40,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - QuestData/Daily
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7957c7a0545daa9478cffbc56abe3163
+    m_Address: Assets/Data/QuestData/OneTimeQuest/AchievementQuest/KillMonsterType/KillPuffeQuestData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - QuestData/Achievement
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 801750b17c96b654d9740ea053207e89
     m_Address: Assets/Data/QuestData/NormalQuest/ObtainSkillQuestData/Daily_ObtainSkillQuestData.asset
@@ -82,6 +94,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - QuestData/Repeat
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: df13577e08307b746ba1505aeaab58e8
+    m_Address: Assets/Data/QuestData/OneTimeQuest/AchievementQuest/KillMonsterType/KillShellfishQuestData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - QuestData/Achievement
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e485362e1f0324744bc48899bf6487e1
     m_Address: Assets/Data/QuestData/OneTimeQuest/AchievementQuest/KillMonsterType/KillOctopusQuestData.asset

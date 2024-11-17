@@ -217,7 +217,47 @@ public class DummyQuestServer : DummyServerData
                         }
                     }
                 }
+            },
+            // KillPuffe 퀘스트
+            {
+                QuestType.KillPuffe, new Dictionary<QuestCategory, Dictionary<int, BigInteger>>
+                {
+                    // 업적 퀘스트
+                    {
+                        QuestCategory.Achievement, new Dictionary<int, BigInteger>
+                        {
+                            {0, 990}
+                        }
+                    }
+                }
+            },
+            // KillKrake 퀘스트
+            {
+                QuestType.KillKrake, new Dictionary<QuestCategory, Dictionary<int, BigInteger>>
+                {
+                    // 업적 퀘스트
+                    {
+                        QuestCategory.Achievement, new Dictionary<int, BigInteger>
+                        {
+                            {0, 990}
+                        }
+                    }
+                }
+            },
+            // KillShellfish 퀘스트
+            {
+                QuestType.KillShellfish, new Dictionary<QuestCategory, Dictionary<int, BigInteger>>
+                {
+                    // 업적 퀘스트
+                    {
+                        QuestCategory.Achievement, new Dictionary<int, BigInteger>
+                        {
+                            {0, 990}
+                        }
+                    }
+                }
             }
+
         };
     // =========================
 
