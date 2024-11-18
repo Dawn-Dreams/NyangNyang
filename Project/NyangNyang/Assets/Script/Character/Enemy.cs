@@ -212,11 +212,10 @@ public class Enemy : Character
     {
         // 적 개체는 최소 1마리에서 최대 5마리
         initialNumOfDummyEnemy = numOfEnemy = (int)Mathf.Clamp(numOfEnemy, 1.0f, dummyEnemyObj.Length);
-
+        
+        
         // 더미 몬스터들의 타입을 설정
         _dummyEnemyMonsterTypes = SelectEnemyTypes(numOfEnemy, _monsterData.monsterTypes);
-        
-
 
         // 더미 몬스터 생성
         BigInteger dummyMaxHp = BigInteger.Divide(maxHP, numOfEnemy);
@@ -301,21 +300,30 @@ public class Enemy : Character
             {
                 enemyTypePercent[0] += 100 - currentPercent;
             }
-
             // 적군 뽑기
             for (int enemyIndex = 0; enemyIndex < numOfEnemy; ++enemyIndex)
             {
                 int rand = Random.Range(1, 100);
+                
                 for (int percentIndex = 0; percentIndex < enemyTypePercent.Count; ++percentIndex)
                 {
-                    if (rand > enemyTypePercent[percentIndex])
+                    // ex) 5종류 기준 54 / 25 / 12 / 6 / 3
+                    if (rand >= enemyTypePercent[percentIndex])
                     {
                         types.Add(monsterDataMonsterTypes[percentIndex]);
-                        //Debug.Log($"{enemyIndex} 번째 적은 -> {monsterDataMonsterTypes[percentIndex]} // {rand} 나오고 }");
                         break;
                     }
                 }
             }
+            
+            if (types.Count != numOfEnemy)
+            {
+                for (int count = types.Count; count < numOfEnemy; ++count)
+                {
+                    types.Add(monsterDataMonsterTypes[0]);
+                }
+            }
+            
 
             return types;
         }
