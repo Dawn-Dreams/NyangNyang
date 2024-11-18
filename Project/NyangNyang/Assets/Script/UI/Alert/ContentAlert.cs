@@ -13,6 +13,7 @@ public class ContentAlert : MonoBehaviour
 {
     private Dictionary<AlertState, AddressableHandle<GameObject>> _alertIcons = new Dictionary<AlertState, AddressableHandle<GameObject>>();
     private Image _targetImage;
+    private Button _targetButton;
 
     private AlertState _currentAlertState = AlertState.Null;
     private GameObject _alertIconObj = null;
@@ -26,6 +27,7 @@ public class ContentAlert : MonoBehaviour
         if (tempButton != null)
         {
             _targetImage = tempButton.image;
+            _targetButton = tempButton;
         }
         else
         {
@@ -49,14 +51,16 @@ public class ContentAlert : MonoBehaviour
             _currentAlertState = newState;
         }
 
-        _alertIconObj = Instantiate(_alertIcons[_currentAlertState].obj, transform);
-        if (_currentAlertState == AlertState.Locked)
+        if (_alertIcons.ContainsKey(newState))
         {
-            _targetImage.color = new Color(0.5f, 0.5f, 0.5f);
+            _alertIconObj = Instantiate(_alertIcons[_currentAlertState].obj, transform);
         }
-        else
+        
+        _targetImage.color = _currentAlertState == AlertState.Locked ? new Color(0.5f, 0.5f, 0.5f, 1.0f) : new Color(1,1,1, 1.0f);
+
+        if (_targetButton != null)
         {
-            _targetImage.color = new Color(1,1,1);
+            _targetButton.interactable = _currentAlertState != AlertState.Locked;
         }
     }
 

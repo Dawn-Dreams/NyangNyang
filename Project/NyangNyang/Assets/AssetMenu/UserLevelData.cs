@@ -49,6 +49,11 @@ public class UserLevelData : ScriptableObject
             //GameObject.Find("Manager").GetComponent<Player>().ShowLevelUpIcon();
             // 09.28 폴더 정리 이후 Manager 위치 이동 후 수정 필요
         }
+
+        if (OnExpChange != null)
+        {
+            OnExpChange(this);
+        }
     }
 
     public UserLevelData SetUserLevelData(int getCurrentLevel, BigInteger getExp = default(BigInteger))
