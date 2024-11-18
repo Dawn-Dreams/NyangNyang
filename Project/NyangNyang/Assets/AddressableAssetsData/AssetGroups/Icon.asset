@@ -17,6 +17,16 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: f5621916dba42d94b99f8f962f34da57
   m_SerializeEntries:
+  - m_GUID: 5561d77395d645c48a76da88c40749c6
+    m_Address: Alert/Locked
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8475480bb1cbf6045ab0259759ee172a
+    m_Address: Alert/RedDot
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9a8a247ba0dca4d02b349891f034076c
     m_Address: Assets/MyAsset/CuteKawaiiGUIPack/Demo/Sprites/Common/Icons/Checkmark.png
     m_ReadOnly: 0
