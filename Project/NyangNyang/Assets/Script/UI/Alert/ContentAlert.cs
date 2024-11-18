@@ -64,4 +64,8 @@ public class ContentAlert : MonoBehaviour
         }
     }
 
+    public AlertState GetCurrentAlertState()
+    {
+        return _currentAlertState;
+    }
 }

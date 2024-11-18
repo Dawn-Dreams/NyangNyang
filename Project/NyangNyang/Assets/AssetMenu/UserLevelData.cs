@@ -46,8 +46,7 @@ public class UserLevelData : ScriptableObject
         // TODO: 임시 레벨업 아이콘 코드
         if (levelUpCount > 0)
         {
-            //GameObject.Find("Manager").GetComponent<Player>().ShowLevelUpIcon();
-            // 09.28 폴더 정리 이후 Manager 위치 이동 후 수정 필요
+            PlayerLevelUpUI.GetInstance().gameObject.SetActive(true);
         }
 
         if (OnExpChange != null)
