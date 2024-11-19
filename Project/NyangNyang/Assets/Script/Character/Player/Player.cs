@@ -22,6 +22,33 @@ public class Player : MonoBehaviour
         get => playerCurrency.diamond;
         set => playerCurrency.SetDiamond(value);
     }
+    
+    public static int Cheese
+    {
+        get => playerCurrency.cheese;
+        set => playerCurrency.SetCheese(value);
+    }
+
+    // 인덱스를 자주 업데이트하거나 읽을 일이 많다면 별도 프로퍼티로 관리하는 방식이 나음
+    public static int Ticket1
+    {
+        get => playerCurrency.ticket[0];
+        set => playerCurrency.ticket[0] = value;
+    }
+
+    public static int Ticket2
+    {
+        get => playerCurrency.ticket[1];
+        set => playerCurrency.ticket[1] = value;
+    }
+
+    public static int Ticket3
+    {
+        get => playerCurrency.ticket[2];
+        set => playerCurrency.ticket[2] = value;
+    }
+
+
     // ========================
     // ===== 플레이어 경험치 =====
     private static UserLevelData playerLevelData;
