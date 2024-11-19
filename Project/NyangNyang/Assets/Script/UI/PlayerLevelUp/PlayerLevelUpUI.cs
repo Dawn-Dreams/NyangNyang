@@ -68,7 +68,7 @@ public class PlayerLevelUpUI : MonoBehaviour
         for (int i = 0; i < childCount; ++i)
         {
             GameObject obj = grid.transform.GetChild(0).gameObject;
-            obj.transform.parent = iconObjectPool.transform;
+            obj.transform.SetParent(iconObjectPool.transform);
             newContentIconPool.Add(obj);
         }
         gameObject.SetActive(false);
