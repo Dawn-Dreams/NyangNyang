@@ -1103,7 +1103,6 @@ GameObject:
   - component: {fileID: 735589652}
   - component: {fileID: 735589651}
   - component: {fileID: 735589650}
-  - component: {fileID: 735589653}
   m_Layer: 5
   m_Name: ExitButton
   m_TagString: Untagged
@@ -1128,8 +1127,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 251, y: 747}
-  m_SizeDelta: {x: 160, y: 170.313}
+  m_AnchoredPosition: {x: 278, y: 736}
+  m_SizeDelta: {x: 124.621, y: 117.2444}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &735589650
 MonoBehaviour:
@@ -1174,7 +1173,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 735589651}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1633305412}
+        m_TargetAssemblyTypeName: MiniGame1, Assembly-CSharp
+        m_MethodName: EndGame1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &735589651
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1213,19 +1224,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 735589648}
   m_CullTransparentMesh: 1
---- !u!114 &735589653
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 735589648}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4ed37529b4c1be41ba2fd7574de3418, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  deleteButton: {fileID: 735589650}
 --- !u!1 &739064143
 GameObject:
   m_ObjectHideFlags: 0
@@ -1943,50 +1941,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1286633816}
   m_CullTransparentMesh: 1
---- !u!1 &1328707440
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1328707442}
-  - component: {fileID: 1328707441}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1328707441
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1328707440}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d6fbb669ee8bf74aa669e0afec73966, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1328707442
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1328707440}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.9562085, y: -6.791183, z: 6.038967}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1397596581
 GameObject:
   m_ObjectHideFlags: 0
@@ -2684,6 +2638,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a91fc735a0423045a066d2efeee79d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bgmSource: {fileID: 8300000, guid: 4b79a33dd2ccff240a76a000b3b2e5ca, type: 3}
   gridSizeX: 7
   gridSizeY: 8
   tilePrefab: {fileID: 7738798599913100365, guid: 446de69a475041146b5921dce5760b9d, type: 3}
@@ -2699,7 +2654,6 @@ MonoBehaviour:
   matchCount: 3
   slideDuration: 0.3
   gameTime: 60
-  score: 0
   timerSlider: {fileID: 440562087}
   scoreText: {fileID: 821834220}
   countdownText: {fileID: 1667001299}
@@ -3233,4 +3187,3 @@ SceneRoots:
   - {fileID: 1949588198}
   - {fileID: 1457763674}
   - {fileID: 839698361}
-  - {fileID: 1328707442}

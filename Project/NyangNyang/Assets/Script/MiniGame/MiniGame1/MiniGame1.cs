@@ -26,7 +26,6 @@ public class MiniGame1 : MiniGameBase
 
     public float gameTime = 60.0f; // 기본 60초 제한시간
     private float tempTimer = 0.0f; // 현재 시간
-    public int score = 0;  // 점수 -> 추후 재화와 비례 하도록
     private int scorePerTile = 10; // 타일 하나 당 점수
 
     public Slider timerSlider;
@@ -50,7 +49,7 @@ public class MiniGame1 : MiniGameBase
 
     private void Start()
     {
-        base.Initialize("MiniGame1", 0);
+        base.Initialize("MiniGame1", 0,0);
         StartCoroutine(CountdownAndStartGame());
     }
 
@@ -389,8 +388,8 @@ public class MiniGame1 : MiniGameBase
                 grid[tile.x, tile.y] = null;  // 그리드에서 타일 제거
             }
         }
-        score += matchedTiles.Count * scorePerTile; // 삭제된 타일 개수 당 점수 추가
-        scoreText.text = "Score: " + score;
+        Score += matchedTiles.Count * scorePerTile; // 삭제된 타일 개수 당 점수 추가
+        scoreText.text = "Score: " + Score;
 
         StartCoroutine(WaitAndDropTiles()); // 애니메이션과 드롭 로직 시작
         matchedTiles.Clear();
@@ -482,5 +481,9 @@ public class MiniGame1 : MiniGameBase
         CheckAndRemoveMatches(); // 매칭 체크
 
         yield return new WaitForSeconds(0.1f);
+    }
+
+    public void EndGame1() {
+        base.EndGame();
     }
 }

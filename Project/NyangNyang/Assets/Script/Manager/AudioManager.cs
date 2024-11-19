@@ -7,6 +7,7 @@ public class AudioManager : MonoBehaviour
     public AudioSource bgmSource;
     public AudioSource miniGamebgmSource;
     public AudioSource sfxSource;
+    public AudioClip[] clips;
 
     public float bgmVolume
     {
@@ -50,7 +51,18 @@ public class AudioManager : MonoBehaviour
         sfxSource.volume = sfxVolume;
     }
 
-    public void PlayMainBGM(AudioClip clip)
+    public void PlayMainBGM()
+    {
+        if (bgmSource.clip != clips[0])
+        {
+            bgmSource.clip = clips[0];
+            bgmSource.Play();
+        }
+
+    }
+
+    // 외부에서 재생할 때
+    public void PlayBGM(AudioClip clip)
     {
         if (bgmSource.clip != clip)
         {
@@ -58,18 +70,19 @@ public class AudioManager : MonoBehaviour
             bgmSource.Play();
         }
     }
-    public void PauseMainBGM()
+
+    public void PauseBGM()
     {
         bgmSource.Pause();
     }
-    public void ResumeMainBGM()
+    public void ResumeBGM()
     {
         bgmSource.Play();
     }
 
-    public void PlayMiniGameBGM(AudioClip clip)
+    public void PlayMiniGameBGM()
     {
-        miniGamebgmSource.clip = clip;
+        miniGamebgmSource.clip = clips[1];
         miniGamebgmSource.Play();
     }
 

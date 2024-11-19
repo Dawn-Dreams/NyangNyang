@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,7 +22,6 @@ public class SceneChangeButton : MonoBehaviour
 
     void ChangeScene()
     {
-        Debug.Log("??");
         SceneManager.LoadScene(sceneName);
     }
 }
