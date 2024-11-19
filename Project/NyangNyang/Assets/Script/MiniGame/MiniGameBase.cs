@@ -36,6 +36,7 @@ public abstract class MiniGameBase : MonoBehaviour
         Score = initialScore;
         AudioManager.Instance.PauseBGM();
         AudioManager.Instance.PlayMiniGameBGM();
+        baseReward = 100;
         //DisableMainSceneEventSystem();  // 원래 씬의 EventSystem 비활성화
     }
 
