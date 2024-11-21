@@ -40,7 +40,7 @@ public class BaseStoryQuest : BaseQuest
 
     public void LoadCurrentQuest()
     {
-        List<QuestDataBase> storyQuestData = QuestDataManager.GetInstance().questDataList[(int)QuestCategory.Story];
+        List<QuestDataBase> storyQuestData = QuestDataManager.GetInstance().questDataList[(int)QuestCategory.Story].objs;
         if (_currentQuestID >= storyQuestData.Count)
         {
             gameObject.SetActive(false);

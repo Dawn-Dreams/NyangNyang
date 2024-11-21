@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
+using static CurrencyData;
 
 [CreateAssetMenu(fileName = "CurrencyData", menuName = "ScriptableObjects/CurrencyData", order = 1)]
 public class CurrencyData : ScriptableObject
 {
     public BigInteger gold;
     public int diamond;
+    public int cheese;
     public int[] ticket = {0,0,0};
 
     // 골드 변화 델리게이트 이벤트
@@ -20,11 +22,16 @@ public class CurrencyData : ScriptableObject
     // 다이아 변화 델리게이트 이벤트
     public delegate void OnDiamondChangeDelegate(int newDiamondValue);
     public event OnDiamondChangeDelegate OnDiamondChange;
+    
+    // 치즈 변화 델리게이트 이벤트
+    public delegate void OnCheeseChangeDelegate(int newCheeseValue);
+    public event OnCheeseChangeDelegate OnCheeseChange;
 
-    public CurrencyData SetCurrencyData(BigInteger getGold, int getDiamond, int[] getTicket)
+    public CurrencyData SetCurrencyData(BigInteger getGold, int getDiamond, int getCheese, int[] getTicket)
     {
         gold = getGold;
         diamond = getDiamond;
+        cheese = getCheese;
         ticket = (int[])getTicket.Clone();
         return this;
     }
@@ -33,6 +40,7 @@ public class CurrencyData : ScriptableObject
     {
         gold = otherData.gold;
         diamond = otherData.diamond;
+        cheese = otherData.cheese;
         ticket = otherData.ticket; 
         return this;
     }
@@ -62,6 +70,15 @@ public class CurrencyData : ScriptableObject
         if (OnDiamondChange != null)
         {
             OnDiamondChange(newDiamond);
+        }
+    }
+
+     public void SetCheese(int newCheese)
+    {
+        cheese = newCheese;
+        if (OnCheeseChange != null)
+        {
+            OnCheeseChange(newCheese);
         }
     }
 

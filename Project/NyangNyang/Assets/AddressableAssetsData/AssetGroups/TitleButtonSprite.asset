@@ -18,25 +18,25 @@ MonoBehaviour:
   m_GUID: a4063e5c641a1c243a6faee274706555
   m_SerializeEntries:
   - m_GUID: 6e325d085339a458ab28d7ba62fa1c87
-    m_Address: Assets/MyAsset/CuteKawaiiGUIPack/Icons/Icons/Trophies-Badges/Squircle--Green-256.png
+    m_Address: Squircle--Green-256
     m_ReadOnly: 0
     m_SerializedLabels:
     - Sprite/Button/Owning
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 766fe9a9da08c49318d8b4efeb70fc0e
-    m_Address: Assets/MyAsset/CuteKawaiiGUIPack/Icons/Icons/Trophies-Badges/Squircle-Purple-256.png
+    m_Address: Squircle-Purple-256
     m_ReadOnly: 0
     m_SerializedLabels:
     - Sprite/Button/CurrentPreview
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 83842b40cc43d48ffaeca5ef7da46789
-    m_Address: Assets/MyAsset/CuteKawaiiGUIPack/Icons/Icons/Trophies-Badges/Squircle--Blue-256.png
+    m_Address: Squircle--Blue-256
     m_ReadOnly: 0
     m_SerializedLabels:
     - Sprite/Button/CurrentSelect
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cd146a721efb14e1891b24d83f67b045
-    m_Address: Assets/MyAsset/CuteKawaiiGUIPack/Icons/Icons/Trophies-Badges/Squircle-Gray-256.png
+    m_Address: Squircle-Gray-256
     m_ReadOnly: 0
     m_SerializedLabels:
     - Sprite/Button/NotOwning

@@ -9,6 +9,8 @@ public class Costume : MonoBehaviour
     [SerializeField] private Transform catHeadTransform;
     [SerializeField] private Transform catBodyTransform;
     [SerializeField] private Transform catHandRTransform;
+    [SerializeField] private Transform petSocketTransform;
+
     private Dictionary<CatCostumePart, Transform> _catCostumeTransforms = new Dictionary<CatCostumePart, Transform>
     {
         { CatCostumePart.Head , null},
@@ -22,7 +24,8 @@ public class Costume : MonoBehaviour
         { CatCostumePart.Head, (int)(HeadCostumeType.NotEquip)  },
         { CatCostumePart.Body, (int)(BodyCostumeType.NotEquip)  },
         { CatCostumePart.Hand_R, (int)(HandRCostumeType.NotEquip) },
-        {CatCostumePart.FurSkin, (int) (CatFurSkin.Cheese)}
+        {CatCostumePart.FurSkin, (int) (CatFurSkin.Cheese)},
+        {CatCostumePart.Pet, (int)(EnemyMonsterType.Null)}
     };
     // 해당 파츠의 코스튬 GameObject
     private Dictionary<CatCostumePart, GameObject> _currentCatCostumeGameObjects = new Dictionary<CatCostumePart, GameObject>
@@ -72,6 +75,16 @@ public class Costume : MonoBehaviour
             ChangeCatFurSkin((CatFurSkin)costumeType);
             return;
         }
+        // 펫에 대해서는 펫 매니져에서 적용
+        if (part == CatCostumePart.Pet)
+        {
+            if (PetManager.GetInstance() && PetManager.GetInstance().playerPet)
+            {
+                PetManager.GetInstance().playerPet.SetPetType((EnemyMonsterType)costumeType);
+            }
+            return;
+        }
+
 
         // 현재 착용중인 코스튬은 삭제
         if (_currentCatCostumeGameObjects[part] != null)

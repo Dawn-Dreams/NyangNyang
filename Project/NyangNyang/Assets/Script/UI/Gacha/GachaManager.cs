@@ -1,3 +1,4 @@
+using Ricimi;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,6 @@ using UnityEngine.UI;
 
 public class GachaManager : MonoBehaviour
 {
-
     enum type { weapon, skill, none };
 
     [SerializeField]
@@ -15,14 +15,18 @@ public class GachaManager : MonoBehaviour
     private GameObject ProbabilityPanel;
 
     [SerializeField]
-    private GameObject BeforePanel;
+    private GameObject SkillBeforePanel;
 
     [SerializeField]
-    private GameObject AfterPanel;
+    private GameObject SkillAfterPanel;
 
-    GameObject board;
-    float rotationSpeed = 360f;
-    bool isRotate = false;
+    [SerializeField]
+    private GameObject wheel;
+
+    // This animation curve drives the spin wheel motion.
+    public AnimationCurve AnimationCurve;
+
+    private bool m_spinning = false;
 
     type curType = type.none;
     int weaponGachaLevel = 1;
@@ -37,9 +41,16 @@ public class GachaManager : MonoBehaviour
 
     private void Start()
     {
-        board = BeforePanel.transform.Find("Board").gameObject;
-        GachaLevelTxt = ProbabilityPanel.transform.Find("Level").GetComponent<Text>();
+       // GachaLevelTxt = ProbabilityPanel.transform.Find("Level").GetComponent<Text>();
         // TODO: ¼­¹ö¿¡¼­ »Ì±â ·¹º§ ¹Þ¾Æ¿À±â
+    }
+
+    private void OnEnable()
+    {
+        Debug.Log("dd");
+
+        SkillBeforePanel.SetActive(true);
+        SkillAfterPanel.SetActive(false);
     }
 
     public void OnClickedWeaponProbButton()
@@ -102,8 +113,8 @@ public class GachaManager : MonoBehaviour
         if ( curType != type.none)
         {
             curType = type.none;
-            BeforePanel.SetActive(false);
-            AfterPanel.SetActive(false);
+            //BeforePanel.SetActive(false);
+            //AfterPanel.SetActive(false);
             GachaDetailPanel.SetActive(false);
         }
     }
@@ -111,62 +122,61 @@ public class GachaManager : MonoBehaviour
     public void OnClickedDrawButton()
     {
         // ÇÏ³ª¸¸ »Ì±â
-        if (!isRotate && Player.Gold >= cost)
+        if (Player.Gold >= cost)
         {
-            BeforePanel.SetActive(true);
-            AfterPanel.SetActive(false);
+            SkillBeforePanel.SetActive(true);
+            SkillAfterPanel.SetActive(false);
+
+            Spin();
+
             Player.Gold -= cost;
-            StartCoroutine(RotateOverTime(1f, 1));
-            isRotate = true;
         }
     }
 
     public void OnClickedDrawAllButton()
     {
         // ÀÏ°ý »Ì±â
-        if (!isRotate && Player.Gold >= cost * 10)
+        if (Player.Gold >= cost * 10)
         {
-            BeforePanel.SetActive(true);
-            AfterPanel.SetActive(false);
+            //BeforePanel.SetActive(true);
+            //AfterPanel.SetActive(false);
             Player.Gold -= cost * 10;
-            StartCoroutine(RotateOverTime(1f, 10));
-            isRotate = true;
         }
     }
 
-    IEnumerator RotateOverTime(float duration, int n)
+    public void Spin()
     {
-        float elapsedTime = 0f;
+        if (!m_spinning)
+            StartCoroutine(DoSpin());
+    }
 
-        while (elapsedTime < duration)
-        {
-            board.transform.Rotate(-Vector3.forward * rotationSpeed * Time.deltaTime * 2);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-        board.transform.rotation = Quaternion.identity;
+    private IEnumerator DoSpin()
+    {
+
+        m_spinning = true;
 
         yield return new WaitForSeconds(1f);
 
-        isRotate = false;
-        BeforePanel.SetActive(false);
-        AfterPanel.SetActive(true);
+        var timer = 0.0f;
+        var startAngle = wheel.transform.eulerAngles.z;
 
-        if (n == 1 && curType == type.weapon)
+        var time = 3.0f;
+        var maxAngle = 360.0f;
+
+        while (timer < time)
         {
-            AfterPanel.GetComponent<PickUpWeapon>().ShowPickUpWeapon();
+            var angle = AnimationCurve.Evaluate(timer / time) * maxAngle;
+            wheel.transform.eulerAngles = new Vector3(0.0f, 0.0f, angle + startAngle);
+            timer += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
         }
-        else if ( n != 1 && curType == type.weapon)
-        {
-            AfterPanel.GetComponent<PickUpWeapon>().ShowPickUpWeapons();
-        }
-        else if ( n == 1 && curType == type.skill)
-        {
-            AfterPanel.GetComponent<PickUpSkill>().ShowPickUpSkill();
-        }
-        else
-        {
-            AfterPanel.GetComponent<PickUpSkill>().ShowPickUpSkills();
-        }
+
+        wheel.transform.eulerAngles = new Vector3(0.0f, 0.0f, maxAngle + startAngle);
+        m_spinning = false;
+
+        yield return new WaitForSeconds(1f);
+
+        SkillBeforePanel.SetActive(false);
+        SkillAfterPanel.SetActive(true);
     }
 }

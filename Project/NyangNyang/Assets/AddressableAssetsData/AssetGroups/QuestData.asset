@@ -1,0 +1,115 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: QuestData
+  m_EditorClassIdentifier: 
+  m_GroupName: QuestData
+  m_Data:
+    m_SerializedData: []
+  m_GUID: d462310969d587e409c5ac580794028a
+  m_SerializeEntries:
+  - m_GUID: 1578065f28141284eb926894f8266c6e
+    m_Address: Assets/Data/QuestData/OneTimeQuest/AchievementQuest/KillMonsterType/KillKrakeQuestData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - QuestData/Achievement
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 251b9a87bb1429a479697fee3d8a6d11
+    m_Address: Assets/Data/QuestData/OneTimeQuest/AchievementQuest/KillMonsterType/KillStarfishQuestData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - QuestData/Achievement
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3f8d7d82c32767442bd4e740f290ff49
+    m_Address: RepeatGoldSpeningQuestData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - QuestData/Repeat
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 65428c9c2541b094fa9642523dd9ec77
+    m_Address: DailyGoldSpeningQuestData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - QuestData/Daily
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7957c7a0545daa9478cffbc56abe3163
+    m_Address: Assets/Data/QuestData/OneTimeQuest/AchievementQuest/KillMonsterType/KillPuffeQuestData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - QuestData/Achievement
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 801750b17c96b654d9740ea053207e89
+    m_Address: Assets/Data/QuestData/NormalQuest/ObtainSkillQuestData/Daily_ObtainSkillQuestData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - QuestData/Daily
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8f12fcab0a54bad4d96fadb5f402e5b3
+    m_Address: Assets/Data/QuestData/NormalQuest/CombineWeaponQuestData/Daily_CombineWeaponQuestData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - QuestData/Daily
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9ae3b8551ae631140916a92a5eec494f
+    m_Address: WeeklyKillMonsterQuestData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - QuestData/Weekly
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a60dfbfff52e25c42b07c729ab7df1d5
+    m_Address: DailyKillMonsterQuestData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - QuestData/Daily
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: baf67e34e401cae4d84e876409f285f7
+    m_Address: FirstTimeQuestData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - QuestData/Achievement
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c45299d0b008b78448ae3ec6e316b5e6
+    m_Address: Assets/Data/QuestData/NormalQuest/ObtainWeaponQuestData/Normal_ObtainWeaponQuestData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - QuestData/Daily
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c96c4f1fb92fa244fa900b882f7ddf9e
+    m_Address: RepeatKillMonsterQuestData
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - QuestData/Repeat
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d0ba41a337ba0c24ca9a2f224e15cd61
+    m_Address: Assets/Data/QuestData/NormalQuest/SkillLevelUpQuestData/Repeat_SkillLevelUpQuestData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - QuestData/Repeat
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: df13577e08307b746ba1505aeaab58e8
+    m_Address: Assets/Data/QuestData/OneTimeQuest/AchievementQuest/KillMonsterType/KillShellfishQuestData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - QuestData/Achievement
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e485362e1f0324744bc48899bf6487e1
+    m_Address: Assets/Data/QuestData/OneTimeQuest/AchievementQuest/KillMonsterType/KillOctopusQuestData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - QuestData/Achievement
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 5f1874fff1b70124d8333b18a2e9b4e8, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 092ec6447e332d249bc8f30fa5855fa0, type: 2}
+    - {fileID: 11400000, guid: 79cabce54190ff74f9d130fc9d61521c, type: 2}

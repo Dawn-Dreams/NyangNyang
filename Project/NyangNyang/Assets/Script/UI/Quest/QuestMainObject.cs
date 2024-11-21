@@ -27,7 +27,7 @@ public class QuestMainObject : MonoBehaviour
     {
         for (int i = 0; i < questListRectTransforms.Count; ++i)
         {
-            foreach (QuestDataBase questData in QuestDataManager.GetInstance().questDataList[i])
+            foreach (QuestDataBase questData in QuestDataManager.GetInstance().questDataList[i].objs)
             {
                 BaseQuest questPanel = Instantiate(questPanelPrefab, questListContentTransforms[i]);
                 questPanel.LoadQuest(questData);

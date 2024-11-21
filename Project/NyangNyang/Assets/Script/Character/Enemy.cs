@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
@@ -7,7 +8,9 @@ using UnityEngine.Serialization;
 using UnityEngine.UI;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 using Quaternion = UnityEngine.Quaternion;
+using Random = UnityEngine.Random;
 using Transform = UnityEngine.Transform;
+using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
 public enum EnemyMonsterType
@@ -36,11 +39,17 @@ public class DummyEnemy
     public EnemyMonsterType monsterType;
 
     private AddressableHandle<GameObject> _enemyMonsterPrefab;
-
+    private Slider _slider;
     
-    public DummyEnemy(GameObject dummyObject, EnemyMonsterType type, BigInteger maxHP)
+    public DummyEnemy(GameObject dummyObject, Slider slider, EnemyMonsterType type, BigInteger maxHP)
     {
+        if (dummyObject == null || slider == null)
+        {
+            Debug.LogError("DummyEnemy: Null argument in constructor");
+        }
         this.dummyGameObject = dummyObject;
+
+        _slider = slider;
 
         monsterType = type;
 
@@ -69,14 +78,9 @@ public class DummyEnemy
         }
         currentHP = currentHP - getDamage;
 
+        // TODO: 나중에 지우기
         hpText.text = currentHP + " / " + maxHP;
-
-        // 피격 애니메이션
-        if (animationManager)
-        {
-            animationManager.PlayAnimation(AnimationManager.AnimationState.Damage);
-        }
-        
+        _slider.value = MyBigIntegerMath.DivideToFloat(currentHP, maxHP, 5);
 
         // 대미지 출력
         // TODO 오브젝트 풀링 방식으로 바꾸기
@@ -95,11 +99,7 @@ public class DummyEnemy
 
     public void DestroyDummyEnemy()
     {
-        // TODO : 임시 사망 코드 추후 애니메이션으로 변경 및 ...
-        if (animationManager)
-        {
-            animationManager.PlayAnimation(AnimationManager.AnimationState.DieA);
-        }
+        EnemyPlayAnimation(AnimationManager.AnimationState.DieA);
         
         //dummyGameObject.GetComponent<SpriteRenderer>().color = new Color(0.25f, 0.25f, 0.25f);
         hpText.gameObject.SetActive(false);
@@ -112,6 +112,34 @@ public class DummyEnemy
             floatingDamage = getFloatingDamage;
         }
     }
+
+    public void EnemyPlayAnimation(AnimationManager.AnimationState state)
+    {
+        animationManager.PlayAnimation(state);
+    }
+
+    public void EnemyArriveAtCombatArea()
+    {
+        EnemyPlayAnimation(AnimationManager.AnimationState.IdleA);
+        _slider.gameObject.SetActive(true);
+        if (Camera.main != null)
+        {
+            Vector3 point = Camera.main.WorldToScreenPoint(dummyGameObject.transform.position);
+            point.z = 0.0f;
+            _slider.gameObject.GetComponent<RectTransform>().anchoredPosition3D = point;
+        }
+        
+        _slider.value = 1f;
+    }
+
+    public void Initialize(Slider slider, EnemyMonsterType type, BigInteger maxHP)
+    {
+        this._slider = slider;
+        this.monsterType = type;
+        this.maxHP = maxHP;
+
+        Debug.Log($"DummyEnemy initialized: Type = {type}, Max HP = {maxHP}");
+    }
 }
 
 public class Enemy : Character
@@ -121,8 +149,9 @@ public class Enemy : Character
 
     [SerializeField] private GameObject[] dummyEnemyObj;
     private List<DummyEnemy> _dummyEnemies;
+    private List<EnemyMonsterType> _dummyEnemyMonsterTypes;
 
-    private int initialNumOfDummyEnemy = 0;
+    public int initialNumOfDummyEnemy = 0;
 
     // 전투 위치와 관련된 변수들
     private Vector3 spawnPosition;
@@ -133,14 +162,25 @@ public class Enemy : Character
     private Character catObject;
 
     // 몬스터 정보에 대한 변수
-    public MonsterData monsterData;
+    public MonsterData monsterDataTemplate;
+    private MonsterData _monsterData;
+
+    // 몬스터들의 체력을 나타내는 Slider
+    [SerializeField] private List<Slider> sliders;
 
     protected override void Awake()
     {
+        sliders = EnemySpawnManager.GetInstance().enemyHealthSliders;
+
         // stage manager 
         if (stageManager == null)
         {
             stageManager = GameManager.GetInstance().stageManager;
+        }
+
+        foreach (var slider in sliders)
+        {
+            slider.gameObject.SetActive(false);
         }
 
         DummyEnemy.SetFloatingDamage(floatingDamage);
@@ -150,18 +190,16 @@ public class Enemy : Character
         characterID = 0;
         IsEnemy = true;
 
-        // --몬스터 정보 받기 (임시 코드 & 서버에서 미리 받아서 적용될 수 있도록 or SpawnerManager 에서 할 수 있도록 )--
-        // TODO : 10/30. 몬스터 정보 클라에서 관리
+        _monsterData = ScriptableObject.CreateInstance<MonsterData>().SetMonsterDataFromOther(monsterDataTemplate);
         int currentTheme= GameManager.GetInstance().stageManager.GetCurrentTheme();
         int currentStage = GameManager.GetInstance().stageManager.GetCurrentStage();
-        int currentGate = GameManager.GetInstance().stageManager.GetCurrentGate();
-        int maxGate = GameManager.GetInstance().stageManager.maxGateCount;
-
-        status = new Status(monsterData.monsterStatus);
+        int maxStage = GameManager.GetInstance().stageManager.maxStageCount;
+        _monsterData.InitializeMonsterStatus(currentTheme,currentStage, maxStage);
+        status = new Status(_monsterData.monsterStatus);
 
         base.Awake();
         
-        SetNumberOfEnemyInGroup(monsterData.enemyCount);
+        SetNumberOfEnemyInGroup(_monsterData.enemyCount);
 
         // ~~enemy drop data 받기~~  몬스터 정보 받기에서 진행
         //if (DropData == null)
@@ -172,30 +210,123 @@ public class Enemy : Character
 
     public void SetNumberOfEnemyInGroup(int numOfEnemy = 1)
     {
-        if (numOfEnemy == 0)
-        {
-            numOfEnemy = 1;
-        }
-
         // 적 개체는 최소 1마리에서 최대 5마리
         initialNumOfDummyEnemy = numOfEnemy = (int)Mathf.Clamp(numOfEnemy, 1.0f, dummyEnemyObj.Length);
+        
+        
+        // 더미 몬스터들의 타입을 설정
+        _dummyEnemyMonsterTypes = SelectEnemyTypes(numOfEnemy, _monsterData.monsterTypes);
 
+        // 더미 몬스터 생성
         BigInteger dummyMaxHp = BigInteger.Divide(maxHP, numOfEnemy);
         for (int i = 0; i < dummyEnemyObj.Length; ++i)
         {
-            // active dummy enemy
             if (i < numOfEnemy)
             {
-                _dummyEnemies.Add(new DummyEnemy(dummyEnemyObj[i], monsterData.monsterTypes[i], dummyMaxHp));
+                if (dummyEnemyObj[i] != null && sliders[i] != null)
+                {
+                    //_dummyEnemies.Add(new DummyEnemy(dummyEnemyObj[i], sliders[i], _monsterData.monsterTypes[i], dummyMaxHp));
+                    _dummyEnemies.Add(new DummyEnemy(dummyEnemyObj[i], sliders[i], _dummyEnemyMonsterTypes[i], dummyMaxHp));
+                }
+                else
+                {
+                    Debug.LogError($"dummyObject 또는 slider가 null입니다: Index {i}");
+                }
             }
             else
             {
                 dummyEnemyObj[i].SetActive(false);
+                sliders[i].gameObject.SetActive(false);
             }
         }
 
         currentHP = maxHP = dummyMaxHp * numOfEnemy;
         ChangeHealthBar();
+    }
+
+    // 해당 적군의 몬스터 타입들을 구하는 함수
+    private List<EnemyMonsterType> SelectEnemyTypes(int numOfEnemy, List<EnemyMonsterType> monsterDataMonsterTypes)
+    {
+        /*
+           1. 최초 스테이지
+           - 정해진 형태로, AAA BB / AA BB C / D
+           2. 반복 스테이지
+           - 정해진 애들 안에서 확률에 의해 나오도록
+           ABCDE 내 50%/25%/12.5%/6.25%/3.125% / 남은 경우 A 로 해서
+           총 53.125% / 25% / 12.5% / 6.25% / 3.125% 가 되도록,
+         */
+
+        // 한마리 (보스의 경우)
+        if (numOfEnemy == 1)
+        {
+            return new List<EnemyMonsterType>() { monsterDataMonsterTypes[0] };
+        }
+
+        // 최초 스테이지일 경우
+        if (!Player.continuousCombat)
+        {
+            // 주어진 형태로,
+            if (stageManager.GetCurrentGate() == 0)
+            {
+                return new List<EnemyMonsterType>()
+                {
+                    monsterDataMonsterTypes[0], monsterDataMonsterTypes[0], monsterDataMonsterTypes[0],
+                    monsterDataMonsterTypes[1], monsterDataMonsterTypes[1]
+                };
+            }
+            else
+            {
+                return new List<EnemyMonsterType>()
+                {
+                    monsterDataMonsterTypes[0], monsterDataMonsterTypes[0], 
+                    monsterDataMonsterTypes[1], monsterDataMonsterTypes[1], monsterDataMonsterTypes[2]
+                };
+            }
+        }
+        // 반복 스테이지일 경우
+        else
+        {
+            List<EnemyMonsterType> types = new List<EnemyMonsterType>();
+            // 확률 구하기
+            List<int> enemyTypePercent = new List<int>();
+            int currentPercent = 0;
+            for (int i = 0; i < numOfEnemy; ++i)
+            {
+                int percent = (int)(100 / Mathf.Pow(2, i+1));
+                enemyTypePercent.Add(percent);
+                currentPercent += percent;
+            }
+            if (currentPercent < 100)
+            {
+                enemyTypePercent[0] += 100 - currentPercent;
+            }
+            // 적군 뽑기
+            for (int enemyIndex = 0; enemyIndex < numOfEnemy; ++enemyIndex)
+            {
+                int rand = Random.Range(1, 100);
+                
+                for (int percentIndex = 0; percentIndex < enemyTypePercent.Count; ++percentIndex)
+                {
+                    // ex) 5종류 기준 54 / 25 / 12 / 6 / 3
+                    if (rand >= enemyTypePercent[percentIndex])
+                    {
+                        types.Add(monsterDataMonsterTypes[percentIndex]);
+                        break;
+                    }
+                }
+            }
+            
+            if (types.Count != numOfEnemy)
+            {
+                for (int count = types.Count; count < numOfEnemy; ++count)
+                {
+                    types.Add(monsterDataMonsterTypes[0]);
+                }
+            }
+            
+
+            return types;
+        }
     }
 
     public void GoToCombatArea(Character enemyCat, Vector3 combatTransform)
@@ -227,13 +358,11 @@ public class Enemy : Character
     {
         foreach (var dummyEnemy in _dummyEnemies)
         {
-            if (dummyEnemy.animationManager)
-            {
-                dummyEnemy.animationManager.PlayAnimation(AnimationManager.AnimationState.IdleA);
-            }
-            
+            dummyEnemy.EnemyArriveAtCombatArea();
         }
         
+        CombatManager.GetInstance().EnemyArriveCombatArea(this);
+
         if (moveToCombatAreaCoroutine != null)
         {
             StopCoroutine(moveToCombatAreaCoroutine);
@@ -260,13 +389,9 @@ public class Enemy : Character
     protected override void Attack()
     {
         base.Attack();
-
         foreach (var dummyEnemy in _dummyEnemies)
         {
-            if (dummyEnemy.animationManager)
-            {
-                dummyEnemy.animationManager.PlayAnimation(AnimationManager.AnimationState.ATK1);
-            }
+            dummyEnemy.EnemyPlayAnimation(AnimationManager.AnimationState.ATK1);
         }
     }
 
@@ -314,17 +439,21 @@ public class Enemy : Character
 
     protected override void Death()
     {
-        if (monsterData.enemyDropData)
+        if (_monsterData.enemyDropData)
         {
-            monsterData.enemyDropData.GiveItemToPlayer();
+            _monsterData.enemyDropData.GiveItemToPlayer();
         }
 
-        if (stageManager)
+        
+        for (int i = 0; i < _dummyEnemyMonsterTypes.Count; ++i)
         {
-            stageManager.GateClearAfterEnemyDeath(0.5f);
+            if (QuestManager.GetInstance().OnUserKillEnemyType != null)
+            {
+                QuestManager.GetInstance().OnUserKillEnemyType(_dummyEnemyMonsterTypes[i]);
+            }
         }
 
-        EnemySpawnManager.GetInstance().EnemyDeath(initialNumOfDummyEnemy);
+        CombatManager.GetInstance().CurrentEnemyDeath(this);
 
         base.Death();
     }

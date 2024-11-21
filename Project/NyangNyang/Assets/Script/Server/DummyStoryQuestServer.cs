@@ -19,7 +19,7 @@ public class DummyStoryQuestServer : DummyQuestServer
         return currentUserQuestID;
     }
 
-    public static void UserSendStoryQuestClear(int userID, QuestDataBase questData)
+    public static void UserSendStoryQuestClear(int userID, StoryQuestDataBase questData)
     {
         // 보상지급
         {

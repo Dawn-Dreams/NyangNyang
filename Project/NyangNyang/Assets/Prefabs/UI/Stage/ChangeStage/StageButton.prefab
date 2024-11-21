@@ -53,9 +53,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37a916ab343257b4a8611940931221df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  normalSprite: {fileID: 21300000, guid: 059d03f99e95eed47b0f522b4ebefe28, type: 3}
-  currentSprite: {fileID: 21300000, guid: 741933a74062c5e48b9773edf7b056dd, type: 3}
-  closeSprite: {fileID: 21300000, guid: a255f5f1223c8884793cdddde2e69c2e, type: 3}
+  normalSprite: {fileID: 21300000, guid: 8d04e370d2efa419fb857984e818f43b, type: 3}
+  currentSprite: {fileID: 21300000, guid: b2cc82f17a86949bcba3917040ec753a, type: 3}
+  closeSprite: {fileID: 21300000, guid: cae424e5c6df4449bb6b7409fea0a29d, type: 3}
   button: {fileID: 1413772889734702319}
   stageNumberText: {fileID: 6633455057853954371}
   buttonImage: {fileID: 7326036695244425117}
@@ -88,8 +88,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 059d03f99e95eed47b0f522b4ebefe28, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 7ac492d69945842dcb349876f1bfb046, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -200,7 +200,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9818833, g: 1, b: 0, a: 1}
+  m_Color: {r: 1, g: 0.87843144, b: 0.39607847, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -345,7 +345,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 17.51381, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

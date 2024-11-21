@@ -28,12 +28,13 @@ public class MiniGameScene : MonoBehaviour
     }
 
     // 씬 삭제 메서드
-    private void UnloadMiniGame1Scene()
+    public void UnloadMiniGame1Scene()
     {
         // 씬 이름이 "MiniGame1"인 경우 언로드 진행
         if (SceneManager.GetSceneByName("MiniGame1").isLoaded)
         {
             SceneManager.UnloadSceneAsync("MiniGame1");
+            GameManager.isMiniGameActive = false;
         }
         else
         {

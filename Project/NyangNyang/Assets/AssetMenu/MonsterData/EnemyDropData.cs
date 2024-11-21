@@ -9,7 +9,7 @@ using UnityEngine;
 public class EnemyDropData : ScriptableObject
 {
     [SerializeField] private BigInteger _gold = 1000;
-    [SerializeField] private BigInteger _exp = 50;
+    [SerializeField] private BigInteger _exp = 1000;
 
     //TODO: 장비 등 기타 드랍 아이템이 있을 경우 해당 클래스에 추가
 
@@ -39,9 +39,6 @@ public class EnemyDropData : ScriptableObject
         //Player.Gold += MyBigIntegerMath.MultiplyWithFloat(_gold ,Player.playerStatus.goldAcquisitionPercent); 
         Player.AddGold(_gold, true);
         Player.AddExp(_exp, true);
-
-        _gold = 0;
-        _exp = 0;
     }
 
     public void MulDropData(float mulValue)

@@ -1,6 +1,5 @@
-using System.Collections.Generic;
+
 using System.Numerics;
-using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -23,6 +22,33 @@ public class Player : MonoBehaviour
         get => playerCurrency.diamond;
         set => playerCurrency.SetDiamond(value);
     }
+    
+    public static int Cheese
+    {
+        get => playerCurrency.cheese;
+        set => playerCurrency.SetCheese(value);
+    }
+
+    // 인덱스를 자주 업데이트하거나 읽을 일이 많다면 별도 프로퍼티로 관리하는 방식이 나음
+    public static int Ticket1
+    {
+        get => playerCurrency.ticket[0];
+        set => playerCurrency.ticket[0] = value;
+    }
+
+    public static int Ticket2
+    {
+        get => playerCurrency.ticket[1];
+        set => playerCurrency.ticket[1] = value;
+    }
+
+    public static int Ticket3
+    {
+        get => playerCurrency.ticket[2];
+        set => playerCurrency.ticket[2] = value;
+    }
+
+
     // ========================
     // ===== 플레이어 경험치 =====
     private static UserLevelData playerLevelData;
@@ -38,16 +64,6 @@ public class Player : MonoBehaviour
     // 티켓 변화 델리게이트 이벤트
     public delegate void OnTicketChangeDelegate(int[] newTicketVal);
     public static event OnTicketChangeDelegate OnTicketChange;
-
-    // 플레이어 퀘스트 델리게이트
-    public delegate void OnGoldSpendingQuestDelegate(QuestCategory questCategory, BigInteger newQuestData);
-    public static event OnGoldSpendingQuestDelegate OnRenewGoldSpendingQuest;
-    public delegate void OnMonsterKillQuestDelegate(QuestCategory category, long monsterKillCount);
-    public static event OnMonsterKillQuestDelegate OnMonsterKillQuestChange;
-
-
-
-
 
     // 한 스테이지 내에서 반복 전투를 진행하는 것에 대한 변수
     public static bool continuousCombat = false;
@@ -94,6 +110,7 @@ public class Player : MonoBehaviour
             playerStatus = new Status(DummyServerData.GetUserStatusLevelData(userID));
             // 플레이어는 디폴트 스탯 버프
             playerStatus.BuffPlayerStatusDefaultValue(5);
+            playerStatus.isPlayerStatus = true;
         }
         GetCurrencyDataFromServer();
         GetExpDataFromServer();
@@ -229,23 +246,6 @@ public class Player : MonoBehaviour
 
         themeData = playerHighestClearStageData[0];
         stageData = playerHighestClearStageData[1];
-    }
-
-    // 반복 퀘스트
-    public static void RecvGoldSpendingDataFromServer(BigInteger newVal, QuestCategory questCategory)
-    {
-        if (OnRenewGoldSpendingQuest != null)
-        {
-            OnRenewGoldSpendingQuest(questCategory, newVal);
-        }
-    }
-
-    public static void RecvMonsterKillDataFromServer(QuestCategory questCategory, long newVal)
-    {
-        if (OnMonsterKillQuestChange != null)
-        {
-            OnMonsterKillQuestChange(questCategory, newVal);
-        }
     }
 
     // ================
