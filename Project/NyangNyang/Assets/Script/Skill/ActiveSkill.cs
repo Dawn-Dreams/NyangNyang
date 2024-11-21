@@ -1,4 +1,4 @@
-public class ActiveSkill : Skill
+public abstract class ActiveSkill : Skill
 {
     float coolTime;
 
@@ -7,8 +7,17 @@ public class ActiveSkill : Skill
     {
     }
 
-    public override void PlaySkill()
+    public override void Activate()
+    {
+        // 각 스킬에 맞게 설정
+
+        ApplyEffect();
+    }
+
+    public override void Deactivate()
     {
         // 각 스킬에 맞게 설정
     }
+
+    public abstract void ApplyEffect();
 }

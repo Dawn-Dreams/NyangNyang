@@ -9,6 +9,9 @@ public class SkillManager : MonoBehaviour
     private static SkillManager instance;
     public static SkillManager GetInstance() => instance;
 
+
+    public List<Skill> SkillList = new List<Skill>();
+
     private Skill[] skills = new Skill[25];
     private Dictionary<string, int> skillDic = new Dictionary<string, int>();
     public Sprite[] sprites;
@@ -30,11 +33,13 @@ public class SkillManager : MonoBehaviour
     {
         // TODO: 서버에서 데이터 받아오기
 
-        for (int i = 0; i < 25; ++i)
-        {
-            skills[i] = new Skill(i, i.ToString(), 2000, 1, 5000);
-            skillDic[i.ToString()] = i;
-        }
+        // 액티브 스킬
+
+        // 패시브 스킬
+        SkillList.Add(new DefenseUpSkill(9, "털복숭이 갑옷", 0, 1, 1));
+        SkillList.Add(new DefenseUpSkill(10, "꼬리 방패", 0, 1, 1));
+        SkillList.Add(new DefenseUpSkill(11, "퐁퐁 쿠션 아머", 0, 1, 1));
+        SkillList.Add(new DefenseUpSkill(12, "튼튼한 발톱 가드", 0, 1, 1));
     }
 
     public Skill GetSkill(int id)
@@ -100,6 +105,24 @@ public class SkillManager : MonoBehaviour
             return levelUpNeeds[level];
         }
         return -1;
+    }
+
+    public void LetSkillActivate(int id)
+    {
+        Skill skill = GetSkill(id);
+        if ( skill != null)
+        {
+            skill.Activate();
+        }
+    }
+
+    public void LetSkillDeActivate(int id)
+    {
+        Skill skill = GetSkill(id);
+        if (skill != null)
+        {
+            skill.Deactivate();
+        }
     }
 
 }
