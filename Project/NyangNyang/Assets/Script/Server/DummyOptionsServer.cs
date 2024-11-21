@@ -156,7 +156,7 @@ public class DummyOptionsServer
     }
 }
 
-// 데이터 구조체 (공지, 우편, 친구, 랭킹, 게시판)
+// 데이터 구조체 (공지, 우편, 친구, 랭킹-해결, 게시판)
 [System.Serializable]
 public class NoticeData
 {
