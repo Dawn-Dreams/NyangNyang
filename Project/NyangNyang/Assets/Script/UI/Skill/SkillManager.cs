@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum SkillSubType { None, A, B, C, D, E };
+
 public class SkillManager : MonoBehaviour
 {
     private static SkillManager instance;

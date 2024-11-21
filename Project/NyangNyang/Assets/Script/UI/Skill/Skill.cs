@@ -1,4 +1,4 @@
-public class Skill
+public abstract class Skill
 {
     protected int id;
     protected string name;
@@ -30,4 +30,6 @@ public class Skill
         level = _level;
         levelUpCost = _levelUpCost;
     }
+
+    public abstract void PlaySkill();
 }
