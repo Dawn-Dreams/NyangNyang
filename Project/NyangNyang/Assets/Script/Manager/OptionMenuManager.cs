@@ -17,6 +17,9 @@ public class OptionMenuManager : MonoBehaviour
     private Toggle[] toggles;               // 동적으로 찾은 Toggle들을 저장할 배열
     private GameObject[] panels;            // 동적으로 찾은 패널들을 저장할 배열
 
+    public GameObject friendProfilePopupPrefab; // 친구 프로필 팝업 프리팹
+    private GameObject currentFriendProfilePopup; // 현재 활성화된 팝업
+
     private void Start()
     {
         FindTogglesAndPanels();
@@ -229,6 +232,13 @@ public class OptionMenuManager : MonoBehaviour
                 friendUserIDText.text = friendData.friendUID.ToString();
                 friendUserNameText.text = friendData.friendName;
                 friendUserScoreText.text = friendData.friendLevel.ToString();
+
+                // 버튼 클릭 이벤트 추가
+                Button buttonComponent = friendButton.GetComponent<Button>();
+                if (buttonComponent != null)
+                {
+                    buttonComponent.onClick.AddListener(() => ShowFriendProfilePopup(friendData));
+                }
             }
         }
         else
@@ -236,6 +246,7 @@ public class OptionMenuManager : MonoBehaviour
             Debug.LogWarning("친구 데이터가 없습니다.");
         }
     }
+
 
     // 커뮤니티
     public void OpenCommunityPanel()
@@ -247,4 +258,36 @@ public class OptionMenuManager : MonoBehaviour
     void OpenSettingsPanel()
     {
     }
+
+
+    // 친구 버튼 팝업 메서드
+    void ShowFriendProfilePopup(FriendData friendData)
+    {
+        // 기존 팝업 닫기
+        if (currentFriendProfilePopup != null)
+        {
+            Destroy(currentFriendProfilePopup);
+        }
+
+        // 팝업 생성
+        currentFriendProfilePopup = Instantiate(friendProfilePopupPrefab, transform);
+
+        // 프로필 팝업 데이터 설정
+        TMP_Text nameText = currentFriendProfilePopup.transform.Find("NameText").GetComponent<TMP_Text>();
+        TMP_Text idText = currentFriendProfilePopup.transform.Find("IDText").GetComponent<TMP_Text>();
+        TMP_Text levelText = currentFriendProfilePopup.transform.Find("LevelText").GetComponent<TMP_Text>();
+        Button closeButton = currentFriendProfilePopup.transform.Find("CloseButton").GetComponent<Button>();
+
+        nameText.text = $"{friendData.friendName}";
+        idText.text = $"ID : {friendData.friendUID}";
+        levelText.text = $"{friendData.friendLevel} Level";
+
+        // 닫기 버튼 이벤트 설정
+        closeButton.onClick.AddListener(() =>
+        {
+            Destroy(currentFriendProfilePopup);
+            currentFriendProfilePopup = null;
+        });
+    }
+
 }
