@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.google.ads.mobile": "9.2.1",
+    "com.google.ads.mobile": "9.4.0",
     "com.google.external-dependency-manager": "1.2.183",
     "com.rito.play-mode-saver": "https://github.com/rito15/Unity-Play-Mode-Saver.git",
     "com.unity.addressables": "1.22.2",
