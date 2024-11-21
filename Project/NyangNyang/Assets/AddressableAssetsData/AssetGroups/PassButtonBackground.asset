@@ -18,19 +18,19 @@ MonoBehaviour:
   m_GUID: cca78b93175e81a49966a93e35011b0e
   m_SerializeEntries:
   - m_GUID: a321a884f8f2d5242b074aa4ea27d9a7
-    m_Address: Assets/Prefabs/UI/Pass/PassRewardOpenBackground.prefab
+    m_Address: PassRewardOpenBackground
     m_ReadOnly: 0
     m_SerializedLabels:
     - Pass/Background/Open
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d1d7ca45b2334a6429197202ce534214
-    m_Address: Assets/Prefabs/UI/Pass/GoldPassCloseBackground.prefab
+    m_Address: GoldPassCloseBackground
     m_ReadOnly: 0
     m_SerializedLabels:
     - Pass/Background/Close/Gold
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d8e709418c62bb44ab9ba2a7e9172457
-    m_Address: Assets/Prefabs/UI/Pass/FreePassCloseBackground.prefab
+    m_Address: FreePassCloseBackground
     m_ReadOnly: 0
     m_SerializedLabels:
     - Pass/Background/Close/Free

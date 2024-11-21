@@ -23,7 +23,7 @@ public enum CatFurSkin
 [Serializable]
 public enum CatCostumePart
 {
-    Head, Hand_R, Body,FurSkin, Count
+    Head, Hand_R, Body,FurSkin, Pet , Count
 }
 
 // 머리 장착 코스튬
@@ -126,7 +126,8 @@ public class CostumeManager : MonoBehaviour
         _catCostumes[(CatCostumePart.Hand_R)].LoadAssets("Costume/Hand_R", Enum.GetNames(typeof(HandRCostumeType)).ToList());
         _catCostumes[(CatCostumePart.Body)].LoadAssets("Costume/Body", Enum.GetNames(typeof(BodyCostumeType)).ToList());
         _catCostumes[(CatCostumePart.FurSkin)].LoadAssets("Costume/FurSkin", Enum.GetNames(typeof(CatFurSkin)).ToList());
-        
+        //_catCostumes[(CatCostumePart.Pet)].LoadAssets("Costume/Pet", Enum.GetNames(typeof(EnemyMonsterType)).ToList());
+
     }
 
     public Material GetCatFurSkinMaterial(CatFurSkin furSkinType)
@@ -156,6 +157,9 @@ public class CostumeManager : MonoBehaviour
             case CatCostumePart.FurSkin:
                 retVal = (int)CatFurSkin.Count;
                 break;
+            case CatCostumePart.Pet:
+                retVal = (int)EnemyMonsterType.Count;
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(part), part, null);
         }
@@ -182,6 +186,9 @@ public class CostumeManager : MonoBehaviour
             case CatCostumePart.FurSkin:
                 retVal = ((CatFurSkin)index).ToString();
                 break;
+            case CatCostumePart.Pet:
+                retVal = ((EnemyMonsterType)index).ToString();
+                break;
             case CatCostumePart.Count:
                 break;
             default:
@@ -190,8 +197,4 @@ public class CostumeManager : MonoBehaviour
         return retVal;
     }
 
-    public GameObject GetCostumePrefab(CatCostumePart part, int index)
-    {
-        return _catCostumes[part].objs[index];
-    }
 }

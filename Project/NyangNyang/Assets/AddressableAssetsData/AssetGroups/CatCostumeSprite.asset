@@ -15,7 +15,7 @@ MonoBehaviour:
   m_GroupName: CatCostumeSprite
   m_Data:
     m_SerializedData: []
-  m_GUID: 712c4f539ac9f4c438339dfc567b7507
+  m_GUID: 8311baab5db0edc439a0b85422aea616
   m_SerializeEntries:
   - m_GUID: 1509b6ee9148369489b0006f5486940b
     m_Address: Sprite/Costume/Head/Grass
@@ -126,5 +126,5 @@ MonoBehaviour:
   m_Settings: {fileID: 11400000, guid: 5f1874fff1b70124d8333b18a2e9b4e8, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 03a69f1d20a372e4e97663eb075ef80a, type: 2}
-    - {fileID: 11400000, guid: 6814928b0a784de4ebf04b045b0c180c, type: 2}
+    - {fileID: 11400000, guid: ec93111e201837c4f9b9acc6c74f45eb, type: 2}
+    - {fileID: 11400000, guid: e5c00633ab64f3741a92a460addfca27, type: 2}

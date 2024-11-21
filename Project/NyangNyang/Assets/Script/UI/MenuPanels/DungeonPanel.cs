@@ -1,8 +1,8 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.SceneManagement;
+using System;
 
 public class DungeonPanel : MenuPanel
 {
@@ -12,15 +12,16 @@ public class DungeonPanel : MenuPanel
 
     [SerializeField]
     private GameObject[] stageTabs;
-    private Button[] minigameButtons, startButtons, sweepButtons;
+    private Button[] startButtons, sweepButtons;
     private TextMeshProUGUI[] ticketTexts, titleTexts;
     private ScrollRect[] levelScrollViews;
     private Button[][] levelSelectButtons;
 
-    private DungeonManager DungeonManager;
-    //private MiniGame1 miniGame1;
+    private DungeonManager dungeonManager;
 
-    // 현재 클리어한 최고 레벨을 Player가 저장하도록 수정 필요
+    private readonly List<string> dungeonNames = new List<string> { "황야의 대지", "눈꽃 동굴", "독거미 숲" };
+    private readonly List<string> ticketNames = new List<string> { "노랑", "파랑", "빨강" };
+
     private int[] highestClearedStage = new int[3] { 1, 1, 1 };
     public int TempDungeonStageLevel { get; private set; }
     private int currentActiveTabIndex = 0;
@@ -29,13 +30,12 @@ public class DungeonPanel : MenuPanel
     {
         InitializeManagers();
         InitializeUIComponents();
-        OnClickStageButton(0); // Default tab selection
+        OnClickStageButton(0); // 기본 탭 선택
     }
 
     private void InitializeManagers()
     {
-        //miniGame1 = FindObjectOfType<MiniGame1>() ?? throw new NullReferenceException("MiniGame1이 NULL입니다.");
-        DungeonManager = FindObjectOfType<DungeonManager>() ?? throw new NullReferenceException("DungeonManager가 존재하지 않습니다.");
+        dungeonManager = FindObjectOfType<DungeonManager>() ?? throw new NullReferenceException("DungeonManager가 존재하지 않습니다.");
     }
 
     private void InitializeUIComponents()
@@ -58,7 +58,6 @@ public class DungeonPanel : MenuPanel
     private void InitializeTabs()
     {
         int tabCount = stageTabs.Length;
-        minigameButtons = new Button[tabCount];
         startButtons = new Button[tabCount];
         sweepButtons = new Button[tabCount];
         ticketTexts = new TextMeshProUGUI[tabCount];
@@ -68,14 +67,14 @@ public class DungeonPanel : MenuPanel
         for (int i = 0; i < tabCount; i++)
         {
             var tab = stageTabs[i].transform;
-            minigameButtons[i] = tab.Find("MiniGameStartButton").GetComponent<Button>();
+            
             startButtons[i] = tab.Find("DungeonStartButton").GetComponent<Button>();
             sweepButtons[i] = tab.Find("DungeonSweepButton").GetComponent<Button>();
             ticketTexts[i] = tab.Find("TicketText").GetComponent<TextMeshProUGUI>();
             titleTexts[i] = tab.Find("GameTitleText").GetComponent<TextMeshProUGUI>();
 
             int index = i;
-            minigameButtons[i].onClick.AddListener(() => OnClickMinigameButton(index));
+            
             startButtons[i].onClick.AddListener(() => OnClickStartButton(index));
             sweepButtons[i].onClick.AddListener(() => OnClickSweepButton(index));
 
@@ -130,7 +129,7 @@ public class DungeonPanel : MenuPanel
     private void OnClickStageButton(int index)
     {
         SetActiveTab(index);
-        titleTexts[index].text = $"미니게임 던전 {index + 1}";
+        titleTexts[index].text = $"{dungeonNames[index]}";
         UpdateTicketText(index);
     }
 
@@ -145,47 +144,7 @@ public class DungeonPanel : MenuPanel
     {
         TempDungeonStageLevel = levelIndex + 1;
         UpdateLevelSelectButtons(tabIndex);
-        titleTexts[tabIndex].text = $"미니게임 던전 {tabIndex + 1}-{TempDungeonStageLevel}";
-    }
-
-    // 미니게임 시작 버튼 클릭 시 실행
-    void OnClickMinigameButton(int index)
-    {
-        // 스페셜 스테이지가 진행 중이면 미니게임을 시작하지 않음
-        if (GameManager.isDungeonActive)
-        {
-            Debug.Log("스페셜 스테이지가 실행 중이므로 미니게임을 시작할 수 없습니다.");
-            return;
-        }
-
-        // 미니게임이 이미 진행 중인지 확인
-        if (GameManager.isMiniGameActive)
-        {
-            Debug.Log("다른 미니게임이 이미 실행 중입니다.");
-            return;
-        }
-
-
-        switch (index)
-        {
-            case 0:
-                SceneManager.LoadScene("MiniGame1", LoadSceneMode.Additive);
-                //FindObjectOfType<MiniGame1>().StartGame();
-                GameManager.isMiniGameActive = true;
-                break;
-            case 1:
-                // FindObjectOfType<MiniGame2>().StartGame();
-                Debug.Log("미니게임 2 시작버튼클릭");
-                break;
-            case 2:
-                // FindObjectOfType<MiniGame3>().StartGame();
-                Debug.Log("미니게임 3 시작버튼클릭");
-                break;
-            default:
-                Debug.LogWarning("올바르지 않은 인덱스입니다.");
-                break;
-        }
-        UpdateTicketText(index);
+        titleTexts[tabIndex].text = $"{dungeonNames[tabIndex]} - LEVEL {TempDungeonStageLevel}";
     }
 
     private void OnClickStartButton(int index)
@@ -195,8 +154,8 @@ public class DungeonPanel : MenuPanel
             Debug.Log("입장권이 부족합니다.");
             return;
         }
-        DungeonManager.StartDungeon(index, TempDungeonStageLevel);
-        highestClearedStage[index] = DungeonManager.DungeonLevels[index];
+        dungeonManager.StartDungeon(index, TempDungeonStageLevel);
+        highestClearedStage[index] = dungeonManager.DungeonLevels[index];
         UpdateTicketText(index);
     }
 
@@ -207,24 +166,23 @@ public class DungeonPanel : MenuPanel
             Debug.Log("입장권이 부족합니다.");
             return;
         }
-        //DungeonManager.StartDungeon(index, TempDungeonStageLevel);
-
-        // 아이템 획득 로직 추가
         Debug.Log("소탕");
-        highestClearedStage[index] = DungeonManager.DungeonLevels[index];
+        highestClearedStage[index] = dungeonManager.DungeonLevels[index];
         UpdateTicketText(index);
     }
 
     private void UpdateTicketText(int index)
     {
+        string ticketName = ticketNames[index];
         int sweepTicketCount = DummyServerData.GetTicketCount(Player.GetUserID(), index);
-        ticketTexts[index].text = $"{index + 1}번 소탕권 개수: {sweepTicketCount}";
+
+        ticketTexts[index].text = $"{ticketName} 조개패 {sweepTicketCount}개";
     }
+
     private void UpdateStageButtons(int tabIndex)
     {
         for (int i = 0; i < levelSelectButtons[tabIndex].Length; i++)
         {
-            // 최고 클리어된 스테이지 이하의 버튼만 활성화
             levelSelectButtons[tabIndex][i].interactable = (i + 1) <= highestClearedStage[tabIndex];
         }
     }

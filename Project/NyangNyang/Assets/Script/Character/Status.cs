@@ -19,6 +19,7 @@ public class StatusLevelData
     private int HP_DEFAULT_VALUE = 50;
     private int MP_DEFAULT_VALUE = 10;
     private int STR_DEFAULT_VALUE = 5;
+    private float ATTACK_SPEED_DEFAULT_VALUE = 0.75f;
     //private static int MAX_ATTACK_SPEED = 10000;
 
     public StatusLevelData(int hpLevel, int mpLevel, int strLevel, int defenceLevel = 0, int healHpLevel = 0, int healMpLevel = 0, int critLevel = 0, int attackSpeedLevel = 0, int goldAcquisition = 0, int expAcquisition = 0)
@@ -83,6 +84,7 @@ public class StatusLevelData
             case StatusLevelType.ATTACK_SPEED:
                 // TODO <- 회의 필요 // 0 ~ 10000 레벨을 마스터로 1 ~ 0.25
                 //value = 0.25f + Mathf.Lerp(1.0f, MAX_ATTACK_SPEED, MAX_ATTACK_SPEED - statusLevels[(int)StatusLevelType.ATTACK_SPEED]) * 0.75f;
+                return ATTACK_SPEED_DEFAULT_VALUE;
                 return 1f;
                 //break;
             case StatusLevelType.GOLD:
@@ -121,12 +123,18 @@ public class StatusLevelData
         }
     }
 
+    public void MultipleStatusLevelByType(float mulValue, StatusLevelType type)
+    {
+        statusLevels[(int)type] = (int)(statusLevels[(int)type] * mulValue);
+    }
+
     // 플레이어의 스탯의 디폴트 효과를 배로 적용시켜주는 함수
     public void BuffDefaultValue(int buffValue)
     {
         HP_DEFAULT_VALUE *= buffValue;
         MP_DEFAULT_VALUE *= buffValue;
         STR_DEFAULT_VALUE *= buffValue;
+        ATTACK_SPEED_DEFAULT_VALUE = 0.25f;
     }
 }
 
@@ -134,6 +142,7 @@ public class Status
 {
     private StatusLevelData levelData;
 
+    public bool isPlayerStatus = false;
 
     // 스테이터스 레벨 변화 델리게이트
     public delegate void OnStatusLevelChangeDelegate(StatusLevelType type);
@@ -163,11 +172,6 @@ public class Status
     // 적군을 잡을 때에 받는 경우에만 해당
     public float goldAcquisitionPercent = 1.0f;    // 골드 획득량(가중치) (초기 1, value%로 적용)
     public float expAcquisitionPercent = 1.0f;     // 경험치 획득량(가중치) (초기 1, value%로 적용)
-
-    public Status()
-    {
-
-    }
 
     public Status(StatusLevelData data)
     {
@@ -308,6 +312,20 @@ public class Status
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
 
-       
+        if (isPlayerStatus)
+        {
+            CombatPowerManager.GetInstance()
+                .ChangeCurrentCombatPower(GetCurrentAttackPower(), GetCurrentDefencePower());
+        }
+
+    }
+
+    public BigInteger GetCurrentAttackPower()
+    {
+        return attackPower + (int)(critPercent * 100) + (int)(10000/attackSpeed);
+    }
+    public BigInteger GetCurrentDefencePower()
+    {
+        return defence + healHPPerSec + healMPPerSec + hp;
     }
 }

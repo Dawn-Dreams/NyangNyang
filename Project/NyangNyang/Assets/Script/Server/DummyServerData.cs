@@ -34,10 +34,10 @@ public class DummyServerData : MonoBehaviour
     //    // 임시 일반 몬스터 데이터
     //    };
 
-    // 각 유저 재화(골드+보석+티켓) 데이터
+    // 각 유저 재화(골드+다이아+치즈+조개패) 데이터
     protected static CurrencyData[] usersCurrencyData = new CurrencyData[]
     {
-        ScriptableObject.CreateInstance<CurrencyData>().SetCurrencyData(1_000_000_000,3,new int[] {5,5,5}),
+        ScriptableObject.CreateInstance<CurrencyData>().SetCurrencyData(1_000_000_000,3,1000,new int[] {5,5,5}),
         ScriptableObject.CreateInstance<CurrencyData>(),
         ScriptableObject.CreateInstance<CurrencyData>(),
         ScriptableObject.CreateInstance<CurrencyData>(),
@@ -60,7 +60,7 @@ public class DummyServerData : MonoBehaviour
     // 각 유저의 클리어 스테이지 정보 // 스테이지 테마와 스테이지 정보만 관리
     protected static int[,] playerClearStageData = new int[,]
     {
-        { 1,0 },        // 0번 유저
+        { 5,5 },        // 0번 유저
         {20,3}
     };
 
@@ -282,6 +282,16 @@ public class DummyServerData : MonoBehaviour
         
         // 강제로 플레이어에게 주입
         Player.Diamond = usersCurrencyData[userID].diamond;
+    }
+
+     public static void GiveUserCheeseAndSendData(int userID, BigInteger addCheese)
+    {
+        
+        //범위 체크 생략
+        usersCurrencyData[userID].cheese += (int)addCheese;
+        
+        // 강제로 플레이어에게 주입
+        Player.Cheese = usersCurrencyData[userID].cheese;
     }
 
     // 함수 종료

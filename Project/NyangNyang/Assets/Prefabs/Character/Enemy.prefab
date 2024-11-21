@@ -484,7 +484,15 @@ MonoBehaviour:
   - {fileID: 9192302672031689055}
   - {fileID: 3046654298694143425}
   - {fileID: 6376011621515299061}
-  monsterData: {fileID: 11400000, guid: 0b25bb281776b0242974f3f98f5ed216, type: 2}
+  initialNumOfDummyEnemy: 0
+  monsterDataTemplate: {fileID: 11400000, guid: 0b25bb281776b0242974f3f98f5ed216, type: 2}
+  sliders:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  cameraToShowHealthBarUI: {fileID: 0}
 --- !u!1 &6376011621515299061
 GameObject:
   m_ObjectHideFlags: 0

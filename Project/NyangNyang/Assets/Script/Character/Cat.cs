@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class Cat : Character
 {
+    public AnimationManager animationManager;
+
     protected override void Awake()
     {
         //characterID = 0;
@@ -29,6 +31,13 @@ public class Cat : Character
         CurrentHP += hpDifference;
     }
 
+    protected override void Attack()
+    {
+        base.Attack();
+        animationManager.PlayAnimation(AnimationManager.AnimationState.ATK1);
+    }
+
+
     public void CatRespawn()
     {
         CurrentHP = maxHP;
@@ -39,6 +48,6 @@ public class Cat : Character
     {
         base.Death();
 
-        GameManager.GetInstance().stageManager.PlayerDie();
+        CombatManager.GetInstance().PlayerCatDeath();
     }
 }

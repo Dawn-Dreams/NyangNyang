@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,21 +8,29 @@ using UnityEngine.UI;
 public class SceneChangeButton : MonoBehaviour
 {
     public string sceneName;
-    public Button sceneChangeButton;
+    private Button _sceneChangeButton;
 
     private void Start()
     {
-        if (sceneChangeButton == null)
+        if (_sceneChangeButton == null)
         {
-            sceneChangeButton = GetComponent<Button>();
+            _sceneChangeButton = GetComponent<Button>();
+            _sceneChangeButton.onClick.AddListener(ChangeScene);
         }
-        sceneChangeButton.onClick.AddListener(ChangeScene);
         
+    }
+
+    private void OnEnable()
+    {
+        if (_sceneChangeButton == null)
+        {
+            _sceneChangeButton = GetComponent<Button>();
+            _sceneChangeButton.onClick.AddListener(ChangeScene);
+        }
     }
 
     void ChangeScene()
     {
-        Debug.Log("??");
         SceneManager.LoadScene(sceneName);
     }
 }

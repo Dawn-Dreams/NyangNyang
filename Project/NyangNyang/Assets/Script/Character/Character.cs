@@ -34,6 +34,10 @@ public class Character : MonoBehaviour
     [SerializeField]
     private CameraShake cameraShake;
 
+    // 던전 전투와 일반 전투 분리하기 위해 추가
+    public bool isIndependent = false; // CombatManager 상태와 무관하게 공격할지 여부
+
+
     public BigInteger CurrentHP
     {
         get { return currentHP; }
@@ -78,18 +82,20 @@ public class Character : MonoBehaviour
         {
             healthBarSlider.value = 1;
         }
-        
+
 
     }
 
     protected IEnumerator AttackEnemy()
     {
-        yield return new WaitForSeconds(0.25f);
         while (true)
         {
-            Attack();
-            
-            yield return new WaitForSeconds(0.5f);
+            // isIndependent가 true인 경우 CombatManager 상태를 무시하고 공격
+            if (isIndependent || CombatManager.GetInstance().canFight)
+            {
+                Attack();
+            }
+            yield return new WaitForSeconds(status.attackSpeed);
         }
     }
 
@@ -121,14 +127,14 @@ public class Character : MonoBehaviour
         // TODO: 이 식도 추후 status 에서 적용
         BigInteger applyDamage = BigInteger.Max(0, damage - status.defence);
         DecreaseHp(applyDamage);
-       
+
         return applyDamage;
     }
 
     protected void DecreaseHp(BigInteger applyDamage)
     {
         CurrentHP = BigInteger.Min(maxHP, BigInteger.Max(0, currentHP - applyDamage));
-        
+
         if (IsDead())
         {
             Death();
@@ -139,7 +145,7 @@ public class Character : MonoBehaviour
     {
         if (healthBarSlider)
         {
-            float healthPercent = MyBigIntegerMath.DivideToFloat(currentHP,maxHP,5);
+            float healthPercent = MyBigIntegerMath.DivideToFloat(currentHP, maxHP, 5);
             healthBarSlider.value = healthPercent;
         }
         if (textMeshPro)
@@ -160,12 +166,17 @@ public class Character : MonoBehaviour
             if (attackCoroutine != null)
             {
                 StopCoroutine(attackCoroutine);
+                attackCoroutine = null;
             }
-            
+
             return;
         }
         enemyObject = targetObject;
-        attackCoroutine = StartCoroutine(AttackEnemy());
+        if (attackCoroutine == null)
+        {
+            attackCoroutine = StartCoroutine(AttackEnemy());
+        }
+
     }
 
     protected virtual void Death()
@@ -174,10 +185,8 @@ public class Character : MonoBehaviour
         {
             enemyObject.SetEnemy(null);
         }
-
-        // TODO: 임시 사망 처리
-        gameObject.SetActive(false);
     }
+
 }
 
 //Character -> Cat / Enemy

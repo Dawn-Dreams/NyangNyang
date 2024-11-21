@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -7,29 +6,19 @@ using UnityEngine.UI;
 
 public class OptionMenuManager : MonoBehaviour
 {
-    private static OptionMenuManager instance;
     public GameObject toggleParentObject;   // Toggle들을 담고 있는 부모 오브젝트
     public GameObject panelParentObject;    // 패널들을 담고 있는 부모 오브젝트
 
     public GameObject noticeTextPrefab;     // 공지 텍스트 프리팹
-    public GameObject rankUserButtonPrefab; // 랭킹 버튼 프리팹
     public GameObject boardButtonPrefab;    // 게시판 버튼 프리팹
     public GameObject mailButtonPrefab;     // 우편 버튼 프리팹
     public GameObject friendButtonPrefab;   // 친구 버튼 프리팹
 
     private Toggle[] toggles;               // 동적으로 찾은 Toggle들을 저장할 배열
     private GameObject[] panels;            // 동적으로 찾은 패널들을 저장할 배열
-    
-    private List<RankingData> rankList;
 
-    public static OptionMenuManager GetOptionManager()
-    {
-        return instance;
-    }
     private void Start()
     {
-
-        if (instance == null) instance = this;
         FindTogglesAndPanels();
 
         for (int i = 0; i < toggles.Length; i++)
@@ -48,7 +37,7 @@ public class OptionMenuManager : MonoBehaviour
         {
             panel.SetActive(false);
         }
-        
+
         // 0번 패널 활성화
         if (toggles.Length > 0 && panels.Length > 0)
         {
@@ -59,7 +48,6 @@ public class OptionMenuManager : MonoBehaviour
 
     void FindTogglesAndPanels()
     {
-
         toggles = toggleParentObject.GetComponentsInChildren<Toggle>();
         panels = new GameObject[panelParentObject.transform.childCount];
 
@@ -71,8 +59,6 @@ public class OptionMenuManager : MonoBehaviour
 
     void OpenPanel(int index)
     {
-
-
         foreach (GameObject panel in panels)
         {
             panel.SetActive(false);
@@ -99,18 +85,15 @@ public class OptionMenuManager : MonoBehaviour
                 OpenFriendsPanel();
                 break;
             case 2:
-                OpenRankingPanel();
-                break;
-            case 3:
                 OpenSettingsPanel();
                 break;
-            case 4:
+            case 3:
                 OpenNoticePanel();
                 break;
-            case 5:
+            case 4:
                 OpenBulletinBoardPanel();
                 break;
-            case 6:
+            case 5:
                 OpenCommunityPanel();
                 break;
             default:
@@ -158,51 +141,11 @@ public class OptionMenuManager : MonoBehaviour
         }
     }
 
-    // 랭킹
-    public void SetRankList(List<RankingData> ranks)
-    {
-        rankList = ranks;
-        GameObject contentObj = GameObject.Find("RankUI/Viewport/Content");
-        if (rankList.Count > 0)
-        {
-            foreach (RankingData rankData in rankList)
-            {
-                GameObject rankUserButton = Instantiate(rankUserButtonPrefab, contentObj.transform);
-
-                TMP_Text rankNumberText = rankUserButton.transform.Find("RankNumber").GetComponent<TMP_Text>();
-                TMP_Text rankUserNameText = rankUserButton.transform.Find("RankUserName").GetComponent<TMP_Text>();
-                TMP_Text rankScoreText = rankUserButton.transform.Find("RankScore").GetComponent<TMP_Text>();
-
-                rankNumberText.text = (rankList.IndexOf(rankData) + 1).ToString();
-                rankUserNameText.text = rankData.nickname;
-                rankScoreText.text = rankData.score.ToString();
-            }
-        }
-        else
-        {
-            Debug.LogWarning("랭킹 데이터가 없습니다.");
-        }
-
-    }
-    void OpenRankingPanel()
-    {
-
-        GameObject contentObj = GameObject.Find("RankUI/Viewport/Content");
-        // 기존에 생성된 요소들을 모두 제거
-        foreach (Transform child in contentObj.transform)
-        {
-            Destroy(child.gameObject);
-        }
-        NetworkManager.GetStatusManager().UpdatePlayersRanking(rankList);
-
-    }
-
     // 게시판
     void OpenBulletinBoardPanel()
     {
         List<BoardData> boardList = DummyOptionsServer.GetBoardData();
         GameObject contentObj = GameObject.Find("BulletinBoardUI/Viewport/Content");
-        // Application.OpenURL("https://cafe.naver.com/nyangnyangcafeurl"); // 게시판에 커뮤니티 버튼 추가
         // 기존에 생성된 요소들을 모두 제거
         foreach (Transform child in contentObj.transform)
         {
@@ -295,9 +238,9 @@ public class OptionMenuManager : MonoBehaviour
     }
 
     // 커뮤니티
-    void OpenCommunityPanel()
+    public void OpenCommunityPanel()
     {
-        
+        Application.OpenURL("https://cafe.naver.com/nyangnyangexpedition"); // 게시판에 커뮤니티 버튼 추가
     }
 
     // 설정

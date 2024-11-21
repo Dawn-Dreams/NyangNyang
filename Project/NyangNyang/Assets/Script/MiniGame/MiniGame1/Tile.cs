@@ -136,7 +136,32 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUp
         // 애니메이션 완료 후 타일 비활성화
         gameObject.transform.localScale = Vector3.zero;
         gameObject.SetActive(false);
+        Destroy(gameObject, 0.5f);
     }
+
+    public IEnumerator MoveDownByCells(int cells)
+    {
+        if (animator != null)
+            animator.enabled = false;
+
+        Vector3 startPos = transform.localPosition;
+        Vector3 endPos = new Vector3(transform.localPosition.x, transform.localPosition.y - (cells* 100), transform.localPosition.z);
+        float duration = 0.1f * cells; // 이동 애니메이션 시간 (칸 수에 비례)
+        float elapsedTime = 0f;
+
+        // 애니메이션 진행
+        while (elapsedTime < duration)
+        {
+            transform.localPosition = Vector3.Lerp(startPos, endPos, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // 최종 위치 설정
+        transform.localPosition = endPos;
+        y -= cells; // 타일의 y 좌표 업데이트
+    }
+
 }
 
 public enum Direction

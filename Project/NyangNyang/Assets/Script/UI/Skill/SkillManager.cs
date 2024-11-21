@@ -11,7 +11,7 @@ public class SkillManager : MonoBehaviour
     private Dictionary<string, int> skillDic = new Dictionary<string, int>();
     public Sprite[] sprites;
 
-    // ¹ë·±½º ÆĞÄ¡ ÇÊ¿ä
+    // ë°¸ëŸ°ìŠ¤ íŒ¨ì¹˜ í•„ìš”
     private int[] levelUpCosts = new int[9] { 5000, 10000, 50000, 100000, 250000, 500000, 1000000, 2500000, 5000000};
     private int[] levelUpNeeds = new int[9] { 5, 10, 20, 20, 30, 50, 100, 500, 1000 };
 
@@ -26,7 +26,7 @@ public class SkillManager : MonoBehaviour
 
     public void InitializedSkills()
     {
-        // TODO: ¼­¹ö¿¡¼­ µ¥ÀÌÅÍ ¹Ş¾Æ¿À±â
+        // TODO: ì„œë²„ì—ì„œ ë°ì´í„° ë°›ì•„ì˜¤ê¸°
 
         for (int i = 0; i < 25; ++i)
         {
@@ -82,6 +82,12 @@ public class SkillManager : MonoBehaviour
         if ( skill != null )
         {
             skill.SetPossession(count);
+
+            // 11.12 ì´ìœ¤ì„ - ìŠ¤í‚¬ íšë“ í€˜ìŠ¤íŠ¸
+            if (QuestManager.GetInstance().OnUserGetSkill != null)
+            {
+                QuestManager.GetInstance().OnUserGetSkill(count);
+            }
         }
     }
 

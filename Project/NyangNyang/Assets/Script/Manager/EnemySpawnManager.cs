@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemySpawnManager : MonoBehaviour
 {
@@ -14,14 +16,15 @@ public class EnemySpawnManager : MonoBehaviour
     public delegate void OnEnemyDeathDelegate(int enemyCount);
     public event OnEnemyDeathDelegate OnEnemyDeath;
 
-    public GameObject enemyPrefab;
-    public GameObject bossEnemyPrefab;
+    private AddressableHandle<GameObject> _enemyPrefab;
+    private AddressableHandle<GameObject> _bossEnemyPrefab;
 
     public Transform enemySpawnPosition;
     public Transform enemyCombatPosition;
 
     private Enemy currentEnemy; // 현재 적을 저장하는 변수
 
+    public List<Slider> enemyHealthSliders;
     
 
     void Start()
@@ -31,7 +34,21 @@ public class EnemySpawnManager : MonoBehaviour
             _instance = this;
         }
 
+        LoadAsset();
+
         OnGatePassed(false);
+    }
+
+    private void LoadAsset()
+    {
+        _enemyPrefab = new AddressableHandle<GameObject>().Load("EnemyPrefab/Enemy");
+        _bossEnemyPrefab = new AddressableHandle<GameObject>().Load("EnemyPrefab/BossEnemy");
+    }
+
+    private void OnDestroy()
+    {
+        if(_enemyPrefab != null) _enemyPrefab.Release();
+        if(_bossEnemyPrefab != null) _bossEnemyPrefab.Release();
     }
 
     // Gate 통과 시 또는 적이 사망했을 때 적을 다시 소환
@@ -41,12 +58,12 @@ public class EnemySpawnManager : MonoBehaviour
         {
             if (isFinalStage)
             {
-                SpawnEnemy(bossEnemyPrefab);
+                SpawnEnemy(_bossEnemyPrefab.obj);
             }
             else
             {
                 // TODO: 임시 무리 수, 추후 서버에서 정보를 받아올 예정
-                SpawnEnemy(enemyPrefab);
+                SpawnEnemy(_enemyPrefab.obj);
             }
         }
     }
@@ -65,13 +82,13 @@ public class EnemySpawnManager : MonoBehaviour
         currentEnemy.GoToCombatArea(cat, enemyCombatPosition.position);
     }
 
-    public void DestroyEnemy()
+    public void DestroyEnemy(float waitTime = 0.0f)
     {
         Cat cat = GameManager.GetInstance().catObject;
 
         if (currentEnemy)
         {
-            Destroy(currentEnemy.gameObject);
+            Destroy(currentEnemy.gameObject, waitTime);
         }
 
         currentEnemy = null;
