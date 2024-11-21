@@ -1,12 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEditor.PackageManager;
 
 
-//ÆÐÅ¶ ÁÖ°í¹Þ´Â°Å 
+//íŒ¨í‚· ì£¼ê³ ë°›ëŠ”ê±° 
 
 [System.Serializable]
 public class PlayerStatusData

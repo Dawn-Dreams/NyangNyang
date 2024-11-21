@@ -2,12 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using Unity.VisualScripting;
-using UnityEditor.PackageManager;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.SocialPlatforms.Impl;
 
 enum MailType
 {
