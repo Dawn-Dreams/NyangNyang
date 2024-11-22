@@ -26,7 +26,7 @@ public class DungeonPanel : MenuPanel
     public int TempDungeonStageLevel { get; private set; }
     private int currentActiveTabIndex = 0;
 
-    private void Start()
+    private void OnEnable()
     {
         InitializeManagers();
         InitializeUIComponents();
