@@ -219,7 +219,7 @@ public class NetworkManager : MonoBehaviour
         else
         {
 
-          //  OptionMenuManager.GetOptionManager().SetRankList(res.rankingData);
+          //  OptionMenuUI.GetOptionManager().SetRankList(res.rankingData);
 
         }
     }
