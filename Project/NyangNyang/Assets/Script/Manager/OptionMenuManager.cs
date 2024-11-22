@@ -27,6 +27,15 @@ public class OptionMenuManager : MonoBehaviour
         InitializeMenuUI();
     }
 
+    private void OnDisable()
+    {
+        // 기존의 이벤트 리스너 제거 (중복 방지)
+        foreach (var toggle in toggles)
+        {
+            toggle.onValueChanged.RemoveAllListeners();
+        }
+    }
+
     private void InitializeMenuUI()
     {
    
@@ -54,6 +63,7 @@ public class OptionMenuManager : MonoBehaviour
         {
             toggles[0].isOn = true;
             panels[0].SetActive(true);
+            CallPanelFunction(0);         // 0번 패널의 데이터 초기화
         }
     }
 
