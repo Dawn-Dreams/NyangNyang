@@ -60,7 +60,7 @@ public class DummyServerData : MonoBehaviour
     // 각 유저의 클리어 스테이지 정보 // 스테이지 테마와 스테이지 정보만 관리
     protected static int[,] playerClearStageData = new int[,]
     {
-        { 1,3 },        // 0번 유저
+        { 2,1 },        // 0번 유저
         {20,3}
     };
 

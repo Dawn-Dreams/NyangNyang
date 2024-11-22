@@ -7,6 +7,11 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
+public enum StagePlanet
+{
+    Forest, Desert, Ocean, Lava, Ice, Count
+}
+
 public class StageManager : MonoBehaviour
 {
     private static StageManager _instance;

@@ -17,6 +17,36 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: ddcfc9f36c05b344cb2aa2ecd4dea22a
   m_SerializeEntries:
+  - m_GUID: 2a4b79010bbaf1d4eae89706be6ee3d3
+    m_Address: Enemy/Porin_B
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 361b78d018549c94eb5224d2cfbf0e16
+    m_Address: Enemy/Rato
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3ae64ec5940f1714fa34aa739c361dd6
+    m_Address: Enemy/FirePig
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 546ec0d33f8c2d3428df40074557d762
+    m_Address: Enemy/Snailo
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 58bf3ea2bfe17cf41aeff26a1b223cc5
+    m_Address: Enemy/Scopionto
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 610733e2b20b2dd4a8b92a23de41fe04
+    m_Address: Enemy/Tampora_B
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 70673200db936c044944026ff710abd7
     m_Address: Enemy/StarFish
     m_ReadOnly: 0
@@ -29,11 +59,66 @@ MonoBehaviour:
     m_SerializedLabels:
     - Costume/Pet
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 85d1e77da7664f446a11658cd65b9735
+    m_Address: Enemy/Cactuso
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 85eaabf04035b23499b06d104335a2e1
+    m_Address: Enemy/Porin_A
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8a291ef7dcaee954a87227060ca9fe47
+    m_Address: Enemy/Gazer
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a32d178bf2d701548ac5a062339240a8
+    m_Address: Enemy/MiniIceBear
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a3b20522710585e4c86300ac2d400cc5
+    m_Address: Enemy/IceBear
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b1b178fda36ad9449aa0d62b00af1a4e
+    m_Address: Enemy/Wormo
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b565a0c0d18b42f40857944e9812f479
     m_Address: Enemy/Krake
     m_ReadOnly: 0
     m_SerializedLabels:
     - Costume/Pet
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bc16f48ab115f904085683f3211c01b2
+    m_Address: Enemy/MiniIceCube
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c5f76b928ea208544b02f74e45bf5367
+    m_Address: Enemy/Platopo
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c78ea64757b304245baf6ad3afacf33f
+    m_Address: Enemy/IceStarflake
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c952d6ce7e2e76847a7268abda9f4e48
+    m_Address: Enemy/Racco
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ccfb69215d207e04686876b0db06fd1c
+    m_Address: Enemy/Tampora_A
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e0a12ceacd3631a4da9f2e86f4cedbe7
     m_Address: Enemy/Puffe
@@ -41,11 +126,26 @@ MonoBehaviour:
     m_SerializedLabels:
     - Costume/Pet
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f0d2670f454c56342a48f5561818f093
+    m_Address: Enemy/IceGolem
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f865c18184ded92459e8d493d16cc7a4
+    m_Address: Enemy/MegaGolem
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fa643a5162b9f4d4682e11b1129c111e
     m_Address: Enemy/Octopus
     m_ReadOnly: 0
     m_SerializedLabels:
     - Costume/Pet
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fb6efb7bf07c24541aaa47f08c399343
+    m_Address: Enemy/FireGolem
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5f1874fff1b70124d8333b18a2e9b4e8, type: 2}

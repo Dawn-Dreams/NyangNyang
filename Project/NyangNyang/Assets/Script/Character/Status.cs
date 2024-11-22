@@ -85,7 +85,7 @@ public class StatusLevelData
                 // TODO <- 회의 필요 // 0 ~ 10000 레벨을 마스터로 1 ~ 0.25
                 //value = 0.25f + Mathf.Lerp(1.0f, MAX_ATTACK_SPEED, MAX_ATTACK_SPEED - statusLevels[(int)StatusLevelType.ATTACK_SPEED]) * 0.75f;
                 return ATTACK_SPEED_DEFAULT_VALUE;
-                return 1f;
+                //return 1f;
                 //break;
             case StatusLevelType.GOLD:
                 // 기본 1%, 레벨당 0.1% 추가

@@ -2,27 +2,26 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
-using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 using Quaternion = UnityEngine.Quaternion;
 using Random = UnityEngine.Random;
-using Transform = UnityEngine.Transform;
-using Vector2 = UnityEngine.Vector2;
 using Vector3 = UnityEngine.Vector3;
 
+[Serializable]
 public enum EnemyMonsterType
 {
     Null = 0,
     // 숲
-
+    Porin_A, Porin_B, Racco, Platopo, Snailo,
     // 바다
     StarFish, Octopus, Puffe, Shellfish, Krake,
     // 사막
+    Rato, Cactuso,  Wormo, Scopionto, MegaGolem,
     // 얼음
-    // 하늘
+    MiniIceCube, MiniIceBear, IceBear, IceStarflake, IceGolem,
+    // 용암
+    Gazar, Tempora_A, Tempora_B, FirePig, FireGolem,
 
     Count
 }
@@ -195,6 +194,15 @@ public class Enemy : Character
         int currentStage = GameManager.GetInstance().stageManager.GetCurrentStage();
         int maxStage = GameManager.GetInstance().stageManager.maxStageCount;
         _monsterData.InitializeMonsterStatus(currentTheme,currentStage, maxStage);
+        if (_monsterData.monsterTypes == null || _monsterData.monsterTypes.Count == 0)
+        {
+            string text = (StagePlanet)((currentTheme-1) % (int)StagePlanet.Count ) + "Planet_MonsterType";
+            AddressableHandle<MonsterTypeFromPlanet> data =
+                new AddressableHandle<MonsterTypeFromPlanet>().Load(text);
+            Debug.Log(text);
+            _monsterData.monsterTypes = data.obj.monsterTypes;
+        }
+
         status = new Status(_monsterData.monsterStatus);
 
         base.Awake();
@@ -259,7 +267,7 @@ public class Enemy : Character
         // 한마리 (보스의 경우)
         if (numOfEnemy == 1)
         {
-            return new List<EnemyMonsterType>() { monsterDataMonsterTypes[0] };
+            return new List<EnemyMonsterType>() { monsterDataMonsterTypes[^1] };
         }
 
         // 최초 스테이지일 경우
