@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: MonsterTypeFromPlanet
+  m_EditorClassIdentifier: 
+  m_GroupName: MonsterTypeFromPlanet
+  m_Data:
+    m_SerializedData: []
+  m_GUID: c217b8ebda9ba1c4db29e6850ffad93c
+  m_SerializeEntries:
+  - m_GUID: 11e301e310ec2194e94d15448c630402
+    m_Address: ForestPlanet_MonsterType
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 73c71b78e235c124b81e45aa5b6ac601
+    m_Address: OceanPlanet_MonsterType
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b9fcc0b926c81c24f82659752edd04b4
+    m_Address: IcePlanet_MonsterType
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bfb4c23177cee77429a9b6fb2a476cde
+    m_Address: LavaPlanet_MonsterType
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ebb58aceb4a80004c8778c50c5576c6d
+    m_Address: DesertPlanet_MonsterType
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 5f1874fff1b70124d8333b18a2e9b4e8, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 602918691eb47f04ab214553912cc67a, type: 2}
+    - {fileID: 11400000, guid: a31c6b7b74241ec4aae3bd3bb10c384e, type: 2}

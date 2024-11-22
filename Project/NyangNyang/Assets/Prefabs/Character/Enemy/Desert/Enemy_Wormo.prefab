@@ -423,6 +423,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8805510576081194749}
   - component: {fileID: 5592728366843877884}
+  - component: {fileID: 570027255096762655}
   m_Layer: 0
   m_Name: Enemy_Wormo
   m_TagString: Untagged
@@ -468,3 +469,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &570027255096762655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8176467211782952007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aefa655dc2bab9e449dc05fb176e8294, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

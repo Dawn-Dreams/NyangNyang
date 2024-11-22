@@ -505,6 +505,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2402854457633043262}
   - component: {fileID: 2797331410228213013}
+  - component: {fileID: 4103238764983869045}
   m_Layer: 0
   m_Name: Enemy_Scopionto
   m_TagString: Untagged
@@ -550,6 +551,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4103238764983869045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3031898680943585668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aefa655dc2bab9e449dc05fb176e8294, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3850163664204104430
 GameObject:
   m_ObjectHideFlags: 0
