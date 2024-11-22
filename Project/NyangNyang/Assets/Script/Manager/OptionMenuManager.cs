@@ -22,8 +22,14 @@ public class OptionMenuManager : MonoBehaviour
     public GameObject mailPopupPrefab; // 우편 팝업 프리팹
     private GameObject currentPopup; // 현재 활성화된 팝업
 
-    private void Start()
+    private void OnEnable()
     {
+        InitializeMenuUI();
+    }
+
+    private void InitializeMenuUI()
+    {
+   
         FindTogglesAndPanels();
 
         for (int i = 0; i < toggles.Length; i++)
