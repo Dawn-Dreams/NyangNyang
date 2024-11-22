@@ -18,7 +18,9 @@ public class OptionMenuManager : MonoBehaviour
     private GameObject[] panels;            // 동적으로 찾은 패널들을 저장할 배열
 
     public GameObject friendProfilePopupPrefab; // 친구 프로필 팝업 프리팹
-    private GameObject currentFriendProfilePopup; // 현재 활성화된 팝업
+    public GameObject boardPopupPrefab; // 게시판 팝업 프리팹
+    public GameObject mailPopupPrefab; // 우편 팝업 프리팹
+    private GameObject currentPopup; // 현재 활성화된 팝업
 
     private void Start()
     {
@@ -149,6 +151,7 @@ public class OptionMenuManager : MonoBehaviour
     {
         List<BoardData> boardList = DummyOptionsServer.GetBoardData();
         GameObject contentObj = GameObject.Find("BulletinBoardUI/Viewport/Content");
+
         // 기존에 생성된 요소들을 모두 제거
         foreach (Transform child in contentObj.transform)
         {
@@ -161,6 +164,8 @@ public class OptionMenuManager : MonoBehaviour
             {
                 GameObject boardButton = Instantiate(boardButtonPrefab, contentObj.transform);
                 TMP_Text titleText = boardButton.transform.Find("Title").GetComponent<TMP_Text>();
+                Button boardButtonComponent = boardButton.GetComponent<Button>();
+                boardButtonComponent.onClick.AddListener(() => ShowBoardPopup(boardData));
 
                 titleText.text = boardData.title;
             }
@@ -187,6 +192,8 @@ public class OptionMenuManager : MonoBehaviour
             foreach (MailData mailData in mailList)
             {
                 GameObject mailButton = Instantiate(mailButtonPrefab, contentObj.transform);
+                Button mailButtonComponent = mailButton.GetComponent<Button>();
+                mailButtonComponent.onClick.AddListener(() => ShowMailPopup(mailData));
 
                 TMP_Text mailNumberText = mailButton.transform.Find("MessageNumber").GetComponent<TMP_Text>();
                 TMP_Text mailTitleText = mailButton.transform.Find("MessageTitle").GetComponent<TMP_Text>();
@@ -264,19 +271,19 @@ public class OptionMenuManager : MonoBehaviour
     void ShowFriendProfilePopup(FriendData friendData)
     {
         // 기존 팝업 닫기
-        if (currentFriendProfilePopup != null)
+        if (currentPopup != null)
         {
-            Destroy(currentFriendProfilePopup);
+            Destroy(currentPopup);
         }
 
         // 팝업 생성
-        currentFriendProfilePopup = Instantiate(friendProfilePopupPrefab, transform);
+        currentPopup = Instantiate(friendProfilePopupPrefab, transform);
 
         // 프로필 팝업 데이터 설정
-        TMP_Text nameText = currentFriendProfilePopup.transform.Find("NameText").GetComponent<TMP_Text>();
-        TMP_Text idText = currentFriendProfilePopup.transform.Find("IDText").GetComponent<TMP_Text>();
-        TMP_Text levelText = currentFriendProfilePopup.transform.Find("LevelText").GetComponent<TMP_Text>();
-        Button closeButton = currentFriendProfilePopup.transform.Find("CloseButton").GetComponent<Button>();
+        TMP_Text nameText = currentPopup.transform.Find("NameText").GetComponent<TMP_Text>();
+        TMP_Text idText = currentPopup.transform.Find("IDText").GetComponent<TMP_Text>();
+        TMP_Text levelText = currentPopup.transform.Find("LevelText").GetComponent<TMP_Text>();
+        Button closeButton = currentPopup.transform.Find("CloseButton").GetComponent<Button>();
 
         nameText.text = $"{friendData.friendName}";
         idText.text = $"ID : {friendData.friendUID}";
@@ -285,9 +292,71 @@ public class OptionMenuManager : MonoBehaviour
         // 닫기 버튼 이벤트 설정
         closeButton.onClick.AddListener(() =>
         {
-            Destroy(currentFriendProfilePopup);
-            currentFriendProfilePopup = null;
+            Destroy(currentPopup);
+            currentPopup = null;
         });
     }
+
+    // 우편 팝업 열기 메서드
+    void ShowMailPopup(MailData mailData)
+    {
+        // 기존 팝업 닫기
+        if (currentPopup != null)
+        {
+            Destroy(currentPopup);
+        }
+
+        // 팝업 생성
+        currentPopup = Instantiate(mailPopupPrefab, transform);
+
+        // 팝업 데이터 설정
+        TMP_Text titleText = currentPopup.transform.Find("TitleText").GetComponent<TMP_Text>();
+        TMP_Text contentText = currentPopup.transform.Find("ContentText").GetComponent<TMP_Text>();
+        TMP_Text dateText = currentPopup.transform.Find("DateText").GetComponent<TMP_Text>();
+        Button closeButton = currentPopup.transform.Find("CloseButton").GetComponent<Button>();
+
+        titleText.text = mailData.title;
+        contentText.text = mailData.content;
+        dateText.text = $"Date: {mailData.date}";
+
+        // 닫기 버튼 이벤트 설정
+        closeButton.onClick.AddListener(() =>
+        {
+            Destroy(currentPopup);
+            currentPopup = null;
+        });
+    }
+
+
+    // 게시판 팝업 열기 메서드
+    void ShowBoardPopup(BoardData boardData)
+    {
+        // 기존 팝업 닫기
+        if (currentPopup != null)
+        {
+            Destroy(currentPopup);
+        }
+
+        // 팝업 생성
+        currentPopup = Instantiate(boardPopupPrefab, transform);
+
+        // 팝업 데이터 설정
+        TMP_Text titleText = currentPopup.transform.Find("TitleText").GetComponent<TMP_Text>();
+        TMP_Text contentText = currentPopup.transform.Find("ContentText").GetComponent<TMP_Text>();
+        TMP_Text dateText = currentPopup.transform.Find("DateText").GetComponent<TMP_Text>();
+        Button closeButton = currentPopup.transform.Find("CloseButton").GetComponent<Button>();
+
+        titleText.text = boardData.title;
+        contentText.text = boardData.content;
+        dateText.text = $"Date: {boardData.date}";
+
+        // 닫기 버튼 이벤트 설정
+        closeButton.onClick.AddListener(() =>
+        {
+            Destroy(currentPopup);
+            currentPopup = null;
+        });
+    }
+
 
 }
