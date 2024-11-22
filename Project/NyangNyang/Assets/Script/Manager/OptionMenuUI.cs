@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class OptionMenuManager : MonoBehaviour
+public class OptionMenuUI : MonoBehaviour
 {
     public GameObject toggleParentObject;   // Toggle들을 담고 있는 부모 오브젝트
     public GameObject panelParentObject;    // 패널들을 담고 있는 부모 오브젝트
