@@ -11,6 +11,7 @@ public class PlayerCostumeUI : MonoBehaviour
     public RectTransform handRCostumeContent;
     public RectTransform furSkinContent;
     public RectTransform petContent;
+    public RectTransform emotionContent;
     private Dictionary<CatCostumePart, RectTransform> _contentRectTransforms = new Dictionary<CatCostumePart, RectTransform>();
 
     public CostumeElement costumeElementPrefab;
@@ -85,6 +86,7 @@ public class PlayerCostumeUI : MonoBehaviour
         _contentRectTransforms.Add(CatCostumePart.Hand_R, handRCostumeContent);
         _contentRectTransforms.Add(CatCostumePart.FurSkin, furSkinContent);
         _contentRectTransforms.Add(CatCostumePart.Pet, petContent);
+        _contentRectTransforms.Add(CatCostumePart.Emotion, emotionContent);
 
         for (int i = 0; i < (int)CatCostumePart.Count; ++i)
         {

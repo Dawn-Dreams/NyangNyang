@@ -25,7 +25,8 @@ public class Costume : MonoBehaviour
         { CatCostumePart.Body, (int)(BodyCostumeType.NotEquip)  },
         { CatCostumePart.Hand_R, (int)(HandRCostumeType.NotEquip) },
         {CatCostumePart.FurSkin, (int) (CatFurSkin.Cheese)},
-        {CatCostumePart.Pet, (int)(EnemyMonsterType.Null)}
+        {CatCostumePart.Pet, (int)(EnemyMonsterType.Null)},
+        {CatCostumePart.Emotion, (int)(EmotionCostumeType.Smile)},
     };
     // 해당 파츠의 코스튬 GameObject
     private Dictionary<CatCostumePart, GameObject> _currentCatCostumeGameObjects = new Dictionary<CatCostumePart, GameObject>
@@ -67,12 +68,28 @@ public class Costume : MonoBehaviour
         catSkinnedMesh.materials = mats;
     }
 
+    private void ChangeCatEmotion(EmotionCostumeType changeEmotionIndex)
+    {
+        _currentCatCostume[CatCostumePart.Emotion] = (int)changeEmotionIndex;
+
+        Material[] mats = catSkinnedMesh.materials;
+
+        mats[1] = CostumeManager.GetInstance().GetCatEmotionMaterial(changeEmotionIndex);
+        catSkinnedMesh.materials = mats;
+    }
+
     public void ChangeCatCostume(CatCostumePart part, int costumeType)
     {
         // 털에 대해서는 다른 함수로 적용
         if (part == CatCostumePart.FurSkin)
         {
             ChangeCatFurSkin((CatFurSkin)costumeType);
+            return;
+        }
+        // 표정에 대해서는 다른 함수로 적용
+        if (part == CatCostumePart.Emotion)
+        {
+            ChangeCatEmotion((EmotionCostumeType)costumeType);
             return;
         }
         // 펫에 대해서는 펫 매니져에서 적용
@@ -84,6 +101,7 @@ public class Costume : MonoBehaviour
             }
             return;
         }
+        
 
 
         // 현재 착용중인 코스튬은 삭제
