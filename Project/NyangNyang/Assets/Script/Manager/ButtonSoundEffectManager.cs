@@ -1,28 +1,45 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Button))]
 public class ButtonSoundEffectManager : MonoBehaviour
 {
     private Button _button;
+    private Toggle _toggle;
 
     private void Start()
     {
         _button = GetComponent<Button>();
-        _button.onClick.AddListener(PlaySound);
-    }
+        _toggle = GetComponent<Toggle>();
 
-    private void OnCreate()
-    {
-        _button = GetComponent<Button>();
-        _button.onClick.AddListener(PlaySound);
+        if (_button != null)
+        {
+            _button.onClick.AddListener(PlaySound);
+        }
+
+        if (_toggle != null)
+        {
+            _toggle.onValueChanged.AddListener((value) => PlaySound()); // 토글 상태가 변경될 때마다 소리 재생
+        }
     }
 
     private void PlaySound()
     {
         if (AudioManager.Instance != null)
         {
-            AudioManager.Instance.PlaySFX(0);
+            AudioManager.Instance.PlaySFX(0);  // 효과음 재생
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (_button != null)
+        {
+            _button.onClick.RemoveListener(PlaySound);
+        }
+
+        if (_toggle != null)
+        {
+            _toggle.onValueChanged.RemoveListener((value) => PlaySound());
         }
     }
 }
