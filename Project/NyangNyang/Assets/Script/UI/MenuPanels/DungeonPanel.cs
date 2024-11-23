@@ -69,7 +69,7 @@ public class DungeonPanel : MenuPanel
             
             startButtons[i] = tab.Find("DungeonStartButton").GetComponent<Button>();
             sweepButtons[i] = tab.Find("DungeonSweepButton").GetComponent<Button>();
-            shellTexts[i] = tab.Find("TicketText").GetComponent<TextMeshProUGUI>();
+            shellTexts[i] = tab.Find("ShellText").GetComponent<TextMeshProUGUI>();
             titleTexts[i] = tab.Find("GameTitleText").GetComponent<TextMeshProUGUI>();
 
             int index = i;
