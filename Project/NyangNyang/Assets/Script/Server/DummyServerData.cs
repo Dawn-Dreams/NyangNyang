@@ -60,7 +60,7 @@ public class DummyServerData : MonoBehaviour
     // 각 유저의 클리어 스테이지 정보 // 스테이지 테마와 스테이지 정보만 관리
     protected static int[,] playerClearStageData = new int[,]
     {
-        { 1,3 },        // 0번 유저
+        { 2,1 },        // 0번 유저
         {20,3}
     };
 
@@ -172,55 +172,55 @@ public class DummyServerData : MonoBehaviour
     //}
 
 
-    // 티켓이 있는지 확인하는 함수 (유저 ID, 티켓 종류)
-    public static bool HasTicket(int userID, int index)
+    // 조개패가 있는지 확인하는 함수 (유저 ID, 조개패 종류)
+    public static bool HasShell(int userID, int index)
     {
-        if (!IsValidUser(userID) || !IsValidTicketIndex(index))
+        if (!IsValidUser(userID) || !IsValidShellIndex(index))
         {
             Debug.Log("INVALID USERID OR INDEX");
             return false;
         }
 
-        return usersCurrencyData[userID].ticket[index] > 0;
+        return usersCurrencyData[userID].shell[index] > 0;
     }
 
-    // 티켓을 사용하는 함수
-    public static bool UseTicket(int userID, int index)
+    // 조개패를 사용하는 함수
+    public static bool UseShell(int userID, int index)
     {
-        if (HasTicket(userID, index))
+        if (HasShell(userID, index))
         {
-            usersCurrencyData[userID].ticket[index]--;
-            Debug.Log($"티켓 사용: 남은 티켓 수량 {usersCurrencyData[userID].ticket[index]}");
+            usersCurrencyData[userID].shell[index]--;
+            Debug.Log($"조개패 사용: 남은 조개패 수량 {usersCurrencyData[userID].shell[index]}");
             return true;
         }
 
-        Debug.Log("티켓이 부족합니다.");
+        Debug.Log("조개패가 부족합니다.");
         return false;
     }
 
-    // 티켓 수량을 가져오는 함수
-    public static int GetTicketCount(int userID, int index)
+    // 조개패 수량을 가져오는 함수
+    public static int GetShellCount(int userID, int index)
     {
-        if (!IsValidUser(userID) || !IsValidTicketIndex(index))
+        if (!IsValidUser(userID) || !IsValidShellIndex(index))
         {
             Debug.Log("INVALID USERID OR INDEX");
             return 0;
         }
 
-        return usersCurrencyData[userID].ticket[index];
+        return usersCurrencyData[userID].shell[index];
     }
 
-    // 티켓을 추가하는 함수
-    public static void AddTicket(int userID, int index, int amount)
+    // 조개패를 추가하는 함수
+    public static void AddShell(int userID, int index, int amount)
     {
-        if (!IsValidUser(userID) || !IsValidTicketIndex(index))
+        if (!IsValidUser(userID) || !IsValidShellIndex(index))
         {
             Debug.Log("INVALID USERID OR INDEX");
             return;
         }
 
-        usersCurrencyData[userID].ticket[index] += amount;
-        Debug.Log($"유저 {userID}에게 티켓 {index + 1}번을 {amount}개 추가했습니다. 현재 티켓 수량: {usersCurrencyData[userID].ticket[index]}개");
+        usersCurrencyData[userID].shell[index] += amount;
+        Debug.Log($"유저 {userID}에게 조개패 {index + 1}번을 {amount}개 추가했습니다. 현재 조개패 수량: {usersCurrencyData[userID].shell[index]}개");
     }
 
     // 유저 ID의 유효성을 확인하는 함수
@@ -229,10 +229,10 @@ public class DummyServerData : MonoBehaviour
         return userID >= 0 && userID < usersCurrencyData.Length;
     }
 
-    // 티켓 인덱스의 유효성을 확인하는 함수
-    private static bool IsValidTicketIndex(int index)
+    // 조개패 인덱스의 유효성을 확인하는 함수
+    private static bool IsValidShellIndex(int index)
     {
-        return index >= 0 && index < 3; // 티켓 배열 크기와 동일
+        return index >= 0 && index < 3; // 조개패 배열 크기와 동일
     }
 
     public static void GetUserClearStageData(int userID, out int clearStageTheme, out int clearStage)

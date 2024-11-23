@@ -30,22 +30,22 @@ public class Player : MonoBehaviour
     }
 
     // 인덱스를 자주 업데이트하거나 읽을 일이 많다면 별도 프로퍼티로 관리하는 방식이 나음
-    public static int Ticket1
+    public static int Shell1
     {
-        get => playerCurrency.ticket[0];
-        set => playerCurrency.ticket[0] = value;
+        get => playerCurrency.shell[0];
+        set => playerCurrency.shell[0] = value;
     }
 
-    public static int Ticket2
+    public static int Shell2
     {
-        get => playerCurrency.ticket[1];
-        set => playerCurrency.ticket[1] = value;
+        get => playerCurrency.shell[1];
+        set => playerCurrency.shell[1] = value;
     }
 
-    public static int Ticket3
+    public static int Shell3
     {
-        get => playerCurrency.ticket[2];
-        set => playerCurrency.ticket[2] = value;
+        get => playerCurrency.shell[2];
+        set => playerCurrency.shell[2] = value;
     }
 
 
@@ -62,8 +62,8 @@ public class Player : MonoBehaviour
 
 
     // 티켓 변화 델리게이트 이벤트
-    public delegate void OnTicketChangeDelegate(int[] newTicketVal);
-    public static event OnTicketChangeDelegate OnTicketChange;
+    public delegate void OnShellChangeDelegate(int[] newShellVal);
+    public static event OnShellChangeDelegate OnShellChange;
 
     // 한 스테이지 내에서 반복 전투를 진행하는 것에 대한 변수
     public static bool continuousCombat = false;
@@ -72,18 +72,18 @@ public class Player : MonoBehaviour
 
    
 
-    public static int[] Ticket
+    public static int[] Shell
     {
-        get { return playerCurrency.ticket; }
+        get { return playerCurrency.shell; }
         set
         {
             // 배열 비교를 위해 참조 대신 값 비교를 해야 함
-            if (playerCurrency.ticket.Length == value.Length)
+            if (playerCurrency.shell.Length == value.Length)
             {
                 bool isEqual = true;
-                for (int i = 0; i < playerCurrency.ticket.Length; i++)
+                for (int i = 0; i < playerCurrency.shell.Length; i++)
                 {
-                    if (playerCurrency.ticket[i] != value[i])
+                    if (playerCurrency.shell[i] != value[i])
                     {
                         isEqual = false;
                         break;
@@ -93,10 +93,10 @@ public class Player : MonoBehaviour
                 if (isEqual) return;
             }
 
-            playerCurrency.ticket = (int[])value.Clone();
+            playerCurrency.shell = (int[])value.Clone();
 
-            if (OnTicketChange != null)
-                OnTicketChange(playerCurrency.ticket);
+            if (OnShellChange != null)
+                OnShellChange(playerCurrency.shell);
         }
     }
 
@@ -194,19 +194,19 @@ public class Player : MonoBehaviour
         Player.Gold += addGoldValue;
     }
 
-    public static void AddTickets(int[] addTicketValues)
+    public static void AddShells(int[] addShellValues)
     {
         // 서버에 티켓 추가 요청이 있을 경우 처리
-        // DummyServerData.AddTicketsOnServer(userID, addTicketValues);
+        // DummyServerData.AddShellsOnServer(userID, addShellValues);
 
         // 티켓 값 업데이트 (예시로 티켓의 각 값을 더하는 로직 사용)
-        for (int i = 0; i < playerCurrency.ticket.Length && i < addTicketValues.Length; i++)
+        for (int i = 0; i < playerCurrency.shell.Length && i < addShellValues.Length; i++)
         {
-            playerCurrency.ticket[i] += addTicketValues[i];
+            playerCurrency.shell[i] += addShellValues[i];
         }
 
-        if (OnTicketChange != null)
-            OnTicketChange(playerCurrency.ticket);
+        if (OnShellChange != null)
+            OnShellChange(playerCurrency.shell);
     }
 
     public static void UpdatePlayerStatusLevelByType(StatusLevelType type, int newValue)

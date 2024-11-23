@@ -39,7 +39,7 @@ public class PlayerGoodsData
     public int uid;
     public int gold;
     public int jewerly;
-    public int ticket;
+    public int shell;
 
 }
 

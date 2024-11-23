@@ -23,7 +23,7 @@ public enum CatFurSkin
 [Serializable]
 public enum CatCostumePart
 {
-    Head, Hand_R, Body,FurSkin, Pet , Count
+    Head, Hand_R, Body,FurSkin, Pet, Emotion, Count
 }
 
 // 머리 장착 코스튬
@@ -45,6 +45,11 @@ public enum BodyCostumeType
 {
     NotEquip = 0,
     Bag, Fish, Pan, Count
+}
+
+public enum EmotionCostumeType
+{// 1,2,3,4, 9 , 11
+    Smile, Questioning, CatMouth, BrightlySmile, WhatsWrong, Ggyu, Count
 }
 
 // !!TODO: 현재는 코스튬 매니저에서 고양이가 입은 옷을 갈아입히는 역할까지 모두 하지만,
@@ -70,6 +75,8 @@ public class CostumeManager : MonoBehaviour
 
     // 고양이 털 스킨 머테리얼 에셋 관리 변수
     private List<AddressableHandle<Material>> _catFurMaterials = new List<AddressableHandle<Material>>();
+    // 고양이 표정 머테리얼 에셋 관리 변수
+    private List<AddressableHandle<Material>> _catEmotionMaterials = new List<AddressableHandle<Material>>();
     // 고양이 코스튬 프리팹 에셋 관리 변수
     private Dictionary<CatCostumePart, AddressableHandleAssets<GameObject>> _catCostumes =
         new Dictionary<CatCostumePart, AddressableHandleAssets<GameObject>>();
@@ -114,8 +121,16 @@ public class CostumeManager : MonoBehaviour
             _catFurMaterials.Add(furMaterial);
         }
 
+        // 고양이 표정 머테리얼 로드
+        for (int i = 0; i < (int)EmotionCostumeType.Count; i++)
+        {
+            AddressableHandle<Material> emotionMaterial = new AddressableHandle<Material>();
+            emotionMaterial.Load("Costume/Emotion/" + (EmotionCostumeType)i);
+            _catEmotionMaterials.Add(emotionMaterial);
+        }
+
         // 고양이 코스튬 로드
-        for(int i = 0; i < (int)CatCostumePart.Count; ++i)
+        for (int i = 0; i < (int)CatCostumePart.Count; ++i)
         {
             // 에셋 로드 후
             _catCostumes.Add((CatCostumePart)i, new AddressableHandleAssets<GameObject>());
@@ -125,14 +140,22 @@ public class CostumeManager : MonoBehaviour
         _catCostumes[(CatCostumePart.Head)].LoadAssets("Costume/Head", Enum.GetNames(typeof(HeadCostumeType)).ToList());
         _catCostumes[(CatCostumePart.Hand_R)].LoadAssets("Costume/Hand_R", Enum.GetNames(typeof(HandRCostumeType)).ToList());
         _catCostumes[(CatCostumePart.Body)].LoadAssets("Costume/Body", Enum.GetNames(typeof(BodyCostumeType)).ToList());
-        _catCostumes[(CatCostumePart.FurSkin)].LoadAssets("Costume/FurSkin", Enum.GetNames(typeof(CatFurSkin)).ToList());
+        //_catCostumes[(CatCostumePart.FurSkin)].LoadAssets("Costume/FurSkin", Enum.GetNames(typeof(CatFurSkin)).ToList());
+        // 펫은 바로바로 에셋 찾아서 쓰도록, Pet.cs 내에서 관리
         //_catCostumes[(CatCostumePart.Pet)].LoadAssets("Costume/Pet", Enum.GetNames(typeof(EnemyMonsterType)).ToList());
+        //_catCostumes[(CatCostumePart.Emotion)]
+          //  .LoadAssets("Costume/Emotion", Enum.GetNames(typeof(EmotionCostumeType)).ToList());
 
     }
 
     public Material GetCatFurSkinMaterial(CatFurSkin furSkinType)
     {
         return _catFurMaterials[(int)furSkinType].obj;
+    }
+
+    public Material GetCatEmotionMaterial(EmotionCostumeType emotionIndex)
+    {
+        return _catEmotionMaterials[(int)emotionIndex].obj;
     }
 
     public GameObject GetCatCostumePrefab(CatCostumePart part, int costumeType)
@@ -159,6 +182,9 @@ public class CostumeManager : MonoBehaviour
                 break;
             case CatCostumePart.Pet:
                 retVal = (int)EnemyMonsterType.Count;
+                break;
+            case CatCostumePart.Emotion:
+                retVal = (int)EmotionCostumeType.Count;
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(part), part, null);
@@ -188,6 +214,9 @@ public class CostumeManager : MonoBehaviour
                 break;
             case CatCostumePart.Pet:
                 retVal = ((EnemyMonsterType)index).ToString();
+                break;
+            case CatCostumePart.Emotion:
+                retVal = ((EmotionCostumeType)index).ToString();
                 break;
             case CatCostumePart.Count:
                 break;

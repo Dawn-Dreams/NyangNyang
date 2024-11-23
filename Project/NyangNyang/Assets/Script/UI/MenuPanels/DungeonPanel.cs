@@ -13,24 +13,24 @@ public class DungeonPanel : MenuPanel
     [SerializeField]
     private GameObject[] stageTabs;
     private Button[] startButtons, sweepButtons;
-    private TextMeshProUGUI[] ticketTexts, titleTexts;
+    private TextMeshProUGUI[] shellTexts, titleTexts;
     private ScrollRect[] levelScrollViews;
     private Button[][] levelSelectButtons;
 
     private DungeonManager dungeonManager;
 
     private readonly List<string> dungeonNames = new List<string> { "황야의 대지", "눈꽃 동굴", "독거미 숲" };
-    private readonly List<string> ticketNames = new List<string> { "노랑", "파랑", "빨강" };
+    private readonly List<string> shellNames = new List<string> { "노랑", "파랑", "빨강" };
 
-    private int[] highestClearedStage = new int[3] { 1, 1, 1 };
+    private int[] dungeonHighestClearLevel = new int[3] { 1, 1, 1 };
     public int TempDungeonStageLevel { get; private set; }
     private int currentActiveTabIndex = 0;
 
-    private void Start()
+    private void OnEnable()
     {
         InitializeManagers();
         InitializeUIComponents();
-        OnClickStageButton(0); // 기본 탭 선택
+        SetActiveTab(0); // 기본 탭 선택
     }
 
     private void InitializeManagers()
@@ -50,8 +50,7 @@ public class DungeonPanel : MenuPanel
         stageButtons = scrollView.content.GetComponentsInChildren<Button>();
         for (int i = 0; i < stageButtons.Length; i++)
         {
-            int index = i;
-            stageButtons[i].onClick.AddListener(() => OnClickStageButton(index));
+            stageButtons[i].onClick.AddListener(() => OnClickStageButton(i));
         }
     }
 
@@ -60,7 +59,7 @@ public class DungeonPanel : MenuPanel
         int tabCount = stageTabs.Length;
         startButtons = new Button[tabCount];
         sweepButtons = new Button[tabCount];
-        ticketTexts = new TextMeshProUGUI[tabCount];
+        shellTexts = new TextMeshProUGUI[tabCount];
         titleTexts = new TextMeshProUGUI[tabCount];
         levelScrollViews = new ScrollRect[tabCount];
 
@@ -70,7 +69,7 @@ public class DungeonPanel : MenuPanel
             
             startButtons[i] = tab.Find("DungeonStartButton").GetComponent<Button>();
             sweepButtons[i] = tab.Find("DungeonSweepButton").GetComponent<Button>();
-            ticketTexts[i] = tab.Find("TicketText").GetComponent<TextMeshProUGUI>();
+            shellTexts[i] = tab.Find("ShellText").GetComponent<TextMeshProUGUI>();
             titleTexts[i] = tab.Find("GameTitleText").GetComponent<TextMeshProUGUI>();
 
             int index = i;
@@ -100,7 +99,7 @@ public class DungeonPanel : MenuPanel
             int level = j + 1; // 레벨은 1부터 시작하므로 j + 1로 설정
             buttons[j].onClick.RemoveAllListeners(); // 이전 리스너 제거
             buttons[j].onClick.AddListener(() => OnClickStageLevelButton(tabIndex, level - 1)); // levelIndex는 0부터 시작하므로 level - 1
-            buttons[j].interactable = level <= highestClearedStage[tabIndex]; // 최고 클리어된 레벨까지만 활성화
+            buttons[j].interactable = level <= dungeonHighestClearLevel[tabIndex]; // 최고 클리어된 레벨까지만 활성화
             buttons[j].GetComponentInChildren<TextMeshProUGUI>().text = $"던전 LEVEL {level}"; // 레벨 번호 표시
         }
     }
@@ -108,9 +107,9 @@ public class DungeonPanel : MenuPanel
 
     public void OnStageCleared(int tabIndex, int clearedStageLevel)
     {
-        if (clearedStageLevel >= highestClearedStage[tabIndex])
+        if (clearedStageLevel >= dungeonHighestClearLevel[tabIndex])
         {
-            highestClearedStage[tabIndex] = clearedStageLevel;
+            dungeonHighestClearLevel[tabIndex] = clearedStageLevel;
             UpdateLevelSelectButtons(tabIndex);
         }
         UpdateStageButtons(tabIndex);
@@ -130,12 +129,21 @@ public class DungeonPanel : MenuPanel
     {
         SetActiveTab(index);
         titleTexts[index].text = $"{dungeonNames[index]}";
-        UpdateTicketText(index);
+        UpdateShellText(index);
     }
 
     private void SetActiveTab(int index)
     {
-        foreach (var tab in stageTabs) tab.SetActive(false);
+        // 배열의 범위 내인지 확인
+        if (index < 0 || index >= stageTabs.Length)
+        {
+            Debug.LogError($"Index {index} is out of bounds of stageTabs array.");
+            return;
+        }
+
+        foreach (var tab in stageTabs)
+            tab.SetActive(false);
+
         stageTabs[index].SetActive(true);
         currentActiveTabIndex = index;
     }
@@ -149,41 +157,41 @@ public class DungeonPanel : MenuPanel
 
     private void OnClickStartButton(int index)
     {
-        if (!DummyServerData.HasTicket(Player.GetUserID(), index))
+        if (!DummyServerData.HasShell(Player.GetUserID(), index))
         {
             Debug.Log("입장권이 부족합니다.");
             return;
         }
         dungeonManager.StartDungeon(index, TempDungeonStageLevel);
-        highestClearedStage[index] = dungeonManager.DungeonLevels[index];
-        UpdateTicketText(index);
+        dungeonHighestClearLevel[index] = dungeonManager.dungeonHighestClearLevel[index];
+        UpdateShellText(index);
     }
 
     private void OnClickSweepButton(int index)
     {
-        if (!DummyServerData.HasTicket(Player.GetUserID(), index))
+        if (!DummyServerData.HasShell(Player.GetUserID(), index))
         {
             Debug.Log("입장권이 부족합니다.");
             return;
         }
         Debug.Log("소탕");
-        highestClearedStage[index] = dungeonManager.DungeonLevels[index];
-        UpdateTicketText(index);
+        dungeonHighestClearLevel[index] = dungeonManager.dungeonHighestClearLevel[index];
+        UpdateShellText(index);
     }
 
-    private void UpdateTicketText(int index)
+    private void UpdateShellText(int index)
     {
-        string ticketName = ticketNames[index];
-        int sweepTicketCount = DummyServerData.GetTicketCount(Player.GetUserID(), index);
+        string shellName = shellNames[index];
+        int sweepShellCount = DummyServerData.GetShellCount(Player.GetUserID(), index);
 
-        ticketTexts[index].text = $"{ticketName} 조개패 {sweepTicketCount}개";
+        shellTexts[index].text = $"{shellName} 조개패 {sweepShellCount}개";
     }
 
     private void UpdateStageButtons(int tabIndex)
     {
         for (int i = 0; i < levelSelectButtons[tabIndex].Length; i++)
         {
-            levelSelectButtons[tabIndex][i].interactable = (i + 1) <= highestClearedStage[tabIndex];
+            levelSelectButtons[tabIndex][i].interactable = (i + 1) <= dungeonHighestClearLevel[tabIndex];
         }
     }
 }

@@ -12,7 +12,7 @@ public class DungeonManager : MonoBehaviour
     private GameObject[] dungeonPanels;
     private TextMeshProUGUI DungeonResultText;
 
-    public int[] DungeonLevels = new int[3] { 1, 1, 1 };
+    public int[] dungeonHighestClearLevel = new int[3] { 1, 1, 1 };
     private int currentDungeonIndex;
 
     // 스페셜 스테이지 지속 시간
@@ -85,7 +85,7 @@ public class DungeonManager : MonoBehaviour
             Debug.Log("미니게임이 실행 중이므로 스페셜 스테이지를 시작할 수 없습니다.");
             return;
         }
-        if (!DummyServerData.HasTicket(Player.GetUserID(), index))
+        if (!DummyServerData.HasShell(Player.GetUserID(), index))
         {
             Debug.Log("소탕권이 부족하여 스페셜 스테이지를 시작할 수 없습니다.");
             return;
@@ -117,7 +117,7 @@ public class DungeonManager : MonoBehaviour
         currentDungeonIndex = index;
         DungeonUI.SetActive(true);  // UI 활성화
 
-        DummyServerData.UseTicket(Player.GetUserID(), index); // 티켓 차감
+        DummyServerData.UseShell(Player.GetUserID(), index); // 티켓 차감
 
         StartCoroutine(StartCombatAfterDelay(1.0f));
         StartCoroutine(CheckBattleOutcome());
@@ -189,16 +189,16 @@ public class DungeonManager : MonoBehaviour
         // 성공 처리
         if (isSuccess)
         {
-            if (currentDungeonIndex >= 0 && currentDungeonIndex < DungeonLevels.Length)
+            if (currentDungeonIndex >= 0 && currentDungeonIndex < dungeonHighestClearLevel.Length)
             {
-                DungeonLevels[currentDungeonIndex]++;
+                dungeonHighestClearLevel[currentDungeonIndex]++;
                 ShowDungeonResultText("CLEAR!!", 2);
-                Player.AddGold(DungeonLevels[currentDungeonIndex] * gainGold);
+                Player.AddGold(dungeonHighestClearLevel[currentDungeonIndex] * gainGold);
 
                 var DungeonPanel = FindObjectOfType<DungeonPanel>();
                 if (DungeonPanel != null)
                 {
-                    DungeonPanel.OnStageCleared(currentDungeonIndex, DungeonLevels[currentDungeonIndex]);
+                    DungeonPanel.OnStageCleared(currentDungeonIndex, dungeonHighestClearLevel[currentDungeonIndex]);
                 }
             }
         }

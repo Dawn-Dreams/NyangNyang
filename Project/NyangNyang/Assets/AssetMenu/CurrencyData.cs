@@ -10,7 +10,7 @@ public class CurrencyData : ScriptableObject
     public BigInteger gold;
     public int diamond;
     public int cheese;
-    public int[] ticket = {0,0,0};
+    public int[] shell = {0,0,0};
 
     // 골드 변화 델리게이트 이벤트
     public delegate void OnGoldChangeDelegate(BigInteger newGoldVal);
@@ -27,12 +27,12 @@ public class CurrencyData : ScriptableObject
     public delegate void OnCheeseChangeDelegate(int newCheeseValue);
     public event OnCheeseChangeDelegate OnCheeseChange;
 
-    public CurrencyData SetCurrencyData(BigInteger getGold, int getDiamond, int getCheese, int[] getTicket)
+    public CurrencyData SetCurrencyData(BigInteger getGold, int getDiamond, int getCheese, int[] getShell)
     {
         gold = getGold;
         diamond = getDiamond;
         cheese = getCheese;
-        ticket = (int[])getTicket.Clone();
+        shell = (int[])getShell.Clone();
         return this;
     }
 
@@ -41,7 +41,7 @@ public class CurrencyData : ScriptableObject
         gold = otherData.gold;
         diamond = otherData.diamond;
         cheese = otherData.cheese;
-        ticket = otherData.ticket; 
+        shell = otherData.shell; 
         return this;
     }
 

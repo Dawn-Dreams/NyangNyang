@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: CatEmotionMaterials
+  m_EditorClassIdentifier: 
+  m_GroupName: CatEmotionMaterials
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 618bc9e5e6e9c914a98f1eb756e5d9ab
+  m_SerializeEntries:
+  - m_GUID: 270f8050589f6674fb1740765f7cb064
+    m_Address: Costume/Emotion/WhatsWrong
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/Emotion
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 36e02d79d513e4c42909114d4fd196d6
+    m_Address: Costume/Emotion/CatMouth
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/Emotion
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7261da149d23e6c42801adce6fc53a50
+    m_Address: Costume/Emotion/Questioning
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/Emotion
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9305e6acf8676f045a0e225b68a4912b
+    m_Address: Costume/Emotion/BrightlySmile
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/Emotion
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: acfcfae64ee9a4e4fad8dfec14c0d2e0
+    m_Address: Costume/Emotion/Ggyu
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/Emotion
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c38968b96b442334db4638cdd25da8e8
+    m_Address: Costume/Emotion/Smile
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Costume/Emotion
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 5f1874fff1b70124d8333b18a2e9b4e8, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 944e5c41ce6429943b42dbf130819144, type: 2}
+    - {fileID: 11400000, guid: e949085a4639c0b47a92f055d7d91617, type: 2}

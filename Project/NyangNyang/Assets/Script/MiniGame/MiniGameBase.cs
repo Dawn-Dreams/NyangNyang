@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public abstract class MiniGameBase : MonoBehaviour
 {
     protected string gameName;
-    protected int rewardTicketIndex; // 보상으로 받을 소탕권 인덱스
+    protected int rewardShellIndex; // 보상으로 받을 소탕권 인덱스
     protected bool isGameCleared;    // 게임 클리어 여부
     private int baseReward;
 
@@ -27,10 +27,10 @@ public abstract class MiniGameBase : MonoBehaviour
         return score;
     }
 
-    protected void Initialize(string gameName, int rewardTicketIndex, int initialScore)
+    protected void Initialize(string gameName, int rewardShellIndex, int initialScore)
     {
         this.gameName = gameName;
-        this.rewardTicketIndex = rewardTicketIndex;
+        this.rewardShellIndex = rewardShellIndex;
         GameManager.isMiniGameActive = true;
         isGameCleared = false;
         Score = initialScore;

@@ -79,7 +79,8 @@ namespace StatusEffects.Modules
         {
             VFXInstance VFXInstance = moduleInstance as VFXInstance;
             // Give the vfx the name of the prefab so it can be queried later
-            GameObject VFXGameObject = Instantiate(VFXInstance.Prefab, manager.transform).name = VFXInstance.Prefab.name;
+            GameObject VFXGameObject = Instantiate(VFXInstance.Prefab, manager.transform);
+            VFXGameObject.name = VFXInstance.Prefab.name;
 
             if (VFXInstance.InstantiateAgainWhenAddingStacks)
             {

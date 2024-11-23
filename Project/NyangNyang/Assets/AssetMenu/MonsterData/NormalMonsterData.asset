@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: NormalMonsterData
   m_EditorClassIdentifier: 
   enemyCount: 5
-  monsterTypes: 0100000002000000030000000400000005000000
+  monsterTypes: 
   monsterStatus:
     statusLevels: 01000000010000000100000001000000010000000100000001000000010000000100000001000000
   enemyDropData: {fileID: 11400000, guid: 7fb04559e37a5d3448b165ff059a3569, type: 2}
+  baseHP: 0
+  baseAttack: 0
+  baseDefense: 0
