@@ -42,7 +42,7 @@ public class CombatManager : MonoBehaviour
         GameManager.GetInstance().catObject.SetEnemy(null);
         
         // 아이템 드랍(currentEnemy의 monsterData.enemyDropData 참조)
-        Debug.Log("적군에게서 아이템 드랍");
+        //Debug.Log("적군에게서 아이템 드랍");
 
         // 적군 gateClearWaitTime 이후 Destroy
         EnemySpawnManager.GetInstance().DestroyEnemy(gateClearWaitTime);

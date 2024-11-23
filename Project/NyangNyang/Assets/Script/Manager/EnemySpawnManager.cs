@@ -77,9 +77,12 @@ public class EnemySpawnManager : MonoBehaviour
     {
         Cat cat = GameManager.GetInstance().catObject;
 
-        // 적 스폰
-        currentEnemy = Instantiate(prefab, enemySpawnPosition).GetComponent<Enemy>();
-        currentEnemy.GoToCombatArea(cat, enemyCombatPosition.position);
+        if (cat != null &&  prefab != null)
+        {
+            // 적 스폰
+            currentEnemy = Instantiate(prefab, enemySpawnPosition).GetComponent<Enemy>();
+            currentEnemy.GoToCombatArea(cat, enemyCombatPosition.position);
+        }
     }
 
     public void DestroyEnemy(float waitTime = 0.0f)

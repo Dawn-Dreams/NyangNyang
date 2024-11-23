@@ -199,7 +199,7 @@ public class Enemy : Character
             string text = (StagePlanet)((currentTheme-1) % (int)StagePlanet.Count ) + "Planet_MonsterType";
             AddressableHandle<MonsterTypeFromPlanet> data =
                 new AddressableHandle<MonsterTypeFromPlanet>().Load(text);
-            Debug.Log(text);
+            //Debug.Log(text);
             _monsterData.monsterTypes = data.obj.monsterTypes;
         }
 

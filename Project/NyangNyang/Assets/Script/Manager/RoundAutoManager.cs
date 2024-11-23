@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BackgroundSpritesRound
@@ -62,6 +63,7 @@ public class RoundAutoManager : MonoBehaviour
         {
             Debug.LogError("spriteList에 스프라이트가 없습니다.");
         }
+        ChangeSpriteByIndex(currentSpriteIndex);
     }
 
     void Update()
@@ -92,7 +94,7 @@ public class RoundAutoManager : MonoBehaviour
     {
         if (spriteList == null || spriteList.Count == 0 || backgroundCircle == null || index > 4 || index < 0)
             return;
-        currentSpriteIndex = (index-1) % spriteList.Count;
+        currentSpriteIndex = index % spriteList.Count;
         backgroundCircle.SetNewSprite(spriteList[currentSpriteIndex]);
     }
 }

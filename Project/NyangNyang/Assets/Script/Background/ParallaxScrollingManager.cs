@@ -91,11 +91,14 @@ public class ParallaxScrollingManager : MonoBehaviour
             float layerMoveSpeed = initialMoveSpeed * Mathf.Pow(IncreaseSpeed, i);
             _backgroundObjects.Add(new BackgroundSprites(i, layerMoveSpeed));
         }
+        // 초기 배경 설정
+        ChangeBackgroundImageFromPrefab(currentPrefabIndex);
     }
 
     void Update()
     {
-        MoveSprites();
+        if (shouldMove)
+            MoveSprites();
     }
 
     void MoveSprites()
