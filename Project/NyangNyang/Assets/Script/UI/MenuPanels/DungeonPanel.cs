@@ -30,7 +30,7 @@ public class DungeonPanel : MenuPanel
     {
         InitializeManagers();
         InitializeUIComponents();
-        OnClickStageButton(0); // 기본 탭 선택
+        SetActiveTab(0); // 기본 탭 선택
     }
 
     private void InitializeManagers()
@@ -50,8 +50,7 @@ public class DungeonPanel : MenuPanel
         stageButtons = scrollView.content.GetComponentsInChildren<Button>();
         for (int i = 0; i < stageButtons.Length; i++)
         {
-            int index = i;
-            stageButtons[i].onClick.AddListener(() => OnClickStageButton(index));
+            stageButtons[i].onClick.AddListener(() => OnClickStageButton(i));
         }
     }
 
@@ -135,7 +134,16 @@ public class DungeonPanel : MenuPanel
 
     private void SetActiveTab(int index)
     {
-        foreach (var tab in stageTabs) tab.SetActive(false);
+        // 배열의 범위 내인지 확인
+        if (index < 0 || index >= stageTabs.Length)
+        {
+            Debug.LogError($"Index {index} is out of bounds of stageTabs array.");
+            return;
+        }
+
+        foreach (var tab in stageTabs)
+            tab.SetActive(false);
+
         stageTabs[index].SetActive(true);
         currentActiveTabIndex = index;
     }
