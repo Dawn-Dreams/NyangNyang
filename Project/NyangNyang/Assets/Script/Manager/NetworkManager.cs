@@ -132,7 +132,7 @@ public class NetworkManager : MonoBehaviour
         else
         {
             //로그인 성공했을 때 여기서 데이터 세팅해야한다.
-            
+            Player.SetUserLoginData(res);
             Debug.Log("Success Login");
         }
     }

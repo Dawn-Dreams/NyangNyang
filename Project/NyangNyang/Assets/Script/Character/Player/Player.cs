@@ -104,9 +104,6 @@ public class Player : MonoBehaviour
     // 게임 매니저 내에서 실행
     public static void OnAwakeGetInitialDataFromServer()
     {
-        //만약 기기에 저장해놓은 id가 -1이면 -> uid 발급
-
-        //아니면 데이터 가져오기
 
 
         // 서버로부터 user id 받기
@@ -159,7 +156,7 @@ public class Player : MonoBehaviour
     {
         //로그인 성공 시 받아오는 데이터
         // status, stauslv, goods(골드,다이아,치즈),메일함
-
+        
 
     }
     public static int GetUserID()
