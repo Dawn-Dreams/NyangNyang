@@ -1,10 +1,11 @@
 
 using System.Numerics;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private static int userID = 0;
+    private static int userID = -1;
     public static string PlayerName;
 
     public static Status playerStatus;
@@ -103,6 +104,11 @@ public class Player : MonoBehaviour
     // 게임 매니저 내에서 실행
     public static void OnAwakeGetInitialDataFromServer()
     {
+        //만약 기기에 저장해놓은 id가 -1이면 -> uid 발급
+
+        //아니면 데이터 가져오기
+
+
         // 서버로부터 user id 받기
         userID = 0;
         if (playerStatus == null)
@@ -149,11 +155,23 @@ public class Player : MonoBehaviour
         }
     }
 
+    public static void SetUserLoginData(ResponseLogin res)
+    {
+        //로그인 성공 시 받아오는 데이터
+        // status, stauslv, goods(골드,다이아,치즈),메일함
+
+
+    }
     public static int GetUserID()
     {
         return userID;
     }
-
+    public static void SetUserID(int uid)
+    {
+        //게스트로그인 - 기기저장 uid
+        PlayerPrefs.SetInt("UserID", uid);
+        userID = uid;
+    }
     public static void GetCurrencyDataFromServer()
     {
         if (playerCurrency == null)

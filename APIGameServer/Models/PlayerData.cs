@@ -32,8 +32,12 @@ public class PlayerGoodsData
 {
     public int uid { get; set; }
     public int gold { get; set; }
-    public int jewerly { get; set; }
-    public int ticket { get; set; }
+    public int diamond { get; set; }
+    public int cheese{ get; set; }
+
+    public int shell1 { get; set; }
+    public int shell2 { get; set; }
+    public int shell3 { get; set; }
 
 
 }

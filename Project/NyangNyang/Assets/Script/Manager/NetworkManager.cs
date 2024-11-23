@@ -77,6 +77,8 @@ public class NetworkManager : MonoBehaviour
             callback.Invoke(uwr);
         }
     }
+
+    //Create New User Request - issus user id
     public void ReqUserRegist()
     {
         Debug.Log("UserRegister");
@@ -84,14 +86,31 @@ public class NetworkManager : MonoBehaviour
         ReqRegist req = new ReqRegist();
         StartCoroutine(CoSendNetRequest("Regist", req, GetUserId));
 
+    }
+
+    void GetUserId(UnityWebRequest uwr) 
+    {
+        var res = JsonUtility.FromJson<ResRegist>(uwr.downloadHandler.text);
+
+        if (res.result != (int)ErrorCode.None)
+        {
+            Debug.Log("Failed get register data");
+        }
+        else
+        {
+            Player.SetUserID(res.uid);
+
+            Debug.Log(string.Format("Register Success User ID {0}", res.uid));
+            Debug.Log(string.Format("Register ger userId {0}", Player.GetUserID()));
+
+        }
 
     }
 
+    //Login Request with uid -> get userdata(ststus, lv, goods, malist ect.. from server db)
     public void UserLogin(int uid)
     {
         Debug.Log("User Login");
-
-        //api�������� �α��� ���� �����Ǹ� �߰�
 
         RequestLogin req = new RequestLogin
         {
@@ -100,6 +119,7 @@ public class NetworkManager : MonoBehaviour
         StartCoroutine(CoSendNetRequest("Login", req, GetPlayerGameData));
 
     }
+
     void GetPlayerGameData(UnityWebRequest uwr)
     {
         var res = JsonUtility.FromJson<ResponseLogin>(uwr.downloadHandler.text);
@@ -107,16 +127,17 @@ public class NetworkManager : MonoBehaviour
         if (res.result != ErrorCode.None)
         {
 
-            Debug.Log("Failed gacha");
+            Debug.Log("Failed GetPlayerGameData");
         }
         else
         {
-           // Player.SetPlayerNickname("nayeng5");
-            //Player.SetUserId(5);
+            //로그인 성공했을 때 여기서 데이터 세팅해야한다.
+            
             Debug.Log("Success Login");
         }
     }
 
+    //change nickname request -> 닉네임 변경 성공여부 리턴
     public void ChangeNickname(int uid, string oldNickname, string newNickname)
     {
         ReqChangeNickname req = new ReqChangeNickname(uid, oldNickname, newNickname);
@@ -131,6 +152,7 @@ public class NetworkManager : MonoBehaviour
         var res = JsonUtility.FromJson<ResChangeNickname>(uwr.downloadHandler.text);
         if (res.result != ErrorCode.None)
         {
+            //닉네임 변경 성공
             //Player.SetPlayerNickname(nichname);
 
         }
@@ -139,6 +161,7 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
+    //플레이어 status 정보 db에 저장요청
     public void UpdatePlayerStatus(int uid, int hp, int mp, int attack_power, int def,
         int heal_hp_percent, int heal_mp_percent, float crit_percent, float attack_speed)
     {
@@ -164,6 +187,22 @@ public class NetworkManager : MonoBehaviour
 
         }
     }
+    void UpdateStats(UnityWebRequest uwr)
+    {
+
+        var res = JsonUtility.FromJson<ResUpdateDbData>(uwr.downloadHandler.text);
+        if (res.result != (int)ErrorCode.None)
+        {
+            Debug.Log("Failed saved DB");
+        }
+        else
+        {
+            Debug.Log("Success saved DB");
+        }
+
+    }
+
+    //업데이트 레벨 
     public void UpdatePlayerStatusLv(int uid, int hp_lv, int mp_lv, int str_lv, int def_lv,
     int heal_hp_lv, int heal_mp_lv, int crit_lv, int attack_speed_lv, int gold_acq_lv, int exp_acq_lv)
     {
@@ -184,10 +223,25 @@ public class NetworkManager : MonoBehaviour
             exp_acq_lv = exp_acq_lv
         };
 
-        StartCoroutine(CoSendNetRequest("UpdatePlayerStatLv", req, UpdateStats));
+        StartCoroutine(CoSendNetRequest("UpdatePlayerStatLv", req, UpdateStatsLevel));
+    }
+    void UpdateStatsLevel(UnityWebRequest uwr)
+    {
+
+        var res = JsonUtility.FromJson<ResUpdateDbData>(uwr.downloadHandler.text);
+        if (res.result != (int)ErrorCode.None)
+        {
+            Debug.Log("Failed saved DB");
+        }
+        else
+        {
+            Debug.Log("Success saved DB");
+        }
+
     }
 
 
+    //업데이트 점수
     public void UpdatePlayerScore(int uid, int score)
     {
         Debug.Log("Update Player Score To server");
@@ -197,15 +251,17 @@ public class NetworkManager : MonoBehaviour
             score = score
         };
 
+        //todo. 함수 변경해야함 update statt가 아님 -> redis에 올려야할듯?
+        //함수가 필요없는거 같긴함.
         StartCoroutine(CoSendNetRequest("UpdatePlayerScore", req, UpdateStats));
 
     }
 
+    //랭킹 누를때 업데이트누르기
     public void UpdatePlayersRanking(List<RankingData> rankList)
     {
         RequestUpdateScore req = new RequestUpdateScore();
 
-        //������ ��ŷ ������Ʈ ��û -> ��ŷui������ �θ���ɵ�?
         StartCoroutine(CoSendNetRequest("UpdateRanking", null,
             (result) => SettingRankData(result)));
         Debug.Log("SettingRankData");
@@ -227,6 +283,8 @@ public class NetworkManager : MonoBehaviour
 
         }
     }
+
+    //가차뽑기 누를때 
     public void EquipmentGacha(int uid)
     {
         ReqWeaponGacha req = new ReqWeaponGacha { uid = uid };
@@ -253,6 +311,8 @@ public class NetworkManager : MonoBehaviour
             Debug.Log("Success gacha");
         }
     }
+
+    //스킬가차 누를때
     public void SkillsGacha(int uid)
     {
         ReqSkiilGacha req = new ReqSkiilGacha { uid = uid };
@@ -280,40 +340,6 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
-    void GetUserId(UnityWebRequest uwr) //����ó�������Ҷ�
-    {
-        var res = JsonUtility.FromJson<ResRegist>(uwr.downloadHandler.text);
-
-        if (res.result != (int)ErrorCode.None)
-        {
-            Debug.Log("Failed get register data");
-        }
-        else
-        {
-            Debug.Log(string.Format("Register Success User ID {0}", res.uid));
-
-           // Player.SetUserId(res.uid);
-            Debug.Log(string.Format("Register ger userId {0}", Player.GetUserID()));
-
-        }
-
-    }
-
-    void UpdateStats(UnityWebRequest uwr)
-    {
-        //������ DB�����û ������ �������� ���� ����
-
-        var res = JsonUtility.FromJson<ResUpdateDbData>(uwr.downloadHandler.text);
-        if (res.result != (int)ErrorCode.None)
-        {
-            Debug.Log("Failed saved DB");
-        }
-        else
-        {
-            Debug.Log("Success saved DB");
-        }
-
-    }
 
 
 
