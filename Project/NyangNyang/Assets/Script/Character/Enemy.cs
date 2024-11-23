@@ -99,7 +99,7 @@ public class DummyEnemy
     public void DestroyDummyEnemy()
     {
         EnemyPlayAnimation(AnimationManager.AnimationState.DieA);
-        
+        _slider.gameObject.SetActive(false);   
         //dummyGameObject.GetComponent<SpriteRenderer>().color = new Color(0.25f, 0.25f, 0.25f);
         hpText.gameObject.SetActive(false);
     }
