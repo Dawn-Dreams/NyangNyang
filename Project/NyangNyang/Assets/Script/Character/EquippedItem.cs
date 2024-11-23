@@ -96,9 +96,7 @@ public class EquippedItem : MonoBehaviour
         if (s != null)
         {
             SkillImages[CurSkillSlot].sprite = s;
-            /*
-                공격력 관련 코드 작성         
-             */
+            SkillManager.GetInstance().LetSkillActivate(id);
 
 
             SkillPopUp.SetActive(false);
