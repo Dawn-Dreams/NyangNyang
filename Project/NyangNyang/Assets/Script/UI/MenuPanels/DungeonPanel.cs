@@ -3,11 +3,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using System.Linq;
 
 public class DungeonPanel : MenuPanel
 {
     [SerializeField]
-    private ScrollRect scrollView;
+    private GameObject stageButtonsParent;
     private Button[] stageButtons;
 
     [SerializeField]
@@ -16,6 +17,9 @@ public class DungeonPanel : MenuPanel
     private TextMeshProUGUI[] shellTexts, titleTexts;
     private ScrollRect[] levelScrollViews;
     private Button[][] levelSelectButtons;
+
+    [SerializeField] private int gainGold = 10000;               // 기본 골드 획득량
+    [SerializeField] private int gainEXP = 1000;               // 기본 경험치 획득량
 
     private DungeonManager dungeonManager;
 
@@ -47,10 +51,22 @@ public class DungeonPanel : MenuPanel
 
     private void InitializeStageButtons()
     {
-        stageButtons = scrollView.content.GetComponentsInChildren<Button>();
+        List<Button> buttons = new List<Button>();
+        foreach (Transform child in stageButtonsParent.transform)
+        {
+            Button button = child.GetComponent<Button>();
+            if (button != null)
+            {
+                buttons.Add(button);
+            }
+        }
+
+        stageButtons = buttons.ToArray();
+
         for (int i = 0; i < stageButtons.Length; i++)
         {
-            stageButtons[i].onClick.AddListener(() => OnClickStageButton(i));
+            int index = i; // 클로저 문제 해결
+            stageButtons[i].onClick.AddListener(() => OnClickStageButton(index));
         }
     }
 
@@ -66,20 +82,25 @@ public class DungeonPanel : MenuPanel
         for (int i = 0; i < tabCount; i++)
         {
             var tab = stageTabs[i].transform;
-            
+
             startButtons[i] = tab.Find("DungeonStartButton").GetComponent<Button>();
             sweepButtons[i] = tab.Find("DungeonSweepButton").GetComponent<Button>();
             shellTexts[i] = tab.Find("ShellText").GetComponent<TextMeshProUGUI>();
             titleTexts[i] = tab.Find("GameTitleText").GetComponent<TextMeshProUGUI>();
 
             int index = i;
-            
+
+            // 기존 리스너 제거 후 리스너 등록
+            startButtons[i].onClick.RemoveAllListeners();
+            sweepButtons[i].onClick.RemoveAllListeners();
+
             startButtons[i].onClick.AddListener(() => OnClickStartButton(index));
             sweepButtons[i].onClick.AddListener(() => OnClickSweepButton(index));
 
             levelScrollViews[i] = stageTabs[i].GetComponentInChildren<ScrollRect>();
         }
     }
+
 
     private void InitializeLevelSelectButtons()
     {
@@ -102,6 +123,8 @@ public class DungeonPanel : MenuPanel
             buttons[j].interactable = level <= dungeonHighestClearLevel[tabIndex]; // 최고 클리어된 레벨까지만 활성화
             buttons[j].GetComponentInChildren<TextMeshProUGUI>().text = $"던전 LEVEL {level}"; // 레벨 번호 표시
         }
+        // 조개패 개수 init
+        UpdateShellText(tabIndex);
     }
 
 
@@ -112,9 +135,16 @@ public class DungeonPanel : MenuPanel
             dungeonHighestClearLevel[tabIndex] = clearedStageLevel;
             UpdateLevelSelectButtons(tabIndex);
         }
+        GetReward(tabIndex);
         UpdateStageButtons(tabIndex);
     }
+    private void GetReward(int tabIndex)
+    {
+        // 던전 보상
+        Player.AddGold(dungeonHighestClearLevel[tabIndex] * gainGold);
+        Player.AddExp(dungeonHighestClearLevel[tabIndex] * gainEXP);
 
+    }
     private void UpdateLevelSelectButtons(int tabIndex)
     {
         for (int i = 0; i < levelSelectButtons[tabIndex].Length; i++)
@@ -152,6 +182,7 @@ public class DungeonPanel : MenuPanel
     {
         TempDungeonStageLevel = levelIndex + 1;
         UpdateLevelSelectButtons(tabIndex);
+        dungeonManager.currentDungeonLevel = TempDungeonStageLevel;
         titleTexts[tabIndex].text = $"{dungeonNames[tabIndex]} - LEVEL {TempDungeonStageLevel}";
     }
 
@@ -174,9 +205,14 @@ public class DungeonPanel : MenuPanel
             Debug.Log("입장권이 부족합니다.");
             return;
         }
-        Debug.Log("소탕");
-        dungeonHighestClearLevel[index] = dungeonManager.dungeonHighestClearLevel[index];
-        UpdateShellText(index);
+        if (TempDungeonStageLevel < dungeonHighestClearLevel[index])
+        {
+            Debug.Log("소탕");
+            DummyServerData.UseShell(Player.GetUserID(), index); // 티켓 차감
+            GetReward(index);
+        }
+        else
+            Debug.Log("아직 클리어 되지 않았습니다.");
     }
 
     private void UpdateShellText(int index)

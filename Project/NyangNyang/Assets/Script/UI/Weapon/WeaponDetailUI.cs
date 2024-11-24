@@ -53,6 +53,10 @@ public class WeaponDetailUI : MonoBehaviour
             
             choosedWeapon = WeaponManager.GetInstance().GetWeapon(_obj.name);
 
+
+            Debug.Log(_obj.name);
+
+
             wNameTxt.text = choosedWeapon.GetName();
             wImage.sprite = WeaponManager.GetInstance().GetSprite(choosedWeapon.GetID());
 
@@ -86,7 +90,7 @@ public class WeaponDetailUI : MonoBehaviour
     public void OnClickedMerge()
     {
         // 다음 단계로의 merge 과정
-        if (choosedWeapon != null && choosedWeapon.GetWeaponCount() > 5)
+        if (choosedWeapon != null && choosedWeapon.GetWeaponCount() >= 5)
         {
             if (WeaponManager.GetInstance().CombineWeapon(choosedWeapon.GetID()))
             {

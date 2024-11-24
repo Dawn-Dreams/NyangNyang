@@ -1,3 +1,5 @@
+using StatusEffects;
+
 public abstract class Skill
 {
     protected int id;
@@ -5,14 +7,16 @@ public abstract class Skill
     protected int possession;
     protected int level;
     protected int levelUpCost;
+    protected float effect;
 
-    public Skill(int _id, string _name, int _possession, int _level, int _levelUpCost)
+    public Skill(int _id, string _name, int _possession, int _level, int _levelUpCost, float _effect)
     {
         id = _id;
         name = _name;
         possession = _possession;
         level = _level;
         levelUpCost = _levelUpCost;
+        effect = _effect;
     }
 
     public int GetID() => id;

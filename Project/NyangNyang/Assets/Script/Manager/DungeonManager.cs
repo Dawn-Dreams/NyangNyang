@@ -13,6 +13,7 @@ public class DungeonManager : MonoBehaviour
     private TextMeshProUGUI DungeonResultText;
 
     public int[] dungeonHighestClearLevel = new int[3] { 1, 1, 1 };
+    public int currentDungeonLevel;
     private int currentDungeonIndex;
 
     // 스페셜 스테이지 지속 시간
@@ -21,7 +22,7 @@ public class DungeonManager : MonoBehaviour
     public int baseGoldAmount = 100000;
     private Coroutine goldCoroutine;
     private bool isSuccess;
-    private int gainGold = 100000;               // 기본 골드 획득량
+
     // 임시 객체로 사용할 cat과 enemy 프리팹
     public Cat catPrefab;
     public DungeonBossEnemy enemyPrefab;
@@ -30,7 +31,7 @@ public class DungeonManager : MonoBehaviour
 
     // 싱글톤 인스턴스
     public static DungeonManager Instance { get; private set; }
-   
+
     private void Awake()
     {
         if (transform.parent != null)
@@ -181,7 +182,7 @@ public class DungeonManager : MonoBehaviour
     {
         if (GameManager.isDungeonActive)
         {
-            ShowDungeonResultText("TIME OUT...", 2);
+            ShowDungeonResultText("<color=#E5E1DA>TIMEOUT</color>", 2);
             isSuccess = false;
             EndDungeonStage(); // 실패 처리
         }
@@ -195,26 +196,30 @@ public class DungeonManager : MonoBehaviour
         // 성공 처리
         if (isSuccess)
         {
-            if (currentDungeonIndex >= 0 && currentDungeonIndex < dungeonHighestClearLevel.Length)
+            // 현재 최고 단계 클리어 시
+            if (currentDungeonLevel == dungeonHighestClearLevel[currentDungeonIndex])
             {
                 dungeonHighestClearLevel[currentDungeonIndex]++;
-                ShowDungeonResultText("CLEAR!!", 2);
-                Player.AddGold(dungeonHighestClearLevel[currentDungeonIndex] * gainGold);
-
-                var DungeonPanel = FindObjectOfType<DungeonPanel>();
-                if (DungeonPanel != null)
-                {
-                    DungeonPanel.OnStageCleared(currentDungeonIndex, dungeonHighestClearLevel[currentDungeonIndex]);
-                }
+                ShowDungeonResultText($"<color=#BFECFF>{currentDungeonLevel} CLEAR!!</color>", 2);
             }
-            enemyInstance._dummyEnemies[0].animationManager.PlayAnimation(AnimationManager.AnimationState.DieA);
+            else
+            {
+                ShowDungeonResultText($"<color=#BFECFF>CLEAR!!</color>", 2);
+            }
+
+            var DungeonPanel = FindObjectOfType<DungeonPanel>();
+            if (DungeonPanel != null)
+            {
+                DungeonPanel.OnStageCleared(currentDungeonIndex, dungeonHighestClearLevel[currentDungeonIndex]);
+            }
             catInstance.animationManager.PlayAnimation(AnimationManager.AnimationState.Victory);
+            enemyInstance._dummyEnemies[0].animationManager.PlayAnimation(AnimationManager.AnimationState.DieA);
         }
         else
         {
             catInstance.animationManager.PlayAnimation(AnimationManager.AnimationState.DieB);
             enemyInstance._dummyEnemies[0].animationManager.PlayAnimation(AnimationManager.AnimationState.Victory);
-            ShowDungeonResultText("DIE...", 2);
+            ShowDungeonResultText("<color=#E5E1DA>FAIL...</color>", 2);
         }
         StopCombatActions();
         StartCoroutine(DestroyObjectsWithDelay(3.0f));

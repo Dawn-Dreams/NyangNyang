@@ -131,7 +131,7 @@ public class DungeonBossEnemy : Enemy
         // 사망 처리
         if (currentHP <= 0)
         {
-            Debug.Log($"보스 사망: {gameObject.name}");
+            //Debug.Log($"보스 사망: {gameObject.name}");
             Death();
         }
 

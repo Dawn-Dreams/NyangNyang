@@ -5,11 +5,13 @@ public class Weapon
     int possession;     // 장비 개수
     int grade;          // 장비 등급
     int subGrade;       // 세부 등급
+    bool isLock = true;
 
     int status;          // 장비 세부 능력치
     int nextStatus = 10;     // 다음 장비의 세부 능력치
     int level;          // 장비 레벨
     int coin = 1;           // 장비 레벨 업 시 필요한 코인 초기값
+    float effect = 2f;
 
 
     public Weapon(int _id, string _name, int _grade, int _subGrade, int _level, int _possession)
@@ -35,6 +37,16 @@ public class Weapon
     public string GetName()
     {
         return name;
+    }
+
+    public bool GetIsLock()
+    {
+        return isLock;
+    }
+
+    public void SetIsLockToTrue()
+    {
+        isLock = false;
     }
 
     public void AddWeapon(int count)
@@ -84,5 +96,10 @@ public class Weapon
     public int GetNextStatus()
     {
         return nextStatus;
+    }
+
+    public float GetEffect()
+    {
+        return effect;
     }
 }
