@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+
     private static int userID = 0;
     public static string PlayerName;
 
@@ -99,6 +100,20 @@ public class Player : MonoBehaviour
                 OnShellChange(playerCurrency.shell);
         }
     }
+
+    //처음 플레이이 하는 유저일때 uid 발급
+    public static void SetUserId(int uid)
+    {
+        //기기 내 userid저장
+        PlayerPrefs.SetInt("uid", uid);
+        userID = uid;
+        PlayerName = "냥냥" + uid;
+        //player의 초기값 채우면될듯?
+
+    }
+
+    
+
 
     // 게임 매니저 내에서 실행
     public static void OnAwakeGetInitialDataFromServer()

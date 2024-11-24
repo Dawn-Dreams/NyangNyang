@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -22,7 +23,9 @@ public class NetworkManager : MonoBehaviour
     {
         return instance;
     }
-    string _baseUrl = "http://127.0.0.1:11500";
+
+    //gcp 통신 외부ip35.232.170.22
+    string _baseUrl = "http://35.232.170.226:11500";
 
     private void Start()
     {
@@ -30,16 +33,20 @@ public class NetworkManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
-
-            _mailTitle.Add("�̺�Ʈ ����");
-            _mailTitle.Add("���� ����");
-            _mailTitle.Add("ģ�� ��û");
-
-            UserLogin(5);
+            if (PlayerPrefs.HasKey("uid"))
+            {
+                //playerpfer에 uid가 있으면 유저임
+                var uid = PlayerPrefs.GetInt("uid");
+                UserLogin(uid);
+            }
+            else
+            { 
+                ReqUserRegist();
+            }
+     
         }
 
-
-        Debug.Log("networkd instatnce  �ʱ�ȭ");
+        Debug.Log("networkd instatnce  초기화완료");
     }
 
 
@@ -82,12 +89,28 @@ public class NetworkManager : MonoBehaviour
 
 
     }
+    void GetUserId(UnityWebRequest uwr)
+    {
+        var res = JsonUtility.FromJson<ResRegist>(uwr.downloadHandler.text);
 
+        if (res.result != (int)ErrorCode.None)
+        {
+            Debug.Log("Failed get register data");
+        }
+        else
+        {
+            Debug.Log(string.Format("Register Success User ID {0}", res.uid));
+
+            Debug.Log(string.Format("Register ger userId {0}", Player.GetUserID()));
+
+            Player.SetUserId(res.uid);
+        }
+
+
+    }
     public void UserLogin(int uid)
     {
         Debug.Log("User Login");
-
-        //api�������� �α��� ���� �����Ǹ� �߰�
 
         RequestLogin req = new RequestLogin
         {
@@ -107,8 +130,6 @@ public class NetworkManager : MonoBehaviour
         }
         else
         {
-           // Player.SetPlayerNickname("nayeng5");
-            //Player.SetUserId(5);
             Debug.Log("Success Login");
         }
     }
@@ -135,23 +156,23 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
-    public void UpdatePlayerStatus(int uid, int hp, int mp, int attack_power, int def,
-        int heal_hp_percent, int heal_mp_percent, float crit_percent, float attack_speed)
+    public void UpdatePlayerStatus(int uid, Status data)
     {
         Debug.Log("Update Player Status in DB");
 
         PlayerStatusData req = new PlayerStatusData
         {
-            uid = uid,
-            hp = hp,
-            mp = mp,
-            attack_power = attack_power,
-            def = def,
-            heal_hp_persec = heal_hp_percent,
-            heal_mp_persec = heal_mp_percent,
-            crit_percent = crit_percent,
-            attack_speed = attack_speed
 
+            uid = uid,
+            hp = data.hp,
+            mp = data.mp,
+            attackPower = data.attackPower,
+            defence = data.defence,
+            healHPPerSec = data.healHPPerSec,
+            healMPPerSec = data.healMPPerSec,
+            critPercent = data.critPercent,
+            attackSpeed = data.attackSpeed,
+            weaponEffect = data.weaponEffect
         };
 
         if (req != null)
@@ -160,24 +181,23 @@ public class NetworkManager : MonoBehaviour
 
         }
     }
-    public void UpdatePlayerStatusLv(int uid, int hp_lv, int mp_lv, int str_lv, int def_lv,
-    int heal_hp_lv, int heal_mp_lv, int crit_lv, int attack_speed_lv, int gold_acq_lv, int exp_acq_lv)
+    public void UpdatePlayerStatusLv(int uid, StatusLevelData data)
     {
         Debug.Log("Update Player Status Lv in DB");
 
         PlayerStatusLevelData req = new PlayerStatusLevelData
         {
             uid = uid,
-            hp_lv = hp_lv,
-            mp_lv = mp_lv,
-            str_lv = str_lv,
-            def_lv = def_lv,
-            heal_hp_lv = heal_hp_lv,
-            heal_mp_lv = heal_mp_lv,
-            crit_lv = crit_lv,
-            attack_speed_lv = attack_speed_lv,
-            gold_acq_lv = gold_acq_lv,
-            exp_acq_lv = exp_acq_lv
+            hpLevel = data.statusLevels[0],
+            mpLevel = data.statusLevels[1],
+            strLevel = data.statusLevels[2],
+            defenceLevel = data.statusLevels[3],
+            healHpLevel = data.statusLevels[4],
+            healMpLevel = data.statusLevels[5],
+            critLevel = data.statusLevels[6],
+            attackSpeedLevel = data.statusLevels[7],
+            goldAcquisition = data.statusLevels[8],
+            expAcquisition = data.statusLevels[9]
         };
 
         StartCoroutine(CoSendNetRequest("UpdatePlayerStatLv", req, UpdateStats));
@@ -209,7 +229,6 @@ public class NetworkManager : MonoBehaviour
     }
     void SettingRankData(UnityWebRequest uwr)
     {
-        //��ŷ����Ʈ ������ ����ϴ� �Լ�
         var res = JsonUtility.FromJson<ResponseRanking>(uwr.downloadHandler.text);
 
         if (res.result != (int)ErrorCode.None)
@@ -276,24 +295,7 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
-    void GetUserId(UnityWebRequest uwr) //����ó�������Ҷ�
-    {
-        var res = JsonUtility.FromJson<ResRegist>(uwr.downloadHandler.text);
 
-        if (res.result != (int)ErrorCode.None)
-        {
-            Debug.Log("Failed get register data");
-        }
-        else
-        {
-            Debug.Log(string.Format("Register Success User ID {0}", res.uid));
-
-           // Player.SetUserId(res.uid);
-            Debug.Log(string.Format("Register ger userId {0}", Player.GetUserID()));
-
-        }
-
-    }
 
     void UpdateStats(UnityWebRequest uwr)
     {

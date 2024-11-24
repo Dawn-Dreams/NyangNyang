@@ -14,7 +14,7 @@ public class DummyServerData : MonoBehaviour
     // ===============
     // 데이터 시작
 
-    // 각 유저 스탯 레벨 데이터
+    // 각 유저 스탯 레벨 데이터 
     protected static StatusLevelData[] usersStatusLevelData = new StatusLevelData[]
     {
         new StatusLevelData(0,0,0,0,0),
@@ -34,7 +34,7 @@ public class DummyServerData : MonoBehaviour
     //    // 임시 일반 몬스터 데이터
     //    };
 
-    // 각 유저 재화(골드+다이아+치즈+조개패) 데이터
+    // 각 유저 재화(골드+다이아+치즈+조개패) 데이터 
     protected static CurrencyData[] usersCurrencyData = new CurrencyData[]
     {
         ScriptableObject.CreateInstance<CurrencyData>().SetCurrencyData(1_000_000_000,3,1000,new int[] {5,5,5}),

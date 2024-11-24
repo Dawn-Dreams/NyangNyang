@@ -8,30 +8,33 @@ using System.Collections.Generic;
 public class PlayerStatusData
 {
     public int uid;
-    public int hp;
-    public int mp;
-    public int attack_power;
-    public int def;
-    public int heal_hp_persec;
-    public int heal_mp_persec;
-    public float crit_percent;
-    public float attack_speed;
+    public int hp;             // 체력
+    public int mp;             // 마나
+    public int attackPower;    // 공격력
+    public int defence;        // 방어력
+    public int healHPPerSec;   // 초당 체력 회복량   
+    public int healMPPerSec;   // 초당 마나 회복량
+    public float critPercent; // 치명타 확률
+    public float attackSpeed;    // 공격 속도(초기 1, 0.25 상한선 스탯) <- TODO: 회의 필요
+    public float weaponEffect;
+    public float skillAttackEffect;
+    public float skillDefenceEffect;
 }
 
 [System.Serializable]
 public class PlayerStatusLevelData
 {
     public int uid;
-    public int hp_lv;
-    public int mp_lv;
-    public int str_lv;
-    public int def_lv;
-    public int heal_hp_lv;
-    public int heal_mp_lv;
-    public int crit_lv;
-    public int attack_speed_lv;
-    public int gold_acq_lv;
-    public int exp_acq_lv;
+    public int hpLevel;
+    public int mpLevel;
+    public int strLevel;
+    public int defenceLevel;
+    public int healHpLevel;
+    public int healMpLevel;
+    public int critLevel;
+    public int attackSpeedLevel;
+    public int goldAcquisition;
+    public int expAcquisition;
 }
 [System.Serializable]
 public class PlayerGoodsData
@@ -39,7 +42,11 @@ public class PlayerGoodsData
     public int uid;
     public int gold;
     public int jewerly;
-    public int shell;
+    public int cheese;
+    public int shell01;
+    public int shell02;
+    public int shell03;
+
 
 }
 
