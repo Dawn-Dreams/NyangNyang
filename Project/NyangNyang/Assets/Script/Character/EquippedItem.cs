@@ -30,7 +30,7 @@ public class EquippedItem : MonoBehaviour
 
     [SerializeField]
     GameObject SkillPopUp;
-    bool isOpenActiveSlot = false;
+    public bool isOpenActiveSlot = false;
 
     public void OnClickedWeaponEquippedButton()
     {
@@ -90,9 +90,11 @@ public class EquippedItem : MonoBehaviour
             Skill tmp = SkillManager.GetInstance().GetSkill(_obj.name);
             if ( tmp != null )
             {
+                Debug.Log(_obj.name);
                 if ( isOpenActiveSlot && tmp.GetID() < 5)
                 {
                     // 액티브 창을 열었으며, 액티브 스킬을 선택한 경우
+                    Debug.Log(_obj.name); 
                     SelectedSkill = tmp;
                 }
                 else if ( !isOpenActiveSlot && tmp.GetID() > 4 )
@@ -102,6 +104,11 @@ public class EquippedItem : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void OnClickedSkillCancleButton()
+    {
+        isOpenActiveSlot = false;
     }
 
     void UpdateEquippedWeapon()

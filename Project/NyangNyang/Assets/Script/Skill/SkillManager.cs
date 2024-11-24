@@ -32,21 +32,37 @@ public class SkillManager : MonoBehaviour
         // TODO: 서버에서 데이터 받아오기
 
         // 액티브 스킬
-        SkillList.Add(new ActiveSkill(0, "우주 냥경찰 출동!", 1, 1, 1, 1f));
-        SkillList.Add(new ActiveSkill(1, "캣닢비가 내려와", 1, 1, 1, 2f));
-        SkillList.Add(new ActiveSkill(2, "냥냥대원들아 도와줘", 1, 1, 1, 3f));
-        SkillList.Add(new ActiveSkill(3, "자린고비냥", 0, 1, 1, 4f));
-        SkillList.Add(new ActiveSkill(4, "실타래 폭탄", 0, 1, 1, 4f));
-        // 패시브 스킬
-        SkillList.Add(new DefenseUpSkill(9, "털복숭이 갑옷", 1, 1, 1, 1f));
-        SkillList.Add(new DefenseUpSkill(10, "꼬리 방패", 1, 1, 1, 2f));
-        SkillList.Add(new DefenseUpSkill(11, "퐁퐁 쿠션 아머", 0, 1, 1, 3f));
-        SkillList.Add(new DefenseUpSkill(12, "튼튼한 발톱 가드", 0, 1, 1, 4f));
+        skills[0] = new ActiveSkill(0, "우주 냥경찰 출동!", 1, 1, 1, 1f);
+        skillDic["우주 냥경찰 출동!"] = 0;
 
-        SkillList.Add(new AttackUpSkill(21, "젤리 파워업", 0, 1, 1, 1f));
-        SkillList.Add(new AttackUpSkill(22, "모래 목욕", 0, 1, 1, 2f));
-        SkillList.Add(new AttackUpSkill(23, "포동포동 냥이", 0, 1, 1, 3f));
-        SkillList.Add(new AttackUpSkill(24, "별빛 힐링", 0, 1, 1, 4f));
+        skills[1] = new ActiveSkill(1, "캣닢비가 내려와", 1, 1, 1, 2f);
+        skillDic["캣닢비가 내려와"] = 1;
+
+        skills[2] = new ActiveSkill(2, "냥냥대원들아 도와줘", 1, 1, 1, 3f);
+        skillDic["냥냥대원들아 도와줘"] = 2;
+
+        skills[3] = new ActiveSkill(3, "자린고비냥", 0, 1, 1, 4f);
+        skillDic["자린고비냥"] = 3;
+
+        skills[4] = new ActiveSkill(4, "실타래 폭탄", 0, 1, 1, 4f);
+        skillDic["실타래 폭탄"] = 4;
+
+        for (int i = 5; i < 25; ++i)
+        {
+            skills[i] = new DefenseUpSkill(i, "털복숭이 갑옷", 1, 1, 1, 1f);
+            skillDic["털복숭이 갑옷"] = i;
+        }
+
+        // 패시브 스킬
+        //SkillList.Add(new DefenseUpSkill(9, "털복숭이 갑옷", 1, 1, 1, 1f));
+        //SkillList.Add(new DefenseUpSkill(10, "꼬리 방패", 1, 1, 1, 2f));
+        //SkillList.Add(new DefenseUpSkill(11, "퐁퐁 쿠션 아머", 0, 1, 1, 3f));
+        //SkillList.Add(new DefenseUpSkill(12, "튼튼한 발톱 가드", 0, 1, 1, 4f));
+
+        //SkillList.Add(new AttackUpSkill(21, "젤리 파워업", 0, 1, 1, 1f));
+        //SkillList.Add(new AttackUpSkill(22, "모래 목욕", 0, 1, 1, 2f));
+        //SkillList.Add(new AttackUpSkill(23, "포동포동 냥이", 0, 1, 1, 3f));
+        //SkillList.Add(new AttackUpSkill(24, "별빛 힐링", 0, 1, 1, 4f));
     }
 
     public Skill GetSkill(int id)
