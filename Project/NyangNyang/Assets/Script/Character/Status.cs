@@ -158,6 +158,9 @@ public class Status
     public int healMPPerSec;   // 초당 마나 회복량
     public float critPercent; // 치명타 확률
     public float attackSpeed;    // 공격 속도(초기 1, 0.25 상한선 스탯) <- TODO: 회의 필요
+    public float weaponEffect;
+    public float skillAttackEffect;
+    public float skillDefenceEffect;
 
     public Dictionary<SnackType, float> snackBuffValue = new Dictionary<SnackType, float>
     {
@@ -172,6 +175,7 @@ public class Status
     // 적군을 잡을 때에 받는 경우에만 해당
     public float goldAcquisitionPercent = 1.0f;    // 골드 획득량(가중치) (초기 1, value%로 적용)
     public float expAcquisitionPercent = 1.0f;     // 경험치 획득량(가중치) (초기 1, value%로 적용)
+    
 
     public Status(StatusLevelData data)
     {
@@ -232,6 +236,28 @@ public class Status
         UpdateStatus();
     }
 
+    public void SetWeaponEffect(float _attack)
+    {
+        weaponEffect = _attack;
+
+        UpdateStatus();
+    }
+
+    public void SetSKillAttackEffect(float _attack)
+    {
+        skillAttackEffect = _attack;
+
+        UpdateStatus();
+    }
+
+    public void SetSKillDefenceEffect(float _attack)
+    {
+        skillDefenceEffect = _attack;
+
+        UpdateStatus();
+    }
+
+
     public void SetTitleOwningEffect(List<TitleOwningEffect> titleOwningEffects)
     {
         titleOwningEffectValue = new Dictionary<StatusLevelType, int>();
@@ -275,7 +301,7 @@ public class Status
                 mp = (int)levelData.CalculateValueFromLevel(StatusLevelType.MP);
                 break;
             case StatusLevelType.STR:
-                float attackMulValue = snackBuffValue[SnackType.Atk];
+                float attackMulValue = snackBuffValue[SnackType.Atk] + weaponEffect + skillAttackEffect;
                 int strAddValue = 0;
                 if (titleOwningEffectValue.ContainsKey(StatusLevelType.STR))
                 {
