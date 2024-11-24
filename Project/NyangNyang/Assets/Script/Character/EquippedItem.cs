@@ -90,15 +90,14 @@ public class EquippedItem : MonoBehaviour
             Skill tmp = SkillManager.GetInstance().GetSkill(_obj.name);
             if ( tmp != null )
             {
-                Debug.Log(_obj.name);
-                if ( isOpenActiveSlot && tmp.GetID() < 5)
+                if ( isOpenActiveSlot && tmp.GetID() < 5 && tmp.HasSkill() )
                 {
                     // 액티브 창을 열었으며, 액티브 스킬을 선택한 경우
-                    Debug.Log(_obj.name); 
                     SelectedSkill = tmp;
                 }
-                else if ( !isOpenActiveSlot && tmp.GetID() > 4 )
+                else if ( !isOpenActiveSlot && tmp.GetID() > 4 && tmp.HasSkill() )
                 {
+                    Debug.Log(tmp.GetName());
                     // 패시브 창을 열었으며, 패시브 스킬을 선택한 경우
                     SelectedSkill = tmp;
                 }
@@ -106,9 +105,11 @@ public class EquippedItem : MonoBehaviour
         }
     }
 
-    public void OnClickedSkillCancleButton()
+    public void OnClickedCancleButton()
     {
         isOpenActiveSlot = false;
+        SelectedSkill = null;
+        SelectedWeapon = null;
     }
 
     void UpdateEquippedWeapon()
