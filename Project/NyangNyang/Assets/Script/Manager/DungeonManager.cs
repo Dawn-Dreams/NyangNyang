@@ -181,7 +181,7 @@ public class DungeonManager : MonoBehaviour
     {
         if (GameManager.isDungeonActive)
         {
-            ShowDungeonResultText("TIME OUT...", 2);
+            ShowDungeonResultText("<color=#E5E1DA>TIMEOUT</color>", 2);
             isSuccess = false;
             EndDungeonStage(); // 실패 처리
         }
@@ -198,7 +198,7 @@ public class DungeonManager : MonoBehaviour
             if (currentDungeonIndex >= 0 && currentDungeonIndex < dungeonHighestClearLevel.Length)
             {
                 dungeonHighestClearLevel[currentDungeonIndex]++;
-                ShowDungeonResultText("CLEAR!!", 2);
+                ShowDungeonResultText("<color=#BFECFF>CLEAR!!</color>", 2);
                 Player.AddGold(dungeonHighestClearLevel[currentDungeonIndex] * gainGold);
 
                 var DungeonPanel = FindObjectOfType<DungeonPanel>();
@@ -207,14 +207,14 @@ public class DungeonManager : MonoBehaviour
                     DungeonPanel.OnStageCleared(currentDungeonIndex, dungeonHighestClearLevel[currentDungeonIndex]);
                 }
             }
-            enemyInstance._dummyEnemies[0].animationManager.PlayAnimation(AnimationManager.AnimationState.DieA);
             catInstance.animationManager.PlayAnimation(AnimationManager.AnimationState.Victory);
+            enemyInstance._dummyEnemies[0].animationManager.PlayAnimation(AnimationManager.AnimationState.DieA);
         }
         else
         {
             catInstance.animationManager.PlayAnimation(AnimationManager.AnimationState.DieB);
             enemyInstance._dummyEnemies[0].animationManager.PlayAnimation(AnimationManager.AnimationState.Victory);
-            ShowDungeonResultText("DIE...", 2);
+            ShowDungeonResultText("<color=#E5E1DA>FAIL...</color>", 2);
         }
         StopCombatActions();
         StartCoroutine(DestroyObjectsWithDelay(3.0f));

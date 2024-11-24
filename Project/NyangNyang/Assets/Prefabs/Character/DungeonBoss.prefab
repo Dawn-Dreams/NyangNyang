@@ -86,7 +86,6 @@ GameObject:
   - component: {fileID: 5036487220002995817}
   - component: {fileID: 3135344182061165174}
   - component: {fileID: 994343110640423511}
-  - component: {fileID: 8262057230204181414}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -163,28 +162,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!102 &8262057230204181414
-TextMesh:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1031642556816585889}
-  m_Text: 5 / 5
-  m_OffsetZ: 0
-  m_CharacterSize: 1
-  m_LineSpacing: 1
-  m_Anchor: 1
-  m_Alignment: 1
-  m_TabSize: 4
-  m_FontSize: 10
-  m_FontStyle: 1
-  m_RichText: 1
-  m_Font: {fileID: 0}
-  m_Color:
-    serializedVersion: 2
-    rgba: 4294967295
 --- !u!1 &2490322000326804637
 GameObject:
   m_ObjectHideFlags: 0

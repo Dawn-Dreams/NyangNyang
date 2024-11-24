@@ -3,11 +3,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using System.Linq;
 
 public class DungeonPanel : MenuPanel
 {
     [SerializeField]
-    private ScrollRect scrollView;
+    private GameObject stageButtonsParent;
     private Button[] stageButtons;
 
     [SerializeField]
@@ -33,6 +34,13 @@ public class DungeonPanel : MenuPanel
         SetActiveTab(0); // 기본 탭 선택
     }
 
+    private void Start()
+    {
+        InitializeManagers();
+        InitializeUIComponents();
+        SetActiveTab(0); // 기본 탭 선택
+    }
+
     private void InitializeManagers()
     {
         dungeonManager = FindObjectOfType<DungeonManager>() ?? throw new NullReferenceException("DungeonManager가 존재하지 않습니다.");
@@ -47,10 +55,23 @@ public class DungeonPanel : MenuPanel
 
     private void InitializeStageButtons()
     {
-        stageButtons = scrollView.content.GetComponentsInChildren<Button>();
+        List<Button> buttons = new List<Button>();
+        foreach (Transform child in stageButtonsParent.transform)
+        {
+            Button button = child.GetComponent<Button>();
+            if (button != null)
+            {
+                buttons.Add(button);
+                Debug.Log($"Found button: {button.name}");
+            }
+        }
+
+        stageButtons = buttons.ToArray();
+
         for (int i = 0; i < stageButtons.Length; i++)
         {
-            stageButtons[i].onClick.AddListener(() => OnClickStageButton(i));
+            int index = i; // 클로저 문제 해결
+            stageButtons[i].onClick.AddListener(() => OnClickStageButton(index));
         }
     }
 
