@@ -23,42 +23,43 @@ public class WeaponManager : MonoBehaviour
     public void InitializedWeapons()
     {
         // TODO: 서버에서 데이터 받아오기
-
+        // 이후는 일부러 연결 안 해둠 어차피 서버 연결 시 사라질 부분
 
         weapons[0] = new Weapon(0, "낡은 횃불", 1, 1, 1, 10);
         weaponDic["낡은 횃불"] = 0;
+        weapons[0].SetIsLockToTrue();
 
-        weapons[1] = new Weapon(1, "평범한 횃불", 1, 1, 1, 10);
+        weapons[1] = new Weapon(1, "평범한 횃불", 1, 1, 1, 0);
         weaponDic["평범한 횃불"] = 1;
 
-        weapons[2] = new Weapon(2, "정교한 횃불", 1, 1, 1, 10);
+        weapons[2] = new Weapon(2, "정교한 횃불", 1, 1, 1, 0);
         weaponDic["정교한 횃불"] = 2;
 
-        weapons[3] = new Weapon(3, "전설의 횃불", 1, 1, 1, 10);
+        weapons[3] = new Weapon(3, "전설의 횃불", 1, 1, 1, 0);
         weaponDic["전설의 횃불"] = 3;
 
-        weapons[4] = new Weapon(4, "낡은 밀대", 1, 1, 1, 10);
+        weapons[4] = new Weapon(4, "낡은 밀대", 1, 1, 1, 0);
         weaponDic["낡은 밀대"] = 4;
 
-        weapons[5] = new Weapon(5, "평범한 밀대", 1, 1, 1, 10);
+        weapons[5] = new Weapon(5, "평범한 밀대", 1, 1, 1, 0);
         weaponDic["평범한 밀대"] = 5;
 
-        weapons[6] = new Weapon(6, "정교한 밀대", 1, 1, 1, 10);
+        weapons[6] = new Weapon(6, "정교한 밀대", 1, 1, 1, 0);
         weaponDic["정교한 밀대"] = 6;
 
-        weapons[7] = new Weapon(7, "전설의 밀대", 1, 1, 1, 10);
+        weapons[7] = new Weapon(7, "전설의 밀대", 1, 1, 1, 0);
         weaponDic["전설의 밀대"] = 7;
 
-        weapons[8] = new Weapon(8, "낡은 잠자리채", 1, 1, 1, 10);
+        weapons[8] = new Weapon(8, "낡은 잠자리채", 1, 1, 1, 0);
         weaponDic["낡은 잠자리채"] = 8;
 
-        weapons[9] = new Weapon(9, "평범한 잠자리채", 1, 1, 1, 10);
+        weapons[9] = new Weapon(9, "평범한 잠자리채", 1, 1, 1, 0);
         weaponDic["평범한 잠자리채"] = 9;
 
-        weapons[10] = new Weapon(10, "정교한 잠자리채", 1, 1, 1, 10);
+        weapons[10] = new Weapon(10, "정교한 잠자리채", 1, 1, 1, 0);
         weaponDic["정교한 잠자리채"] = 10;
 
-        weapons[11] = new Weapon(11, "전설의 잠자리채", 1, 1, 1, 10);
+        weapons[11] = new Weapon(11, "전설의 잠자리채", 1, 1, 1, 0);
         weaponDic["전설의 잠자리채"] = 11;
 
         for (int i = 12; i < 32; ++i)
@@ -150,6 +151,7 @@ public class WeaponManager : MonoBehaviour
 
                 if (weapon != null)
                 {
+                    weapon.SetIsLockToTrue();
                     weapon.AddWeapon(1);
                 }
             }

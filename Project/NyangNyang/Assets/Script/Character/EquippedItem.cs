@@ -28,6 +28,7 @@ public class EquippedItem : MonoBehaviour
     {
         if (SelectedWeapon != null)
         {
+            
             EquippedWeapon = SelectedWeapon;
             UpdateEquippedWeapon();
         }
@@ -54,7 +55,14 @@ public class EquippedItem : MonoBehaviour
     {
         if (_obj != null)
         {
-            SelectedWeapon = WeaponManager.GetInstance().GetWeapon(_obj.name);
+            
+            Weapon t = WeaponManager.GetInstance().GetWeapon(_obj.name);
+            
+            if ( t != null && !t.GetIsLock() )
+            {
+                Debug.Log(_obj.name);
+                SelectedWeapon = t;
+            }
         }
     }
 
@@ -78,8 +86,6 @@ public class EquippedItem : MonoBehaviour
             /*
                 공격력 관련 코드 작성         
              */
-            
-
             WeaponPopUp.SetActive(false);
             SelectedWeapon = null;
 

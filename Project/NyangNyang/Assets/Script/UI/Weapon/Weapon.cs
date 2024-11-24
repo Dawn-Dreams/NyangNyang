@@ -5,6 +5,7 @@ public class Weapon
     int possession;     // 장비 개수
     int grade;          // 장비 등급
     int subGrade;       // 세부 등급
+    bool isLock = true;
 
     int status;          // 장비 세부 능력치
     int nextStatus = 10;     // 다음 장비의 세부 능력치
@@ -35,6 +36,16 @@ public class Weapon
     public string GetName()
     {
         return name;
+    }
+
+    public bool GetIsLock()
+    {
+        return isLock;
+    }
+
+    public void SetIsLockToTrue()
+    {
+        isLock = false;
     }
 
     public void AddWeapon(int count)
