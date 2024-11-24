@@ -34,10 +34,15 @@ public class SkillManager : MonoBehaviour
         // 액티브 스킬
 
         // 패시브 스킬
-        SkillList.Add(new DefenseUpSkill(9, "털복숭이 갑옷", 0, 1, 1));
-        SkillList.Add(new DefenseUpSkill(10, "꼬리 방패", 0, 1, 1));
-        SkillList.Add(new DefenseUpSkill(11, "퐁퐁 쿠션 아머", 0, 1, 1));
-        SkillList.Add(new DefenseUpSkill(12, "튼튼한 발톱 가드", 0, 1, 1));
+        SkillList.Add(new DefenseUpSkill(9, "털복숭이 갑옷", 0, 1, 1, 1f));
+        SkillList.Add(new DefenseUpSkill(10, "꼬리 방패", 0, 1, 1, 2f));
+        SkillList.Add(new DefenseUpSkill(11, "퐁퐁 쿠션 아머", 0, 1, 1, 3f));
+        SkillList.Add(new DefenseUpSkill(12, "튼튼한 발톱 가드", 0, 1, 1, 4f));
+
+        SkillList.Add(new AttackUpSkill(21, "젤리 파워업", 0, 1, 1, 1f));
+        SkillList.Add(new AttackUpSkill(22, "모래 목욕", 0, 1, 1, 2f));
+        SkillList.Add(new AttackUpSkill(23, "포동포동 냥이", 0, 1, 1, 3f));
+        SkillList.Add(new AttackUpSkill(24, "별빛 힐링", 0, 1, 1, 4f));
     }
 
     public Skill GetSkill(int id)
