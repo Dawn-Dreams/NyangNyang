@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
             Instance = this;
 
+
         // 시작 시 서버로부터 정보 받기
         Player.OnAwakeGetInitialDataFromServer();
 
@@ -30,6 +31,13 @@ public class GameManager : MonoBehaviour
         CostumeManager.SetInstance(costumeManager);
 
         PlayerCostume.OnAwake_CallInGameManager();
+    }
+    private void Start()
+    {
+        //Awake에서 SaveLoadManager를 사용하면 null문제가 자꾸 발생해서 start에 넣어놓음
+        PlayerStatusData loadedStatus = SaveLoadManager.GetSaveLoadManager().LoadPlayerStatus();
+        Debug.Log($"Loaded Player Status: HP = {loadedStatus.hp}, MP = {loadedStatus.mp}");
+
     }
 
 }

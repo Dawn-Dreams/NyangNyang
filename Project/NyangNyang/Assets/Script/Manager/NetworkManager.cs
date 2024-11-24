@@ -148,7 +148,7 @@ public class NetworkManager : MonoBehaviour
         var res = JsonUtility.FromJson<ResChangeNickname>(uwr.downloadHandler.text);
         if (res.result != ErrorCode.None)
         {
-            //Player.SetPlayerNickname(nichname);
+            //Player.SetPlayerNickname(nichname); 중복체크 후 새로 바뀐 닉네임 업뎃
 
         }
         else

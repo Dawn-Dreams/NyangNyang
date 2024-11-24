@@ -108,7 +108,7 @@ public class Player : MonoBehaviour
         PlayerPrefs.SetInt("uid", uid);
         userID = uid;
         PlayerName = "냥냥" + uid;
-        //player의 초기값 채우면될듯?
+        //player의 초기값 채우면될듯
 
     }
 
@@ -118,7 +118,6 @@ public class Player : MonoBehaviour
     // 게임 매니저 내에서 실행
     public static void OnAwakeGetInitialDataFromServer()
     {
-        // 서버로부터 user id 받기
         userID = 0;
         if (playerStatus == null)
         {
