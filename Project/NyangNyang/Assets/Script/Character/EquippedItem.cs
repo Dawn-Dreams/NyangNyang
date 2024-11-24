@@ -16,7 +16,8 @@ public class EquippedItem : MonoBehaviour
 
     // 액티브 스킬
     public ActiveSkillManager ActiveSkillManager;
-    int ActivateSkillIndex = 3;
+    Skill CurActiveSkill;
+    public Image ActiveSkillImage;
 
     [SerializeField]
     Image WeaponImage;
@@ -29,6 +30,7 @@ public class EquippedItem : MonoBehaviour
 
     [SerializeField]
     GameObject SkillPopUp;
+    bool isOpenActiveSlot = false;
 
     public void OnClickedWeaponEquippedButton()
     {
@@ -42,10 +44,19 @@ public class EquippedItem : MonoBehaviour
 
     public void OnClickedSkillEquippedButton()
     {
-        if (SelectedSkill != null)
+        if (SelectedSkill != null && !isOpenActiveSlot)
         {
             EquippedSkills[CurSkillSlot] = SelectedSkill;
             UpdateEquippedSkill();
+        }
+    }
+
+    public void OnClickedActiveSkillEquippedOKButton()
+    {
+        if (SelectedSkill != null && isOpenActiveSlot)
+        {
+            CurActiveSkill = SelectedSkill;
+            UpdateEquippedActiveSkill();
         }
     }
 
@@ -76,7 +87,20 @@ public class EquippedItem : MonoBehaviour
     {
         if (_obj != null)
         {
-            SelectedSkill = SkillManager.GetInstance().GetSkill(_obj.name);
+            Skill tmp = SkillManager.GetInstance().GetSkill(_obj.name);
+            if ( tmp != null )
+            {
+                if ( isOpenActiveSlot && tmp.GetID() < 5)
+                {
+                    // 액티브 창을 열었으며, 액티브 스킬을 선택한 경우
+                    SelectedSkill = tmp;
+                }
+                else if ( !isOpenActiveSlot && tmp.GetID() > 4 )
+                {
+                    // 패시브 창을 열었으며, 패시브 스킬을 선택한 경우
+                    SelectedSkill = tmp;
+                }
+            }
         }
     }
 
@@ -108,17 +132,39 @@ public class EquippedItem : MonoBehaviour
             SkillImages[CurSkillSlot].sprite = s;
             SkillManager.GetInstance().LetSkillActivate(id);
 
-
             SkillPopUp.SetActive(false);
             SelectedSkill = null;
             CurSkillSlot = -1;
-
         }
     }
 
+    void UpdateEquippedActiveSkill()
+    {
+        int id = SelectedSkill.GetID();
+
+        Sprite s = SkillManager.GetInstance().GetSprite(id);
+
+        if (s != null)
+        {
+            ActiveSkillImage.sprite = s;
+
+            SkillPopUp.SetActive(false);
+            isOpenActiveSlot = false;
+            SelectedSkill = null;
+        }
+    }
+
+    public void OnClickedActiveSkillEquippedButton()
+    {
+        SkillPopUp.SetActive(true);
+        isOpenActiveSlot = true;
+    }
 
     public void ActivateActiveSkill()
     {
-        ActiveSkillManager.CurSkillActivate(ActivateSkillIndex);
+        if ( CurActiveSkill != null )
+        {
+            ActiveSkillManager.CurSkillActivate(CurActiveSkill.GetID());
+        }
     }
 }

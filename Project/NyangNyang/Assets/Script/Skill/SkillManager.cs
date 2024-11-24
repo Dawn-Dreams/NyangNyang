@@ -32,10 +32,14 @@ public class SkillManager : MonoBehaviour
         // TODO: 서버에서 데이터 받아오기
 
         // 액티브 스킬
-
+        SkillList.Add(new ActiveSkill(0, "우주 냥경찰 출동!", 1, 1, 1, 1f));
+        SkillList.Add(new ActiveSkill(1, "캣닢비가 내려와", 1, 1, 1, 2f));
+        SkillList.Add(new ActiveSkill(2, "냥냥대원들아 도와줘", 1, 1, 1, 3f));
+        SkillList.Add(new ActiveSkill(3, "자린고비냥", 0, 1, 1, 4f));
+        SkillList.Add(new ActiveSkill(4, "실타래 폭탄", 0, 1, 1, 4f));
         // 패시브 스킬
-        SkillList.Add(new DefenseUpSkill(9, "털복숭이 갑옷", 0, 1, 1, 1f));
-        SkillList.Add(new DefenseUpSkill(10, "꼬리 방패", 0, 1, 1, 2f));
+        SkillList.Add(new DefenseUpSkill(9, "털복숭이 갑옷", 1, 1, 1, 1f));
+        SkillList.Add(new DefenseUpSkill(10, "꼬리 방패", 1, 1, 1, 2f));
         SkillList.Add(new DefenseUpSkill(11, "퐁퐁 쿠션 아머", 0, 1, 1, 3f));
         SkillList.Add(new DefenseUpSkill(12, "튼튼한 발톱 가드", 0, 1, 1, 4f));
 
