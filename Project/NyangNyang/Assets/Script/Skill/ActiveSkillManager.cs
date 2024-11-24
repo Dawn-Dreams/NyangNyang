@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ActiveSkillManager : MonoBehaviour
 {
@@ -46,26 +47,34 @@ public class ActiveSkillManager : MonoBehaviour
     public float duration = 2f;        // 이동에 걸리는 시간
 
 
+    public float SkillCoolTime = 10f;
+    public bool isWaiting = false;
+    public Slider CoolTime;
 
     public void CurSkillActivate(int id)
     {
-        switch (id)
+
+        if ( !isWaiting )
         {
-            case 0:
-                StartCoroutine(UFOCatSkill());
-                break;
-            case 1:
-                StartCoroutine(SpawnLeaves());
-                break;
-            case 2:
-                StartCoroutine(HelpMeSkill());
-                break;
-            case 3:
-                StartCoroutine(ScroogeSkill());
-                break;
-            case 4:
-                StartCoroutine(ThrowToTarget());
-                break;
+            switch (id)
+            {
+                case 0:
+                    StartCoroutine(UFOCatSkill());
+                    break;
+                case 1:
+                    StartCoroutine(SpawnLeaves());
+                    break;
+                case 2:
+                    StartCoroutine(HelpMeSkill());
+                    break;
+                case 3:
+                    StartCoroutine(ScroogeSkill());
+                    break;
+                case 4:
+                    StartCoroutine(ThrowToTarget());
+                    break;
+
+            }
 
         }
     }
@@ -97,6 +106,9 @@ public class ActiveSkillManager : MonoBehaviour
 
         // 이동 종료 후 정확한 위치 설정
         HelpCat.transform.position = HelpendPosition;
+
+
+        StartCoroutine(WaitForCoolTime());
     }
 
     IEnumerator ScroogeSkill()
@@ -126,6 +138,8 @@ public class ActiveSkillManager : MonoBehaviour
 
         // 이동 종료 후 정확한 위치 설정
         ScroogeCat.transform.position = ScroogeendPosition;
+
+        StartCoroutine(WaitForCoolTime());
     }
 
     IEnumerator UFOCatSkill()
@@ -171,6 +185,8 @@ public class ActiveSkillManager : MonoBehaviour
         Destroy(beam);
         UFOCat.SetActive(false);
 
+        StartCoroutine(WaitForCoolTime());
+
     }
 
     private IEnumerator SpawnLeaves()
@@ -196,6 +212,8 @@ public class ActiveSkillManager : MonoBehaviour
             // 나뭇잎 생성 간격
             yield return new WaitForSeconds(0.1f);
         }
+
+        StartCoroutine(WaitForCoolTime());
     }
 
     private IEnumerator FallLeaf(GameObject leaf, float speed)
@@ -253,5 +271,33 @@ public class ActiveSkillManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         Destroy(skein);
+
+        StartCoroutine(WaitForCoolTime());
+    }
+
+    IEnumerator WaitForCoolTime()
+    {
+        float elapsedTime = 0f;
+        
+        isWaiting = true;
+
+        while (elapsedTime < SkillCoolTime)
+        {
+            CoolTime.value = elapsedTime / SkillCoolTime;
+            elapsedTime += Time.deltaTime;
+            yield return null; // 다음 프레임까지 대기
+        }
+
+        isWaiting = false;
+    }
+
+    public void SetSkillCoolTime(float _time)
+    {
+        SkillCoolTime *= (_time + 1f);
+    }
+
+    public void ResetSkillCoolTime()
+    {
+        SkillCoolTime = 1f;
     }
 }

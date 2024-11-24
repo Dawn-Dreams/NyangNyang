@@ -32,6 +32,11 @@ public class EquippedItem : MonoBehaviour
     GameObject SkillPopUp;
     public bool isOpenActiveSlot = false;
 
+
+    [SerializeField]
+    NyangNyangPower nyangMgr;
+    int ActiveSkillCost = 10;
+
     public void OnClickedWeaponEquippedButton()
     {
         if (SelectedWeapon != null)
@@ -171,8 +176,9 @@ public class EquippedItem : MonoBehaviour
 
     public void ActivateActiveSkill()
     {
-        if ( CurActiveSkill != null )
+        if ( CurActiveSkill != null && nyangMgr.CanUseNyangNyangPower(ActiveSkillCost) && !ActiveSkillManager.isWaiting)
         {
+            nyangMgr.UseNyangNyangPower(ActiveSkillCost);
             ActiveSkillManager.CurSkillActivate(CurActiveSkill.GetID());
         }
     }

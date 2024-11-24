@@ -11,7 +11,7 @@ public class CoolTimeDownSkill : PassiveSkill
 
     public override void ApplyEffect()
     {
-        // 플레이어(고양이) 쿨타임 감소
+        
     }
 
     public override void DetachEffect()
