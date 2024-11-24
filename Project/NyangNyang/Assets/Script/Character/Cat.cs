@@ -16,7 +16,7 @@ public class Cat : Character
         status = Player.playerStatus;
 
         Player.playerStatus.OnStatusLevelChange += HPLevelChanged;
-        
+
         base.Awake();
     }
 
@@ -46,8 +46,13 @@ public class Cat : Character
 
     protected override void Death()
     {
+        if (isIndependent)
+        {
+            animationManager.PlayAnimation(AnimationManager.AnimationState.DieB);
+            Debug.Log("CatDeathAnim");
+        }
+        Debug.Log("CatDeath");
         base.Death();
-
         CombatManager.GetInstance().PlayerCatDeath();
     }
 }

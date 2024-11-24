@@ -17,7 +17,7 @@ public enum EnemyMonsterType
     // 바다
     StarFish, Octopus, Puffe, Shellfish, Krake,
     // 사막
-    Rato, Cactuso,  Wormo, Scopionto, MegaGolem,
+    Rato, Cactuso, Wormo, Scopionto, MegaGolem,
     // 얼음
     MiniIceCube, MiniIceBear, IceBear, IceStarflake, IceGolem,
     // 용암
@@ -39,7 +39,7 @@ public class DummyEnemy
 
     private AddressableHandle<GameObject> _enemyMonsterPrefab;
     private Slider _slider;
-    
+
     public DummyEnemy(GameObject dummyObject, Slider slider, EnemyMonsterType type, BigInteger maxHP)
     {
         if (dummyObject == null || slider == null)
@@ -62,7 +62,7 @@ public class DummyEnemy
 
     private void LoadEnemyMonsterAsset()
     {
-        _enemyMonsterPrefab = new AddressableHandle<GameObject>().Load("Enemy/"+monsterType);
+        _enemyMonsterPrefab = new AddressableHandle<GameObject>().Load("Enemy/" + monsterType);
         animationManager = GameObject.Instantiate(_enemyMonsterPrefab.obj, dummyGameObject.transform).GetComponent<AnimationManager>();
     }
 
@@ -70,7 +70,7 @@ public class DummyEnemy
     public BigInteger TakeDamage(BigInteger getDamage)
     {
         BigInteger returnApplyDamage = getDamage;
-        
+
         if (getDamage > currentHP)
         {
             returnApplyDamage = currentHP;
@@ -99,7 +99,7 @@ public class DummyEnemy
     public void DestroyDummyEnemy()
     {
         EnemyPlayAnimation(AnimationManager.AnimationState.DieA);
-        _slider.gameObject.SetActive(false);   
+        _slider.gameObject.SetActive(false);
         //dummyGameObject.GetComponent<SpriteRenderer>().color = new Color(0.25f, 0.25f, 0.25f);
         hpText.gameObject.SetActive(false);
     }
@@ -127,7 +127,7 @@ public class DummyEnemy
             point.z = 0.0f;
             _slider.gameObject.GetComponent<RectTransform>().anchoredPosition3D = point;
         }
-        
+
         _slider.value = 1f;
     }
 
@@ -147,7 +147,7 @@ public class Enemy : Character
     [SerializeField] private StageManager stageManager;
 
     [SerializeField] private GameObject[] dummyEnemyObj;
-    private List<DummyEnemy> _dummyEnemies;
+    public List<DummyEnemy> _dummyEnemies;
     private List<EnemyMonsterType> _dummyEnemyMonsterTypes;
 
     public int initialNumOfDummyEnemy = 0;
@@ -190,13 +190,13 @@ public class Enemy : Character
         IsEnemy = true;
 
         _monsterData = ScriptableObject.CreateInstance<MonsterData>().SetMonsterDataFromOther(monsterDataTemplate);
-        int currentTheme= GameManager.GetInstance().stageManager.GetCurrentTheme();
+        int currentTheme = GameManager.GetInstance().stageManager.GetCurrentTheme();
         int currentStage = GameManager.GetInstance().stageManager.GetCurrentStage();
         int maxStage = GameManager.GetInstance().stageManager.maxStageCount;
-        _monsterData.InitializeMonsterStatus(currentTheme,currentStage, maxStage);
+        _monsterData.InitializeMonsterStatus(currentTheme, currentStage, maxStage);
         if (_monsterData.monsterTypes == null || _monsterData.monsterTypes.Count == 0)
         {
-            string text = (StagePlanet)((currentTheme-1) % (int)StagePlanet.Count ) + "Planet_MonsterType";
+            string text = (StagePlanet)((currentTheme - 1) % (int)StagePlanet.Count) + "Planet_MonsterType";
             AddressableHandle<MonsterTypeFromPlanet> data =
                 new AddressableHandle<MonsterTypeFromPlanet>().Load(text);
             //Debug.Log(text);
@@ -206,7 +206,7 @@ public class Enemy : Character
         status = new Status(_monsterData.monsterStatus);
 
         base.Awake();
-        
+
         SetNumberOfEnemyInGroup(_monsterData.enemyCount);
 
         // ~~enemy drop data 받기~~  몬스터 정보 받기에서 진행
@@ -220,8 +220,8 @@ public class Enemy : Character
     {
         // 적 개체는 최소 1마리에서 최대 5마리
         initialNumOfDummyEnemy = numOfEnemy = (int)Mathf.Clamp(numOfEnemy, 1.0f, dummyEnemyObj.Length);
-        
-        
+
+
         // 더미 몬스터들의 타입을 설정
         _dummyEnemyMonsterTypes = SelectEnemyTypes(numOfEnemy, _monsterData.monsterTypes);
 
@@ -286,7 +286,7 @@ public class Enemy : Character
             {
                 return new List<EnemyMonsterType>()
                 {
-                    monsterDataMonsterTypes[0], monsterDataMonsterTypes[0], 
+                    monsterDataMonsterTypes[0], monsterDataMonsterTypes[0],
                     monsterDataMonsterTypes[1], monsterDataMonsterTypes[1], monsterDataMonsterTypes[2]
                 };
             }
@@ -300,7 +300,7 @@ public class Enemy : Character
             int currentPercent = 0;
             for (int i = 0; i < numOfEnemy; ++i)
             {
-                int percent = (int)(100 / Mathf.Pow(2, i+1));
+                int percent = (int)(100 / Mathf.Pow(2, i + 1));
                 enemyTypePercent.Add(percent);
                 currentPercent += percent;
             }
@@ -312,7 +312,7 @@ public class Enemy : Character
             for (int enemyIndex = 0; enemyIndex < numOfEnemy; ++enemyIndex)
             {
                 int rand = Random.Range(1, 100);
-                
+
                 for (int percentIndex = 0; percentIndex < enemyTypePercent.Count; ++percentIndex)
                 {
                     // ex) 5종류 기준 54 / 25 / 12 / 6 / 3
@@ -323,7 +323,7 @@ public class Enemy : Character
                     }
                 }
             }
-            
+
             if (types.Count != numOfEnemy)
             {
                 for (int count = types.Count; count < numOfEnemy; ++count)
@@ -331,7 +331,7 @@ public class Enemy : Character
                     types.Add(monsterDataMonsterTypes[0]);
                 }
             }
-            
+
 
             return types;
         }
@@ -350,7 +350,7 @@ public class Enemy : Character
     {
         while (true)
         {
-            currentMoveTime = Mathf.Min(currentMoveTime+Time.deltaTime, moveToCombatAreaRequiredTime);
+            currentMoveTime = Mathf.Min(currentMoveTime + Time.deltaTime, moveToCombatAreaRequiredTime);
             if (currentMoveTime >= moveToCombatAreaRequiredTime)
             {
                 ArriveCombatArea();
@@ -359,7 +359,7 @@ public class Enemy : Character
             transform.position = Vector3.Lerp(spawnPosition, combatPosition, currentMoveTime / moveToCombatAreaRequiredTime);
             yield return null;
         }
-        
+
     }
 
     void ArriveCombatArea()
@@ -368,7 +368,7 @@ public class Enemy : Character
         {
             dummyEnemy.EnemyArriveAtCombatArea();
         }
-        
+
         CombatManager.GetInstance().EnemyArriveCombatArea(this);
 
         if (moveToCombatAreaCoroutine != null)
@@ -390,7 +390,7 @@ public class Enemy : Character
         BigInteger damage = base.CalculateDamage();
         BigInteger initialDamage = damage;
         float divideValue = ((float)_dummyEnemies.Count / initialNumOfDummyEnemy);
-        damage = MyBigIntegerMath.MultiplyWithFloat(damage,divideValue,5);
+        damage = MyBigIntegerMath.MultiplyWithFloat(damage, divideValue, 5);
         return damage;
     }
 
@@ -405,7 +405,7 @@ public class Enemy : Character
 
     public override BigInteger TakeDamage(BigInteger damage, bool isAOESkill = false)
     {
-        if (_dummyEnemies.Count == 0)
+        if (_dummyEnemies.Count == 0 && isIndependent)
         {
             Debug.Log("이미 적군이 사망함");
             return 0;
@@ -421,10 +421,10 @@ public class Enemy : Character
         }
 
         // apply damage
-        for(int i = 0; i < maxApplyDamageCount; ++i)
+        for (int i = 0; i < maxApplyDamageCount; ++i)
         {
             amountOfDamage += _dummyEnemies[i].TakeDamage(applyDamage);
-             
+
             if (_dummyEnemies[i].IsDead())
             {
                 _dummyEnemies[i].DestroyDummyEnemy();
@@ -442,26 +442,36 @@ public class Enemy : Character
     // 적군이 사망했는지 여부를 반환
     public override bool IsDead()
     {
+        if (isIndependent == true)
+        {
+            if (currentHP == 0)
+                return true;
+        }
+
         return _dummyEnemies.Count == 0;
     }
 
     protected override void Death()
     {
-        if (_monsterData.enemyDropData)
+        if (!isIndependent)
         {
-            _monsterData.enemyDropData.GiveItemToPlayer();
-        }
 
-        
-        for (int i = 0; i < _dummyEnemyMonsterTypes.Count; ++i)
-        {
-            if (QuestManager.GetInstance().OnUserKillEnemyType != null)
+            if (_monsterData.enemyDropData)
             {
-                QuestManager.GetInstance().OnUserKillEnemyType(_dummyEnemyMonsterTypes[i]);
+                _monsterData.enemyDropData.GiveItemToPlayer();
             }
-        }
 
-        CombatManager.GetInstance().CurrentEnemyDeath(this);
+
+            for (int i = 0; i < _dummyEnemyMonsterTypes.Count; ++i)
+            {
+                if (QuestManager.GetInstance().OnUserKillEnemyType != null)
+                {
+                    QuestManager.GetInstance().OnUserKillEnemyType(_dummyEnemyMonsterTypes[i]);
+                }
+            }
+
+            CombatManager.GetInstance().CurrentEnemyDeath(this);
+        }
 
         base.Death();
     }

@@ -2,10 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static DungeonBossEnemy;
-
 public class DungeonBossEnemy : Enemy
 {
     public enum BossType
@@ -27,32 +26,13 @@ public class DungeonBossEnemy : Enemy
     {
         base.Awake();
 
-        // 필요한 오브젝트 및 슬라이더를 할당
-        GameObject dummyObject = GameObject.Find("DummyObjectName");
-        Slider slider = FindObjectOfType<Slider>();
-
-        if (dummyObject == null)
-        {
-            Debug.LogWarning("DungeonBossEnemy 초기화: DummyObjectName을 찾을 수 없어 기본 설정으로 진행합니다.");
-            dummyObject = new GameObject("DefaultDummyObject");
-            dummyObject.transform.SetParent(this.transform); // 보스 하위에 설정
-            dummyObject.transform.localPosition = UnityEngine.Vector3.zero; // 상대 위치를 (0,0,0)으로 설정
-
-        }
-
-        if (slider == null)
-        {
-            Debug.LogWarning("DungeonBossEnemy 초기화: Slider를 찾을 수 없어 기본 슬라이더를 생성합니다.");
-            GameObject sliderObject = new GameObject("DefaultSlider");
-            slider = sliderObject.AddComponent<Slider>();
-        }
-       
+        healthBarSlider = FindObjectOfType<Slider>();
+        textMeshPro = FindObjectOfType<TextMeshProUGUI>();
         isIndependent = true;
+
     }
 
-    private Status bossStatus;
-
-    public void InitializeBossForDungeon(int dungeonIndex, int dungeonLevel)
+     public void InitializeBossForDungeon(int dungeonIndex, int dungeonLevel)
     {
         // 보스 유형 설정
         switch (dungeonIndex)
@@ -65,22 +45,12 @@ public class DungeonBossEnemy : Enemy
                 return;
         }
 
-        // 보스 데이터 로드
-        BossMonsterData bossData = BossMonsterDataManager.GetBossDataByType(bossType);
+        maxHP = new BigInteger(10000 * (dungeonLevel+1) * (dungeonLevel + 1));
+        currentHP = maxHP;
 
-        int hpMultiplier = dungeonLevel * 1000;   // 레벨에 따라 HP 증가
-        int attackMultiplier = dungeonLevel * 50; // 레벨에 따라 공격력 증가
-        int defenseMultiplier = dungeonLevel * 20; // 레벨에 따라 방어력 증가
 
-        maxHP = bossData.baseHP + hpMultiplier;           // 기본 체력 + 레벨 보정
-        status.hp = (int)maxHP;                                // 초기 체력은 최대 체력으로 설정
-        status.attackPower = bossData.baseAttack + attackMultiplier; // 공격력 계산
-        status.defence = bossData.baseDefense + defenseMultiplier;   // 방어력 계산
-
-        Debug.Log($"status.hp: {status.hp}, status.attackPower: {status.attackPower}, status.defence: {status.defence}");
-        Debug.Log("Max HP : " + maxHP);
+        Debug.Log($"보스 체력 설정 완료: maxHP = {maxHP}, currentHP = {currentHP}");
     }
-
 
     private void StartRoarSkill()
     {
@@ -131,67 +101,50 @@ public class DungeonBossEnemy : Enemy
         // 허수아비는 공격하지 않음
         if (bossType == BossType.Scarecrow)
         {
-            Debug.Log("허수아비 보스는 공격하지 않음");
             return;
         }
-
-        base.Attack();
 
         // 스킬로만 데미지를 주는 보스는 일반 공격 대신 특수 공격
         if (bossType == BossType.SkillOnly)
         {
             SpecialAttack();
         }
+
+        foreach (var dummyEnemy in _dummyEnemies)
+        {
+            dummyEnemy.EnemyPlayAnimation(AnimationManager.AnimationState.ATK1);
+        }
+
+        base.Attack();
+    }
+    public override BigInteger TakeDamage(BigInteger damage, bool isAOESkill = false)
+    {
+        BigInteger reducedDamage = damage * 9 / 10; // 대미지 90%만 받음
+
+        currentHP -= reducedDamage;
+        if (currentHP < 0)
+            currentHP = 0;
+
+        healthBarSlider.value = (float)(currentHP) / (float)(maxHP);
+        textMeshPro.text = $"{currentHP} / {maxHP}";
+
+        // 사망 처리
+        if (currentHP <= 0)
+        {
+            Debug.Log($"보스 사망: {gameObject.name}");
+            Death();
+        }
+
+        return reducedDamage;
     }
 
     protected override void Death()
     {
-        Debug.Log($"DungeonBossEnemy({bossType}) 사망");
         if (bossType == BossType.RoaringSkill && roarSkillCoroutine != null)
         {
             StopCoroutine(roarSkillCoroutine);
         }
-
+        
         base.Death();
-    }
-}
-public static class BossMonsterDataManager
-{
-    private static Dictionary<BossType, BossMonsterData> bossDataDictionary;
-
-    static BossMonsterDataManager()
-    {
-        bossDataDictionary = new Dictionary<BossType, BossMonsterData>
-        {
-            {
-                BossType.Scarecrow, CreateBossData(10000, 500, 200)
-            },
-            {
-                BossType.SkillOnly, CreateBossData(8000, 700, 150)
-            },
-            {
-                BossType.RoaringSkill, CreateBossData(12000, 400, 300)
-            }
-        };
-    }
-
-    private static BossMonsterData CreateBossData(int hp, int attack, int defense)
-    {
-        BossMonsterData data = ScriptableObject.CreateInstance<BossMonsterData>();
-        data.baseHP = hp;
-        data.baseAttack = attack;
-        data.baseDefense = defense;
-        return data;
-    }
-
-    public static BossMonsterData GetBossDataByType(BossType type)
-    {
-        if (bossDataDictionary.TryGetValue(type, out var data))
-        {
-            return data;
-        }
-
-        Debug.LogError($"BossMonsterData for {type} not found.");
-        return null;
     }
 }
