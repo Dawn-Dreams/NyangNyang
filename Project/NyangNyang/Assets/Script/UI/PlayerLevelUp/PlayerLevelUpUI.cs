@@ -19,6 +19,9 @@ public class PlayerLevelUpUI : MonoBehaviour
     private List<GameObject> newContentIconPool = new List<GameObject>();
     public GameObject iconObjectPool;
 
+    public Animation levelUpObjectAnimation;
+    public Button newContentAlertButton;
+
     private void Awake()
     {
         _instance = this;
@@ -30,6 +33,28 @@ public class PlayerLevelUpUI : MonoBehaviour
         {
             newContentIconPool.Add(Instantiate(iconPrefab,iconObjectPool.transform));
         }
+        
+    }
+
+    public void UserLevelUp()
+    {
+        // 레벨업 UI 애니메이션 재생
+        levelUpObjectAnimation.gameObject.SetActive(true);
+        levelUpObjectAnimation.Play();
+
+        // 새로운 컨텐츠가 있다면 좌하단 ! UI
+        if (grid.transform.childCount > 0)
+        {
+            newContentAlertButton.gameObject.SetActive(true);
+        }
+
+
+    }
+
+    public void OpenLevelUpUI()
+    {
+        gameObject.SetActive(true);
+        newContentAlertButton.gameObject.SetActive(false);
     }
 
     void OnDestroy()
@@ -42,15 +67,7 @@ public class PlayerLevelUpUI : MonoBehaviour
 
     void OnEnable()
     {
-        if (grid.transform.childCount == 0)
-        {
-            newContentPanel.SetActive(false);
-            Invoke("CloseLevelUpUIWithNoNewContent", 3.0f);
-        }
-        else
-        {
-            newContentPanel.SetActive(true);
-        }
+        newContentPanel.SetActive(true);
     }
 
     void CloseLevelUpUIWithNoNewContent()
