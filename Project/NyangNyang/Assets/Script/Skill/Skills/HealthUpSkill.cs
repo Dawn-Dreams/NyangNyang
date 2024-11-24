@@ -11,10 +11,11 @@ public class HealthUpSkill : PassiveSkill
 
     public override void ApplyEffect()
     {
-        // 플레이어(고양이) 체력 추가
+        Player.playerStatus.SetSKillHPEffect(effect);
     }
 
     public override void DetachEffect()
     {
+        Player.playerStatus.SetSKillHPEffect(-effect);
     }
 }

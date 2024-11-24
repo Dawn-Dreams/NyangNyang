@@ -161,6 +161,7 @@ public class Status
     public float weaponEffect;
     public float skillAttackEffect;
     public float skillDefenceEffect;
+    public float skillHPEffect;
 
     public Dictionary<SnackType, float> snackBuffValue = new Dictionary<SnackType, float>
     {
@@ -250,13 +251,19 @@ public class Status
         UpdateStatus();
     }
 
-    public void SetSKillDefenceEffect(float _attack)
+    public void SetSKillDefenceEffect(float _defence)
     {
-        skillDefenceEffect = _attack;
+        skillDefenceEffect = 1f + _defence;
 
         UpdateStatus();
     }
 
+    public void SetSKillHPEffect(float _HP)
+    {
+        skillHPEffect = 1f + _HP;
+
+        UpdateStatus();
+    }
 
     public void SetTitleOwningEffect(List<TitleOwningEffect> titleOwningEffects)
     {
@@ -288,7 +295,7 @@ public class Status
         switch (type)
         {
             case StatusLevelType.HP:
-                float hpMulValue = snackBuffValue[SnackType.Hp];
+                float hpMulValue = snackBuffValue[SnackType.Hp] + skillHPEffect;
                 int hpAddValue = 0;
                 if (titleOwningEffectValue.ContainsKey(StatusLevelType.HP))
                 {
@@ -310,7 +317,7 @@ public class Status
                 attackPower = (int)((levelData.CalculateValueFromLevel(StatusLevelType.STR) + strAddValue) * attackMulValue);
                 break;
             case StatusLevelType.DEF:
-                defence = (int)levelData.CalculateValueFromLevel(StatusLevelType.DEF);
+                defence = (int)(levelData.CalculateValueFromLevel(StatusLevelType.DEF) * skillDefenceEffect);
                 break;
             case StatusLevelType.HEAL_HP:
                 healHPPerSec = (int)levelData.CalculateValueFromLevel(StatusLevelType.HEAL_HP);

@@ -5,12 +5,19 @@ using UnityEngine.UI;
 
 public class EquippedItem : MonoBehaviour
 {
+    // 장비
     Weapon EquippedWeapon;
     Weapon SelectedWeapon;
 
+    // 패시브 스킬
     Skill[] EquippedSkills = new Skill[4];
     int CurSkillSlot;
     Skill SelectedSkill;
+
+    // 액티브 스킬
+    public ActiveSkillManager ActiveSkillManager;
+    Skill CurActiveSkill;
+    public Image ActiveSkillImage;
 
     [SerializeField]
     Image WeaponImage;
@@ -23,6 +30,7 @@ public class EquippedItem : MonoBehaviour
 
     [SerializeField]
     GameObject SkillPopUp;
+    public bool isOpenActiveSlot = false;
 
     public void OnClickedWeaponEquippedButton()
     {
@@ -36,10 +44,20 @@ public class EquippedItem : MonoBehaviour
 
     public void OnClickedSkillEquippedButton()
     {
-        if (SelectedSkill != null)
+        if (SelectedSkill != null && !isOpenActiveSlot)
         {
+            SkillManager.GetInstance().LetSkillDeActivate(EquippedSkills[CurSkillSlot].GetID());
             EquippedSkills[CurSkillSlot] = SelectedSkill;
             UpdateEquippedSkill();
+        }
+    }
+
+    public void OnClickedActiveSkillEquippedOKButton()
+    {
+        if (SelectedSkill != null && isOpenActiveSlot)
+        {
+            CurActiveSkill = SelectedSkill;
+            UpdateEquippedActiveSkill();
         }
     }
 
@@ -70,8 +88,29 @@ public class EquippedItem : MonoBehaviour
     {
         if (_obj != null)
         {
-            SelectedSkill = SkillManager.GetInstance().GetSkill(_obj.name);
+            Skill tmp = SkillManager.GetInstance().GetSkill(_obj.name);
+            if ( tmp != null )
+            {
+                if ( isOpenActiveSlot && tmp.GetID() < 5 && tmp.HasSkill() )
+                {
+                    // 액티브 창을 열었으며, 액티브 스킬을 선택한 경우
+                    SelectedSkill = tmp;
+                }
+                else if ( !isOpenActiveSlot && tmp.GetID() > 4 && tmp.HasSkill() )
+                {
+                    Debug.Log(tmp.GetName());
+                    // 패시브 창을 열었으며, 패시브 스킬을 선택한 경우
+                    SelectedSkill = tmp;
+                }
+            }
         }
+    }
+
+    public void OnClickedCancleButton()
+    {
+        isOpenActiveSlot = false;
+        SelectedSkill = null;
+        SelectedWeapon = null;
     }
 
     void UpdateEquippedWeapon()
@@ -102,13 +141,39 @@ public class EquippedItem : MonoBehaviour
             SkillImages[CurSkillSlot].sprite = s;
             SkillManager.GetInstance().LetSkillActivate(id);
 
-
             SkillPopUp.SetActive(false);
             SelectedSkill = null;
             CurSkillSlot = -1;
-
         }
-
     }
 
+    void UpdateEquippedActiveSkill()
+    {
+        int id = SelectedSkill.GetID();
+
+        Sprite s = SkillManager.GetInstance().GetSprite(id);
+
+        if (s != null)
+        {
+            ActiveSkillImage.sprite = s;
+
+            SkillPopUp.SetActive(false);
+            isOpenActiveSlot = false;
+            SelectedSkill = null;
+        }
+    }
+
+    public void OnClickedActiveSkillEquippedButton()
+    {
+        SkillPopUp.SetActive(true);
+        isOpenActiveSlot = true;
+    }
+
+    public void ActivateActiveSkill()
+    {
+        if ( CurActiveSkill != null )
+        {
+            ActiveSkillManager.CurSkillActivate(CurActiveSkill.GetID());
+        }
+    }
 }
