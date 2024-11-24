@@ -115,7 +115,7 @@ public class OptionMenuUI : MonoBehaviour
                 OpenBulletinBoardPanel();
                 break;
             case 5:
-                OpenCommunityPanel();
+                OpenAccountPanel();
                 break;
             default:
                 Debug.LogWarning("해당 인덱스에 대한 고유 함수가 없습니다.");
@@ -280,6 +280,13 @@ public class OptionMenuUI : MonoBehaviour
     // 설정
     void OpenSettingsPanel()
     {
+
+    }
+
+    // 계정
+    void OpenAccountPanel()
+    {
+
     }
 
 

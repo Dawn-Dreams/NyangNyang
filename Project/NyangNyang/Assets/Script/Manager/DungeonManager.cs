@@ -13,6 +13,7 @@ public class DungeonManager : MonoBehaviour
     private TextMeshProUGUI DungeonResultText;
 
     public int[] dungeonHighestClearLevel = new int[3] { 1, 1, 1 };
+    public int currentDungeonLevel;
     private int currentDungeonIndex;
 
     // 스페셜 스테이지 지속 시간
@@ -21,7 +22,7 @@ public class DungeonManager : MonoBehaviour
     public int baseGoldAmount = 100000;
     private Coroutine goldCoroutine;
     private bool isSuccess;
-    private int gainGold = 100000;               // 기본 골드 획득량
+
     // 임시 객체로 사용할 cat과 enemy 프리팹
     public Cat catPrefab;
     public DungeonBossEnemy enemyPrefab;
@@ -30,7 +31,7 @@ public class DungeonManager : MonoBehaviour
 
     // 싱글톤 인스턴스
     public static DungeonManager Instance { get; private set; }
-   
+
     private void Awake()
     {
         if (transform.parent != null)
@@ -195,17 +196,21 @@ public class DungeonManager : MonoBehaviour
         // 성공 처리
         if (isSuccess)
         {
-            if (currentDungeonIndex >= 0 && currentDungeonIndex < dungeonHighestClearLevel.Length)
+            // 현재 최고 단계 클리어 시
+            if (currentDungeonLevel == dungeonHighestClearLevel[currentDungeonIndex])
             {
                 dungeonHighestClearLevel[currentDungeonIndex]++;
-                ShowDungeonResultText("<color=#BFECFF>CLEAR!!</color>", 2);
-                Player.AddGold(dungeonHighestClearLevel[currentDungeonIndex] * gainGold);
+                ShowDungeonResultText($"<color=#BFECFF>{currentDungeonLevel} CLEAR!!</color>", 2);
+            }
+            else
+            {
+                ShowDungeonResultText($"<color=#BFECFF>CLEAR!!</color>", 2);
+            }
 
-                var DungeonPanel = FindObjectOfType<DungeonPanel>();
-                if (DungeonPanel != null)
-                {
-                    DungeonPanel.OnStageCleared(currentDungeonIndex, dungeonHighestClearLevel[currentDungeonIndex]);
-                }
+            var DungeonPanel = FindObjectOfType<DungeonPanel>();
+            if (DungeonPanel != null)
+            {
+                DungeonPanel.OnStageCleared(currentDungeonIndex, dungeonHighestClearLevel[currentDungeonIndex]);
             }
             catInstance.animationManager.PlayAnimation(AnimationManager.AnimationState.Victory);
             enemyInstance._dummyEnemies[0].animationManager.PlayAnimation(AnimationManager.AnimationState.DieA);
