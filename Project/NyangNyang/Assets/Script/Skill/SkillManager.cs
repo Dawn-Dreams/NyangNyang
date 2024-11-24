@@ -47,17 +47,35 @@ public class SkillManager : MonoBehaviour
         skills[4] = new ActiveSkill(4, "실타래 폭탄", 0, 1, 1, 4f);
         skillDic["실타래 폭탄"] = 4;
 
-        for (int i = 5; i < 25; ++i)
+        skills[5] = new RecoverHPSkill(5, "냥냥 마법빵", 0, 1, 1, 4f);
+        skillDic["냥냥 마법빵"] = 5;
+
+        skills[6] = new RecoverHPSkill(6, "생선 간식 타임", 0, 1, 1, 4f);
+        skillDic["생선 간식 타임"] = 6;
+
+        skills[7] = new RecoverHPSkill(7, "햇볕 낮잠", 0, 1, 1, 4f);
+        skillDic["햇볕 낮잠"] = 7;
+
+        skills[8] = new RecoverHPSkill(8, "핑크 젤리 힐링", 0, 1, 1, 4f);
+        skillDic["핑크 젤리 힐링"] = 8;
+
+        skills[9] = new DefenseUpSkill(9, "털복숭이 갑옷", 1, 1, 1, 1f);
+        skillDic["털복숭이 갑옷"] = 9;
+
+        skills[10] = new DefenseUpSkill(10, "꼬리 방패", 1, 1, 1, 2f);
+        skillDic["꼬리 방패"] = 10;
+
+        skills[11] = new DefenseUpSkill(11, "퐁퐁 쿠션 아머", 0, 1, 1, 3f);
+        skillDic["퐁퐁 쿠션 아머"] = 11;
+
+        skills[12] = new DefenseUpSkill(12, "튼튼한 발톱 가드", 0, 1, 1, 4f);
+        skillDic["튼튼한 발톱 가드"] = 12;
+
+        for (int i = 13; i < 25; ++i)
         {
             skills[i] = new DefenseUpSkill(i, "털복숭이 갑옷", 1, 1, 1, 1f);
             skillDic["털복숭이 갑옷"] = i;
         }
-
-        // 패시브 스킬
-        //SkillList.Add(new DefenseUpSkill(9, "털복숭이 갑옷", 1, 1, 1, 1f));
-        //SkillList.Add(new DefenseUpSkill(10, "꼬리 방패", 1, 1, 1, 2f));
-        //SkillList.Add(new DefenseUpSkill(11, "퐁퐁 쿠션 아머", 0, 1, 1, 3f));
-        //SkillList.Add(new DefenseUpSkill(12, "튼튼한 발톱 가드", 0, 1, 1, 4f));
 
         //SkillList.Add(new AttackUpSkill(21, "젤리 파워업", 0, 1, 1, 1f));
         //SkillList.Add(new AttackUpSkill(22, "모래 목욕", 0, 1, 1, 2f));

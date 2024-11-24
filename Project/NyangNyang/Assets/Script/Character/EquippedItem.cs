@@ -46,6 +46,7 @@ public class EquippedItem : MonoBehaviour
     {
         if (SelectedSkill != null && !isOpenActiveSlot)
         {
+            SkillManager.GetInstance().LetSkillDeActivate(EquippedSkills[CurSkillSlot].GetID());
             EquippedSkills[CurSkillSlot] = SelectedSkill;
             UpdateEquippedSkill();
         }
