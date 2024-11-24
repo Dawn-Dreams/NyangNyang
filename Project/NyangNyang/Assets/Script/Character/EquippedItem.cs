@@ -5,12 +5,18 @@ using UnityEngine.UI;
 
 public class EquippedItem : MonoBehaviour
 {
+    // 장비
     Weapon EquippedWeapon;
     Weapon SelectedWeapon;
 
+    // 패시브 스킬
     Skill[] EquippedSkills = new Skill[4];
     int CurSkillSlot;
     Skill SelectedSkill;
+
+    // 액티브 스킬
+    public ActiveSkillManager ActiveSkillManager;
+    int ActivateSkillIndex = 3;
 
     [SerializeField]
     Image WeaponImage;
@@ -108,7 +114,11 @@ public class EquippedItem : MonoBehaviour
             CurSkillSlot = -1;
 
         }
-
     }
 
+
+    public void ActivateActiveSkill()
+    {
+        ActiveSkillManager.CurSkillActivate(ActivateSkillIndex);
+    }
 }

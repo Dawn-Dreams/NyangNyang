@@ -8,10 +8,4 @@ public class HelpMeSkill : ActiveSkill
     : base(_id, _name, _possession, _level, _levelUpCost, _effect)
     {
     }
-
-    public override void ApplyEffect()
-    {
-        // 플레이어(고양이) 체력 회복 로직 작성
-        // 코루틴 사용하기
-    }
 }
