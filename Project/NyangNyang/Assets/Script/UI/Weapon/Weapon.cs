@@ -11,6 +11,7 @@ public class Weapon
     int nextStatus = 10;     // 다음 장비의 세부 능력치
     int level;          // 장비 레벨
     int coin = 1;           // 장비 레벨 업 시 필요한 코인 초기값
+    float effect = 2f;
 
 
     public Weapon(int _id, string _name, int _grade, int _subGrade, int _level, int _possession)
@@ -95,5 +96,10 @@ public class Weapon
     public int GetNextStatus()
     {
         return nextStatus;
+    }
+
+    public float GetEffect()
+    {
+        return effect;
     }
 }

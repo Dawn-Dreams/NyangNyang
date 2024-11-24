@@ -83,9 +83,7 @@ public class EquippedItem : MonoBehaviour
         if (s != null)
         {
             WeaponImage.sprite = s;
-            /*
-                공격력 관련 코드 작성         
-             */
+            Player.playerStatus.SetWeaponEffect(SelectedWeapon.GetEffect());
             WeaponPopUp.SetActive(false);
             SelectedWeapon = null;
 
