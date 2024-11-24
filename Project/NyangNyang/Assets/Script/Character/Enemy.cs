@@ -32,7 +32,6 @@ public class DummyEnemy
     private GameObject dummyGameObject;
     private BigInteger currentHP;
     private BigInteger maxHP;
-    private TextMesh hpText;
 
     public AnimationManager animationManager;
     public EnemyMonsterType monsterType;
@@ -55,9 +54,6 @@ public class DummyEnemy
         LoadEnemyMonsterAsset();
 
         this.currentHP = this.maxHP = maxHP;
-
-        hpText = dummyObject.GetComponentInChildren<TextMesh>();
-        hpText.text = currentHP + " / " + maxHP;
     }
 
     private void LoadEnemyMonsterAsset()
@@ -77,8 +73,6 @@ public class DummyEnemy
         }
         currentHP = currentHP - getDamage;
 
-        // TODO: 나중에 지우기
-        hpText.text = currentHP + " / " + maxHP;
         _slider.value = MyBigIntegerMath.DivideToFloat(currentHP, maxHP, 5);
 
         // 대미지 출력
@@ -101,7 +95,6 @@ public class DummyEnemy
         EnemyPlayAnimation(AnimationManager.AnimationState.DieA);
         _slider.gameObject.SetActive(false);
         //dummyGameObject.GetComponent<SpriteRenderer>().color = new Color(0.25f, 0.25f, 0.25f);
-        hpText.gameObject.SetActive(false);
     }
 
     public static void SetFloatingDamage(GameObject getFloatingDamage)
