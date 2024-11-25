@@ -6,6 +6,16 @@ using UnityEngine.UI;
 public class ActiveSkillManager : MonoBehaviour
 {
 
+    private static ActiveSkillManager instance;
+    public static ActiveSkillManager GetInstance() => instance;
+
+    private void Awake()
+    {
+        if ( instance == null) { 
+            instance = this;
+        }
+    }
+
     [Header("우주 냥경찰")]
     public GameObject UFOCat;
     public GameObject Beam;

@@ -162,6 +162,7 @@ public class Status
     public float skillAttackEffect;
     public float skillDefenceEffect;
     public float skillHPEffect;
+    public int skillRecoverHPEffect;
 
     public Dictionary<SnackType, float> snackBuffValue = new Dictionary<SnackType, float>
     {
@@ -269,6 +270,13 @@ public class Status
         UpdateStatus();
     }
 
+    public void SetSkillRecoverHP(int _HPAmount)
+    {
+        skillRecoverHPEffect = _HPAmount;
+
+        UpdateStatus();
+    }
+
     public void SetTitleOwningEffect(List<TitleOwningEffect> titleOwningEffects)
     {
         titleOwningEffectValue = new Dictionary<StatusLevelType, int>();
@@ -305,7 +313,7 @@ public class Status
                 {
                     hpAddValue += titleOwningEffectValue[StatusLevelType.HP];
                 }
-                hp = (int)((levelData.CalculateValueFromLevel(StatusLevelType.HP) + hpAddValue) * hpMulValue);
+                hp = (int)((levelData.CalculateValueFromLevel(StatusLevelType.HP) + hpAddValue) * hpMulValue) + skillRecoverHPEffect;
                 break;
 
             case StatusLevelType.MP:
