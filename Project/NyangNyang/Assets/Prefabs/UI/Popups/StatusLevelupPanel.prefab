@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1024967512211433417}
   - component: {fileID: 2430074560902006174}
   - component: {fileID: 8073811266520248571}
+  - component: {fileID: 2549192434187285965}
   m_Layer: 5
   m_Name: LevelUpButton
   m_TagString: Untagged
@@ -92,6 +93,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2549192434187285965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 344046536980980216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 302209630f1da1e4e832205e80296e52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPressed: 0
 --- !u!1 &499764561324041052
 GameObject:
   m_ObjectHideFlags: 0
@@ -1271,8 +1285,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 5
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4816dcefa069ae74e95ec7435e88d119, type: 2}
+  m_sharedMaterial: {fileID: 4936838257364365244, guid: 4816dcefa069ae74e95ec7435e88d119, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1687,7 +1701,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 388f4d878f04c7449ab12e4ebba8d342, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 195599377f97b43cbb8f95766dfdb555, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

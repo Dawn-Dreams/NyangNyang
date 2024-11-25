@@ -114,13 +114,13 @@ public class CombatPowerManager : MonoBehaviour
         SetChangeValueText(defencePowerChangeText, diffDefenceVal);
         
         combatPowerChangeUIObject.SetActive(true);
+        _activeTime = Time.time;
+        _activeCoroutine = null;
         if (_inactiveCoroutine == null)
         {
             _inactiveCoroutine = StartCoroutine(InactivateUI());
         }
         
-        _activeTime = Time.time;
-        _activeCoroutine = null;
     }
 
     IEnumerator InactivateUI()
