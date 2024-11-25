@@ -26,7 +26,7 @@ public class KillMonsterTypeQuestDataBase : AchievementQuestData
     protected override void QuestActingAction()
     {
         BindDelegate();
-        QuestManager.GetInstance().GetQuestProgressDataFromServer(questCategory, questType);
+        QuestManager.GetInstance().LoadQuestProgressDataFromJson(questCategory, questType);
     }
 
     protected override void CheckQuestClear()

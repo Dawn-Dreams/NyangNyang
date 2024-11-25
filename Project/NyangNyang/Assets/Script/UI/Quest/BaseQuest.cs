@@ -60,10 +60,6 @@ public class BaseQuest : MonoBehaviour
 
     public virtual void SetRewardButtonInteractable(bool newActive, string newText= "진행중")
     {
-        if (!questData.IsRewardRepeatable())
-        {
-            questData.RequestHasReceivedRewardToServer();
-        }
         if (questData.IsGetReward())
         {
             // TODO: 새로운 이미지로 변경

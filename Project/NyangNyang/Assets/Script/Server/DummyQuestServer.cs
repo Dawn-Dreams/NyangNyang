@@ -44,31 +44,31 @@ public class DummyQuestServer : DummyServerData
 
 
 
-    // 유저가 퀘스트 보상을 받았는지에 대한 변수
-    private static Dictionary<QuestCategory, Dictionary<QuestType, List<int>>> _getRewardUsersID =
-        new Dictionary<QuestCategory, Dictionary<QuestType, List<int>>>
-        {
-            // 일일 퀘스트
-            {
-                QuestCategory.Daily, new Dictionary<QuestType, List<int>>
-                {
-                    { QuestType.GoldSpending, new List<int>() },
-                    {QuestType.KillMonster, new List<int>()},
-                    {QuestType.ObtainWeapon, new List<int>()},
-                    {QuestType.ObtainSkill, new List<int>()},
-                    {QuestType.SkillLevelUp, new List<int>()},
-                    {QuestType.CombineWeapon, new List<int>()},
-                }
-            },
-            // 주간 퀘스트
-            {
-                QuestCategory.Weekly, new Dictionary<QuestType, List<int>>
-                {
-                    {QuestType.KillMonster, new List<int>()}
-                }
-            }
-            // 업적 퀘스트는 클라 내에서 해당 칭호를 가지고 있는지로 파악 하여 진행 예정
-        };
+    //// 유저가 퀘스트 보상을 받았는지에 대한 변수
+    //private static Dictionary<QuestCategory, Dictionary<QuestType, List<int>>> _getRewardUsersID =
+    //    new Dictionary<QuestCategory, Dictionary<QuestType, List<int>>>
+    //    {
+    //        // 일일 퀘스트
+    //        {
+    //            QuestCategory.Daily, new Dictionary<QuestType, List<int>>
+    //            {
+    //                { QuestType.GoldSpending, new List<int>() },
+    //                {QuestType.KillMonster, new List<int>()},
+    //                {QuestType.ObtainWeapon, new List<int>()},
+    //                {QuestType.ObtainSkill, new List<int>()},
+    //                {QuestType.SkillLevelUp, new List<int>()},
+    //                {QuestType.CombineWeapon, new List<int>()},
+    //            }
+    //        },
+    //        // 주간 퀘스트
+    //        {
+    //            QuestCategory.Weekly, new Dictionary<QuestType, List<int>>
+    //            {
+    //                {QuestType.KillMonster, new List<int>()}
+    //            }
+    //        }
+    //        // 업적 퀘스트는 클라 내에서 해당 칭호를 가지고 있는지로 파악 하여 진행 예정
+    //    };
 
 
     // 유저의 퀘스트 진행 데이터 저장
@@ -110,24 +110,24 @@ public class DummyQuestServer : DummyServerData
                     {
                         QuestCategory.Repeat, new Dictionary<int, BigInteger>
                         {
-                            {0, 98},
-                            {1, 0}
+                            { 0, 98 },
+                            { 1, 0 }
                         }
                     },
                     // 일일 퀘스트
                     {
                         QuestCategory.Daily, new Dictionary<int, BigInteger>
                         {
-                            {0, 30},
-                            {1, 0}
+                            { 0, 30 },
+                            { 1, 0 }
                         }
                     },
                     // 주간 퀘스트
                     {
                         QuestCategory.Weekly, new Dictionary<int, BigInteger>
                         {
-                            {0, 70},
-                            {1, 0}
+                            { 0, 70 },
+                            { 1, 0 }
                         }
                     }
                 }
@@ -141,11 +141,11 @@ public class DummyQuestServer : DummyServerData
                     {
                         QuestCategory.Daily, new Dictionary<int, BigInteger>
                         {
-                            {0, 35}
+                            { 0, 35 }
                         }
                     }
                 }
-             
+
             },
 
             // CombineWeapon 퀘스트
@@ -156,7 +156,7 @@ public class DummyQuestServer : DummyServerData
                     {
                         QuestCategory.Daily, new Dictionary<int, BigInteger>
                         {
-                            {0, 3}
+                            { 0, 3 }
                         }
                     }
                 }
@@ -171,7 +171,7 @@ public class DummyQuestServer : DummyServerData
                     {
                         QuestCategory.Daily, new Dictionary<int, BigInteger>
                         {
-                            {0, 10}
+                            { 0, 10 }
                         }
                     }
                 }
@@ -186,7 +186,7 @@ public class DummyQuestServer : DummyServerData
                     {
                         QuestCategory.Repeat, new Dictionary<int, BigInteger>
                         {
-                            {0, 5}
+                            { 0, 5 }
                         }
                     }
                 }
@@ -201,7 +201,7 @@ public class DummyQuestServer : DummyServerData
                     {
                         QuestCategory.Achievement, new Dictionary<int, BigInteger>
                         {
-                            {0, 990}
+                            { 0, 990 }
                         }
                     }
                 }
@@ -214,7 +214,7 @@ public class DummyQuestServer : DummyServerData
                     {
                         QuestCategory.Achievement, new Dictionary<int, BigInteger>
                         {
-                            {0, 990}
+                            { 0, 990 }
                         }
                     }
                 }
@@ -227,7 +227,7 @@ public class DummyQuestServer : DummyServerData
                     {
                         QuestCategory.Achievement, new Dictionary<int, BigInteger>
                         {
-                            {0, 990}
+                            { 0, 990 }
                         }
                     }
                 }
@@ -240,7 +240,7 @@ public class DummyQuestServer : DummyServerData
                     {
                         QuestCategory.Achievement, new Dictionary<int, BigInteger>
                         {
-                            {0, 990}
+                            { 0, 990 }
                         }
                     }
                 }
@@ -253,7 +253,7 @@ public class DummyQuestServer : DummyServerData
                     {
                         QuestCategory.Achievement, new Dictionary<int, BigInteger>
                         {
-                            {0, 990}
+                            { 0, 990 }
                         }
                     }
                 }
@@ -261,114 +261,4 @@ public class DummyQuestServer : DummyServerData
 
         };
     // =========================
-
-    // 유저가 일일/주간/업적 퀘스트 등에서 보상을 받은 적 있는지의 정보를 전송해주는 함수
-    public static bool SendRewardInfoToUser(int userID, QuestCategory questCategory, QuestType questType)
-    {
-        bool isUserGetReward = false;
-        if (_getRewardUsersID.ContainsKey(questCategory))
-        {
-            // 카테고리로 보상 반복 유무가 정해지므로 카테고리만 확인
-            isUserGetReward = _getRewardUsersID[questCategory][questType].Contains(userID);
-        }
-        return isUserGetReward;
-    }
-
-    public static void GetQuestDataFromClient(int userID, QuestCategory questCategory, QuestType questType,
-        BigInteger newValue)
-    {
-        if (userQuestProgressData.ContainsKey(questType) && userQuestProgressData[questType].ContainsKey(questCategory))
-        {
-            userQuestProgressData[questType][questCategory][userID] = newValue;
-        }
-    }
-
-    // TODO : SendQuestDataToPlayer와 비슷한 맥락을 하는 함수지만 바로 접근하는 함수
-    public static BigInteger SendQuestProgressDataToClient(int userID, QuestCategory questCategory, QuestType questType)
-    {
-        return userQuestProgressData[questType][questCategory][userID];
-    }
-
-    // 유저가 보상 흭득을 요구하는 함수
-    public static void UserRequestReward(int userID, NormalQuestDataBase questInfo)
-    {
-        // 서버의 퀘스트 정보를 쓰려했으나 스토리 퀘스트 서버가 분리되어 적용 불가, 추후 개선 예정
-        //QuestDataBase questInfo = GetQuestInfo(questCategory, questType);
-
-        
-        Action<int, BigInteger> giveUserCurrencyAction = null;
-        BigInteger rewardCount;
-        if (questInfo)
-        {
-            rewardCount = questInfo.rewardCount;
-            switch (questInfo.rewardType)
-            {
-                case RewardType.Gold:
-                    // TODO: DummyServerData 내 제공하는 함수 제작 후 연결 진행
-                    break;
-                case RewardType.Diamond:
-                    //giveUserCurrencyAction += DummyServerData.GiveUserDiamondAndSendData;
-                    break;
-            }
-        }
-        
-        {
-            // TODO: 유저의 데이터가 퀘스트 클리어 가능한지 체크
-            // 안될 시 잘못된 정보라는 패킷 전송
-            //유저가 daily/weekly/achievement 퀘스트 등 일회성 퀘스트를 달성했었는지에 대한 체크
-            if (!questInfo.IsRewardRepeatable() && _getRewardUsersID.ContainsKey(questInfo.GetQuestCategory()) && _getRewardUsersID[questInfo.questCategory][questInfo.questType].Contains(userID))
-            {
-                Debug.Log($"{userID} 유저가 이미 클리어한 퀘스트를 클리어하겠다고 요청함 확인 필요");
-                return;
-            }
-        }
-
-        // 10.31 추가 서버내에서 따로 값을 관리하는 것이 아닌 클라이언트의 값을 그대로 덮는, 저장방식으로 진행하도록 수정
-        if (userQuestProgressData.ContainsKey(questInfo.questType) && userQuestProgressData[questInfo.questType].ContainsKey(questInfo.questCategory))
-        {
-            userQuestProgressData[questInfo.questType][questInfo.questCategory][userID] = questInfo.GetCurrentQuestCount();
-        }
-        
-        
-        // 보상 갯수 계산
-        int clearCount = 1;
-        if (questInfo.IsRewardRepeatable())
-        {
-            clearCount = (int)BigInteger.Divide(userQuestProgressData[questInfo.questType][questInfo.questCategory][userID],
-                questInfo.GetRequireCount());
-        }
-
-        // 필요 시 퀘스트의 데이터를 감소시키는 코드 진행
-        if (userQuestProgressData.ContainsKey(questInfo.questType) && userQuestProgressData[questInfo.questType].ContainsKey(questInfo.questCategory))
-        {
-            userQuestProgressData[questInfo.questType][questInfo.questCategory][userID] -=
-                clearCount * questInfo.GetRequireCount();
-        }
-        
-
-        // 보상 지급
-        if (questInfo && giveUserCurrencyAction != null)
-        {
-            giveUserCurrencyAction(userID, rewardCount * clearCount);
-
-            SetUserGetReward(userID, questInfo);
-            
-        }
-
-        // 퀘스트 정보 다시 전송하여 퀘스트 정보 초기화
-        // 11.12 클라내에서도 동일하게 횟수를 깎아서 진행하기로 설정
-        //SendQuestDataToPlayer(userID, questInfo.questCategory, questInfo.questType);
-
-    }
-
-    private static void SetUserGetReward(int userID, QuestDataBase questInfo)
-    {
-        if (!questInfo.IsRewardRepeatable() && _getRewardUsersID.ContainsKey(questInfo.GetQuestCategory()))
-        {
-            _getRewardUsersID[questInfo.GetQuestCategory()][questInfo.GetQuestType()].Add(userID);
-        }
-    }
-
-    
-    
 }

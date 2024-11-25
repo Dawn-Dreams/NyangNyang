@@ -67,7 +67,7 @@ public class ChangeStageUI : MonoBehaviour
 
     void OnDisable()
     {
-        Addressables.Release(_spriteHandle);    
+        //Addressables.Release(_spriteHandle);    
     }
 
     void SetInitialData()
