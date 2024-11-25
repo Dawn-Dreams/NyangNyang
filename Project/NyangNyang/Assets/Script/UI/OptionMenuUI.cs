@@ -34,6 +34,12 @@ public class OptionMenuUI : MonoBehaviour
         {
             toggle.onValueChanged.RemoveAllListeners();
         }
+        // 데이터를 저장합니다.
+        SaveLoadManager._instance.SaveNotices(SaveLoadManager._instance.LoadNotices());
+        SaveLoadManager._instance.SaveMails(SaveLoadManager._instance.LoadMails());
+        SaveLoadManager._instance.SaveFriends(SaveLoadManager._instance.LoadFriends());
+        SaveLoadManager._instance.SaveRankings(SaveLoadManager._instance.LoadRankings());
+        SaveLoadManager._instance.SaveBoards(SaveLoadManager._instance.LoadBoards());
     }
 
     private void InitializeMenuUI()
@@ -124,10 +130,12 @@ public class OptionMenuUI : MonoBehaviour
     }
 
     // ----------------------------- 패널 고유 함수 -------------------------------------
+    
     // 공지
     void OpenNoticePanel()
     {
-        List<NoticeData> noticeList = DummyOptionsServer.GetNoticeData();
+        // 공지 데이터 로드
+        List<NoticeData> noticeList = SaveLoadManager._instance.LoadNotices();
 
         if (noticeList.Count > 0)
         {
@@ -147,14 +155,16 @@ public class OptionMenuUI : MonoBehaviour
                 return;
             }
 
+            // 모든 공지 내용을 하나의 문자열로 정리
             string allNotices = "";
 
             foreach (NoticeData notice in noticeList)
             {
-                allNotices += $"데이터 {notice.noticeID}: {notice.title} - {notice.content} ({notice.date})\n";  // 형식에 맞춰 추가
+                allNotices += $"공지 ID {notice.noticeID}: {notice.title}\n내용: {notice.content}\n날짜: {notice.date}\n\n";
             }
 
-            noticeTextComponent.text = allNotices;  // TMP_Text에 모든 공지를 적용
+            // 공지 텍스트 UI에 적용
+            noticeTextComponent.text = allNotices;
         }
         else
         {
@@ -162,13 +172,57 @@ public class OptionMenuUI : MonoBehaviour
         }
     }
 
+    // 우편
+    void OpenMessagePanel()
+    {
+        // 데이터 불러오기 (유저 ID는 0으로 설정, 필요에 따라 변경)
+        List<MailData> mailList = SaveLoadManager._instance.LoadMails();
+        GameObject contentObj = GameObject.Find("MessageUI/Viewport/Content");
+
+        // 기존 버튼 제거
+        foreach (Transform child in contentObj.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // 데이터가 있는 경우 처리
+        if (mailList.Count > 0)
+        {
+            foreach (MailData mailData in mailList)
+            {
+                GameObject mailButton = Instantiate(mailButtonPrefab, contentObj.transform);
+                Button mailButtonComponent = mailButton.GetComponent<Button>();
+
+                // 버튼 클릭 시 상세 보기 팝업
+                mailButtonComponent.onClick.AddListener(() => ShowMailPopup(mailData));
+
+                // UI 텍스트 설정
+                TMP_Text mailNumberText = mailButton.transform.Find("MessageNumber").GetComponent<TMP_Text>();
+                TMP_Text mailTitleText = mailButton.transform.Find("MessageTitle").GetComponent<TMP_Text>();
+                TMP_Text mailDateText = mailButton.transform.Find("MessageDate").GetComponent<TMP_Text>();
+                TMP_Text mailReceivedText = mailButton.transform.Find("MessageIsReceived").GetComponent<TMP_Text>();
+
+                mailNumberText.text = mailData.mailID.ToString();
+                mailTitleText.text = mailData.title;
+                mailDateText.text = mailData.date;
+                mailReceivedText.text = mailData.isReceived ? "수령 완료" : "미수령";
+            }
+        }
+        else
+        {
+            Debug.LogWarning("우편 데이터가 없습니다.");
+        }
+    }
+
+
     // 게시판
     void OpenBulletinBoardPanel()
     {
-        List<BoardData> boardList = DummyOptionsServer.GetBoardData();
+        // 게시판 데이터 로드
+        List<BoardData> boardList = SaveLoadManager._instance.LoadBoards();
         GameObject contentObj = GameObject.Find("BulletinBoardUI/Viewport/Content");
 
-        // 기존에 생성된 요소들을 모두 제거
+        // 기존 UI 요소 제거
         foreach (Transform child in contentObj.transform)
         {
             Destroy(child.gameObject);
@@ -179,11 +233,14 @@ public class OptionMenuUI : MonoBehaviour
             foreach (BoardData boardData in boardList)
             {
                 GameObject boardButton = Instantiate(boardButtonPrefab, contentObj.transform);
+
+                // 텍스트 설정
                 TMP_Text titleText = boardButton.transform.Find("Title").GetComponent<TMP_Text>();
+                titleText.text = boardData.title;
+
+                // 버튼 이벤트 추가
                 Button boardButtonComponent = boardButton.GetComponent<Button>();
                 boardButtonComponent.onClick.AddListener(() => ShowBoardPopup(boardData));
-
-                titleText.text = boardData.title;
             }
         }
         else
@@ -192,51 +249,14 @@ public class OptionMenuUI : MonoBehaviour
         }
     }
 
-    // 우편
-    void OpenMessagePanel()
-    {
-        List<MailData> mailList = DummyOptionsServer.GetMailData();
-        GameObject contentObj = GameObject.Find("MessageUI/Viewport/Content");
-
-        foreach (Transform child in contentObj.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        if (mailList.Count > 0)
-        {
-            foreach (MailData mailData in mailList)
-            {
-                GameObject mailButton = Instantiate(mailButtonPrefab, contentObj.transform);
-                Button mailButtonComponent = mailButton.GetComponent<Button>();
-                mailButtonComponent.onClick.AddListener(() => ShowMailPopup(mailData));
-
-                TMP_Text mailNumberText = mailButton.transform.Find("MessageNumber").GetComponent<TMP_Text>();
-                TMP_Text mailTitleText = mailButton.transform.Find("MessageTitle").GetComponent<TMP_Text>();
-                TMP_Text mailDateText = mailButton.transform.Find("MessageDate").GetComponent<TMP_Text>();
-                TMP_Text mailReceivedText = mailButton.transform.Find("MessageIsReceived").GetComponent<TMP_Text>();
-
-                mailNumberText.text = mailData.mailID.ToString();  // 우편 ID 표시
-                mailTitleText.text = mailData.title;  // 우편 제목 표시
-                mailDateText.text = mailData.date;  // 우편 날짜 표시
-                mailReceivedText.text = mailData.isReceived ? "수령 완료" : "미수령";  // 수령 상태 표시
-            }
-        }
-        else
-        {
-            Debug.LogWarning("우편 데이터가 없습니다.");
-        }
-    }
-
-
-
     // 친구
     void OpenFriendsPanel()
     {
-        List<FriendData> friendList = DummyOptionsServer.GetFriendData();
+        // 친구 데이터 로드
+        List<FriendData> friendList = SaveLoadManager._instance.LoadFriends();
         GameObject contentObj = GameObject.Find("FriendUI/Viewport/Content");
 
-        // 기존에 생성된 요소들을 모두 제거
+        // 기존 UI 요소 제거
         foreach (Transform child in contentObj.transform)
         {
             Destroy(child.gameObject);
@@ -248,20 +268,18 @@ public class OptionMenuUI : MonoBehaviour
             {
                 GameObject friendButton = Instantiate(friendButtonPrefab, contentObj.transform);
 
+                // 텍스트 설정
                 TMP_Text friendUserIDText = friendButton.transform.Find("FriendUserID").GetComponent<TMP_Text>();
                 TMP_Text friendUserNameText = friendButton.transform.Find("FriendUserName").GetComponent<TMP_Text>();
-                TMP_Text friendUserScoreText = friendButton.transform.Find("FriendUserScore").GetComponent<TMP_Text>();
+                TMP_Text friendUserLevelText = friendButton.transform.Find("FriendUserLevel").GetComponent<TMP_Text>();
 
                 friendUserIDText.text = friendData.friendUID.ToString();
                 friendUserNameText.text = friendData.friendName;
-                friendUserScoreText.text = friendData.friendLevel.ToString();
+                friendUserLevelText.text = friendData.friendLevel.ToString();
 
-                // 버튼 클릭 이벤트 추가
+                // 버튼 이벤트 추가
                 Button buttonComponent = friendButton.GetComponent<Button>();
-                if (buttonComponent != null)
-                {
-                    buttonComponent.onClick.AddListener(() => ShowFriendProfilePopup(friendData));
-                }
+                buttonComponent.onClick.AddListener(() => ShowFriendProfilePopup(friendData));
             }
         }
         else

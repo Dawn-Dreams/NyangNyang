@@ -13,7 +13,7 @@ using UnityEngine.Events;
 public class SaveLoadManager : MonoBehaviour
 {
     #region instance
-    private static SaveLoadManager _instance;
+    public static SaveLoadManager _instance;
     public static SaveLoadManager GetSaveLoadManager()
     {
         return _instance;
@@ -89,7 +89,12 @@ public class SaveLoadManager : MonoBehaviour
     private string _playerSnackBuffFilePath;
     private string _playerTitleDataFilePath;
     private string _playerCostumeDataFilePath;
-    
+    //
+    private string _noticeFilePath;
+    private string _mailFilePath;
+    private string _friendFilePath;
+    private string _rankingFilePath;
+    private string _boardFilePath;
 
     public void OnAwake_CalledFromGameManager()
     {
@@ -99,14 +104,20 @@ public class SaveLoadManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
 
             //파일저장경로+파일이름
-            _playerStatusLevelFilePath = Path.Combine(Application.persistentDataPath, "StatusLevel.json");
-            _playerCurrencyFilePath = Path.Combine(Application.persistentDataPath, "CurrencyData.json");
-            _playerLevelDataFilePath = Path.Combine(Application.persistentDataPath, "LevelData.json");
-            _playerStageDataFilePath = Path.Combine(Application.persistentDataPath, "StageData.json");
-            _playerSnackBuffFilePath = Path.Combine(Application.persistentDataPath, "SnackBuff.json");
-            _playerTitleDataFilePath = Path.Combine(Application.persistentDataPath, "TitleData.json");
-            _playerCostumeDataFilePath = Path.Combine(Application.persistentDataPath, "PlayerCostume.json");
-
+            string basePath = Application.persistentDataPath;
+            _playerStatusLevelFilePath = Path.Combine(basePath, "StatusLevel.json");
+            _playerCurrencyFilePath = Path.Combine(basePath, "CurrencyData.json");
+            _playerLevelDataFilePath = Path.Combine(basePath, "LevelData.json");
+            _playerStageDataFilePath = Path.Combine(basePath, "StageData.json");
+            _playerSnackBuffFilePath = Path.Combine(basePath, "SnackBuff.json");
+            _playerTitleDataFilePath = Path.Combine(basePath, "TitleData.json");
+            _playerCostumeDataFilePath = Path.Combine(basePath, "PlayerCostume.json");
+            
+            _noticeFilePath = Path.Combine(basePath, "Notices.json");
+            _mailFilePath = Path.Combine(basePath, "Mails.json");
+            _friendFilePath = Path.Combine(basePath, "Friends.json");
+            _rankingFilePath = Path.Combine(basePath, "Rankings.json");
+            _boardFilePath = Path.Combine(basePath, "Boards.json");
             CreateIfFileNotExist();
         }
 
@@ -306,6 +317,103 @@ public class SaveLoadManager : MonoBehaviour
     }
     #endregion
 
+    #region Notice
+    public void SaveNotices(List<NoticeData> notices)
+    {
+        string json = JsonUtility.ToJson(new Wrapper<NoticeData> { items = notices });
+        File.WriteAllText(_noticeFilePath, json);
+    }
+
+    public List<NoticeData> LoadNotices()
+    {
+        if (File.Exists(_noticeFilePath))
+        {
+            string json = File.ReadAllText(_noticeFilePath);
+            return JsonUtility.FromJson<Wrapper<NoticeData>>(json).items;
+        }
+        return new List<NoticeData>();
+    }
+    #endregion
+
+    #region Mail
+    public void SaveMails(List<MailData> mails)
+    {
+        string json = JsonUtility.ToJson(new Wrapper<MailData> { items = mails });
+        File.WriteAllText(_mailFilePath, json);
+    }
+
+    public List<MailData> LoadMails()
+    {
+        if (File.Exists(_mailFilePath))
+        {
+            string json = File.ReadAllText(_mailFilePath);
+            return JsonUtility.FromJson<Wrapper<MailData>>(json).items;
+        }
+        return new List<MailData>();
+    }
+    #endregion
+
+    #region Friend
+    public void SaveFriends(List<FriendData> friends)
+    {
+        string json = JsonUtility.ToJson(new Wrapper<FriendData> { items = friends });
+        File.WriteAllText(_friendFilePath, json);
+    }
+
+    public List<FriendData> LoadFriends()
+    {
+        if (File.Exists(_friendFilePath))
+        {
+            string json = File.ReadAllText(_friendFilePath);
+            return JsonUtility.FromJson<Wrapper<FriendData>>(json).items;
+        }
+        return new List<FriendData>();
+    }
+    #endregion
+
+    #region Ranking
+    public void SaveRankings(List<RankingData> rankings)
+    {
+        string json = JsonUtility.ToJson(new Wrapper<RankingData> { items = rankings });
+        File.WriteAllText(_rankingFilePath, json);
+    }
+
+    public List<RankingData> LoadRankings()
+    {
+        if (File.Exists(_rankingFilePath))
+        {
+            string json = File.ReadAllText(_rankingFilePath);
+            return JsonUtility.FromJson<Wrapper<RankingData>>(json).items;
+        }
+        return new List<RankingData>();
+    }
+    #endregion
+
+    #region Board
+    public void SaveBoards(List<BoardData> boards)
+    {
+        string json = JsonUtility.ToJson(new Wrapper<BoardData> { items = boards });
+        File.WriteAllText(_boardFilePath, json);
+    }
+
+    public List<BoardData> LoadBoards()
+    {
+        if (File.Exists(_boardFilePath))
+        {
+            string json = File.ReadAllText(_boardFilePath);
+            return JsonUtility.FromJson<Wrapper<BoardData>>(json).items;
+        }
+        return new List<BoardData>();
+    }
+    #endregion
+
+    // Generic Wrapper for lists (JsonUtility doesn't support direct List<T> serialization)
+    [Serializable]
+    private class Wrapper<T>
+    {
+        public List<T> items;
+    }
+
     #region PlayerCostume
     // =================PlayerCostume=========================
     // PlayerCostume 저장
@@ -398,6 +506,28 @@ public class SaveLoadManager : MonoBehaviour
             data.petOwningCostume = new List<int>() { 0 };
             data.emotionOwningCostume = new List<int>() { 0 };
             SavePlayerCostumeData(data);
+        }
+
+        //
+        if (!File.Exists(_noticeFilePath))
+        {
+            SaveNotices(new List<NoticeData>());
+        }
+        if (!File.Exists(_mailFilePath))
+        {
+            SaveMails(new List<MailData>());
+        }
+        if (!File.Exists(_friendFilePath))
+        {
+            SaveFriends(new List<FriendData>());
+        }
+        if (!File.Exists(_rankingFilePath))
+        {
+            SaveRankings(new List<RankingData>());
+        }
+        if (!File.Exists(_boardFilePath))
+        {
+            SaveBoards(new List<BoardData>());
         }
     }
 }

@@ -21,6 +21,10 @@ public class RankUI : MonoBehaviour
     {
         InitializeRankUI();
     }
+    private void OnDisable()
+    {
+        InitializeRankUI();
+    }
 
     private void InitializeRankUI()
     {
@@ -88,8 +92,15 @@ public class RankUI : MonoBehaviour
     // 랭킹 + index로 구분(0:메인스테이지/ 1,2,3:던전1,2,3/ 4:미니게임)
     void OpenRankingPanel(int index)
     {
-        List<RankingData> rankList = DummyOptionsServer.GetRankingData();
+        // 랭킹 데이터 로드
+        List<RankingData> rankList = SaveLoadManager._instance.LoadRankings();
         GameObject contentObj = GameObject.Find($"RankUI ({index})/Viewport/Content");
+
+        if (contentObj == null)
+        {
+            Debug.LogError($"RankUI ({index})/Viewport/Content 오브젝트를 찾을 수 없습니다. 계층 구조를 확인하세요.");
+            return;
+        }
 
         // 기존에 생성된 요소들을 모두 제거
         foreach (Transform child in contentObj.transform)
@@ -101,15 +112,17 @@ public class RankUI : MonoBehaviour
         {
             foreach (RankingData rankData in rankList)
             {
+                // 랭킹 항목 버튼 생성
                 GameObject rankUserButton = Instantiate(rankUserButtonPrefab, contentObj.transform);
 
                 TMP_Text rankNumberText = rankUserButton.transform.Find("RankNumber").GetComponent<TMP_Text>();
                 TMP_Text rankUserNameText = rankUserButton.transform.Find("RankUserName").GetComponent<TMP_Text>();
                 TMP_Text rankScoreText = rankUserButton.transform.Find("RankScore").GetComponent<TMP_Text>();
 
-                rankNumberText.text = (rankList.IndexOf(rankData) + 1).ToString();
-                rankUserNameText.text = rankData.userName;
-                rankScoreText.text = rankData.score.ToString();
+                // 데이터 적용
+                rankNumberText.text = rankData.rank.ToString(); // 순위
+                rankUserNameText.text = rankData.userName;      // 유저 이름
+                rankScoreText.text = rankData.score.ToString(); // 점수
 
                 // 클릭 이벤트 추가
                 Button rankButtonComponent = rankUserButton.GetComponent<Button>();
