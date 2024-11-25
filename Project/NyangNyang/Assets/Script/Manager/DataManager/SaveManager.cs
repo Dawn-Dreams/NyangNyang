@@ -88,6 +88,7 @@ public class SaveLoadManager : MonoBehaviour
     private string _playerStageDataFilePath;
     private string _playerSnackBuffFilePath;
     private string _playerTitleDataFilePath;
+    private string _playerCostumeDataFilePath;
 
     public void OnAwake_CalledFromGameManager()
     {
@@ -103,6 +104,7 @@ public class SaveLoadManager : MonoBehaviour
             _playerStageDataFilePath = Path.Combine(Application.persistentDataPath, "StageData.json");
             _playerSnackBuffFilePath = Path.Combine(Application.persistentDataPath, "SnackBuff.json");
             _playerTitleDataFilePath = Path.Combine(Application.persistentDataPath, "TitleData.json");
+            _playerCostumeDataFilePath = Path.Combine(Application.persistentDataPath, "PlayerCostume.json");
 
             CreateIfFileNotExist();
         }
@@ -302,6 +304,29 @@ public class SaveLoadManager : MonoBehaviour
         return false; // 파일이 없을 경우 null 반환
     }
     #endregion
+
+    #region PlayerCostume
+    // =================PlayerCostume=========================
+    // PlayerCostume 저장
+    public void SavePlayerCostumeData(PlayerCostumeJsonData data)
+    {
+        string json = JsonUtility.ToJson(data);
+        File.WriteAllText(_playerCostumeDataFilePath, json);
+    }
+
+    // TitleData 불러오기
+    public bool LoadPlayerPlayerCostume(out PlayerCostumeJsonData data)
+    {
+        data = new PlayerCostumeJsonData();
+        if (File.Exists(_playerCostumeDataFilePath))
+        {
+            string json = File.ReadAllText(_playerCostumeDataFilePath);
+            data = JsonUtility.FromJson<PlayerCostumeJsonData>(json);
+            return true;
+        }
+        return false; // 파일이 없을 경우 null 반환
+    }
+    #endregion
     // =================CatCostumePart=========================
     //// 저장
     /// public void Save어쩌구(저장할클래스이름 data)
@@ -354,6 +379,24 @@ public class SaveLoadManager : MonoBehaviour
         if (!File.Exists(_playerTitleDataFilePath))
         {
             SavePlayerTitleData(new TitleJsonData(){currentSelectedTitle = 0, owningTitles =new List<int> {0}});
+        }
+        // Costume
+        if (!File.Exists(_playerCostumeDataFilePath))
+        {
+            PlayerCostumeJsonData data = new PlayerCostumeJsonData();
+            data.currentEquipCostume = new List<int>();
+            for (int i = 0; i < (int)CatCostumePart.Count; ++i)
+            {
+                data.currentEquipCostume.Add(0);
+            }
+            // 하드코딩
+            data.headOwningCostume = new List<int>() { 0 };
+            data.bodyOwningCostume = new List<int>() { 0 };
+            data.handROwningCostume = new List<int>() { 0 };
+            data.furSkinOwningCostume = new List<int>() { 0 };
+            data.petOwningCostume = new List<int>() { 0 };
+            data.emotionOwningCostume = new List<int>() { 0 };
+            SavePlayerCostumeData(data);
         }
     }
 }
@@ -422,4 +465,17 @@ public struct TitleJsonData
 {
     public int currentSelectedTitle;
     public List<int> owningTitles;
+}
+
+[Serializable]
+public struct PlayerCostumeJsonData
+{
+    public List<int> currentEquipCostume;
+    // 하드코딩
+    public List<int> headOwningCostume;
+    public List<int> bodyOwningCostume;
+    public List<int> handROwningCostume;
+    public List<int> furSkinOwningCostume;
+    public List<int> petOwningCostume;
+    public List<int> emotionOwningCostume;
 }

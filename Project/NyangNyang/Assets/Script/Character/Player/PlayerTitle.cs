@@ -20,7 +20,6 @@ public class PlayerTitle : Player
 
             if (OnSelectTitleChange != null)
             {
-                Debug.Log("??");
                 OnSelectTitleChange();
             }
         }

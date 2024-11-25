@@ -28,31 +28,4 @@ public class DummyPlayerCostumeServer : MonoBehaviour
         } }
     };
 
-    // 유저의 현재 선택된 코스튬 데이터를 요구하는 함수
-    public static Dictionary<CatCostumePart, int> UserRequestCurrentEquipCostumes(int userID)
-    {
-        return _userCurrentEquiCostume[userID];
-    }
-
-    // 유저가 { 파츠, 인덱스 } 의 코스튬 착용에 대한 요청 함수
-    // 클라 내에서도 장착이 적용되므로 반환 필요 x
-    // 실제 서버에서는 파트가 분리되어 정보를 전송받지 말고 한번에 받을 수 있도록
-    public static void UserRequestEquipCostume(int userID, CatCostumePart part, int index)
-    {
-        // 유저가 해당 타이틀을 보유하고 있지 않다면 경고 및 불법사용자 의심 코드 추가..
-        _userCurrentEquiCostume[userID][part] = index;
-    }
-
-    public static void UserRequestAcquireCostume(int userID, CatCostumePart part, int index)
-    {
-        // 보유중이라면 에러 처리 필요
-
-        _userOwningCostumes[userID][part].Add(index);
-    }
-
-    public static Dictionary<CatCostumePart, List<int>> UserRequestOwningCostumes(int userID)
-    {
-        //int[] returnData = _userOwningTitles[userID].ToArray();
-        return _userOwningCostumes[userID];
-    }
 }

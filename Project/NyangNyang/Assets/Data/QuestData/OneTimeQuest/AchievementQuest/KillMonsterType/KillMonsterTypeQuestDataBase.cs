@@ -115,17 +115,16 @@ public class KillMonsterTypeQuestDataBase : AchievementQuestData
 
     public override void RequestQuestReward()
     {
-        
         if (!PlayerCostume.playerOwningCostume[CatCostumePart.Pet].Contains((int)targetMonsterType))
         {
             PlayerCostume.playerOwningCostume[CatCostumePart.Pet].Add((int)targetMonsterType);
             Debug.Log($"유저가 코스튬 {targetMonsterType} 펫을 흭득하였습니다.");
+            PlayerCostume.SaveToJson();
         }
         else
         {
             Debug.Log("오류 - 이미 보유중인 펫");
         }
-        DummyPlayerCostumeServer.UserRequestAcquireCostume(Player.GetUserID(),CatCostumePart.Pet, (int)targetMonsterType);
         GetReward = true;
         RenewalUIAfterChangeQuestValue();
     }

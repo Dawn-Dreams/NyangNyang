@@ -180,12 +180,8 @@ public class PlayerCostumeUI : MonoBehaviour
         // 버튼 타입 변경
         SetCostumeElementOwningImage();
 
-        // 서버로 정보 전송
-        // 실제 서버에서는 한 패킷에 모든 정보 담아서
-        foreach (var currentCostumeData in PlayerCostume.playerCurrentEquipCostumes)
-        {
-            DummyPlayerCostumeServer.UserRequestEquipCostume(Player.GetUserID(), currentCostumeData.Key,currentCostumeData.Value);
-        }
+        // 정보 저장
+        PlayerCostume.SaveToJson();
         
 
         

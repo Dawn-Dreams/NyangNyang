@@ -22,9 +22,18 @@ public class PlayerProfileUI : MonoBehaviour
 
     void SetPlayerTitleText()
     {
-        TitleInfo titleInfo = TitleDataManager.GetInstance().titleInfoDic[PlayerTitle.PlayerCurrentTitleID];
-        playerTitleText.text = titleInfo.name;
-        playerTitleText.color = TitleDataManager.titleGradeColors[(TitleGrade)titleInfo.grade];
+        if (TitleDataManager.GetInstance().titleInfoDic.ContainsKey(PlayerTitle.PlayerCurrentTitleID))
+        {
+            playerTitleText.gameObject.SetActive(true);
+            TitleInfo titleInfo = TitleDataManager.GetInstance().titleInfoDic[PlayerTitle.PlayerCurrentTitleID];
+            playerTitleText.text = titleInfo.name;
+            playerTitleText.color = TitleDataManager.titleGradeColors[(TitleGrade)titleInfo.grade];
+        }
+        else
+        {
+            playerTitleText.gameObject.SetActive(false);
+        }
+        
     }
 
     void SetAllTitleOwningEffectText()

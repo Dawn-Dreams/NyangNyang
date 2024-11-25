@@ -15,7 +15,6 @@ public class CatStatusUI : MonoBehaviour
 
     public void ChangePlayerCurrentTitleText()
     {
-        Debug.Log("??? 바뀌어야하는데 "+PlayerTitle.PlayerCurrentTitleID);
         TitleInfo currentTitleInfo = TitleDataManager.GetInstance().titleInfoDic[PlayerTitle.PlayerCurrentTitleID];
         playerCurrentTitleText.text = currentTitleInfo.name;
         playerCurrentTitleText.color = TitleDataManager.titleGradeColors[(TitleGrade)currentTitleInfo.grade];

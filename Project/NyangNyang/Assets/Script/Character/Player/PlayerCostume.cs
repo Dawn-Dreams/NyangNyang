@@ -59,10 +59,41 @@ public class PlayerCostume : Player
     public static void OnAwake_CallInGameManager()
     {
         _playerCatCostume = GameManager.GetInstance().catObject.GetComponent<Costume>();
-        playerOwningCostume =
-            new Dictionary<CatCostumePart, List<int>>(DummyPlayerCostumeServer.UserRequestOwningCostumes(GetUserID()));
-        playerCurrentEquipCostumes =
-            new Dictionary<CatCostumePart, int>(DummyPlayerCostumeServer.UserRequestCurrentEquipCostumes(GetUserID()));
+        PlayerCostumeJsonData data = new PlayerCostumeJsonData();
+        SaveLoadManager.GetInstance().LoadPlayerPlayerCostume(out data);
+        
+        playerCurrentEquipCostumes = new Dictionary<CatCostumePart, int>();
+        for (int i = 0; i < (int)CatCostumePart.Count; ++i)
+        {
+            playerCurrentEquipCostumes[(CatCostumePart)i] = data.currentEquipCostume[i];
+        }
+
+        // 하드코딩
+        playerOwningCostume = new Dictionary<CatCostumePart, List<int>>();
+        playerOwningCostume[CatCostumePart.Head] = data.headOwningCostume;
+        playerOwningCostume[CatCostumePart.Body] = data.bodyOwningCostume;
+        playerOwningCostume[CatCostumePart.Hand_R] = data.handROwningCostume;
+        playerOwningCostume[CatCostumePart.FurSkin] = data.furSkinOwningCostume;
+        playerOwningCostume[CatCostumePart.Pet] = data.petOwningCostume;
+        playerOwningCostume[CatCostumePart.Emotion] = data.emotionOwningCostume;
+    }
+
+    public static void SaveToJson()
+    {
+        PlayerCostumeJsonData data = new PlayerCostumeJsonData();
+        data.currentEquipCostume = new List<int>(){};
+        for (int i = 0; i < (int)CatCostumePart.Count; ++i)
+        {
+            data.currentEquipCostume.Add(playerCurrentEquipCostumes[(CatCostumePart)i]);
+        }
+        // 하드코딩
+        data.headOwningCostume = playerOwningCostume[CatCostumePart.Head];
+        data.bodyOwningCostume = playerOwningCostume[CatCostumePart.Body];
+        data.handROwningCostume = playerOwningCostume[CatCostumePart.Hand_R];
+        data.furSkinOwningCostume = playerOwningCostume[CatCostumePart.FurSkin];
+        data.petOwningCostume = playerOwningCostume[CatCostumePart.Pet];
+        data.emotionOwningCostume = playerOwningCostume[CatCostumePart.Emotion];
+        SaveLoadManager.GetInstance().SavePlayerCostumeData(data);
     }
 
     void Start()
