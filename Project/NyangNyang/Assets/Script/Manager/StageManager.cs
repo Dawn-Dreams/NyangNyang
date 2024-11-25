@@ -70,12 +70,20 @@ public class StageManager : MonoBehaviour
         {
             _instance = this;
         }
+        
     }
 
     void Start()
     {
-        //SetStageUI();
-        SetNewStage(false);
+        // 데이터 받기
+        if (Player.playerHighestClearStageData[0] == 0)
+        {
+            SaveLoadManager.GetInstance().LoadPlayerStageData(out Player.playerHighestClearStageData[0], out Player.playerHighestClearStageData[1]);
+
+        }
+        currentTheme = Player.playerHighestClearStageData[0];
+        currentStage = Player.playerHighestClearStageData[1];
+        SetNewStage(true);
 
         continuousCombatButton.onClick.AddListener(GoToLastClearStageNextStage);
     }
@@ -169,8 +177,6 @@ public class StageManager : MonoBehaviour
     // 스테이지 내 최고 관문 클리어시 StageClear 함수 실행
     private void StageClear()
     {
-        SendStageClearDataToServer();
-
         // 스테이지 관련 퀘스트에서 사용되는 델리게이트
         if (OnStageClear != null)
         {
@@ -181,14 +187,13 @@ public class StageManager : MonoBehaviour
         fadeCoroutine = StartCoroutine(StartFade(() => FadeStartFuncWhileStageChange(true)));
     }
     // 서버에 스테이지를 클리어했다는 정보 전송
-    void SendStageClearDataToServer()
+    void SaveStageClearDataToJson()
     {
-        int clearTheme;
-        int clearStage;
-        Player.GetPlayerHighestClearStageData(out clearTheme, out clearStage);
+        Player.GetPlayerHighestClearStageData(out var clearTheme, out var clearStage);
         if (currentTheme > clearTheme || (currentTheme == clearTheme && currentStage > clearStage))
         {
-            DummyServerData.PlayerClearStage(Player.GetUserID(), currentTheme, currentStage);
+            //DummyServerData.PlayerClearStage(Player.GetUserID(), currentTheme, currentStage);
+            SaveLoadManager.GetInstance().SavePlayerStageData(new StageData(){highestTheme =  clearTheme,highestStage = clearStage});
             Player.playerHighestClearStageData = new int[] { currentTheme, currentStage };
         }
     }
@@ -286,7 +291,8 @@ public class StageManager : MonoBehaviour
         {
             SetContinuousCombat(false);
         }
-
+        // 최고 스테이지 클리어 했는지 정보 갱신
+        SaveStageClearDataToJson();
 
         SetStageUI();
     }

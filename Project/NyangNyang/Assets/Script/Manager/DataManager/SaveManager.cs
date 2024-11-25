@@ -85,6 +85,7 @@ public class SaveLoadManager : MonoBehaviour
     private string _playerStatusLevelFilePath;
     private string _playerCurrencyFilePath;
     private string _playerLevelDataFilePath;
+    private string _playerStageDataFilePath;
 
     public void OnAwake_CalledFromGameManager()
     {
@@ -97,7 +98,7 @@ public class SaveLoadManager : MonoBehaviour
             _playerStatusLevelFilePath = Path.Combine(Application.persistentDataPath, "StatusLevel.json");
             _playerCurrencyFilePath = Path.Combine(Application.persistentDataPath, "CurrencyData.json");
             _playerLevelDataFilePath = Path.Combine(Application.persistentDataPath, "LevelData.json");
-
+            _playerStageDataFilePath = Path.Combine(Application.persistentDataPath, "StageData.json");
 
 
             CreateIfFileNotExist();
@@ -216,6 +217,32 @@ public class SaveLoadManager : MonoBehaviour
         return false; // 파일이 없을 경우 null 반환
     }
     #endregion
+
+    #region StageData
+    // =================StageData=========================
+    // StageData 저장
+    public void SavePlayerStageData(StageData data)
+    {
+        string json = JsonUtility.ToJson(data);
+        Debug.Log(json);
+        File.WriteAllText(_playerStageDataFilePath, json);
+    }
+
+    // StageData 불러오기
+    public bool LoadPlayerStageData(out int highestTheme, out int highestStage)
+    {
+        highestTheme = 1; highestStage = 1;
+        if (File.Exists(_playerStageDataFilePath))
+        {
+            string json = File.ReadAllText(_playerStageDataFilePath);
+            StageData data = JsonUtility.FromJson<StageData>(json);
+            highestTheme = data.highestTheme;
+            highestStage = data.highestStage;
+            return true;
+        }
+        return false; // 파일이 없을 경우 null 반환
+    }
+    #endregion
     // =================CatCostumePart=========================
     //// 저장
     /// public void Save어쩌구(저장할클래스이름 data)
@@ -254,6 +281,11 @@ public class SaveLoadManager : MonoBehaviour
         {
             SavePlayerLevelData(ScriptableObject.CreateInstance<UserLevelData>());
         }
+        // StageData
+        if (!File.Exists(_playerStageDataFilePath))
+        {
+            SavePlayerStageData(new StageData { highestTheme = 1, highestStage = 1 });
+        }
     }
 }
 
@@ -287,5 +319,10 @@ private void Start() -> GameManager의 start 함수임
         Debug.Log($"Loaded Player Goods: Gold = {loadedGoods.gold}");
  */
 
-
-
+[Serializable]
+public struct StageData
+{
+    public int highestTheme;
+    public int highestStage;
+    
+}

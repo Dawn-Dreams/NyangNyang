@@ -242,11 +242,6 @@ public class Player : MonoBehaviour
 
     public static void GetPlayerHighestClearStageData(out int themeData, out int stageData)
     {
-        if (playerHighestClearStageData[0] == 0)
-        {
-            DummyServerData.GetUserClearStageData(Player.GetUserID(), out playerHighestClearStageData[0], out playerHighestClearStageData[1]);
-        }
-
         themeData = playerHighestClearStageData[0];
         stageData = playerHighestClearStageData[1];
     }

@@ -59,7 +59,7 @@ public class ChangeStageUI : MonoBehaviour
         SetInitialData();
     }
 
-    void OnEnable()
+    public void MapOpen()
     {
         SetInitialData();
         AssetLoad();
@@ -74,8 +74,10 @@ public class ChangeStageUI : MonoBehaviour
     {
         _curStartThemeNum =
             (stageManager.GetCurrentTheme() - 1) / stageManager.maxStageCount * stageManager.maxStageCount + 1;
-        SelectStageThemeNumberButton((stageManager.GetCurrentTheme() - 1) % stageManager.maxStageCount);
+        SelectThemeNumberButton((stageManager.GetCurrentTheme() - 1) % stageManager.maxStageCount);
         SelectStageNumberButton(stageManager.GetCurrentStage());
+
+        RenewalStageButtonTypeInCurrentTheme();
     }
 
 
@@ -89,7 +91,7 @@ public class ChangeStageUI : MonoBehaviour
             themeNumberImages[i] = themeNumberObject[i].GetComponent<Image>();
             themeNumberTexts[i] = themeNumberObject[i].GetComponentInChildren<TextMeshProUGUI>();
             int buttonID = i;
-            themeNumberObject[i].GetComponent<Button>().onClick.AddListener(()=>SelectStageThemeNumberButton(buttonID));
+            themeNumberObject[i].GetComponent<Button>().onClick.AddListener(()=>SelectThemeNumberButton(buttonID));
         }
     }
 
@@ -109,10 +111,10 @@ public class ChangeStageUI : MonoBehaviour
 
         
 
-        SelectStageThemeNumberButton(0);
+        SelectThemeNumberButton(0);
     }
 
-    void SelectStageThemeNumberButton(int buttonNumberID)
+    void SelectThemeNumberButton(int buttonNumberID)
     {
         if (themeNumberImages == null || themeNumberImages.Length == 0)
         {
@@ -270,20 +272,21 @@ public class ChangeStageUI : MonoBehaviour
         {
             return;
         }
-
         // 스테이지 버튼은 Theme가 변경될 때 마다 갱신 해줘야함
         int highestTheme = 0;
         int highestStage = 0;
         Player.GetPlayerHighestClearStageData(out highestTheme, out highestStage);
+
+        Debug.Log(highestTheme + " "+ highestStage);
 
         for (int i = 0; i < stageButtons.Length; ++i)
         {
             int curTheme = _curStartThemeNum + _curSelectThemeNum;
             int curStage = i + 1;
             stageButtons[i].GetButton().interactable = true;
-
+            Debug.Log($"{curTheme} <= {highestTheme} && {curStage} <= {highestStage+1}");
             // 플레이어가 이동 가능한 스테이지 버튼 
-            if (curTheme <= highestTheme && curStage <= highestStage + 1)
+            if (curTheme < highestTheme || (curTheme == highestTheme && curStage <= highestStage + 1))
             {
                 // 현재 있는 버튼
                 if (curTheme == stageManager.GetCurrentTheme() && curStage == stageManager.GetCurrentStage())
