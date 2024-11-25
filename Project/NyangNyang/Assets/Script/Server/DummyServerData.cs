@@ -14,7 +14,9 @@ public class DummyServerData : MonoBehaviour
     // ===============
     // 데이터 시작
 
-    //11.25 json으로 이동
+    //11.25 윤석 - json으로 이동
+    #region 제거한 데이터
+
     //// 각 유저 스탯 레벨 데이터 
     //protected static StatusLevelData[] usersStatusLevelData = new StatusLevelData[]
     //{
@@ -35,6 +37,18 @@ public class DummyServerData : MonoBehaviour
     //    // 임시 일반 몬스터 데이터
     //    };
 
+    //// 유저 레벨+경험치 데이터
+    //protected static UserLevelData[] usersLevelData = new UserLevelData[]
+    //{
+    //    ScriptableObject.CreateInstance<UserLevelData>().SetUserLevelData(1, 0),
+    //    ScriptableObject.CreateInstance<UserLevelData>(),
+    //    ScriptableObject.CreateInstance<UserLevelData>(),
+    //    ScriptableObject.CreateInstance<UserLevelData>(),
+    //    ScriptableObject.CreateInstance<UserLevelData>(),
+    //};
+    #endregion
+
+
     //11.25 윤석 - json으로 이동 // 치즈 및 조개패 데이터만 옮기시면 될것같습니다 승희님.
     // 각 유저 재화(골드+다이아+치즈+조개패) 데이터 
     protected static CurrencyData[] usersCurrencyData = new CurrencyData[]
@@ -46,15 +60,6 @@ public class DummyServerData : MonoBehaviour
         ScriptableObject.CreateInstance<CurrencyData>(),
     };
 
-    // 유저 레벨+경험치 데이터
-    protected static UserLevelData[] usersLevelData = new UserLevelData[]
-    {
-        ScriptableObject.CreateInstance<UserLevelData>().SetUserLevelData(1, 0),
-        ScriptableObject.CreateInstance<UserLevelData>(),
-        ScriptableObject.CreateInstance<UserLevelData>(),
-        ScriptableObject.CreateInstance<UserLevelData>(),
-        ScriptableObject.CreateInstance<UserLevelData>(),
-    };
 
    
 
@@ -85,26 +90,6 @@ public class DummyServerData : MonoBehaviour
     //    return enemyStatusLevelData[characterID];
     //}
 
-    public static UserLevelData GetUserLevelData(int userID)
-    {
-        if (!(0 <= userID && userID < usersLevelData.Length))
-        {
-            Debug.Log("INVALID USERID");
-            return null;
-        }
-
-        return usersLevelData[userID];
-    }
-
-    public static void UserLevelUp(int userID, int levelUpCount, BigInteger addExp)
-    {
-        GetUserLevelData(userID).currentExp += addExp;
-        GetUserLevelData(userID).currentLevel += levelUpCount;
-
-        // 10.31 클라에서 서버에 정보를 보내면서 클라에서도 레벨업을 처리하도록 진행
-        // 서버로부터 정보를 받도록 패킷 전송
-        //Player.GetExpDataFromServer();
-    }
 
     // MonsterData 내에 추가
     //public static EnemyDropData GetEnemyDropData(int characterID)

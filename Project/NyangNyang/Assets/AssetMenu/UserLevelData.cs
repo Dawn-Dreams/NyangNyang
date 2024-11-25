@@ -9,6 +9,8 @@ using UnityEngine;
 public class UserLevelData : ScriptableObject
 {
     public int currentLevel = 1;
+
+    public string currentExpStringForJson;
     public BigInteger currentExp = 0;
 
     private static int addExpPerLevel = 500;
@@ -38,17 +40,20 @@ public class UserLevelData : ScriptableObject
             currentUserExp -= currentRequireExp;
         }
 
-        // TODO: 후에 서버에서 확인하는 코드 생성해야함
-        DummyServerData.UserLevelUp(Player.GetUserID(), levelUpCount, currentUserExp - currentExp);
-
         SetUserLevelData(currentLevel + levelUpCount, currentUserExp - currentExp);
 
-        // TODO: 임시 레벨업 아이콘 코드
         if (levelUpCount > 0)
         {
             PlayerLevelUpUI.GetInstance().UserLevelUp();
         }
 
+        ExecuteExpUpDelegate();
+
+        SaveLoadManager.GetInstance().SavePlayerLevelData(this);
+    }
+
+    public void ExecuteExpUpDelegate()
+    {
         if (OnExpChange != null)
         {
             OnExpChange(this);
@@ -73,4 +78,13 @@ public class UserLevelData : ScriptableObject
         return ScriptableObject.CreateInstance<UserLevelData>().SetUserLevelData(data.currentLevel, data.currentExp);
     }
 
+    public void BeforeSaveToJson()
+    {
+        currentExpStringForJson = currentExp.ToString();
+    }
+
+    public void AfterLoadFromJson()
+    {
+        currentExp = BigInteger.Parse(currentExpStringForJson);
+    }
 }

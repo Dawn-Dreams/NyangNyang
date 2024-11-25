@@ -67,6 +67,8 @@ public class CurrencyData : ScriptableObject
         {
             OnGoldChange(newGold);
         }
+
+        SaveLoadManager.GetInstance().SavePlayerCurrencyData(this, 5.0f);
     }
 
     public void SetDiamond(int newDiamond)
@@ -76,6 +78,7 @@ public class CurrencyData : ScriptableObject
         {
             OnDiamondChange(newDiamond);
         }
+        SaveLoadManager.GetInstance().SavePlayerCurrencyData(this, 5.0f);
     }
 
      public void SetCheese(int newCheese)
@@ -85,6 +88,7 @@ public class CurrencyData : ScriptableObject
         {
             OnCheeseChange(newCheese);
         }
+        SaveLoadManager.GetInstance().SavePlayerCurrencyData(this, 5.0f);
     }
 
 

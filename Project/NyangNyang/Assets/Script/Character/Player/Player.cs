@@ -120,8 +120,8 @@ public class Player : MonoBehaviour
         userID = 0;
 
         GetPlayerStatusData();
-        GetCurrencyDataFromServer();
-        GetExpDataFromServer();
+        GetCurrencyData();
+        GetExpData();
         
         // 서버로부터 받기
         PlayerName = "냥냥이";
@@ -177,7 +177,7 @@ public class Player : MonoBehaviour
             playerStatus.isPlayerStatus = true;
         }
     }
-    public static void GetCurrencyDataFromServer()
+    public static void GetCurrencyData()
     {
         if (playerCurrency == null)
         {
@@ -190,14 +190,14 @@ public class Player : MonoBehaviour
         playerCurrency.SetCurrencyData(data);
     }
 
-    public static void GetExpDataFromServer()
+    public static void GetExpData()
     {
         if (UserLevel == null)
         {
             playerLevelData = ScriptableObject.CreateInstance<UserLevelData>();
         }
-        UserLevelData data = UserLevelData.GetNewDataFromSource(DummyServerData.GetUserLevelData(userID));
-        UserLevel.SetUserLevelData(data.currentLevel, data.currentExp);
+        SaveLoadManager.GetInstance().LoadPlayerLevelData(UserLevel);
+        UserLevel.ExecuteExpUpDelegate();
 
     }
 
