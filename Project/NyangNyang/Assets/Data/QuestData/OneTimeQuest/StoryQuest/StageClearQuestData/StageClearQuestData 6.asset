@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainQuestTitle: 
   subQuestTitle: 
-  rewardCount: 100
+  rewardCount: 10
   questType: 4
   questCategory: 4
   rewardType: 1

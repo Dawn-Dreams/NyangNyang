@@ -32,6 +32,9 @@ public class QuestSaveLoadManager : MonoBehaviour
     {
         OnAwake_CalledFromGameManager();
     }
+
+    #region NotStoryQuest
+
     // 데이터 로드
     public void LoadQuestProgressData(QuestCategory category, QuestType type, out QuestJsonData data)
     {
@@ -46,7 +49,7 @@ public class QuestSaveLoadManager : MonoBehaviour
         else
         {
             //SaveQuestProgressData(category, type, "0");
-            CreateFile(category,type);
+            CreateFile(category, type);
             data = new QuestJsonData() { getReward = false, getRewardTimeString = "", progressString = "0" };
         }
     }
@@ -61,7 +64,7 @@ public class QuestSaveLoadManager : MonoBehaviour
         string json = JsonUtility.ToJson(data);
         File.WriteAllText(path, json);
     }
-    
+
     public void SaveQuestProgressData(QuestCategory questCategory, QuestType type, string progressDataString)
     {
         string path = GetPath(questCategory, type);
@@ -100,6 +103,41 @@ public class QuestSaveLoadManager : MonoBehaviour
         string path = Path.Combine(Application.persistentDataPath, $"Q_{questCategory.ToString()[0]}_{questType}.json");
         return path;
     }
+
+    #endregion
+
+    #region StoryQuest
+    // StoryQuest 저장
+    public void SaveStoryQuestData(StoryQuestJsonData data)
+    {
+        string json = JsonUtility.ToJson(data);
+        File.WriteAllText(GetStoryQuestPath(), json);
+    }
+
+    // StoryQuest 불러오기
+    public void LoadStoryQuestData(out StoryQuestJsonData data)
+    {
+        data = new StoryQuestJsonData();
+        if (File.Exists(GetStoryQuestPath()))
+        {
+            string json = File.ReadAllText(GetStoryQuestPath());
+            data = JsonUtility.FromJson<StoryQuestJsonData>(json);
+        }
+        // 새로 시작하여 파일이 없을 경우,
+        else
+        {
+            data.currentStoryQuestID = 0;
+            SaveStoryQuestData(data);
+        }
+    }
+
+    public string GetStoryQuestPath()
+    {
+        return Path.Combine(Application.persistentDataPath, "StoryQuestData.json");
+    }
+
+    #endregion
+
 }
 
 [Serializable]
@@ -108,4 +146,10 @@ public struct QuestJsonData
     public bool getReward;
     public string getRewardTimeString;
     public string progressString;
+}
+
+[Serializable]
+public struct StoryQuestJsonData
+{
+    public int currentStoryQuestID;
 }

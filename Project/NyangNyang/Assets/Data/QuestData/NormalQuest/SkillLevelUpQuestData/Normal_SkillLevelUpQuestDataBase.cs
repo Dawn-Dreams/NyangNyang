@@ -42,11 +42,12 @@ public class Normal_SkillLevelUpQuestDataBase : NormalQuestDataBase
         return requireSkillLevelUpCount;
     }
 
-    public override void ChangeCurrentProgressCountAfterReward()
+    public override int ChangeCurrentProgressCountAfterReward()
     {
         int clearCount = (int)currentSkillLevelUpCount / requireSkillLevelUpCount;
 
         currentSkillLevelUpCount -= requireSkillLevelUpCount * clearCount;
+        return clearCount;
     }
 
     public override BigInteger GetCurrentQuestCount()

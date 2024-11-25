@@ -5,6 +5,7 @@ using System.Numerics;
 using TMPro;
 //using UnityEditor.TerrainTools;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class StatusLevelupPanel : MonoBehaviour
@@ -31,6 +32,9 @@ public class StatusLevelupPanel : MonoBehaviour
 
     [SerializeField] 
     private Button levelUpButton;
+    private MyHoldButton _holdButton;
+    private Coroutine _levelUpCoroutine = null;
+
     [SerializeField] 
     private TextMeshProUGUI goldCostText;
 
@@ -45,8 +49,12 @@ public class StatusLevelupPanel : MonoBehaviour
         Player.playerStatus.OnStatusLevelChange += Initialize; // += Initialize;
         Initialize(statusLevelType);
 
-        levelUpButton.onClick.AddListener(OnClickLevelUpButton);
+        _holdButton = levelUpButton.gameObject.GetComponent<MyHoldButton>();
+        _holdButton.onPressStartEvent = OnClickLevelUpButton;
+        //levelUpButton.onClick.AddListener(OnClickLevelUpButton);
     }
+
+
 
     void Initialize(StatusLevelType type)
     {
@@ -63,8 +71,8 @@ public class StatusLevelupPanel : MonoBehaviour
     // currentStatusLevel로부터 결과 값 적용시키는 함수
     private void SetStatusValueText()
     {
-        BigInteger value = Player.playerStatus.GetStatusLevelData().GetLevelFromType(statusLevelType);
-        statusValueText.text = value.ToString();
+        //BigInteger value = ;//.GetLevelFromType(statusLevelType);
+        statusValueText.text = Player.playerStatus.GetStatusLevelData().CalculateValueFromLevel(statusLevelType).ToString();
     }
 
     BigInteger CalculateGoldCost(int startCost, float multiplyValue, BigInteger currentLevel)
@@ -98,25 +106,43 @@ public class StatusLevelupPanel : MonoBehaviour
 
     void OnClickLevelUpButton()
     {
-        LevelUpStatus();
+        _levelUpCoroutine = StartCoroutine(LevelUpStatus());
+        //LevelUpStatus();
     }
-
-    void LevelUpStatus()
+    IEnumerator LevelUpStatus()
     {
-        int currentStatusLevel = Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType];
-        BigInteger goldCost = CalculateGoldCost(statusLevelType, currentStatusLevel, levelUpMultiplyValue);
-        if (Player.Gold >= goldCost)
+        int pressTime = 0;
+        while (true)
         {
-            Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] += levelUpMultiplyValue;
+            if (!_holdButton.isPressed)
+            {
+                SaveLoadManager.GetInstance().SavePlayerStatusLevel(Player.playerStatus.GetStatusLevelData());
+                Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] += pressTime;
+                Player.UpdatePlayerStatusLevelByType(statusLevelType, Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType]);
+                yield break;
+            }
 
-            Player.Gold -= goldCost;
+            int currentStatusLevel = Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] + pressTime;
+            BigInteger goldCost = CalculateGoldCost(statusLevelType, currentStatusLevel, levelUpMultiplyValue);
+            if (Player.Gold >= goldCost)
+            {
+                Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] += levelUpMultiplyValue;
+                Player.Gold -= goldCost;
+                pressTime += levelUpMultiplyValue;
+                int statusLevel = (Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] + pressTime);
+                statusValueText.text = Player.playerStatus.GetStatusLevelData()
+                    .CalculateValueFromLevelForText(statusLevelType, statusLevel).ToString();
+                currentLevelText.text = statusLevel.ToString();
+            }
+            else
+            {
+                _holdButton.isPressed = false;
+                yield break;
+            }
 
-            //DummyServerData.UserStatusLevelUp(Player.GetUserID(), statusLevelType, currentStatusLevel,  levelUpMultiplyValue);
-            //  TODO 11.25 정보 json에 저장하는 코드 만들기
-            SaveLoadManager.GetInstance().SavePlayerStatusLevel(Player.playerStatus.GetStatusLevelData(), 5.0f);
-
-            Player.UpdatePlayerStatusLevelByType(statusLevelType, Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType]);
+            yield return new WaitForSeconds(0.1f);
         }
+
     }
     public static BigInteger CalculateGoldCost(StatusLevelType type, BigInteger currentLevel, int levelUpMultiplyValue)
     {

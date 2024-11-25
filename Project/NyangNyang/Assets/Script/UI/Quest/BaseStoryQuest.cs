@@ -33,7 +33,10 @@ public class BaseStoryQuest : BaseQuest
 
     public void GetCurrentQuestIDFromServer()
     {
-        _currentQuestID = DummyStoryQuestServer.SendCurrentStoryQuestIDToUser(Player.GetUserID());
+        StoryQuestJsonData data = new StoryQuestJsonData();
+        QuestSaveLoadManager.GetInstance().LoadStoryQuestData(out data);
+        _currentQuestID = data.currentStoryQuestID;
+            //DummyStoryQuestServer.SendCurrentStoryQuestIDToUser(Player.GetUserID());
 
         LoadCurrentQuest();
     }
@@ -61,7 +64,12 @@ public class BaseStoryQuest : BaseQuest
 
         questData = null;
         _currentQuestID += 1;
+
+        StoryQuestJsonData data = new StoryQuestJsonData();
+        data.currentStoryQuestID = _currentQuestID;
+        QuestSaveLoadManager.GetInstance().SaveStoryQuestData(data);
         LoadCurrentQuest();
+
     }
 
     public override void SetRewardButtonInteractable(bool newActive, string newText)
