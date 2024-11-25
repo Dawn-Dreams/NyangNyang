@@ -34,6 +34,8 @@ public class SkillMgrUI : MonoBehaviour
             {
                 if (skill.HasSkill())
                 {
+                    // 임시 코드
+                    SkillManager.GetInstance().GetSkill(i).SetIsLockToTrue();
                     skillList[i].GetComponent<WeaponUnlock>().Unlock();
                 }
                 sliders[i].value = (float)skill.GetPossession() / 5 >= 1 ? 1 : (float)skill.GetPossession() / 5;

@@ -20,6 +20,7 @@ public class WeaponDetailUI : MonoBehaviour
     private Text wLevelTxt;
     private Image wImage;
     private Slider wPossessionSlider;
+    private GameObject wLockImage;
 
     private Text eCurStatusTxt;
     private Text eNextStatusTxt;
@@ -34,59 +35,38 @@ public class WeaponDetailUI : MonoBehaviour
         wLevelTxt = weaponPanel.transform.Find("levelNum_txt").GetComponent<Text>();
         wImage = weaponPanel.transform.Find("weapon_img").GetComponent<Image>();
         wPossessionSlider = weaponPanel.transform.Find("possession_slider").GetComponent<Slider>();
+        wLockImage = weaponPanel.transform.Find("lock_img").gameObject;
     
         eCurStatusTxt = effectPanel.transform.Find("prev_txt").GetComponent<Text>();
         eNextStatusTxt = effectPanel.transform.Find("next_txt").GetComponent<Text>();
     }
 
+    // 디테일 장비 창 열릴 때마다 불리는 함수
     private void OnEnable()
     {
-        // Active 되는 매 순간 불려짐
         choosedWeapon = null;
     }
 
+    // 장비 인벤 창에서 장비 선택 시 불리는 함수
     public void OnClickedWeapon(GameObject _obj)
     {
-        if ( choosedWeapon == null )
-        {
-            detailPanel.SetActive(true);
-            
+        if ( choosedWeapon == null ) // 선택된 장비가 없는 경우
+        {  
+            // 선택된 장비 정보 받아오기
             choosedWeapon = WeaponManager.GetInstance().GetWeapon(_obj.name);
 
-
-            Debug.Log(_obj.name);
-
-
-            wNameTxt.text = choosedWeapon.GetName();
-            wImage.sprite = WeaponManager.GetInstance().GetSprite(choosedWeapon.GetID());
-
-            if ( choosedWeapon.GetLevel() == 100)
+            // 장비 정보가 잘 불려온 경우
+            if ( choosedWeapon != null )
             {
-                MaxLevelOfWeapon();
-            }
-            else
-            {
-                wLevelTxt.text = choosedWeapon.GetLevel() + "/100";
-                int count = choosedWeapon.GetWeaponCount();
-                weaponCoinTxt.text = choosedWeapon.GetNeedCoin().ToString();
-                wPossessionTxt.text = count + "/5";
-                wPossessionSlider.value = (float)count / 5 >= 1 ? 1 : (float)count / 5;
+                // 장비 디테일 창 열기
+                detailPanel.SetActive(true);
+                UpdateDetailUI();
             }
 
-            eCurStatusTxt.text = choosedWeapon.GetCurStatus().ToString();
-            eNextStatusTxt.text = choosedWeapon.GetNextStatus().ToString();
         }
     }
 
-    public void OnClickedCancle()
-    {
-        if ( choosedWeapon != null )
-        {
-            choosedWeapon = null;
-            detailPanel.SetActive(false);
-        }
-    }
-
+    // 다음 단계로의 장비로 합성하는 함수
     public void OnClickedMerge()
     {
         // 다음 단계로의 merge 과정
@@ -95,7 +75,7 @@ public class WeaponDetailUI : MonoBehaviour
             if (WeaponManager.GetInstance().CombineWeapon(choosedWeapon.GetID()))
             {
                 // Debug.Log("성공");
-                UpdatePossessionText();
+                UpdatePossessionUI();
             }
             else
             {
@@ -110,9 +90,10 @@ public class WeaponDetailUI : MonoBehaviour
         }
     }
 
+    // 장비 Lv 올리는 함수
     public void OnClickedEnhance()
     {
-        if ( choosedWeapon != null && choosedWeapon.HasWeapon() && choosedWeapon.GetLevel() < 100)
+        if ( choosedWeapon != null && !choosedWeapon.GetIsLock() && choosedWeapon.GetLevel() < 100)
         {
             if ( Player.Gold >= int.Parse(weaponCoinTxt.text))
             {
@@ -125,7 +106,7 @@ public class WeaponDetailUI : MonoBehaviour
                 eNextStatusTxt.text = choosedWeapon.GetNextStatus().ToString();
                 if ( choosedWeapon.GetLevel() == 100)
                 {
-                    MaxLevelOfWeapon();
+                    UpdateMaxLevelUI();
                 }
                 else
                 {
@@ -144,7 +125,57 @@ public class WeaponDetailUI : MonoBehaviour
         }
     }
 
-    void UpdatePossessionText()
+    // 이전 무기의 디테일 창으로 넘어가는 함수
+    public void OnClickedShowPreviousWeapon()
+    {
+        if ( choosedWeapon != null )
+        {
+            if ( choosedWeapon.GetID() > 0)
+            {
+                // 선택된 장비 정보 받아오기
+                choosedWeapon = WeaponManager.GetInstance().GetWeapon(choosedWeapon.GetID() - 1);
+
+                // 장비 정보가 잘 불려온 경우
+                if (choosedWeapon != null)
+                {
+                    UpdateDetailUI();
+                }
+            }
+        }
+    }
+
+    // 다음 무기의 디테일 창으로 넘어가는 함수
+    public void OnClickedShowNextWeapon()
+    {
+        if (choosedWeapon != null)
+        {
+            if (choosedWeapon.GetID() < 31)
+            {
+                // 선택된 장비 정보 받아오기
+                choosedWeapon = WeaponManager.GetInstance().GetWeapon(choosedWeapon.GetID() + 1);
+
+                // 장비 정보가 잘 불려온 경우
+                if (choosedWeapon != null)
+                {
+                    UpdateDetailUI();
+                }
+            }
+        }
+    }
+
+    // 디테일 장비 창 닫는 함수
+    public void OnClickedCancle()
+    {
+        if ( choosedWeapon != null )
+        {
+            choosedWeapon = null;
+            wLockImage.SetActive(true); 
+            detailPanel.SetActive(false);
+        }
+    }
+
+    // 다음 단계의 장비로 합성 시, 불리는 소지량 UI 변경 함수
+    void UpdatePossessionUI()
     {
         weaponMgrUI.UpdatePossession(choosedWeapon.GetID());
         weaponMgrUI.UpdatePossession(choosedWeapon.GetID() + 1);
@@ -154,9 +185,42 @@ public class WeaponDetailUI : MonoBehaviour
         wPossessionSlider.value = (float)count / 5 >= 1 ? 1 : (float)count / 5;
     }
 
-    public void MaxLevelOfWeapon()
+    // UpdateDetailUI 할 시, Max Lv인 경우 불리는 함수
+    public void UpdateMaxLevelUI()
     {
         weaponCoinTxt.text = "max";
         wLevelTxt.text = "100";
     }
+
+    // 디테일 창에 새로운 장비의 정보를 띄우는 함수
+    public void UpdateDetailUI()
+    {
+        // UI - 잠금 확인하기
+        wLockImage.SetActive(choosedWeapon.GetIsLock());
+
+        // UI - 이름 및 이미지 변경하기
+        wNameTxt.text = choosedWeapon.GetName();
+        wImage.sprite = WeaponManager.GetInstance().GetSprite(choosedWeapon.GetID());
+
+        // UI - 소지량 변경하기
+        if (choosedWeapon.GetLevel() == 100)
+        {
+            // 장비의 레벨이 max인 경우
+            UpdateMaxLevelUI();
+        }
+        else
+        {
+            // 레벨이 max가 아닌 경우
+            wLevelTxt.text = choosedWeapon.GetLevel() + "/100";
+            int count = choosedWeapon.GetWeaponCount();
+            weaponCoinTxt.text = choosedWeapon.GetNeedCoin().ToString();
+            wPossessionTxt.text = count + "/5";
+            wPossessionSlider.value = (float)count / 5 >= 1 ? 1 : (float)count / 5;
+        }
+
+        // UI - 효과 변경하기
+        eCurStatusTxt.text = choosedWeapon.GetCurStatus().ToString();
+        eNextStatusTxt.text = choosedWeapon.GetNextStatus().ToString();
+    }
+
 }
