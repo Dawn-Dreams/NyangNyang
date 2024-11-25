@@ -43,6 +43,7 @@ public class DummyQuestServer : DummyServerData
 
 
 
+
     // 유저가 퀘스트 보상을 받았는지에 대한 변수
     private static Dictionary<QuestCategory, Dictionary<QuestType, List<int>>> _getRewardUsersID =
         new Dictionary<QuestCategory, Dictionary<QuestType, List<int>>>
