@@ -41,11 +41,12 @@ public class Normal_ObtainWeaponQuestDataBase : NormalQuestDataBase
         return requireWeaponObtainCount;
     }
 
-    public override void ChangeCurrentProgressCountAfterReward()
+    public override int ChangeCurrentProgressCountAfterReward()
     {
         int clearCount = (int)currentWeaponObtainCount / requireWeaponObtainCount;
 
         currentWeaponObtainCount -= requireWeaponObtainCount * clearCount;
+        return clearCount;
     }
 
     public override BigInteger GetCurrentQuestCount()

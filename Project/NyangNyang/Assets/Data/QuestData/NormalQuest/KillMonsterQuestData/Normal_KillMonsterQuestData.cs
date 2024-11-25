@@ -51,11 +51,12 @@ public class Normal_KillMonsterQuestData : NormalQuestDataBase
         return requireKillMonsterCount;
     }
 
-    public override void ChangeCurrentProgressCountAfterReward()
+    public override int ChangeCurrentProgressCountAfterReward()
     {
         int clearCount = (int)_killMonsterCount / requireKillMonsterCount;
             
         _killMonsterCount -= requireKillMonsterCount * clearCount;
+        return clearCount;
     }
 
     public override BigInteger GetCurrentQuestCount()

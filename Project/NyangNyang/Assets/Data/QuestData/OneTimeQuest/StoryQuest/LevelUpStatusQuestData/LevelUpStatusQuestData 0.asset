@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdc46cc0951c2b34e9e0536b70dd8730, type: 3}
   m_Name: LevelUpStatusQuestData 0
   m_EditorClassIdentifier: 
-  mainQuestTitle: 
+  mainQuestTitle: "HP \uC2A4\uD0EF \uB808\uBCA810\uB2EC\uC131"
   subQuestTitle: 
-  rewardCount: 50
-  questType: 3
+  rewardCount: 10
+  questType: 6
   questCategory: 4
   rewardType: 1
   sendQuestDataToServerDelayTime: 5
+  storyQuestID: 0
   requireStatusLevel: 10
   questStatusType: 0

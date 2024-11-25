@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainQuestTitle: "\uC2A4\uD0AC \uD68D\uB4DD\uD558\uAE30"
   subQuestTitle: "\uC2A4\uD0AC\uC744 5\uAC1C \uD68D\uB4DD\uD558\uC138\uC694."
-  rewardCount: 100
-  questType: 3
+  rewardCount: 5
+  questType: 4
   questCategory: 1
   rewardType: 1
   sendQuestDataToServerDelayTime: 5

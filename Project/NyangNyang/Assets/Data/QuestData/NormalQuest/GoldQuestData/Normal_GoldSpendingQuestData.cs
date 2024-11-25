@@ -40,10 +40,11 @@ public class Normal_GoldSpendingQuestData : NormalQuestDataBase
         return requireSpendingGold;
     }
 
-    public override void ChangeCurrentProgressCountAfterReward()
+    public override int ChangeCurrentProgressCountAfterReward()
     {
-        int clearCount = (int)MyBigIntegerMath.DivideToFloat(spendingGold, requireSpendingGold);
+        int clearCount = (int)MyBigIntegerMath.DivideToFloat(spendingGold, requireSpendingGold,10);
         spendingGold -= requireSpendingGold * clearCount;
+        return clearCount;
     }
 
     public override BigInteger GetCurrentQuestCount()

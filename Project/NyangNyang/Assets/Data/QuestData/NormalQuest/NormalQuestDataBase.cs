@@ -19,7 +19,7 @@ public abstract class NormalQuestDataBase : QuestDataBase
     // ===============================================
 
     // 퀘스트 클리어 버튼 이후 클라 내에서 값을 갱신시키는 함수
-    public abstract void ChangeCurrentProgressCountAfterReward();
+    public abstract int ChangeCurrentProgressCountAfterReward();
 
     // 현재 유저의 퀘스트 진행 정도를 받는 함수
     public virtual void LoadCurrentUserQuestProgress()
@@ -36,20 +36,24 @@ public abstract class NormalQuestDataBase : QuestDataBase
 
     public override void RequestQuestReward()
     {
-        if (rewardType == RewardType.Diamond)
-        {
-            Player.Diamond += rewardCount;
-        }
 
         base.RequestQuestReward();
 
         if (IsRewardRepeatable())
         {
-            ChangeCurrentProgressCountAfterReward();
+            int clearCount = ChangeCurrentProgressCountAfterReward();
+            if (rewardType == RewardType.Diamond)
+            {
+                Player.Diamond += rewardCount*clearCount;
+            }
             QuestSaveLoadManager.GetInstance().SaveQuestProgressData(questCategory,questType,GetCurrentQuestCount().ToString());
         }
         else
         {
+            if (rewardType == RewardType.Diamond)
+            {
+                Player.Diamond += rewardCount;
+            }
             GetReward = true;
             QuestSaveLoadManager.GetInstance().UserGetRewardOnNotRepeatable(questCategory, questType);
         }

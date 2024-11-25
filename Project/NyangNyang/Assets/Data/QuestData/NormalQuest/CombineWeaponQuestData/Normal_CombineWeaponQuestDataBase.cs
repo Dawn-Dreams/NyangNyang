@@ -42,11 +42,12 @@ public class Normal_CombineWeaponQuestDataBase : NormalQuestDataBase
         return requireCombineWeaponCount;
     }
 
-    public override void ChangeCurrentProgressCountAfterReward()
+    public override int ChangeCurrentProgressCountAfterReward()
     {
         int clearCount = (int)currentCombineWeaponCount / requireCombineWeaponCount;
 
         currentCombineWeaponCount -= requireCombineWeaponCount * clearCount;
+        return clearCount;
     }
 
     public override BigInteger GetCurrentQuestCount()

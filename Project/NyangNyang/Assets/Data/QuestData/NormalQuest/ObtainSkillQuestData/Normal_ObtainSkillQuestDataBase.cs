@@ -42,11 +42,12 @@ public class Normal_ObtainSkillQuestDataBase : NormalQuestDataBase
         return requireSkillObtainCount;
     }
 
-    public override void ChangeCurrentProgressCountAfterReward()
+    public override int ChangeCurrentProgressCountAfterReward()
     {
         int clearCount = (int)currentSkillObtainCount / requireSkillObtainCount;
 
         currentSkillObtainCount -= requireSkillObtainCount * clearCount;
+        return clearCount;
     }
 
     public override BigInteger GetCurrentQuestCount()

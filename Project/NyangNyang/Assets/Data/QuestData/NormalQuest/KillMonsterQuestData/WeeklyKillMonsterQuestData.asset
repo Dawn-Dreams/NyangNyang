@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainQuestTitle: "\uBAAC\uC2A4\uD130 \uCC98\uCE58"
   subQuestTitle: "\uBAAC\uC2A4\uD130\uB97C 500 \uB9C8\uB9AC \uCC98\uCE58\uD558\uC138\uC694."
-  rewardCount: 300
+  rewardCount: 50
   questType: 1
   questCategory: 2
   rewardType: 1
+  sendQuestDataToServerDelayTime: 5
   requireKillMonsterCount: 500
