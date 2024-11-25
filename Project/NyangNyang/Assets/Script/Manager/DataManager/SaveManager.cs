@@ -23,7 +23,7 @@ public class SaveLoadManager : MonoBehaviour
         return _instance;
     }
 
-    private void Awake()
+    public void OnAwake_CalledFromGameManager()
     {
         if (_instance == null)
         {
@@ -39,6 +39,11 @@ public class SaveLoadManager : MonoBehaviour
             Debug.Log("SaveLoadManager instatnce  초기화완료");
         }
 
+    }
+
+    private void Awake()
+    {
+        OnAwake_CalledFromGameManager();
     }
 
 
