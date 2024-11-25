@@ -273,31 +273,3 @@ public class DungeonManager : MonoBehaviour
         DungeonResultText.gameObject.SetActive(false);
     }
 }
-public class DungeonRewardManager
-{
-    public void GiveDungeonReward(string userID, int index, int level)
-    {
-        int goldReward = CalculateGoldReward(index, level);
-        int itemReward = CalculateItemReward(index, level);
-
-        // 보상 지급
-        Player.AddGold(goldReward);
-        //Player.AddItem(itemReward); // 아이템 보상... 추가 예정
-
-        Debug.Log($"유저 {userID}에게 던전 {index + 1} 레벨 {level} 보상을 지급했습니다. 골드: {goldReward}, 아이템: {itemReward}");
-    }
-
-    private int CalculateGoldReward(int index, int level)
-    {
-        // index와 level에 따라 보상을 다르게 설정
-        return 10000 * (index + 1) * level; // 기본 골드 보상 예시
-    }
-
-    private int CalculateItemReward(int index, int level)
-    {
-        // 특정 레벨 도달 시 아이템 보상 지급 로직
-        return (index + 1) * level; // 아이템 보상 예시
-    }
-}
-
-

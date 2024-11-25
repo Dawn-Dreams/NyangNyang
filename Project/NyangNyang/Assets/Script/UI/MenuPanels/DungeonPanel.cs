@@ -18,6 +18,9 @@ public class DungeonPanel : MenuPanel
     private ScrollRect[] levelScrollViews;
     private Button[][] levelSelectButtons;
 
+    [SerializeField] private GameObject rewardPopup;
+    [SerializeField] private TextMeshProUGUI goldText;    // 팝업의 골드 텍스트
+    [SerializeField] private TextMeshProUGUI expText;     // 팝업의 경험치 텍스트
     [SerializeField] private int gainGold = 10000;               // 기본 골드 획득량
     [SerializeField] private int gainEXP = 1000;               // 기본 경험치 획득량
 
@@ -47,6 +50,7 @@ public class DungeonPanel : MenuPanel
         InitializeStageButtons();
         InitializeTabs();
         InitializeLevelSelectButtons();
+        HideRewardPopup();
     }
 
     private void InitializeStageButtons()
@@ -138,13 +142,7 @@ public class DungeonPanel : MenuPanel
         GetReward(tabIndex);
         UpdateStageButtons(tabIndex);
     }
-    private void GetReward(int tabIndex)
-    {
-        // 던전 보상
-        Player.AddGold(dungeonHighestClearLevel[tabIndex] * gainGold);
-        Player.AddExp(dungeonHighestClearLevel[tabIndex] * gainEXP);
 
-    }
     private void UpdateLevelSelectButtons(int tabIndex)
     {
         for (int i = 0; i < levelSelectButtons[tabIndex].Length; i++)
@@ -190,7 +188,7 @@ public class DungeonPanel : MenuPanel
     {
         if (!DummyServerData.HasShell(Player.GetUserID(), index))
         {
-            Debug.Log("입장권이 부족합니다.");
+            Debug.Log($"{shellNames[index]} 조개패가 부족합니다.");
             return;
         }
         dungeonManager.StartDungeon(index, TempDungeonStageLevel);
@@ -202,7 +200,7 @@ public class DungeonPanel : MenuPanel
     {
         if (!DummyServerData.HasShell(Player.GetUserID(), index))
         {
-            Debug.Log("입장권이 부족합니다.");
+            Debug.Log($"{shellNames[index]} 조개패가 부족합니다.");
             return;
         }
         if (TempDungeonStageLevel < dungeonHighestClearLevel[index])
@@ -228,6 +226,43 @@ public class DungeonPanel : MenuPanel
         for (int i = 0; i < levelSelectButtons[tabIndex].Length; i++)
         {
             levelSelectButtons[tabIndex][i].interactable = (i + 1) <= dungeonHighestClearLevel[tabIndex];
+        }
+    }
+    private void GetReward(int tabIndex)
+    {
+        // 보상 계산
+        int rewardGold = dungeonHighestClearLevel[tabIndex] * gainGold;
+        int rewardEXP = dungeonHighestClearLevel[tabIndex] * gainEXP;
+
+        // 플레이어에게 골드와 경험치 지급
+        Player.AddGold(rewardGold);
+        Player.AddExp(rewardEXP);
+
+        // 보상 팝업 업데이트
+        ShowRewardPopup(rewardGold, rewardEXP);
+    }
+
+    private void ShowRewardPopup(int rewardGold, int rewardEXP)
+    {
+        if (rewardPopup == null)
+        {
+            Debug.LogError("Reward popup is not assigned.");
+            return;
+        }
+
+        // 팝업 텍스트 업데이트
+        goldText.text = $"{rewardGold:N0} 골드 획득!";
+        expText.text = $"{rewardEXP:N0} 경험치 획득!";
+
+        // 팝업 활성화
+        rewardPopup.SetActive(true);
+    }
+
+    public void HideRewardPopup()
+    {
+        if (rewardPopup != null)
+        {
+            rewardPopup.SetActive(false);
         }
     }
 }
