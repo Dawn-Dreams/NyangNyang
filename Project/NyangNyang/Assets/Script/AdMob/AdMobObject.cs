@@ -37,7 +37,7 @@ public class AdMobObject : MonoBehaviour, IPointerClickHandler
     void RewardAction(Reward reward)
     {
         Debug.Log(" 다이아 지급 ");
-        DummyServerData.GiveUserDiamondAndSendData(Player.GetUserID(), (int)reward.Amount);
+        //DummyServerData.GiveUserDiamondAndSendData(Player.GetUserID(), (int)reward.Amount);
     }
 
     public void OnPointerClick(PointerEventData eventData)

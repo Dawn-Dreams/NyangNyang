@@ -306,7 +306,7 @@ public class DummyQuestServer : DummyServerData
                     // TODO: DummyServerData 내 제공하는 함수 제작 후 연결 진행
                     break;
                 case RewardType.Diamond:
-                    giveUserCurrencyAction += DummyServerData.GiveUserDiamondAndSendData;
+                    //giveUserCurrencyAction += DummyServerData.GiveUserDiamondAndSendData;
                     break;
             }
         }

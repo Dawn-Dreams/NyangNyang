@@ -1,12 +1,73 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices.ComTypes;
 using UnityEngine;
+using UnityEngine.Events;
 
 //제컴퓨터 기준 저기에 저장되었음
 //"C:\Users\gaon7\AppData\LocalLow\DawnDreams\NyangNyang\Status.json"->윈도우기준 여기에 저장되어 있음
 
+
 public class SaveLoadManager : MonoBehaviour
 {
     private static SaveLoadManager _instance;
+
+    // 저장 시 딜레이를 주어 저장하기 위한 변수
+    public List<SaveWithDelay> saveDataWithDelay = new List<SaveWithDelay>();
+    public Coroutine saveWithDelayCoroutine = null;
+
+    // 지연과 함께 데이터 전송을 보내는 코루틴에서 실행될 함수
+    private IEnumerator SaveDataListAfterDelay()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1.0f);
+
+            for (int index = 0; index < saveDataWithDelay.Count; ++index)
+            {
+                SaveWithDelay saveData = saveDataWithDelay[index];
+                if (saveData.startTime + saveData.delayTime <= Time.time)
+                {
+                    saveData.saveFunctionCallback();
+                    saveDataWithDelay.RemoveAt(index);
+                    --index;
+                }
+            }
+
+            if (saveDataWithDelay.Count == 0)
+            {
+                StopCoroutine(saveWithDelayCoroutine);
+                saveWithDelayCoroutine = null;
+                yield return null;
+            }
+        }
+        
+    }
+    // saveDataWithDelay 리스트에 추가하는 함수
+    private void AddSaveDataWithDelay(SaveWithDelay newSaveData)
+    {
+        SaveWithDelay saveData = saveDataWithDelay.Find((a) => a.dataType == newSaveData.dataType);
+        // 이미 사전에 저장 요청을 보냈을 경우,
+        if (saveData != null)
+        {
+            saveData.startTime = Time.time;
+            saveData.delayTime = newSaveData.delayTime;
+            saveData.saveFunctionCallback = newSaveData.saveFunctionCallback;
+        }
+        // 새로운 저장 요청일 경우
+        else
+        {
+            saveDataWithDelay.Add(newSaveData);
+        }
+
+        if (saveWithDelayCoroutine == null)
+        {
+            saveWithDelayCoroutine = StartCoroutine(SaveDataListAfterDelay());
+        }
+    }
+
 
     //저장할 데이터의 경로를 저장
     private string playerStatusLevelFilePath;
@@ -53,6 +114,17 @@ public class SaveLoadManager : MonoBehaviour
     {
         string json = JsonUtility.ToJson(data);
         File.WriteAllText(playerStatusLevelFilePath, json);
+        Debug.Log($"저장 진행");
+    }
+    // 저장(딜레이)
+    public void SavePlayerStatusLevel(StatusLevelData data, float delayTime)
+    {
+        SaveWithDelay statusSaveData = new SaveWithDelay(
+            SaveDataType.StatusLevel,
+            () => { SavePlayerStatusLevel(data); },
+            delayTime
+        );
+        AddSaveDataWithDelay(statusSaveData);
     }
 
     //  불러오기
@@ -157,3 +229,6 @@ private void Start() -> GameManager의 start 함수임
         Debug.Log($"Loaded Player Status Level: HP Level = {loadedStatusLevel.hpLevel}");
         Debug.Log($"Loaded Player Goods: Gold = {loadedGoods.gold}");
  */
+
+
+

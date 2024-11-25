@@ -14,12 +14,13 @@ public class DummyServerData : MonoBehaviour
     // ===============
     // 데이터 시작
 
-    // 각 유저 스탯 레벨 데이터 
-    protected static StatusLevelData[] usersStatusLevelData = new StatusLevelData[]
-    {
-        new StatusLevelData(0,0,0,0,0),
-        new StatusLevelData(10,0,5,0),
-    };
+    //11.25 json으로 이동
+    //// 각 유저 스탯 레벨 데이터 
+    //protected static StatusLevelData[] usersStatusLevelData = new StatusLevelData[]
+    //{
+    //    new StatusLevelData(0,0,0,0,0),
+    //    new StatusLevelData(10,0,5,0),
+    //};
 
     // MonsterData 에서 관리
     //private static StatusLevelData[] enemyStatusLevelData = new StatusLevelData[]
@@ -34,6 +35,7 @@ public class DummyServerData : MonoBehaviour
     //    // 임시 일반 몬스터 데이터
     //    };
 
+    //11.25 윤석 - json으로 이동 // 치즈 및 조개패 데이터만 옮기시면 될것같습니다 승희님.
     // 각 유저 재화(골드+다이아+치즈+조개패) 데이터 
     protected static CurrencyData[] usersCurrencyData = new CurrencyData[]
     {
@@ -69,16 +71,6 @@ public class DummyServerData : MonoBehaviour
     // 함수 시작
 
 
-    public static StatusLevelData GetUserStatusLevelData(int userID)
-    {
-        if (!(0 <= userID && userID < usersStatusLevelData.Length))
-        {
-            Debug.Log("INVALID USERID");
-            return null;
-        }
-
-        return usersStatusLevelData[userID];
-    }
 
     // MonsterData에서 관리
     //public static StatusLevelData GetEnemyStatusLevelData(int characterID)
@@ -93,39 +85,6 @@ public class DummyServerData : MonoBehaviour
     //    return enemyStatusLevelData[characterID];
     //}
 
-    public static BigInteger GetUserStatusLevelFromType(int userID, StatusLevelType type)
-    {
-        StatusLevelData statusLevelData = GetUserStatusLevelData(userID);
-        if (statusLevelData != null)
-        {
-            return statusLevelData.GetLevelFromType(type);
-        }
-
-        return -1;
-    }
-
-    public static bool UserStatusLevelUp(int userID,StatusLevelType type, int newLevel, BigInteger currentGold)
-    {
-        // 골드 정보 및 스탯 레벨 정보 갱신
-        // 클라의 정보는 클라에서 갱신
-        GetUserCurrencyData(userID).gold = currentGold;
-        GetUserStatusLevelData(userID).statusLevels[(int)type] = newLevel;
-
-        // TODO: 클라의 패킷이 정상적이지 않은 데이터를 담을 경우 false 리턴 or false 되는 패킷 전송
-        return true;
-    }
-
-    public static CurrencyData GetUserCurrencyData(int userID)
-    {
-        if (!(0 <= userID && userID < usersStatusLevelData.Length))
-        {
-            Debug.Log("INVALID USERID");
-            return null;
-        }
-
-        return usersCurrencyData[userID];
-    }
-
     public static UserLevelData GetUserLevelData(int userID)
     {
         if (!(0 <= userID && userID < usersLevelData.Length))
@@ -135,18 +94,6 @@ public class DummyServerData : MonoBehaviour
         }
 
         return usersLevelData[userID];
-    }
-
-
-
-    public static CurrencyData GetUserGoldData(int userId)
-    {
-        CurrencyData userData = GetUserCurrencyData(userId);
-        if (userData == null)
-        {
-            Debug.Log("Error - DummyServerData.GetUserGoldData");
-        }
-        return userData;
     }
 
     public static void UserLevelUp(int userID, int levelUpCount, BigInteger addExp)
@@ -272,17 +219,6 @@ public class DummyServerData : MonoBehaviour
         playerClearStageData[userID, 1] = clearStage;
     }
 
-    public static void GiveUserDiamondAndSendData(int userID, BigInteger addDiamond)
-    {
-        // 다이아몬드는 int 범위 내에서 해결 가능하지만, Gold(BigInteger)와 Action으로 한번에 묶여서 관리할 일이 있어
-        // 해당 함수는 BigInteger로 인자를 받도록 진행
-
-        //범위 체크 생략
-        usersCurrencyData[userID].diamond += (int)addDiamond;
-        
-        // 강제로 플레이어에게 주입
-        Player.Diamond = usersCurrencyData[userID].diamond;
-    }
 
      public static void GiveUserCheeseAndSendData(int userID, BigInteger addCheese)
     {

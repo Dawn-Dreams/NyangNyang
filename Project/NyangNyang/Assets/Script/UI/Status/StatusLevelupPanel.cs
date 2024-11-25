@@ -111,8 +111,9 @@ public class StatusLevelupPanel : MonoBehaviour
 
             Player.Gold -= goldCost;
 
-            DummyServerData.UserStatusLevelUp(Player.GetUserID(), statusLevelType, currentStatusLevel,
-                levelUpMultiplyValue);
+            //DummyServerData.UserStatusLevelUp(Player.GetUserID(), statusLevelType, currentStatusLevel,  levelUpMultiplyValue);
+            //  TODO 11.25 정보 json에 저장하는 코드 만들기
+            SaveLoadManager.GetInstance().SavePlayerStatusLevel(Player.playerStatus.GetStatusLevelData(), 5.0f);
 
             Player.UpdatePlayerStatusLevelByType(statusLevelType, Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType]);
         }
