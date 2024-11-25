@@ -8,6 +8,7 @@ public abstract class Skill
     protected int level;
     protected int levelUpCost;
     protected float effect;
+    bool isLock = true;
 
     public Skill(int _id, string _name, int _possession, int _level, int _levelUpCost, float _effect)
     {
@@ -34,6 +35,9 @@ public abstract class Skill
     public void SetLevelUpCost(int count) => levelUpCost = count;
     public int GetLevelUpCost() => levelUpCost;
 
+    // Lock 관련
+    public bool GetIsLock() => isLock;
+    public void SetIsLockToTrue() => isLock = false;
 
     // 추상 함수 관련
     public abstract void Activate();

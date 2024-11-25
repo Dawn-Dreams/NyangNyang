@@ -51,16 +51,15 @@ public class WeaponDetailUI : MonoBehaviour
     public void OnClickedWeapon(GameObject _obj)
     {
         if ( choosedWeapon == null ) // 선택된 장비가 없는 경우
-        {
-            // 장비 디테일 창 열기
-            detailPanel.SetActive(true);
-            
+        {  
             // 선택된 장비 정보 받아오기
             choosedWeapon = WeaponManager.GetInstance().GetWeapon(_obj.name);
 
             // 장비 정보가 잘 불려온 경우
             if ( choosedWeapon != null )
             {
+                // 장비 디테일 창 열기
+                detailPanel.SetActive(true);
                 UpdateDetailUI();
             }
 
