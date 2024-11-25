@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-
     private static int userID = 0;
     public static string PlayerName;
 
@@ -119,13 +118,8 @@ public class Player : MonoBehaviour
     public static void OnAwakeGetInitialDataFromServer()
     {
         userID = 0;
-        if (playerStatus == null)
-        {
-            playerStatus = new Status(DummyServerData.GetUserStatusLevelData(userID));
-            // 플레이어는 디폴트 스탯 버프
-            playerStatus.BuffPlayerStatusDefaultValue(5);
-            playerStatus.isPlayerStatus = true;
-        }
+
+        GetPlayerStatusData();
         GetCurrencyDataFromServer();
         GetExpDataFromServer();
         
@@ -168,15 +162,32 @@ public class Player : MonoBehaviour
         return userID;
     }
 
+    public static void GetPlayerStatusData()
+    {
+        if (playerStatus == null)
+        {
+            //new Status(DummyServerData.GetUserStatusLevelData(userID));
+            StatusLevelData playerStatusLevelData = new StatusLevelData(0, 0, 0);
+            SaveLoadManager.GetInstance().LoadPlayerStatusLevel(playerStatusLevelData);
+            playerStatus = new Status(playerStatusLevelData);
+
+
+            //// 플레이어는 디폴트 스탯 버프
+            //playerStatus.BuffPlayerStatusDefaultValue(5);
+            playerStatus.isPlayerStatus = true;
+        }
+    }
     public static void GetCurrencyDataFromServer()
     {
         if (playerCurrency == null)
         {
             playerCurrency = ScriptableObject.CreateInstance<CurrencyData>();
         }
-        CurrencyData data = DummyServerData.GetUserGoldData(userID);
-        Gold = data.gold;
-        Diamond = data.diamond;
+
+        CurrencyData data = ScriptableObject.CreateInstance<CurrencyData>();
+        SaveLoadManager.GetInstance().LoadPlayerCurrencyData(data);
+        //DummyServerData.GetUserGoldData(userID);
+        playerCurrency.SetCurrencyData(data);
     }
 
     public static void GetExpDataFromServer()

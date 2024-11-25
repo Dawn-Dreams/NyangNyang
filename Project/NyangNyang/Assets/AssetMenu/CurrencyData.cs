@@ -1,12 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
 using static CurrencyData;
 
+
+[Serializable]
 [CreateAssetMenu(fileName = "CurrencyData", menuName = "ScriptableObjects/CurrencyData", order = 1)]
 public class CurrencyData : ScriptableObject
 {
+    public string goldStringForJson = "0";
     public BigInteger gold;
     public int diamond;
     public int cheese;
@@ -38,6 +42,7 @@ public class CurrencyData : ScriptableObject
 
     public CurrencyData SetCurrencyData(CurrencyData otherData)
     {
+        goldStringForJson = otherData.goldStringForJson;
         gold = otherData.gold;
         diamond = otherData.diamond;
         cheese = otherData.cheese;
@@ -82,4 +87,14 @@ public class CurrencyData : ScriptableObject
         }
     }
 
+
+    public void BeforeSaveToJson()
+    {
+        goldStringForJson = gold.ToString();
+    }
+
+    public void AfterLoadFromJson()
+    {
+        gold = BigInteger.Parse(goldStringForJson);
+    }
 }

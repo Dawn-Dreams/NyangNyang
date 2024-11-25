@@ -32,12 +32,5 @@ public class GameManager : MonoBehaviour
 
         PlayerCostume.OnAwake_CallInGameManager();
     }
-    private void Start()
-    {
-        //Awake에서 SaveLoadManager를 사용하면 null문제가 자꾸 발생해서 start에 넣어놓음
-        PlayerStatusData loadedStatus = SaveLoadManager.GetSaveLoadManager().LoadPlayerStatus();
-        Debug.Log($"Loaded Player Status: HP = {loadedStatus.hp}, MP = {loadedStatus.mp}");
-
-    }
 
 }

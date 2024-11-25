@@ -176,8 +176,12 @@ public class Status
     // 적군을 잡을 때에 받는 경우에만 해당
     public float goldAcquisitionPercent = 1.0f;    // 골드 획득량(가중치) (초기 1, value%로 적용)
     public float expAcquisitionPercent = 1.0f;     // 경험치 획득량(가중치) (초기 1, value%로 적용)
-    
 
+    public Status()
+    {
+        levelData = new StatusLevelData(0, 0, 0);
+        UpdateStatus();
+    }
     public Status(StatusLevelData data)
     {
         levelData = new StatusLevelData(data);

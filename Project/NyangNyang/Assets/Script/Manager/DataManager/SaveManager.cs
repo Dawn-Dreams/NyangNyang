@@ -1,149 +1,153 @@
 using System.IO;
 using UnityEngine;
 
-//Á¦ÄÄÇ»ÅÍ ±âÁØ Àú±â¿¡ ÀúÀåµÇ¾úÀ½
-//"C:\Users\gaon7\AppData\LocalLow\DawnDreams\NyangNyang\Status.json"->À©µµ¿ì±âÁØ ¿©±â¿¡ ÀúÀåµÇ¾î ÀÖÀ½
+//ì œì»´í“¨í„° ê¸°ì¤€ ì €ê¸°ì— ì €ì¥ë˜ì—ˆìŒ
+//"C:\Users\gaon7\AppData\LocalLow\DawnDreams\NyangNyang\Status.json"->ìœˆë„ìš°ê¸°ì¤€ ì—¬ê¸°ì— ì €ì¥ë˜ì–´ ìˆìŒ
 
 public class SaveLoadManager : MonoBehaviour
 {
-    private static SaveLoadManager instance;
+    private static SaveLoadManager _instance;
 
-    //ÀúÀåÇÒ µ¥ÀÌÅÍÀÇ °æ·Î¸¦ ÀúÀå
-    private string playerStatusFilePath;
+    //ì €ì¥í•  ë°ì´í„°ì˜ ê²½ë¡œë¥¼ ì €ì¥
     private string playerStatusLevelFilePath;
     private string playerCurrencyFilePath;
     private string catCostumeFilePath;
 
-
     public static SaveLoadManager GetSaveLoadManager()
     {
-        return instance;
+        return _instance;
     }
-    private void Start()
+
+    public static SaveLoadManager GetInstance()
     {
-        if (instance == null)
+        return _instance;
+    }
+
+    private void Awake()
+    {
+        if (_instance == null)
         {
-            instance = this;
+            _instance = this;
             DontDestroyOnLoad(gameObject);
 
-            //ÆÄÀÏÀúÀå°æ·Î+ÆÄÀÏÀÌ¸§
-            playerStatusFilePath = Path.Combine(Application.persistentDataPath, "Status.json");
+            //íŒŒì¼ì €ì¥ê²½ë¡œ+íŒŒì¼ì´ë¦„
             playerStatusLevelFilePath = Path.Combine(Application.persistentDataPath, "StatusLevel.json");
             playerCurrencyFilePath = Path.Combine(Application.persistentDataPath, "CurrencyData.json");
             catCostumeFilePath = Path.Combine(Application.persistentDataPath, "CatCostumePart.json");
 
+            CreateIfFileNotExist();
+            Debug.Log("SaveLoadManager instatnce  ì´ˆê¸°í™”ì™„ë£Œ");
         }
-        Debug.Log("SaveLoadManager instatnce  ÃÊ±âÈ­¿Ï·á");
 
     }
 
-  
-    // =================Status=========================
-    // ÀúÀå
-    public void SavePlayerStatus(Status data)
-    {
-        Debug.Log($"Save Player Status: HP = {data.hp}, MP = {data.mp}");
 
-        string json = JsonUtility.ToJson(data);
-        File.WriteAllText(playerStatusFilePath, json);
-    }
-
-    //ºÒ·¯¿À±â
-    public PlayerStatusData LoadPlayerStatus()
-    {
-        if (File.Exists(playerStatusFilePath))
-        {
-            string json = File.ReadAllText(playerStatusFilePath);
-            return JsonUtility.FromJson<PlayerStatusData>(json);
-        }
-        return null; // ÆÄÀÏÀÌ ¾øÀ» °æ¿ì null ¹İÈ¯
-    }
-
-    // =================PlayerStatusLevelData=========================
-    // ÀúÀå
-    public void SavePlayerStatusLevel(PlayerStatusLevelData data)
+    // =================StatusLevelData=========================
+    // ì €ì¥
+    public void SavePlayerStatusLevel(StatusLevelData data)
     {
         string json = JsonUtility.ToJson(data);
         File.WriteAllText(playerStatusLevelFilePath, json);
     }
 
-    //  ºÒ·¯¿À±â
-    public PlayerStatusLevelData LoadPlayerStatusLevel()
+    //  ë¶ˆëŸ¬ì˜¤ê¸°
+    public bool LoadPlayerStatusLevel(StatusLevelData data)
     {
         if (File.Exists(playerStatusLevelFilePath))
         {
             string json = File.ReadAllText(playerStatusLevelFilePath);
-            return JsonUtility.FromJson<PlayerStatusLevelData>(json);
+            JsonUtility.FromJsonOverwrite(json, data);
+            return true;
         }
-        return null; // ÆÄÀÏÀÌ ¾øÀ» °æ¿ì null ¹İÈ¯
+        return false; // íŒŒì¼ì´ ì—†ì„ ê²½ìš° null ë°˜í™˜
     }
 
     // =================CurrencyData=========================
-    // CurrencyData ÀúÀå
+    // CurrencyData ì €ì¥
     public void SavePlayerCurrencyData(CurrencyData data)
     {
+        // BigIntegerëŠ” Serializableì´ ì•„ë‹ˆê¸°ì—,
+        data.BeforeSaveToJson();
+
         string json = JsonUtility.ToJson(data);
+        Debug.Log(json);
         File.WriteAllText(playerCurrencyFilePath, json);
     }
 
-    // CurrencyData ºÒ·¯¿À±â
-    public PlayerGoodsData LoadPlayerGoods()
+    // CurrencyData ë¶ˆëŸ¬ì˜¤ê¸°
+    public bool LoadPlayerCurrencyData(CurrencyData overrideCurrencyData)
     {
         if (File.Exists(playerCurrencyFilePath))
         {
             string json = File.ReadAllText(playerCurrencyFilePath);
-            return JsonUtility.FromJson<PlayerGoodsData>(json);
+            JsonUtility.FromJsonOverwrite(json,overrideCurrencyData);
+            overrideCurrencyData.AfterLoadFromJson();
+            return true;
         }
-        return null; // ÆÄÀÏÀÌ ¾øÀ» °æ¿ì null ¹İÈ¯
+        return false; // íŒŒì¼ì´ ì—†ì„ ê²½ìš° null ë°˜í™˜
     }
 
     // =================CatCostumePart=========================
-    //// ÀúÀå
-    /// public void Save¾îÂ¼±¸(ÀúÀåÇÒÅ¬·¡½ºÀÌ¸§ data)
+    //// ì €ì¥
+    /// public void Saveì–´ì©Œêµ¬(ì €ì¥í• í´ë˜ìŠ¤ì´ë¦„ data)
     /// {
     /// string json = JsonUtility.ToJson(data);
-    /// File.WriteAllText(ÀúÀåÇÒµ¥ÀÌÅÍÀÇÀ§¿¡¼­Á¤ÇØ³õÀº°æ·Î, json);
+    /// File.WriteAllText(ì €ì¥í• ë°ì´í„°ì˜ìœ„ì—ì„œì •í•´ë†“ì€ê²½ë¡œ, json);
     /// }
     /// 
 
-    ////ºÒ·¯¿À±â
-    //public ¹İÈ¯Å¬·¡½ºÀÌ¸§ LoadCatCostumePart()
+    ////ë¶ˆëŸ¬ì˜¤ê¸°
+    //public ë°˜í™˜í´ë˜ìŠ¤ì´ë¦„ LoadCatCostumePart()
     //{
-    //    if (File.Exists(ÀúÀåÇÒµ¥ÀÌÅÍÀÇÀ§¿¡¼­Á¤ÇØ³õÀº°æ·Î))
+    //    if (File.Exists(ì €ì¥í• ë°ì´í„°ì˜ìœ„ì—ì„œì •í•´ë†“ì€ê²½ë¡œ))
     //    {
-    //        string json = File.ReadAllText(ÀúÀåÇÒµ¥ÀÌÅÍÀÇÀ§¿¡¼­Á¤ÇØ³õÀº°æ·Î);
-    //        return JsonUtility.FromJson<¹İÈ¯Å¬·¡½ºÀÌ¸§>(json);
+    //        string json = File.ReadAllText(ì €ì¥í• ë°ì´í„°ì˜ìœ„ì—ì„œì •í•´ë†“ì€ê²½ë¡œ);
+    //        return JsonUtility.FromJson<ë°˜í™˜í´ë˜ìŠ¤ì´ë¦„>(json);
     //    }
-    //    return null; // ÆÄÀÏÀÌ ¾øÀ» °æ¿ì null ¹İÈ¯
+    //    return null; // íŒŒì¼ì´ ì—†ì„ ê²½ìš° null ë°˜í™˜
     //}
 
+
+    private void CreateIfFileNotExist()
+    {
+        // PlayerStatus
+        if (!File.Exists(playerStatusLevelFilePath))
+        {
+            SavePlayerStatusLevel(new StatusLevelData(0, 0, 0, 0));
+        }
+        // CurrencyData
+        if (!File.Exists(playerCurrencyFilePath))
+        {
+            SavePlayerCurrencyData(ScriptableObject.CreateInstance<CurrencyData>());
+        }
+    }
 }
 
 
 
 
 /*
- * »ç¿ë¿¹½Ã
+ * ì‚¬ìš©ì˜ˆì‹œ
     
-private void Start() -> GameManagerÀÇ start ÇÔ¼öÀÓ
+private void Start() -> GameManagerì˜ start í•¨ìˆ˜ì„
     {
-        //Awake¿¡¼­ SaveLoadManager¸¦ »ç¿ëÇÏ¸é null¹®Á¦°¡ ÀÚ²Ù ¹ß»ıÇØ¼­ start¿¡ ³Ö¾î³õÀ½
+        //Awakeì—ì„œ SaveLoadManagerë¥¼ ì‚¬ìš©í•˜ë©´ nullë¬¸ì œê°€ ìê¾¸ ë°œìƒí•´ì„œ startì— ë„£ì–´ë†“ìŒ
         PlayerStatusData loadedStatus = SaveLoadManager.GetSaveLoadManager().LoadPlayerStatus();
         Debug.Log($"Loaded Player Status: HP = {loadedStatus.hp}, MP = {loadedStatus.mp}");
 
     }
 
- µ¥ÀÌÅÍ ÀúÀå
+ ë°ì´í„° ì €ì¥
         saveLoadManager.SavePlayerStatus(playerStatus);
         saveLoadManager.SavePlayerStatusLevel(playerStatusLevel);
         saveLoadManager.SavePlayerGoods(playerGoods);
 
-µ¥ÀÌÅÍ ºÒ·¯¿À±â
+ë°ì´í„° ë¶ˆëŸ¬ì˜¤ê¸°
         PlayerStatusData loadedStatus = saveLoadManager.LoadPlayerStatus();
         PlayerStatusLevelData loadedStatusLevel = saveLoadManager.LoadPlayerStatusLevel();
         PlayerGoodsData loadedGoods = saveLoadManager.LoadPlayerGoods();
 
-ºÒ·¯¿Â µ¥ÀÌÅÍ Ãâ·Â
+ë¶ˆëŸ¬ì˜¨ ë°ì´í„° ì¶œë ¥
         Debug.Log($"Loaded Player Status: HP = {loadedStatus.hp}, MP = {loadedStatus.mp}");
         Debug.Log($"Loaded Player Status Level: HP Level = {loadedStatusLevel.hpLevel}");
         Debug.Log($"Loaded Player Goods: Gold = {loadedGoods.gold}");
