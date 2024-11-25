@@ -11,11 +11,12 @@ public class RecoverHPSkill : PassiveSkill
 
     public override void ApplyEffect()
     {
-        // 플레이어(고양이) 체력 회복 로직 작성
-        // 코루틴 사용하기
+        Player.playerStatus.SetSkillRecoverHP((int)effect);
     }
 
     public override void DetachEffect()
     {
+        Player.playerStatus.SetSkillRecoverHP(0);
     }
+
 }

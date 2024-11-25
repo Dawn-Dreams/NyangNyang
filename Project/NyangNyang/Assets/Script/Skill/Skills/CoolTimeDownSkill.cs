@@ -11,10 +11,11 @@ public class CoolTimeDownSkill : PassiveSkill
 
     public override void ApplyEffect()
     {
-        
+        ActiveSkillManager.GetInstance().SetSkillCoolTime(effect);
     }
 
     public override void DetachEffect()
     {
+        ActiveSkillManager.GetInstance().ResetSkillCoolTime();
     }
 }
