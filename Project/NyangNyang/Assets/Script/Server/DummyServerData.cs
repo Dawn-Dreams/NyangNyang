@@ -167,43 +167,6 @@ public class DummyServerData : MonoBehaviour
         return index >= 0 && index < 3; // 조개패 배열 크기와 동일
     }
 
-    public static void GetUserClearStageData(int userID, out int clearStageTheme, out int clearStage)
-    {
-        if (!(0 <= userID && userID < playerClearStageData.Length))
-        {
-            Debug.Log("INVALID USERID");
-            clearStageTheme = 1;
-            clearStage = 1;
-            return;
-        }
-
-        clearStageTheme = playerClearStageData[userID, 0];
-        clearStage = playerClearStageData[userID, 1];
-    }
-
-
-    public static void PlayerClearStage(int userID, int clearTheme, int clearStage)
-    {
-        if (!(0 <= userID && userID < playerClearStageData.Length))
-        {
-            Debug.Log("INVALID USERID");
-            return;
-        }
-
-        // 잘못된 데이터인지 체크
-        int playerHighestTheme = playerClearStageData[userID, 0];
-        int playerHighestStage = playerClearStageData[userID, 1];
-        if (playerHighestTheme > clearTheme || (playerHighestTheme == clearTheme && playerHighestStage >= clearStage))
-        {
-            Debug.Log(userID + "이전 최고 스테이지보다 낮은 스테이지를 클리어했다고 정보 전달받음");
-            return;
-        } 
-        
-        // *스테이지가 하나 차이인지도 추후 확인해야함
-        playerClearStageData[userID, 0] = clearTheme;
-        playerClearStageData[userID, 1] = clearStage;
-    }
-
 
      public static void GiveUserCheeseAndSendData(int userID, BigInteger addCheese)
     {

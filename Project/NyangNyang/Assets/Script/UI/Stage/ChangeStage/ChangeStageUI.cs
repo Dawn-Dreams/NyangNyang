@@ -277,14 +277,12 @@ public class ChangeStageUI : MonoBehaviour
         int highestStage = 0;
         Player.GetPlayerHighestClearStageData(out highestTheme, out highestStage);
 
-        Debug.Log(highestTheme + " "+ highestStage);
 
         for (int i = 0; i < stageButtons.Length; ++i)
         {
             int curTheme = _curStartThemeNum + _curSelectThemeNum;
             int curStage = i + 1;
             stageButtons[i].GetButton().interactable = true;
-            Debug.Log($"{curTheme} <= {highestTheme} && {curStage} <= {highestStage+1}");
             // 플레이어가 이동 가능한 스테이지 버튼 
             if (curTheme < highestTheme || (curTheme == highestTheme && curStage <= highestStage + 1))
             {

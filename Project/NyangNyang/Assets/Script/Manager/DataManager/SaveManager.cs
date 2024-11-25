@@ -86,6 +86,7 @@ public class SaveLoadManager : MonoBehaviour
     private string _playerCurrencyFilePath;
     private string _playerLevelDataFilePath;
     private string _playerStageDataFilePath;
+    private string _playerSnackBuffFilePath;
 
     public void OnAwake_CalledFromGameManager()
     {
@@ -99,7 +100,7 @@ public class SaveLoadManager : MonoBehaviour
             _playerCurrencyFilePath = Path.Combine(Application.persistentDataPath, "CurrencyData.json");
             _playerLevelDataFilePath = Path.Combine(Application.persistentDataPath, "LevelData.json");
             _playerStageDataFilePath = Path.Combine(Application.persistentDataPath, "StageData.json");
-
+            _playerSnackBuffFilePath = Path.Combine(Application.persistentDataPath, "SnackBuff.json");
 
             CreateIfFileNotExist();
             Debug.Log("SaveLoadManager instatnce  초기화완료");
@@ -224,7 +225,6 @@ public class SaveLoadManager : MonoBehaviour
     public void SavePlayerStageData(StageData data)
     {
         string json = JsonUtility.ToJson(data);
-        Debug.Log(json);
         File.WriteAllText(_playerStageDataFilePath, json);
     }
 
@@ -238,6 +238,38 @@ public class SaveLoadManager : MonoBehaviour
             StageData data = JsonUtility.FromJson<StageData>(json);
             highestTheme = data.highestTheme;
             highestStage = data.highestStage;
+            return true;
+        }
+        return false; // 파일이 없을 경우 null 반환
+    }
+    #endregion
+
+    #region SnackBuff
+    // =================SnackBuff=========================
+    // SnackBuff 저장
+    public void SavePlayerSnackBuffData(SnackBuffJsonData data)
+    {
+        string json = JsonUtility.ToJson(data);
+        File.WriteAllText(_playerSnackBuffFilePath, json);
+    }
+    // 저장(딜레이)
+    public void SavePlayerSnackBuffData(SnackBuffJsonData data, float delayTime)
+    {
+        SaveWithDelay snackBuffDataSaveData = new SaveWithDelay(
+            SaveDataType.SnackBuff,
+            () => { SavePlayerSnackBuffData(data); },
+            delayTime
+        );
+        AddSaveDataWithDelay(snackBuffDataSaveData);
+    }
+    // StageData 불러오기
+    public bool LoadPlayerSnackBuffData(out SnackBuffJsonData outData)
+    {
+        outData = new SnackBuffJsonData();
+        if (File.Exists(_playerSnackBuffFilePath))
+        {
+            string json = File.ReadAllText(_playerSnackBuffFilePath);
+            outData = JsonUtility.FromJson<SnackBuffJsonData>(json);
             return true;
         }
         return false; // 파일이 없을 경우 null 반환
@@ -286,6 +318,11 @@ public class SaveLoadManager : MonoBehaviour
         {
             SavePlayerStageData(new StageData { highestTheme = 1, highestStage = 1 });
         }
+
+        if (!File.Exists(_playerSnackBuffFilePath))
+        {
+            SavePlayerSnackBuffData(new SnackBuffJsonData());
+        }
     }
 }
 
@@ -325,4 +362,25 @@ public struct StageData
     public int highestTheme;
     public int highestStage;
     
+}
+
+[Serializable]
+public struct SnackBuffRemainTimeJsonData
+{
+    public SnackType type;
+    public string time;
+
+    public SnackBuffRemainTimeJsonData(SnackType type, DateTime time)
+    {
+        this.type = type;
+        this.time = time.ToString("yyyy/MM/dd tt hh:mm:ss");
+    }
+
+}
+
+[Serializable]
+public struct SnackBuffJsonData
+{
+    public int snackBuffAdViewCount;
+    public List<SnackBuffRemainTimeJsonData> buffRemainTime;
 }
