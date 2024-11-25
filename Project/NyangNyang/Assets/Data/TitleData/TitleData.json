@@ -2,13 +2,9 @@
   "title":[
     {
       "id": 0,
-      "name": "타이틀0",
+      "name": "",
       "grade": 0,
       "effect": [
-        {
-          "type": "STR",
-          "value": 15
-        }
       ]
     },
     {

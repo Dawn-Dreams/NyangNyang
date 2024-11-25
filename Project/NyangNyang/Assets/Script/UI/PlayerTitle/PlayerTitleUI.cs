@@ -117,7 +117,8 @@ public class PlayerTitleUI : MonoBehaviour
         // 플레이어 타이틀 아이디 교체
         PlayerTitle.PlayerCurrentTitleID = titleID;
         // 서버에 해당 플레이어가 장착중인 타이틀 아이디 변경 요청
-        DummyPlayerTitleServer.UserRequestEquipTitle(Player.GetUserID(), titleID);
+        //DummyPlayerTitleServer.UserRequestEquipTitle(Player.GetUserID(), titleID);
+        SaveLoadManager.GetInstance().SavePlayerTitleData(new TitleJsonData(){currentSelectedTitle = PlayerTitle.PlayerCurrentTitleID, owningTitles = PlayerTitle.playerOwningTitles});
 
         // 선택중 UI 변경
         SetTitleElementsOwning();

@@ -97,8 +97,7 @@ public class SnackBuff : MonoBehaviour
             data.buffRemainTime.Add(new SnackBuffRemainTimeJsonData(buff.Key, buff.Value));
         }
 
-        Debug.Log(JsonUtility.ToJson(data));
-        SaveLoadManager.GetInstance().SavePlayerSnackBuffData(data);
+        SaveLoadManager.GetInstance().SavePlayerSnackBuffData(data,2);
     }
 
 
@@ -127,7 +126,6 @@ public class SnackBuff : MonoBehaviour
 
     public void SetActiveSnackBuffDataFromServer(SnackType snackType, string buffEndDateTimeString)
     {
-        Debug.Log(snackType + " " + buffEndDateTimeString);
         _snackPanelDict[snackType].eatingImageObject.SetActive(true);
 
         DateTime buffEndDateTime = DateTime.Parse(buffEndDateTimeString);
