@@ -3200,11 +3200,11 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 80
+  m_fontSize: 95
   m_fontSizeBase: 90
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 80
+  m_fontSizeMin: 20
   m_fontSizeMax: 95
   m_fontStyle: 0
   m_HorizontalAlignment: 2
@@ -5376,6 +5376,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1209585095}
   - component: {fileID: 1209585096}
+  - component: {fileID: 1209585097}
   m_Layer: 0
   m_Name: SaveLoadManager
   m_TagString: Untagged
@@ -5408,6 +5409,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f415b6a16a37b0745ad51d38d15671b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1209585097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1209585094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e05d36e4c08be24f939af7d098ebe87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1232807986
@@ -6333,12 +6346,16 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uD604\uC7AC \uBC84\uC804\uC740 \uCD9C\uC2DC \uD655\uC778\uC6A9\n<b><color=#FF8A00>\uD14C\uC2A4\uD2B8
-    \uBC84\uC804</color></b> \uC774\uBA70,\n\n\uC774\uD6C4 \uC815\uC2DD \uCD9C\uC2DC
-    \uC2DC \uC5C5\uB370\uC774\uD2B8\uAC00 \n\uC9C4\uD589 \uB420 \uC608\uC815\uC785\uB2C8\uB2E4.\n\n\uD604\uC7AC\uAE4C\uC9C0
-    \uAC1C\uBC1C\uD55C \uCF58\uD150\uCE20\uB294\n\uD14C\uC2A4\uD2B8 \uAE30\uB2A5
-    \uBC84\uD2BC\uC744 \uD1B5\uD574\n\uD50C\uB808\uC774 \uD558\uC2E4 \uC218 \uC788\uC2B5\uB2C8\uB2E4!\n\n\uC790\uC138\uD55C
-    \uB0B4\uC6A9\uC740 \n\uACF5\uC2DD\uCE74\uD398 \uCC38\uACE0 \uBD80\uD0C1\uB4DC\uB9BD\uB2C8\uB2E4."
+  m_text: "<b><color=#FF8A00>\uBCA0\uD0C0 \uD14C\uC2A4\uD2B8</color></b>\uBC84\uC804\uC744\n\uB2E4\uC6B4\uD574\uC8FC\uC154\uC11C
+    \uAC10\uC0AC\uD569\uB2C8\uB2E4!\n\n\uBCA0\uD0C0\uD14C\uC2A4\uD2B8 \uBC84\uC804\uC758
+    \uCEE8\uD150\uCE20\uC640\n\uC55E\uC73C\uB85C\uC758 \uAC1C\uBC1C \uBC29\uD5A5\uC740\n<b><color=#70FF70>\uB0E5\uB0E5\uC6D0\uC815\uB300
+    \uACF5\uC2DD\uCE74\uD398</color></b>\uB97C \uD1B5\uD574 \n\uD655\uC778\uD558\uC2E4
+    \uC218 \uC788\uC2B5\uB2C8\uB2E4!\n\n\uAC8C\uC784\uC744 \uC990\uAE30\uC2DC\uBA74\uC11C
+    \uBD88\uD3B8\uD558\uC2E0 \uC810\uC774\uB098,\n\uAC1C\uC120 \uC0AC\uD56D\uC774
+    \uC788\uC73C\uC2DC\uB2E4\uBA74 \uC5B8\uC81C\uB4E0\uC9C0\n<b><color=#70FF70>\uB0E5\uB0E5\uC6D0\uC815\uB300
+    \uACF5\uC2DD\uCE74\uD398</color></b>\uC5D0 \uC81C\uBCF4\uD574\uC8FC\uC138\uC694!\n\n\uB2E4\uC6B4\uB85C\uB4DC
+    \uD574\uC8FC\uC154\uC11C \uAC10\uC0AC\uD569\uB2C8\uB2E4 ^^!\n\n\uB358 \uB4DC\uB9BC\uC988
+    \uD300"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4816dcefa069ae74e95ec7435e88d119, type: 2}
   m_sharedMaterial: {fileID: 4936838257364365244, guid: 4816dcefa069ae74e95ec7435e88d119, type: 2}
@@ -6365,12 +6382,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 75.65
   m_fontSizeBase: 90
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 80
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
@@ -6978,7 +6995,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uD14C\uC2A4\uD2B8 \uD50C\uB808\uC774"
+  m_text: "\uAC8C\uC784 \uD50C\uB808\uC774"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4816dcefa069ae74e95ec7435e88d119, type: 2}
   m_sharedMaterial: {fileID: 4936838257364365244, guid: 4816dcefa069ae74e95ec7435e88d119, type: 2}
@@ -7005,7 +7022,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 74.25
+  m_fontSize: 87.1
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

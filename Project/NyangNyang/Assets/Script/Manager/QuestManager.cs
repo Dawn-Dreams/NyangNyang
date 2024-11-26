@@ -48,13 +48,57 @@ public class QuestManager : MonoBehaviour
     public OnRenewQuestProgressDataDelegate OnRenewQuestProgressData;
 
     // 서버로부터 값을 받은 후 해당 함수 호출을 통해 퀘스트의 데이터를 갱신
-    public void GetQuestProgressDataFromServer(QuestCategory questCategory, QuestType questType)
+    public void LoadQuestProgressDataFromJson(QuestCategory questCategory, QuestType questType)
     {
-        // TODO: 서버로부터 값받은 이후에 사용되는 함수, 다만 현재는 바로 값을 받도록 구현
-        // TODO : 나중엔 서버에서 받은 후 실행되는거니까 값 갱신 지우기
-        BigInteger currentCount =
-            DummyQuestServer.SendQuestProgressDataToClient(Player.GetUserID(), questCategory,
-                questType);
+        QuestJsonData data = new QuestJsonData();
+        QuestSaveLoadManager.GetInstance().LoadQuestProgressData(questCategory, questType, out data);
+
+        // 퀘스트를 받았는데, getReward 가 초기화 전에 이뤄졌다면 초기화
+        if (questCategory == QuestCategory.Daily)
+        {
+            if (data.getReward)
+            {
+                //매일 오전 00시에 초기화 진행
+                // -> month or date 가 다르면 바로 초기화
+                DateTime getRewardTime = DateTime.Parse(data.getRewardTimeString);
+                if (getRewardTime.Day != DateTime.Now.Day || getRewardTime.Month != DateTime.Now.Month ||
+                    getRewardTime.Year != DateTime.Now.Year)
+                {
+                    data.getReward = false;
+                    data.getRewardTimeString = "";
+                    data.progressString = "0";
+                    QuestSaveLoadManager.GetInstance().InitializeAndSaveQuestProgressData(questCategory, questType);
+                }
+            }
+        }
+        else if(questCategory == QuestCategory.Weekly)
+        {
+            if (data.getReward)
+            {
+                //매 주 월요일 오전 00시에 초기화 진행
+                // 접속한 시간 기준, 월요일의 날자를 구한 뒤, 해당 날자보다 이전이면 초기화
+                DateTime getRewardTime = DateTime.Parse(data.getRewardTimeString);
+                DateTime today = DateTime.Today;
+                DateTime mondayDateTime = DateTime.Today;
+                int dayDiff = today.DayOfWeek - DayOfWeek.Monday;
+                dayDiff = dayDiff + 7 % 7;
+                mondayDateTime = today.AddDays(-dayDiff);
+
+                if (getRewardTime <= mondayDateTime) 
+                {
+                    data.getReward = false;
+                    data.getRewardTimeString = "";
+                    data.progressString = "0";
+                    QuestSaveLoadManager.GetInstance().InitializeAndSaveQuestProgressData(questCategory, questType);
+                }
+            }
+            
+        }
+
+
+        BigInteger currentCount = BigInteger.Parse(data.progressString); 
+            //DummyQuestServer.SendQuestProgressDataToClient(Player.GetUserID(), questCategory,questType);
+
 
         if (OnRenewQuestProgressData != null)
         {

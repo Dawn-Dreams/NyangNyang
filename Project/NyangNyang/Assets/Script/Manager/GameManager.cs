@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,6 +25,7 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
             Instance = this;
         saveAndLoadManager.OnAwake_CalledFromGameManager();
+        saveAndLoadManager.gameObject.GetComponent<QuestSaveLoadManager>().OnAwake_CalledFromGameManager();
 
         // 시작 시 서버로부터 정보 받기
         Player.OnAwakeGetInitialDataFromServer();

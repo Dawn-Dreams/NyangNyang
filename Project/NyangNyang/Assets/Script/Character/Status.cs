@@ -104,6 +104,60 @@ public class StatusLevelData
         return (float)value;
     }
 
+    public float CalculateValueFromLevelForText(StatusLevelType type, int statusLevel)
+    {
+        BigInteger value = 0;
+
+        // 각 스탯의 레벨 -> 값 을 계산하여 반환(계산식)
+        switch (type)
+        {
+            case StatusLevelType.HP:
+                // 기본 10, 레벨당 1
+                value = HP_DEFAULT_VALUE + statusLevel;
+                break;
+            case StatusLevelType.MP:
+                // 기본 10, 레벨당 1
+                value = MP_DEFAULT_VALUE + statusLevel;
+                break;
+            case StatusLevelType.STR:
+                value = STR_DEFAULT_VALUE + statusLevel;
+                break;
+            case StatusLevelType.DEF:
+                value = statusLevel;
+                break;
+            case StatusLevelType.HEAL_HP:
+                value = statusLevel;
+                break;
+            case StatusLevelType.HEAL_MP:
+                value = statusLevel;
+                break;
+            case StatusLevelType.CRIT:
+                //value = (float)statusLevels[(int)StatusLevelType.CRIT] / 100;      // 1 레벨 당 0.1%
+                return (float)statusLevel / 100;
+            //break;
+            case StatusLevelType.ATTACK_SPEED:
+                // TODO <- 회의 필요 // 0 ~ 10000 레벨을 마스터로 1 ~ 0.25
+                //value = 0.25f + Mathf.Lerp(1.0f, MAX_ATTACK_SPEED, MAX_ATTACK_SPEED - statusLevels[(int)StatusLevelType.ATTACK_SPEED]) * 0.75f;
+                return ATTACK_SPEED_DEFAULT_VALUE;
+            //return 1f;
+            //break;
+            case StatusLevelType.GOLD:
+                // 기본 1%, 레벨당 0.1% 추가
+                //value = 1.0f + 0.1f * statusLevels[(int)StatusLevelType.GOLD];
+                return 1f;
+            //break;
+            case StatusLevelType.EXP:
+                // 기본 1%, 레벨당 0.1% 추가
+                //value = 1.0f + 0.1f * statusLevels[(int)StatusLevelType.EXP];
+                return 1f;
+            //break;
+            default:
+                Debug.Log("ERROR TYPE INPUT");
+                break;
+        }
+        return (float)value;
+    }
+
     public BigInteger GetLevelFromType(StatusLevelType type)
     {
         return statusLevels[(int)type];
@@ -329,7 +383,8 @@ public class Status
                 attackPower = (int)((levelData.CalculateValueFromLevel(StatusLevelType.STR) + strAddValue) * attackMulValue);
                 break;
             case StatusLevelType.DEF:
-                defence = (int)(levelData.CalculateValueFromLevel(StatusLevelType.DEF) * skillDefenceEffect);
+                // 윤석 11.28 - @가현 skillDefenceEffect 등 곱해지는 값 별도로 처리해놨으니 나중에 확인 바랍니다
+                defence = (int)(levelData.CalculateValueFromLevel(StatusLevelType.DEF) * (1.0 + skillDefenceEffect)) ;
                 break;
             case StatusLevelType.HEAL_HP:
                 healHPPerSec = (int)levelData.CalculateValueFromLevel(StatusLevelType.HEAL_HP);

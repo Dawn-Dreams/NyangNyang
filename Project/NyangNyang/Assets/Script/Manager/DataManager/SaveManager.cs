@@ -13,7 +13,7 @@ using UnityEngine.Events;
 public class SaveLoadManager : MonoBehaviour
 {
     #region instance
-    private static SaveLoadManager _instance;
+    public static SaveLoadManager _instance;
     public static SaveLoadManager GetSaveLoadManager()
     {
         return _instance;
@@ -86,6 +86,15 @@ public class SaveLoadManager : MonoBehaviour
     private string _playerCurrencyFilePath;
     private string _playerLevelDataFilePath;
     private string _playerStageDataFilePath;
+    private string _playerSnackBuffFilePath;
+    private string _playerTitleDataFilePath;
+    private string _playerCostumeDataFilePath;
+    //
+    private string _noticeFilePath;
+    private string _mailFilePath;
+    private string _friendFilePath;
+    private string _rankingFilePath;
+    private string _boardFilePath;
 
     public void OnAwake_CalledFromGameManager()
     {
@@ -95,14 +104,21 @@ public class SaveLoadManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
 
             //파일저장경로+파일이름
-            _playerStatusLevelFilePath = Path.Combine(Application.persistentDataPath, "StatusLevel.json");
-            _playerCurrencyFilePath = Path.Combine(Application.persistentDataPath, "CurrencyData.json");
-            _playerLevelDataFilePath = Path.Combine(Application.persistentDataPath, "LevelData.json");
-            _playerStageDataFilePath = Path.Combine(Application.persistentDataPath, "StageData.json");
-
-
+            string basePath = Application.persistentDataPath;
+            _playerStatusLevelFilePath = Path.Combine(basePath, "StatusLevel.json");
+            _playerCurrencyFilePath = Path.Combine(basePath, "CurrencyData.json");
+            _playerLevelDataFilePath = Path.Combine(basePath, "LevelData.json");
+            _playerStageDataFilePath = Path.Combine(basePath, "StageData.json");
+            _playerSnackBuffFilePath = Path.Combine(basePath, "SnackBuff.json");
+            _playerTitleDataFilePath = Path.Combine(basePath, "TitleData.json");
+            _playerCostumeDataFilePath = Path.Combine(basePath, "PlayerCostume.json");
+            
+            _noticeFilePath = Path.Combine(basePath, "Notices.json");
+            _mailFilePath = Path.Combine(basePath, "Mails.json");
+            _friendFilePath = Path.Combine(basePath, "Friends.json");
+            _rankingFilePath = Path.Combine(basePath, "Rankings.json");
+            _boardFilePath = Path.Combine(basePath, "Boards.json");
             CreateIfFileNotExist();
-            Debug.Log("SaveLoadManager instatnce  초기화완료");
         }
 
     }
@@ -120,7 +136,6 @@ public class SaveLoadManager : MonoBehaviour
     {
         string json = JsonUtility.ToJson(data);
         File.WriteAllText(_playerStatusLevelFilePath, json);
-        Debug.Log($"저장 진행");
     }
     // 저장(딜레이)
     public void SavePlayerStatusLevel(StatusLevelData data, float delayTime)
@@ -224,7 +239,6 @@ public class SaveLoadManager : MonoBehaviour
     public void SavePlayerStageData(StageData data)
     {
         string json = JsonUtility.ToJson(data);
-        Debug.Log(json);
         File.WriteAllText(_playerStageDataFilePath, json);
     }
 
@@ -238,6 +252,194 @@ public class SaveLoadManager : MonoBehaviour
             StageData data = JsonUtility.FromJson<StageData>(json);
             highestTheme = data.highestTheme;
             highestStage = data.highestStage;
+            return true;
+        }
+        return false; // 파일이 없을 경우 null 반환
+    }
+    #endregion
+
+    #region SnackBuff
+    // =================SnackBuff=========================
+    // SnackBuff 저장
+    public void SavePlayerSnackBuffData(SnackBuffJsonData data)
+    {
+        string json = JsonUtility.ToJson(data);
+        File.WriteAllText(_playerSnackBuffFilePath, json);
+    }
+    // 저장(딜레이)
+    public void SavePlayerSnackBuffData(SnackBuffJsonData data, float delayTime)
+    {
+        SaveWithDelay snackBuffDataSaveData = new SaveWithDelay(
+            SaveDataType.SnackBuff,
+            () => { SavePlayerSnackBuffData(data); },
+            delayTime
+        );
+        AddSaveDataWithDelay(snackBuffDataSaveData);
+    }
+    // SnackBuff 불러오기
+    public bool LoadPlayerSnackBuffData(out SnackBuffJsonData outData)
+    {
+        outData = new SnackBuffJsonData();
+        if (File.Exists(_playerSnackBuffFilePath))
+        {
+            string json = File.ReadAllText(_playerSnackBuffFilePath);
+            outData = JsonUtility.FromJson<SnackBuffJsonData>(json);
+            return true;
+        }
+        return false; // 파일이 없을 경우 null 반환
+    }
+    #endregion
+
+    #region TitleData
+    // =================TitleData=========================
+    // TitleData 저장
+    public void SavePlayerTitleData(TitleJsonData data)
+    {
+        string json = JsonUtility.ToJson(data);
+        File.WriteAllText(_playerTitleDataFilePath, json);
+    }
+
+    // TitleData 불러오기
+    public bool LoadPlayerTitleData(out int currentSelectTitle, out List<int> owningTitles)
+    {
+        currentSelectTitle = 0;
+        owningTitles = new List<int>{0};
+        if (File.Exists(_playerTitleDataFilePath))
+        {
+            string json = File.ReadAllText(_playerTitleDataFilePath);
+            TitleJsonData data = JsonUtility.FromJson<TitleJsonData>(json);
+            currentSelectTitle = data.currentSelectedTitle;
+            owningTitles = data.owningTitles;
+            return true;
+        }
+        return false; // 파일이 없을 경우 null 반환
+    }
+    #endregion
+
+    #region Notice
+    public void SaveNotices(List<NoticeData> notices)
+    {
+        string json = JsonUtility.ToJson(new Wrapper<NoticeData> { items = notices });
+        File.WriteAllText(_noticeFilePath, json);
+    }
+
+    public List<NoticeData> LoadNotices()
+    {
+        if (File.Exists(_noticeFilePath))
+        {
+            string json = File.ReadAllText(_noticeFilePath);
+            return JsonUtility.FromJson<Wrapper<NoticeData>>(json).items;
+        }
+        return new List<NoticeData>();
+    }
+    #endregion
+
+    #region Mail
+    public void SaveMails(List<MailData> mails)
+    {
+        string json = JsonUtility.ToJson(new Wrapper<MailData> { items = mails });
+        File.WriteAllText(_mailFilePath, json);
+    }
+
+    public List<MailData> LoadMails()
+    {
+        if (File.Exists(_mailFilePath))
+        {
+            string json = File.ReadAllText(_mailFilePath);
+            return JsonUtility.FromJson<Wrapper<MailData>>(json).items;
+        }
+        return new List<MailData>();
+    }
+    #endregion
+
+    #region Friend
+    public void SaveFriends(List<FriendData> friends)
+    {
+        string json = JsonUtility.ToJson(new Wrapper<FriendData> { items = friends });
+        File.WriteAllText(_friendFilePath, json);
+    }
+
+    public List<FriendData> LoadFriends()
+    {
+        if (File.Exists(_friendFilePath))
+        {
+            string json = File.ReadAllText(_friendFilePath);
+            return JsonUtility.FromJson<Wrapper<FriendData>>(json).items;
+        }
+        return new List<FriendData>();
+    }
+    #endregion
+
+    #region Ranking
+    public void SaveRankings(List<RankingData> rankings)
+    {
+        if (rankings == null || rankings.Count == 0)
+        {
+            Debug.LogWarning("No ranking data to save.");
+            return;
+        }
+
+        string json = JsonUtility.ToJson(new Wrapper<RankingData> { items = rankings }, true); // Pretty print
+        Debug.Log("Saving rankings to: " + _rankingFilePath);
+        Debug.Log("JSON Data: " + json);
+
+        File.WriteAllText(_rankingFilePath, json);
+        Debug.Log("File saved successfully.");
+    }
+
+    public List<RankingData> LoadRankings()
+    {
+        if (File.Exists(_rankingFilePath))
+        {
+            string json = File.ReadAllText(_rankingFilePath);
+            return JsonUtility.FromJson<Wrapper<RankingData>>(json).items;
+        }
+        return new List<RankingData>();
+    }
+    #endregion
+
+    #region Board
+    public void SaveBoards(List<BoardData> boards)
+    {
+        string json = JsonUtility.ToJson(new Wrapper<BoardData> { items = boards });
+        File.WriteAllText(_boardFilePath, json);
+    }
+
+    public List<BoardData> LoadBoards()
+    {
+        if (File.Exists(_boardFilePath))
+        {
+            string json = File.ReadAllText(_boardFilePath);
+            return JsonUtility.FromJson<Wrapper<BoardData>>(json).items;
+        }
+        return new List<BoardData>();
+    }
+    #endregion
+
+    // Generic Wrapper for lists (JsonUtility doesn't support direct List<T> serialization)
+    [Serializable]
+    private class Wrapper<T>
+    {
+        public List<T> items;
+    }
+
+    #region PlayerCostume
+    // =================PlayerCostume=========================
+    // PlayerCostume 저장
+    public void SavePlayerCostumeData(PlayerCostumeJsonData data)
+    {
+        string json = JsonUtility.ToJson(data);
+        File.WriteAllText(_playerCostumeDataFilePath, json);
+    }
+
+    // TitleData 불러오기
+    public bool LoadPlayerPlayerCostume(out PlayerCostumeJsonData data)
+    {
+        data = new PlayerCostumeJsonData();
+        if (File.Exists(_playerCostumeDataFilePath))
+        {
+            string json = File.ReadAllText(_playerCostumeDataFilePath);
+            data = JsonUtility.FromJson<PlayerCostumeJsonData>(json);
             return true;
         }
         return false; // 파일이 없을 경우 null 반환
@@ -266,6 +468,14 @@ public class SaveLoadManager : MonoBehaviour
 
     private void CreateIfFileNotExist()
     {
+        // 필요한 상위 디렉터리가 없으면 생성
+        string baseDirectory = Path.GetDirectoryName(_playerStatusLevelFilePath);
+        if (!Directory.Exists(baseDirectory))
+        {
+            Directory.CreateDirectory(baseDirectory);
+            Debug.Log($"Created base directory: {baseDirectory}");
+        }
+
         // PlayerStatus
         if (!File.Exists(_playerStatusLevelFilePath))
         {
@@ -286,7 +496,58 @@ public class SaveLoadManager : MonoBehaviour
         {
             SavePlayerStageData(new StageData { highestTheme = 1, highestStage = 1 });
         }
+        // SnackBuff
+        if (!File.Exists(_playerSnackBuffFilePath))
+        {
+            SavePlayerSnackBuffData(new SnackBuffJsonData());
+        }
+        // TitleData
+        if (!File.Exists(_playerTitleDataFilePath))
+        {
+            SavePlayerTitleData(new TitleJsonData { currentSelectedTitle = 0, owningTitles = new List<int> { 0 } });
+        }
+        // Costume
+        if (!File.Exists(_playerCostumeDataFilePath))
+        {
+            PlayerCostumeJsonData data = new PlayerCostumeJsonData();
+            data.currentEquipCostume = new List<int>();
+            for (int i = 0; i < (int)CatCostumePart.Count; ++i)
+            {
+                data.currentEquipCostume.Add(0);
+            }
+            // 하드코딩
+            data.headOwningCostume = new List<int>() { 0 };
+            data.bodyOwningCostume = new List<int>() { 0 };
+            data.handROwningCostume = new List<int>() { 0 };
+            data.furSkinOwningCostume = new List<int>() { 0 };
+            data.petOwningCostume = new List<int>() { 0 };
+            data.emotionOwningCostume = new List<int>() { 0 };
+            SavePlayerCostumeData(data);
+        }
+
+        // Notices
+        if (!File.Exists(_noticeFilePath))
+        {
+            SaveNotices(new List<NoticeData>());
+        }
+        if (!File.Exists(_mailFilePath))
+        {
+            SaveMails(new List<MailData>());
+        }
+        if (!File.Exists(_friendFilePath))
+        {
+            SaveFriends(new List<FriendData>());
+        }
+        if (!File.Exists(_rankingFilePath))
+        {
+            SaveRankings(new List<RankingData>());
+        }
+        if (!File.Exists(_boardFilePath))
+        {
+            SaveBoards(new List<BoardData>());
+        }
     }
+
 }
 
 
@@ -325,4 +586,45 @@ public struct StageData
     public int highestTheme;
     public int highestStage;
     
+}
+
+[Serializable]
+public struct SnackBuffRemainTimeJsonData
+{
+    public SnackType type;
+    public string time;
+
+    public SnackBuffRemainTimeJsonData(SnackType type, DateTime time)
+    {
+        this.type = type;
+        this.time = time.ToString("yyyy/MM/dd tt hh:mm:ss");
+    }
+
+}
+
+[Serializable]
+public struct SnackBuffJsonData
+{
+    public int snackBuffAdViewCount;
+    public List<SnackBuffRemainTimeJsonData> buffRemainTime;
+}
+
+[Serializable]
+public struct TitleJsonData
+{
+    public int currentSelectedTitle;
+    public List<int> owningTitles;
+}
+
+[Serializable]
+public struct PlayerCostumeJsonData
+{
+    public List<int> currentEquipCostume;
+    // 하드코딩
+    public List<int> headOwningCostume;
+    public List<int> bodyOwningCostume;
+    public List<int> handROwningCostume;
+    public List<int> furSkinOwningCostume;
+    public List<int> petOwningCostume;
+    public List<int> emotionOwningCostume;
 }

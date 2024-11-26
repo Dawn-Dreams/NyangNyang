@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -38,6 +39,7 @@ public abstract class MiniGameBase : MonoBehaviour
         AudioManager.Instance.PlayMiniGameBGM();
         baseReward = 100;
         //DisableMainSceneEventSystem();  // 원래 씬의 EventSystem 비활성화
+        Debug.Log($"{gameName} 씬이 성공적으로 로드되었습니다.");
     }
 
     private void OnDestroy()
@@ -117,8 +119,8 @@ public abstract class MiniGameBase : MonoBehaviour
         int rewardValue = Mathf.CeilToInt(baseReward * weight);
 
         // 플레이어에게 보상 지급
-        Player.Cheese += rewardValue;
-
+        //Player.AddCheese(rewardValue);
+        Player.SetShell(0, Player.GetShell(0) + (int)score/1000);
         Debug.Log($"Score: {score}, Weight: {weight}, Reward: {rewardValue}");
     }
 

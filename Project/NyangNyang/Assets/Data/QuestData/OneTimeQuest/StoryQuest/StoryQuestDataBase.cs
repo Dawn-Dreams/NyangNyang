@@ -17,9 +17,6 @@ public abstract class StoryQuestDataBase : OneTimeQuestDataBase
     {
         base.RequestQuestReward();
 
-        // 서버에서 퀘스트 클리어 및 보상 적용
-        DummyStoryQuestServer.UserSendStoryQuestClear(Player.GetUserID(), this);
-        
         // 클라에서도 동일하게 지급되도록
         Player.Diamond += rewardCount;
 

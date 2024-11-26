@@ -29,7 +29,7 @@ public class SettingsMenu : MonoBehaviour
     private string normalCoupon = "DAWNDREAMS2024";  // 예시 쿠폰 번호
     private float brightness = 1f;  // 기본 밝기 값 (1.0 = 최대 밝기)
 
-    void Start()
+    void Awake()
     {
         // 초기 설정
         bgmVolumeSlider.value = AudioManager.Instance.bgmVolume;

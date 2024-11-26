@@ -72,6 +72,9 @@ public class DungeonPanel : MenuPanel
             int index = i; // 클로저 문제 해결
             stageButtons[i].onClick.AddListener(() => OnClickStageButton(index));
         }
+
+        // 정식출시 전
+        Player.SetShell(0, Player.GetShell(0) + 1);
     }
 
     private void InitializeTabs()
@@ -119,6 +122,7 @@ public class DungeonPanel : MenuPanel
 
     private void InitializeLevelButtonInteractions(int tabIndex, Button[] buttons)
     {
+        dungeonHighestClearLevel[tabIndex]= dungeonManager.dungeonHighestClearLevel[tabIndex];
         for (int j = 0; j < buttons.Length; j++)
         {
             int level = j + 1; // 레벨은 1부터 시작하므로 j + 1로 설정
@@ -134,6 +138,7 @@ public class DungeonPanel : MenuPanel
 
     public void OnStageCleared(int tabIndex, int clearedStageLevel)
     {
+        dungeonHighestClearLevel[tabIndex] = dungeonManager.dungeonHighestClearLevel[tabIndex];
         if (clearedStageLevel >= dungeonHighestClearLevel[tabIndex])
         {
             dungeonHighestClearLevel[tabIndex] = clearedStageLevel;
@@ -186,19 +191,20 @@ public class DungeonPanel : MenuPanel
 
     private void OnClickStartButton(int index)
     {
-        if (!DummyServerData.HasShell(Player.GetUserID(), index))
+        if (Player.GetShell(index) <= 0)
         {
             Debug.Log($"{shellNames[index]} 조개패가 부족합니다.");
             return;
         }
         dungeonManager.StartDungeon(index, TempDungeonStageLevel);
+
         dungeonHighestClearLevel[index] = dungeonManager.dungeonHighestClearLevel[index];
         UpdateShellText(index);
     }
 
     private void OnClickSweepButton(int index)
     {
-        if (!DummyServerData.HasShell(Player.GetUserID(), index))
+        if (Player.GetShell(index)<=0)
         {
             Debug.Log($"{shellNames[index]} 조개패가 부족합니다.");
             return;
@@ -206,7 +212,7 @@ public class DungeonPanel : MenuPanel
         if (TempDungeonStageLevel < dungeonHighestClearLevel[index])
         {
             Debug.Log("소탕");
-            DummyServerData.UseShell(Player.GetUserID(), index); // 티켓 차감
+            Player.SetShell(index, Player.GetShell(index) - 1); // 티켓 차감
             GetReward(index);
         }
         else
@@ -216,7 +222,7 @@ public class DungeonPanel : MenuPanel
     private void UpdateShellText(int index)
     {
         string shellName = shellNames[index];
-        int sweepShellCount = DummyServerData.GetShellCount(Player.GetUserID(), index);
+        int sweepShellCount = Player.GetShell(index);
 
         shellTexts[index].text = $"{shellName} 조개패 {sweepShellCount}개";
     }

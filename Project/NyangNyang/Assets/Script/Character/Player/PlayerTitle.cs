@@ -9,7 +9,7 @@ public class PlayerTitle : Player
     public static List<int> playerOwningTitles = new List<int>();
 
     // 플레이어 현재 칭호 ID
-    private static int _playerCurrentTitleID;
+    private static int _playerCurrentTitleID=99999;
     public static int PlayerCurrentTitleID
     {
         get { return _playerCurrentTitleID; }
@@ -28,12 +28,13 @@ public class PlayerTitle : Player
     void Awake()
     {
         OnOwningTitleChange += SetTitleOwningEffectToStatus;
-        playerOwningTitles = DummyPlayerTitleServer.UserRequestOwningTitles(GetUserID());
-        PlayerCurrentTitleID = DummyPlayerTitleServer.UserRequestCurrentSelectedTitleID(GetUserID());
     }
 
     void Start()
     {
+        int currentTitle = 0;
+        SaveLoadManager.GetInstance().LoadPlayerTitleData(out currentTitle, out playerOwningTitles);
+        PlayerCurrentTitleID = currentTitle;
     }
 
     // 유저 착용 칭호 변경 델리게이트
@@ -50,7 +51,7 @@ public class PlayerTitle : Player
         if (!playerOwningTitles.Contains(titleID))
         {
             playerOwningTitles.Add(titleID);
-
+            SaveLoadManager.GetInstance().SavePlayerTitleData(new TitleJsonData() { currentSelectedTitle = PlayerTitle.PlayerCurrentTitleID, owningTitles = PlayerTitle.playerOwningTitles });
             if (OnOwningTitleChange != null)
             {
                 OnOwningTitleChange();

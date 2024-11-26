@@ -20,7 +20,6 @@ public class SnackBuff : MonoBehaviour
 
     private int _snackBuffAdViewCount;
     private int _currentSnackBuffLevel = 0;
-
     private int _requireLevelStep = 5;
     
 
@@ -31,17 +30,28 @@ public class SnackBuff : MonoBehaviour
 
     void Start()
     {
-        // 서버로부터 정보 받기
-        {
-            int adViewCount = DummyAdServer.UserRequestSnackLevelData(Player.GetUserID());
-            SetSnackBuffAdViewCount(adViewCount);
-        }
-
         foreach (var snackPanel in snackPanels)
         {
-            _snackPanelDict.Add(snackPanel.snackType,snackPanel);
+            _snackPanelDict.Add(snackPanel.snackType, snackPanel);
 
             snackPanel.showAdButton.onClick.AddListener(() => OnClickShowAdButton(snackPanel));
+        }
+
+        // 정보 로드
+        {
+            SnackBuffJsonData data = new SnackBuffJsonData();
+            SaveLoadManager.GetInstance().LoadPlayerSnackBuffData(out data);
+            int adViewCount = data.snackBuffAdViewCount;
+
+            if (data.buffRemainTime != null)
+            {
+                for (int i = 0; i < data.buffRemainTime.Count; ++i)
+                {
+                    SetActiveSnackBuffDataFromServer(data.buffRemainTime[i].type, data.buffRemainTime[i].time);
+                }
+            }
+
+            SetSnackBuffAdViewCount(adViewCount);
         }
     }
 
@@ -74,9 +84,21 @@ public class SnackBuff : MonoBehaviour
             snackBuffLevelSlider.value = (float)_snackBuffAdViewCount / requireAdViewCountForNextLevel;
         }
 
-            
+        SaveDataToJson();
     }
 
+    private void SaveDataToJson()
+    {
+        SnackBuffJsonData data = new SnackBuffJsonData();
+        data.snackBuffAdViewCount = _snackBuffAdViewCount;
+        data.buffRemainTime = new List<SnackBuffRemainTimeJsonData>();
+        foreach (var buff in _buffRemainTime)
+        {
+            data.buffRemainTime.Add(new SnackBuffRemainTimeJsonData(buff.Key, buff.Value));
+        }
+
+        SaveLoadManager.GetInstance().SavePlayerSnackBuffData(data,2);
+    }
 
 
     void OnClickShowAdButton(SnackPanel snackPanel)
@@ -95,10 +117,10 @@ public class SnackBuff : MonoBehaviour
         if (_currentSnackBuffLevel < _userMaxSnackBuffLevel)
         {
             SetSnackBuffAdViewCount(_snackBuffAdViewCount + 1);
-            DummyAdServer.UserShowSnackBuffAd(Player.GetUserID());
+
         }
 
-        string buffEndDateTimeString = DateTime.Now.AddSeconds(10).ToString("yyyy/MM/dd tt hh:mm:ss");
+        string buffEndDateTimeString = DateTime.Now.AddMinutes(120).ToString("yyyy/MM/dd tt hh:mm:ss");
         SetActiveSnackBuffDataFromServer(_currentPickSnackPanel.snackType, buffEndDateTimeString);
     }
 
@@ -118,6 +140,8 @@ public class SnackBuff : MonoBehaviour
         {
             BuffTimeCalculateCoroutine = StartCoroutine(BuffTimeCalculate());
         }
+
+        SaveDataToJson();
     }
 
     private float CalculateSnackBuffValue(SnackType snackType)

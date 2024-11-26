@@ -19,6 +19,7 @@ public class BackgroundSpritesRound
 
         // 중심축을 기준으로 회전
         circleObject.transform.Rotate(Vector3.forward, -rotationSpeed * Time.deltaTime);
+       
     }
 
     // 스프라이트를 새 이미지로 교체하는 메서드
@@ -48,11 +49,11 @@ public class RoundAutoManager : MonoBehaviour
     public float rotateSpeed = 15f;   // 회전 속도 (초당 5도)
 
     [SerializeField]
-    private bool shouldRotate = false; // 회전 여부
+    public bool shouldRotate = false; // 회전 여부
 
     // 스프라이트 리스트
     public List<Sprite> spriteList; //0,1,2,3,4 index
-    private int currentSpriteIndex = 0;
+    public int currentIndex = 0;
 
     void Start()
     {
@@ -63,7 +64,7 @@ public class RoundAutoManager : MonoBehaviour
         {
             Debug.LogError("spriteList에 스프라이트가 없습니다.");
         }
-        ChangeSpriteByIndex(currentSpriteIndex);
+        ChangeSpriteByIndex(currentIndex);
     }
 
     void Update()
@@ -85,8 +86,8 @@ public class RoundAutoManager : MonoBehaviour
     {
         if (spriteList == null || spriteList.Count == 0) return;
 
-        currentSpriteIndex = (currentSpriteIndex + 1) % spriteList.Count;
-        backgroundCircle.SetNewSprite(spriteList[currentSpriteIndex]);
+        currentIndex = (currentIndex + 1) % spriteList.Count;
+        backgroundCircle.SetNewSprite(spriteList[currentIndex]);
     }
 
     // 특정 인덱스의 스프라이트로 교체하는 함수
@@ -94,7 +95,7 @@ public class RoundAutoManager : MonoBehaviour
     {
         if (spriteList == null || spriteList.Count == 0 || backgroundCircle == null || index > 4 || index < 0)
             return;
-        currentSpriteIndex = index % spriteList.Count;
-        backgroundCircle.SetNewSprite(spriteList[currentSpriteIndex]);
+        currentIndex = index % spriteList.Count;
+        backgroundCircle.SetNewSprite(spriteList[currentIndex]);
     }
 }

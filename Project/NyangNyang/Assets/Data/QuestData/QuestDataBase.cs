@@ -27,6 +27,8 @@ public abstract class QuestDataBase : ScriptableObject
 
     protected bool GetReward = false;
 
+    protected bool NeedToSaveProgressData = false;
+
     // 퀘스트 값에 갱신이 발생하였을 경우 n초 뒤에 값을 보냄
     public float sendQuestDataToServerDelayTime = 5.0f;
     protected Coroutine SendQuestDataToServerCoroutine;
@@ -121,13 +123,6 @@ public abstract class QuestDataBase : ScriptableObject
     public bool IsGetReward()
     {
         return GetReward;
-    }
-
-    // 해당 퀘스트에 대해서 보상을 받았는지 값을 받아오는 함수
-    public void RequestHasReceivedRewardToServer()
-    {
-        bool isGetReward = DummyQuestServer.SendRewardInfoToUser(Player.GetUserID(), questCategory, questType);
-        GetReward = isGetReward;
     }
 
     public QuestCategory GetQuestCategory()

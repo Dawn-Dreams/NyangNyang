@@ -91,6 +91,17 @@ public class CurrencyData : ScriptableObject
         SaveLoadManager.GetInstance().SavePlayerCurrencyData(this, 5.0f);
     }
 
+    public void SetShell(int index, int newShellValue)
+    {
+        if (index < 0 || index >= shell.Length)
+        {
+            Debug.LogError("잘못된 Shell 인덱스입니다.");
+            return;
+        }
+
+        shell[index] = newShellValue;
+        SaveLoadManager.GetInstance().SavePlayerCurrencyData(this, 5.0f);
+    }
 
     public void BeforeSaveToJson()
     {

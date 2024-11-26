@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainQuestTitle: "\uC2A4\uD0AC \uAC15\uD654\uD558\uAE30"
   subQuestTitle: "\uC2A4\uD0AC\uC744 1\uBC88 \uAC15\uD654\uD558\uC138\uC694."
-  rewardCount: 30
+  rewardCount: 1
   questType: 5
   questCategory: 0
   rewardType: 1

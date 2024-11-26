@@ -5,7 +5,7 @@ using UnityEngine;
 
 public enum SaveDataType
 {
-    StatusLevel, CurrencyData, LevelData, PlayerCostume, Count
+    StatusLevel, CurrencyData, LevelData, SnackBuff,PlayerCostume, Count
 }
 
 public class SaveWithDelay

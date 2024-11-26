@@ -42,11 +42,12 @@ public class Normal_SkillLevelUpQuestDataBase : NormalQuestDataBase
         return requireSkillLevelUpCount;
     }
 
-    public override void ChangeCurrentProgressCountAfterReward()
+    public override int ChangeCurrentProgressCountAfterReward()
     {
         int clearCount = (int)currentSkillLevelUpCount / requireSkillLevelUpCount;
 
         currentSkillLevelUpCount -= requireSkillLevelUpCount * clearCount;
+        return clearCount;
     }
 
     public override BigInteger GetCurrentQuestCount()
@@ -74,7 +75,7 @@ public class Normal_SkillLevelUpQuestDataBase : NormalQuestDataBase
 
         // TODO: 10.31) 추후엔 GameManager 라던가 기타 Monobehaviour 상속 클래스에서 보내도록 
         // 코루틴 써서
-        SendDataToServer();
+        SaveDataToJson();
     }
 
     protected override void RenewalUIAfterChangeQuestValue()

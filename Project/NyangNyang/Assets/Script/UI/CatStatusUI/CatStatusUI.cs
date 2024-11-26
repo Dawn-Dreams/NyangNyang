@@ -8,7 +8,7 @@ public class CatStatusUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI playerCurrentTitleText;
 
-    void Start()
+    void Awake()
     {
         PlayerTitle.OnSelectTitleChange += ChangePlayerCurrentTitleText;
     }

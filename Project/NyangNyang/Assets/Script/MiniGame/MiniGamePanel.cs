@@ -40,6 +40,7 @@ public class MiniGamePanel : MonoBehaviour
             toggles[0].isOn = true;       // 첫 번째 토글 활성화
             panels[0].SetActive(true);    // 첫 번째 패널 활성화
         }
+        Debug.Log("미니게임 Start()");
     }
 
     void FindTogglesAndPanels()
@@ -84,7 +85,7 @@ public class MiniGamePanel : MonoBehaviour
         {
             case 0:
                 SceneManager.LoadScene("MiniGame1", LoadSceneMode.Additive);
-                //FindObjectOfType<MiniGame1>().StartGame();
+                Debug.Log("미니게임 1 시작버튼클릭");
                 GameManager.isMiniGameActive = true;
                 break;
             case 1:
