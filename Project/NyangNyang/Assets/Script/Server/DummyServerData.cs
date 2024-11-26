@@ -107,6 +107,7 @@ public class DummyServerData : MonoBehaviour
     // 조개패가 있는지 확인하는 함수 (유저 ID, 조개패 종류)
     public static bool HasShell(int userID, int index)
     {
+
         if (!IsValidUser(userID) || !IsValidShellIndex(index))
         {
             Debug.Log("INVALID USERID OR INDEX");

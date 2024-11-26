@@ -29,25 +29,26 @@ public class Player : MonoBehaviour
         set => playerCurrency.SetCheese(value);
     }
 
-    // 인덱스를 자주 업데이트하거나 읽을 일이 많다면 별도 프로퍼티로 관리하는 방식이 나음
-    public static int Shell1
+    // Shell 배열을 프로퍼티로 처리
+    public static int GetShell(int index)
     {
-        get => playerCurrency.shell[0];
-        set => playerCurrency.shell[0] = value;
+        if (index < 0 || index >= playerCurrency.shell.Length)
+        {
+            Debug.LogError($"잘못된 Shell 인덱스: {index}");
+            return 0;
+        }
+        return playerCurrency.shell[index];
     }
 
-    public static int Shell2
+    public static void SetShell(int index, int value)
     {
-        get => playerCurrency.shell[1];
-        set => playerCurrency.shell[1] = value;
+        if (index < 0 || index >= playerCurrency.shell.Length)
+        {
+            Debug.LogError($"잘못된 Shell 인덱스: {index}");
+            return;
+        }
+        playerCurrency.SetShell(index, value);
     }
-
-    public static int Shell3
-    {
-        get => playerCurrency.shell[2];
-        set => playerCurrency.shell[2] = value;
-    }
-
 
     // ========================
     // ===== 플레이어 경험치 =====
@@ -221,9 +222,7 @@ public class Player : MonoBehaviour
 
     public static void AddShells(int[] addShellValues)
     {
-        // 서버에 티켓 추가 요청이 있을 경우 처리
-        // DummyServerData.AddShellsOnServer(userID, addShellValues);
-
+        
         // 티켓 값 업데이트 (예시로 티켓의 각 값을 더하는 로직 사용)
         for (int i = 0; i < playerCurrency.shell.Length && i < addShellValues.Length; i++)
         {

@@ -186,7 +186,7 @@ public class DungeonPanel : MenuPanel
 
     private void OnClickStartButton(int index)
     {
-        if (!DummyServerData.HasShell(Player.GetUserID(), index))
+        if (Player.GetShell(index) <= 0)
         {
             Debug.Log($"{shellNames[index]} 조개패가 부족합니다.");
             return;
@@ -198,7 +198,7 @@ public class DungeonPanel : MenuPanel
 
     private void OnClickSweepButton(int index)
     {
-        if (!DummyServerData.HasShell(Player.GetUserID(), index))
+        if (Player.GetShell(index)<=0)
         {
             Debug.Log($"{shellNames[index]} 조개패가 부족합니다.");
             return;
@@ -206,7 +206,7 @@ public class DungeonPanel : MenuPanel
         if (TempDungeonStageLevel < dungeonHighestClearLevel[index])
         {
             Debug.Log("소탕");
-            DummyServerData.UseShell(Player.GetUserID(), index); // 티켓 차감
+            Player.SetShell(index, Player.GetShell(index) - 1); // 티켓 차감
             GetReward(index);
         }
         else
@@ -216,7 +216,7 @@ public class DungeonPanel : MenuPanel
     private void UpdateShellText(int index)
     {
         string shellName = shellNames[index];
-        int sweepShellCount = DummyServerData.GetShellCount(Player.GetUserID(), index);
+        int sweepShellCount = Player.GetShell(index);
 
         shellTexts[index].text = $"{shellName} 조개패 {sweepShellCount}개";
     }
