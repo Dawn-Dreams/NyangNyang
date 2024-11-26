@@ -32,6 +32,10 @@ public class DungeonManager : MonoBehaviour
 
     // 싱글톤 인스턴스
     public static DungeonManager Instance { get; private set; }
+    private void Start()
+    {
+        LoadAndAssignDungeonLevel();
+    }
 
     private void Awake()
     {
@@ -71,7 +75,7 @@ public class DungeonManager : MonoBehaviour
     public void LoadAndAssignDungeonLevel()
     {
         // SaveLoadManager를 통해 친구 데이터 로드
-        List<FriendData> friends = SaveLoadManager.GetInstance().LoadFriends();
+        List<FriendData> friends = SaveLoadManager._instance.LoadFriends();
 
         if (friends != null && friends.Count > 0)
         {
