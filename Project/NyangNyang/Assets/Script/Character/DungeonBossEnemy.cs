@@ -45,7 +45,7 @@ public class DungeonBossEnemy : Enemy
                 return;
         }
 
-        maxHP = new BigInteger(10000 * (dungeonLevel+1) * (dungeonLevel + 1));
+        maxHP = new BigInteger(500 * (dungeonLevel+1) * (dungeonLevel + 1));
         currentHP = maxHP;
 
 

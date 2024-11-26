@@ -19,7 +19,7 @@ public class PlayerBar : MonoBehaviour
 
     
 
-    [SerializeField] private Button menuButton;
+    //[SerializeField] private Button menuButton;
 
     void Start()
     {
@@ -35,7 +35,7 @@ public class PlayerBar : MonoBehaviour
 
         
 
-        menuButton.onClick.AddListener(OnClickMenuButton);
+        //menuButton.onClick.AddListener(OnClickMenuButton);
     }
 
     private void GoldTextChangeHandler(BigInteger goldValue)

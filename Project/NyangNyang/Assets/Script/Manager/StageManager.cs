@@ -24,8 +24,7 @@ public class StageManager : MonoBehaviour
     [SerializeField]
     private ParallaxScrollingManager parallaxScrollingManager;
 
-    [SerializeField]
-    private RoundAutoManager roundAutoManager;
+
 
     [SerializeField]
     private Text ThemeUI;
@@ -138,7 +137,7 @@ public class StageManager : MonoBehaviour
         GameManager.GetInstance().changeStageUI.SetChangeStageButtonInteractable(false);
 
         parallaxScrollingManager.MoveBackgroundSprites(true);
-        roundAutoManager.RotateCircle(true);
+       
 
         // 애니메이션 실행
         GameManager.GetInstance().catObject.animationManager.PlayAnimation(AnimationManager.AnimationState.Walk);
@@ -155,8 +154,7 @@ public class StageManager : MonoBehaviour
 
         // 배경에 대한 움직임 중단
         parallaxScrollingManager.MoveBackgroundSprites(false);
-        roundAutoManager.RotateCircle(false);
-
+       
         // 관문 index 1, 2, ..., maxGateCount 순환
         if (!Player.continuousCombat)
         {
@@ -274,8 +272,7 @@ public class StageManager : MonoBehaviour
         }
 
         parallaxScrollingManager.ChangeIndexNumberBackgroundImage(currentTheme);
-        roundAutoManager.ChangeSpriteByIndex(currentTheme-1);
-
+       
         GameManager.GetInstance().catObject.CatRespawn();
         GameManager.GetInstance().catObject.animationManager.PlayAnimation(AnimationManager.AnimationState.IdleA);
 
@@ -377,7 +374,7 @@ public class StageManager : MonoBehaviour
                 currentStage = 1;
             }
             parallaxScrollingManager.ChangeIndexNumberBackgroundImage(currentTheme);
-            roundAutoManager.ChangeSpriteByIndex(currentTheme-1);
+
         }
         SetStageUI();
 

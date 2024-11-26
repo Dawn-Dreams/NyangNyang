@@ -79,19 +79,12 @@ public class DungeonManager : MonoBehaviour
 
         if (friends != null && friends.Count > 0)
         {
-            // 가장 높은 friendLevel을 가져옴
-            int highestFriendLevel = 0;
-            foreach (var friend in friends)
-            {
-                if (friend.friendLevel > highestFriendLevel)
-                {
-                    highestFriendLevel = friend.friendLevel;
-                }
-            }
+            // 1번 친구의 레벨을 가져옴
+            int friendLevel = friends[0].friendLevel;
 
             // dungeonHighestClearLevel[0]에 값 할당
-            dungeonHighestClearLevel[0] = highestFriendLevel;
-            Debug.Log($"가장 높은 friendLevel: {highestFriendLevel}, dungeonHighestClearLevel[0]에 할당 완료.");
+            dungeonHighestClearLevel[0] = friendLevel;
+            Debug.Log($"1번 친구의 레벨: {friendLevel}, dungeonHighestClearLevel[0]에 할당 완료.");
         }
         else
         {

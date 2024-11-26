@@ -79,8 +79,11 @@ public class ParallaxScrollingManager : MonoBehaviour
     public List<GameObject> spritePrefabs;
 
     // 현재 배경 프리팹 번호
-    private int currentPrefabIndex = 1; // 처음 지정된 기본 배경 인덱스가 1
+    private int currentIndex = 1; // 처음 지정된 기본 배경 인덱스가 1
 
+
+    [SerializeField]
+    private RoundAutoManager roundAutoManager;
     void Start()
     {
         _backgroundObjects = new List<BackgroundSprites>();
@@ -92,7 +95,9 @@ public class ParallaxScrollingManager : MonoBehaviour
             _backgroundObjects.Add(new BackgroundSprites(i, layerMoveSpeed));
         }
         // 초기 배경 설정
-        ChangeBackgroundImageFromPrefab(currentPrefabIndex);
+        ChangeBackgroundImageFromPrefab(currentIndex);
+        roundAutoManager.currentIndex = currentIndex;   
+        roundAutoManager.ChangeSpriteByIndex(currentIndex - 1);
     }
 
     void Update()
@@ -114,7 +119,7 @@ public class ParallaxScrollingManager : MonoBehaviour
     // 현재 테마 가져오기 함수
     public int GetCurrentTheme()
     {
-        return currentPrefabIndex;
+        return currentIndex;
     }
 
     // 다음 인덱스 배경으로 변경하는 함수
@@ -126,11 +131,13 @@ public class ParallaxScrollingManager : MonoBehaviour
     // 특정 인덱스 배경으로 변경하는 함수
     public void ChangeIndexNumberBackgroundImage(int index)
     {
+
         // currentPrefabIndex를 index 값으로 갱신하되, 1부터 시작하는 인덱스를 맞추기 위해 아래와 같이 설정
-        currentPrefabIndex = (index - 1) % spritePrefabs.Count;
+        currentIndex = (index - 1) % spritePrefabs.Count;
+        roundAutoManager.ChangeSpriteByIndex(index - 1);
 
         // 새 배경 이미지 적용
-        ChangeBackgroundImageFromPrefab(currentPrefabIndex);
+        ChangeBackgroundImageFromPrefab(currentIndex);
     }
 
     // 프리팹에서 각 레이어에 맞는 스프라이트들을 가져와 배경을 교체하는 함수
@@ -207,5 +214,6 @@ public class ParallaxScrollingManager : MonoBehaviour
     public void MoveBackgroundSprites(bool moveBackground)
     {
         shouldMove = moveBackground;
+        roundAutoManager.shouldRotate = shouldMove;
     }
 }

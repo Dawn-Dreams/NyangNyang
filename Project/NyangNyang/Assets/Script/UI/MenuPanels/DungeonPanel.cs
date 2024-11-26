@@ -72,6 +72,9 @@ public class DungeonPanel : MenuPanel
             int index = i; // 클로저 문제 해결
             stageButtons[i].onClick.AddListener(() => OnClickStageButton(index));
         }
+
+        // 정식출시 전
+        Player.SetShell(0, Player.GetShell(0) + 1);
     }
 
     private void InitializeTabs()
