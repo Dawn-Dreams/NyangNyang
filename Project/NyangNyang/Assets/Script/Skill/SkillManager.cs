@@ -30,57 +30,101 @@ public class SkillManager : MonoBehaviour
     public void InitializedSkills()
     {
         // TODO: 서버에서 데이터 받아오기
+        /*
+        //// 액티브 스킬
+        //skills[0] = new ActiveSkill(0, "우주 냥경찰 출동!", 1, 1, 1, 1f);
+        //skillDic["우주 냥경찰 출동!"] = 0;
 
-        // 액티브 스킬
-        skills[0] = new ActiveSkill(0, "우주 냥경찰 출동!", 1, 1, 1, 1f);
-        skillDic["우주 냥경찰 출동!"] = 0;
+        //skills[1] = new ActiveSkill(1, "캣닢비가 내려와", 1, 1, 1, 2f);
+        //skillDic["캣닢비가 내려와"] = 1;
 
-        skills[1] = new ActiveSkill(1, "캣닢비가 내려와", 1, 1, 1, 2f);
-        skillDic["캣닢비가 내려와"] = 1;
+        //skills[2] = new ActiveSkill(2, "냥냥대원들아 도와줘", 1, 1, 1, 3f);
+        //skillDic["냥냥대원들아 도와줘"] = 2;
 
-        skills[2] = new ActiveSkill(2, "냥냥대원들아 도와줘", 1, 1, 1, 3f);
-        skillDic["냥냥대원들아 도와줘"] = 2;
+        //skills[3] = new ActiveSkill(3, "자린고비냥", 0, 1, 1, 4f);
+        //skillDic["자린고비냥"] = 3;
 
-        skills[3] = new ActiveSkill(3, "자린고비냥", 0, 1, 1, 4f);
-        skillDic["자린고비냥"] = 3;
+        //skills[4] = new ActiveSkill(4, "실타래 폭탄", 0, 1, 1, 4f);
+        //skillDic["실타래 폭탄"] = 4;
 
-        skills[4] = new ActiveSkill(4, "실타래 폭탄", 0, 1, 1, 4f);
-        skillDic["실타래 폭탄"] = 4;
+        //skills[5] = new RecoverHPSkill(5, "냥냥 마법빵", 0, 1, 1, 4f);
+        //skillDic["냥냥 마법빵"] = 5;
 
-        skills[5] = new RecoverHPSkill(5, "냥냥 마법빵", 0, 1, 1, 4f);
-        skillDic["냥냥 마법빵"] = 5;
+        //skills[6] = new RecoverHPSkill(6, "생선 간식 타임", 0, 1, 1, 4f);
+        //skillDic["생선 간식 타임"] = 6;
 
-        skills[6] = new RecoverHPSkill(6, "생선 간식 타임", 0, 1, 1, 4f);
-        skillDic["생선 간식 타임"] = 6;
+        //skills[7] = new RecoverHPSkill(7, "햇볕 낮잠", 0, 1, 1, 4f);
+        //skillDic["햇볕 낮잠"] = 7;
 
-        skills[7] = new RecoverHPSkill(7, "햇볕 낮잠", 0, 1, 1, 4f);
-        skillDic["햇볕 낮잠"] = 7;
+        //skills[8] = new RecoverHPSkill(8, "핑크 젤리 힐링", 0, 1, 1, 4f);
+        //skillDic["핑크 젤리 힐링"] = 8;
 
-        skills[8] = new RecoverHPSkill(8, "핑크 젤리 힐링", 0, 1, 1, 4f);
-        skillDic["핑크 젤리 힐링"] = 8;
+        //skills[9] = new DefenseUpSkill(9, "털복숭이 갑옷", 1, 1, 1, 1f);
+        //skillDic["털복숭이 갑옷"] = 9;
 
-        skills[9] = new DefenseUpSkill(9, "털복숭이 갑옷", 1, 1, 1, 1f);
-        skillDic["털복숭이 갑옷"] = 9;
+        //skills[10] = new DefenseUpSkill(10, "꼬리 방패", 1, 1, 1, 2f);
+        //skillDic["꼬리 방패"] = 10;
 
-        skills[10] = new DefenseUpSkill(10, "꼬리 방패", 1, 1, 1, 2f);
-        skillDic["꼬리 방패"] = 10;
+        //skills[11] = new DefenseUpSkill(11, "퐁퐁 쿠션 아머", 0, 1, 1, 3f);
+        //skillDic["퐁퐁 쿠션 아머"] = 11;
 
-        skills[11] = new DefenseUpSkill(11, "퐁퐁 쿠션 아머", 0, 1, 1, 3f);
-        skillDic["퐁퐁 쿠션 아머"] = 11;
+        //skills[12] = new DefenseUpSkill(12, "튼튼한 발톱 가드", 0, 1, 1, 4f);
+        //skillDic["튼튼한 발톱 가드"] = 12;
 
-        skills[12] = new DefenseUpSkill(12, "튼튼한 발톱 가드", 0, 1, 1, 4f);
-        skillDic["튼튼한 발톱 가드"] = 12;
+        //for (int i = 13; i < 25; ++i)
+        //{
+        //    skills[i] = new DefenseUpSkill(i, "털복숭이 갑옷", 1, 1, 1, 1f);
+        //    skillDic["털복숭이 갑옷"] = i;
+        //}
 
-        for (int i = 13; i < 25; ++i)
-        {
-            skills[i] = new DefenseUpSkill(i, "털복숭이 갑옷", 1, 1, 1, 1f);
-            skillDic["털복숭이 갑옷"] = i;
-        }
+        ////SkillList.Add(new AttackUpSkill(21, "젤리 파워업", 0, 1, 1, 1f));
+        ////SkillList.Add(new AttackUpSkill(22, "모래 목욕", 0, 1, 1, 2f));
+        ////SkillList.Add(new AttackUpSkill(23, "포동포동 냥이", 0, 1, 1, 3f));
+        ////SkillList.Add(new AttackUpSkill(24, "별빛 힐링", 0, 1, 1, 4f));
+        ///
+        */
 
-        //SkillList.Add(new AttackUpSkill(21, "젤리 파워업", 0, 1, 1, 1f));
-        //SkillList.Add(new AttackUpSkill(22, "모래 목욕", 0, 1, 1, 2f));
-        //SkillList.Add(new AttackUpSkill(23, "포동포동 냥이", 0, 1, 1, 3f));
-        //SkillList.Add(new AttackUpSkill(24, "별빛 힐링", 0, 1, 1, 4f));
+        SkillWeaponDataManager.GetInstance().GetSkillSaveData();
+        //for (int i = 0; i < 25; ++i)
+        //{
+        //    SkillSaveData[] _skills = SkillWeaponDataManager.GetInstance().GetSkillSaveData();
+
+        //    if (_skills[i].type == "Active")
+        //    {
+        //        skills[i] = new ActiveSkill(_skills[i].id, _skills[i].name, _skills[i].possession, _skills[i].level, _skills[i].levelUpCost, _skills[i].effect, _skills[i].type);
+        //    }
+        //    else
+        //    {
+        //        switch (_skills[i].subType)
+        //        {
+        //            case "Recover":
+        //                {
+        //                    skills[i] = new RecoverHPSkill(_skills[i].id, _skills[i].name, _skills[i].possession, _skills[i].level, _skills[i].levelUpCost, _skills[i].effect, _skills[i].type);
+        //                    break;
+        //                }
+        //            case "DefenceUp":
+        //                {
+        //                    skills[i] = new DefenseUpSkill(_skills[i].id, _skills[i].name, _skills[i].possession, _skills[i].level, _skills[i].levelUpCost, _skills[i].effect, _skills[i].type);
+        //                    break;
+        //                }
+        //            case "AttackUp":
+        //                {
+        //                    skills[i] = new AttackUpSkill(_skills[i].id, _skills[i].name, _skills[i].possession, _skills[i].level, _skills[i].levelUpCost, _skills[i].effect, _skills[i].type);
+        //                    break;
+        //                }
+        //            case "CoolTime":
+        //                {
+        //                    skills[i] = new CoolTimeDownSkill(_skills[i].id, _skills[i].name, _skills[i].possession, _skills[i].level, _skills[i].levelUpCost, _skills[i].effect, _skills[i].type);
+        //                    break;
+        //                }
+        //            case "HPUp":
+        //                {
+        //                    skills[i] = new HealthUpSkill(_skills[i].id, _skills[i].name, _skills[i].possession, _skills[i].level, _skills[i].levelUpCost, _skills[i].effect, _skills[i].type);
+        //                    break;
+        //                }
+        //        }
+        //    }
+        //}
     }
 
     public Skill GetSkill(int id)

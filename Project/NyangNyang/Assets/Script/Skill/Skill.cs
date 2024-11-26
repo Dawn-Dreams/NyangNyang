@@ -9,8 +9,9 @@ public abstract class Skill
     protected int levelUpCost;
     protected float effect;
     bool isLock = true;
+    string type;
 
-    public Skill(int _id, string _name, int _possession, int _level, int _levelUpCost, float _effect)
+    public Skill(int _id, string _name, int _possession, int _level, int _levelUpCost, float _effect, string _type)
     {
         id = _id;
         name = _name;
@@ -18,6 +19,7 @@ public abstract class Skill
         level = _level;
         levelUpCost = _levelUpCost;
         effect = _effect;
+        type = _type;
     }
 
     public int GetID() => id;
