@@ -155,8 +155,7 @@ public class DungeonManager : MonoBehaviour
         currentDungeonIndex = index;
         DungeonUI.SetActive(true);
 
-        DummyServerData.UseShell(Player.GetUserID(), index); // 티켓 차감
-
+        Player.SetShell(index, Player.GetShell(index) - 1);
         StartCoroutine(StartCombatAfterDelay(1.0f));
         StartCoroutine(CheckBattleOutcome());
         Invoke("TimeOut", playDuration); // 제한 시간 초과 시 처리

@@ -192,6 +192,7 @@ public class DungeonPanel : MenuPanel
             return;
         }
         dungeonManager.StartDungeon(index, TempDungeonStageLevel);
+
         dungeonHighestClearLevel[index] = dungeonManager.dungeonHighestClearLevel[index];
         UpdateShellText(index);
     }
