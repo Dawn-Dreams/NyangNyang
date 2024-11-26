@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6691946198343309843}
   - component: {fileID: -4768443729610645034}
   m_Layer: 0
-  m_Name: Enemy_Gazer
+  m_Name: Enemy_Gazar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

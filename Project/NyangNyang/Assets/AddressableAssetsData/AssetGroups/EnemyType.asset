@@ -78,7 +78,7 @@ MonoBehaviour:
     - Costume/Pet
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8a291ef7dcaee954a87227060ca9fe47
-    m_Address: Enemy/Gazer
+    m_Address: Enemy/Gazar
     m_ReadOnly: 0
     m_SerializedLabels:
     - Costume/Pet
