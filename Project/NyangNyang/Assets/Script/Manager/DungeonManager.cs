@@ -69,8 +69,7 @@ public class DungeonManager : MonoBehaviour
             Debug.LogError("DungeonResultText를 찾을 수 없습니다.");
         }
 
-        // Load dungeonHighestClearLevel[0] from highLevel
-        LoadAndAssignDungeonLevel();
+        
     }
     public void LoadAndAssignDungeonLevel()
     {

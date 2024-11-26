@@ -122,6 +122,7 @@ public class DungeonPanel : MenuPanel
 
     private void InitializeLevelButtonInteractions(int tabIndex, Button[] buttons)
     {
+        dungeonHighestClearLevel[tabIndex]= dungeonManager.dungeonHighestClearLevel[tabIndex];
         for (int j = 0; j < buttons.Length; j++)
         {
             int level = j + 1; // 레벨은 1부터 시작하므로 j + 1로 설정
@@ -137,6 +138,7 @@ public class DungeonPanel : MenuPanel
 
     public void OnStageCleared(int tabIndex, int clearedStageLevel)
     {
+        dungeonHighestClearLevel[tabIndex] = dungeonManager.dungeonHighestClearLevel[tabIndex];
         if (clearedStageLevel >= dungeonHighestClearLevel[tabIndex])
         {
             dungeonHighestClearLevel[tabIndex] = clearedStageLevel;
