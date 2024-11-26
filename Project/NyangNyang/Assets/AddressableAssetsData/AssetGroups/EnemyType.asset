@@ -48,7 +48,7 @@ MonoBehaviour:
     - Costume/Pet
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 610733e2b20b2dd4a8b92a23de41fe04
-    m_Address: Enemy/Tampora_B
+    m_Address: Enemy/Tempora_B
     m_ReadOnly: 0
     m_SerializedLabels:
     - Costume/Pet
@@ -132,7 +132,7 @@ MonoBehaviour:
     - Costume/Pet
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ccfb69215d207e04686876b0db06fd1c
-    m_Address: Enemy/Tampora_A
+    m_Address: Enemy/Tempora_A
     m_ReadOnly: 0
     m_SerializedLabels:
     - Costume/Pet
