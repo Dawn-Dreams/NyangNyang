@@ -136,7 +136,6 @@ public class SaveLoadManager : MonoBehaviour
     {
         string json = JsonUtility.ToJson(data);
         File.WriteAllText(_playerStatusLevelFilePath, json);
-        Debug.Log($"저장 진행");
     }
     // 저장(딜레이)
     public void SavePlayerStatusLevel(StatusLevelData data, float delayTime)

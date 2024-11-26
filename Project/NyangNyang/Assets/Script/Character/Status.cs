@@ -383,7 +383,8 @@ public class Status
                 attackPower = (int)((levelData.CalculateValueFromLevel(StatusLevelType.STR) + strAddValue) * attackMulValue);
                 break;
             case StatusLevelType.DEF:
-                defence = (int)(levelData.CalculateValueFromLevel(StatusLevelType.DEF) * skillDefenceEffect);
+                // 윤석 11.28 - @가현 skillDefenceEffect 등 곱해지는 값 별도로 처리해놨으니 나중에 확인 바랍니다
+                defence = (int)(levelData.CalculateValueFromLevel(StatusLevelType.DEF) * (1.0 + skillDefenceEffect)) ;
                 break;
             case StatusLevelType.HEAL_HP:
                 healHPPerSec = (int)levelData.CalculateValueFromLevel(StatusLevelType.HEAL_HP);

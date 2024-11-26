@@ -129,7 +129,7 @@ public class StatusLevelupPanel : MonoBehaviour
                 Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] += levelUpMultiplyValue;
                 Player.Gold -= goldCost;
                 pressTime += levelUpMultiplyValue;
-                int statusLevel = (Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] + pressTime);
+                int statusLevel = (Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] + levelUpMultiplyValue);
                 statusValueText.text = Player.playerStatus.GetStatusLevelData()
                     .CalculateValueFromLevelForText(statusLevelType, statusLevel).ToString();
                 currentLevelText.text = statusLevel.ToString();
@@ -140,7 +140,7 @@ public class StatusLevelupPanel : MonoBehaviour
                 yield break;
             }
 
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.2f);
         }
 
     }
