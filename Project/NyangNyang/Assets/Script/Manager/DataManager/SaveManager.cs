@@ -374,8 +374,18 @@ public class SaveLoadManager : MonoBehaviour
     #region Ranking
     public void SaveRankings(List<RankingData> rankings)
     {
-        string json = JsonUtility.ToJson(new Wrapper<RankingData> { items = rankings });
+        if (rankings == null || rankings.Count == 0)
+        {
+            Debug.LogWarning("No ranking data to save.");
+            return;
+        }
+
+        string json = JsonUtility.ToJson(new Wrapper<RankingData> { items = rankings }, true); // Pretty print
+        Debug.Log("Saving rankings to: " + _rankingFilePath);
+        Debug.Log("JSON Data: " + json);
+
         File.WriteAllText(_rankingFilePath, json);
+        Debug.Log("File saved successfully.");
     }
 
     public List<RankingData> LoadRankings()
@@ -459,6 +469,14 @@ public class SaveLoadManager : MonoBehaviour
 
     private void CreateIfFileNotExist()
     {
+        // 필요한 상위 디렉터리가 없으면 생성
+        string baseDirectory = Path.GetDirectoryName(_playerStatusLevelFilePath);
+        if (!Directory.Exists(baseDirectory))
+        {
+            Directory.CreateDirectory(baseDirectory);
+            Debug.Log($"Created base directory: {baseDirectory}");
+        }
+
         // PlayerStatus
         if (!File.Exists(_playerStatusLevelFilePath))
         {
@@ -487,7 +505,7 @@ public class SaveLoadManager : MonoBehaviour
         // TitleData
         if (!File.Exists(_playerTitleDataFilePath))
         {
-            SavePlayerTitleData(new TitleJsonData(){currentSelectedTitle = 0, owningTitles =new List<int> {0}});
+            SavePlayerTitleData(new TitleJsonData { currentSelectedTitle = 0, owningTitles = new List<int> { 0 } });
         }
         // Costume
         if (!File.Exists(_playerCostumeDataFilePath))
@@ -508,7 +526,7 @@ public class SaveLoadManager : MonoBehaviour
             SavePlayerCostumeData(data);
         }
 
-        //
+        // Notices
         if (!File.Exists(_noticeFilePath))
         {
             SaveNotices(new List<NoticeData>());
@@ -530,6 +548,7 @@ public class SaveLoadManager : MonoBehaviour
             SaveBoards(new List<BoardData>());
         }
     }
+
 }
 
 

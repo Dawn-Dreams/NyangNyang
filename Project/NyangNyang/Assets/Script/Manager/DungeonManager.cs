@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using TMPro;
 using UnityEngine;
@@ -63,8 +64,44 @@ public class DungeonManager : MonoBehaviour
         {
             Debug.LogError("DungeonResultText를 찾을 수 없습니다.");
         }
+
+        // Load dungeonHighestClearLevel[0] from highLevel
+        LoadAndAssignDungeonLevel();
+    }
+    public void LoadAndAssignDungeonLevel()
+    {
+        // SaveLoadManager를 통해 친구 데이터 로드
+        List<FriendData> friends = SaveLoadManager.GetInstance().LoadFriends();
+
+        if (friends != null && friends.Count > 0)
+        {
+            // 가장 높은 friendLevel을 가져옴
+            int highestFriendLevel = 0;
+            foreach (var friend in friends)
+            {
+                if (friend.friendLevel > highestFriendLevel)
+                {
+                    highestFriendLevel = friend.friendLevel;
+                }
+            }
+
+            // dungeonHighestClearLevel[0]에 값 할당
+            dungeonHighestClearLevel[0] = highestFriendLevel;
+            Debug.Log($"가장 높은 friendLevel: {highestFriendLevel}, dungeonHighestClearLevel[0]에 할당 완료.");
+        }
+        else
+        {
+            Debug.Log("로드된 친구 데이터가 없습니다. dungeonHighestClearLevel[0]을 기본값으로 유지합니다.");
+        }
     }
 
+    private void SaveFriendLevelForDungeon()
+    {
+        FriendData myFriend = new FriendData(0, "Me", dungeonHighestClearLevel[0]);
+        List<FriendData> friendsList = new List<FriendData> { myFriend };
+        SaveLoadManager.GetInstance().SaveFriends(friendsList);
+
+    }
     private void InitializeClonedCat(Cat clone)
     {
         // 복제본 초기화 (원본 고양이의 Awake 메서드와 동일한 초기화 작업 수행)
@@ -190,6 +227,7 @@ public class DungeonManager : MonoBehaviour
 
     public void EndDungeonStage()
     {
+        LoadAndAssignDungeonLevel();
         if (goldCoroutine != null)
             StopCoroutine(goldCoroutine);
 
@@ -222,6 +260,7 @@ public class DungeonManager : MonoBehaviour
             ShowDungeonResultText("<color=#E5E1DA>FAIL...</color>", 2);
         }
         StopCombatActions();
+        SaveFriendLevelForDungeon();
         StartCoroutine(DestroyObjectsWithDelay(3.0f));
     }
 

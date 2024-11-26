@@ -17,15 +17,25 @@ public class RankUI : MonoBehaviour
     public GameObject rankingPopup; // 랭킹 팝업
     private GameObject currentPopup; // 현재 활성화된 팝업
 
-    private void OnEnable()
-    {
-        InitializeRankUI();
-    }
     private void OnDisable()
     {
         InitializeRankUI();
     }
 
+    void OnEnable()
+    {
+        InitializeRankUI();
+
+        // 테스트 데이터 생성
+        List<RankingData> testRankings = new List<RankingData>
+    {
+        new RankingData(1, 1, "준비중", 1500),
+        new RankingData(2, 2, "입니다", 1450),
+        new RankingData(3, 3, "Player", 1400)
+    };
+
+      
+    }
     private void InitializeRankUI()
     {
         FindTogglesAndPanels();

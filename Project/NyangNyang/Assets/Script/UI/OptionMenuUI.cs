@@ -25,6 +25,7 @@ public class OptionMenuUI : MonoBehaviour
     private void OnEnable()
     {
         InitializeMenuUI();
+        InitializeDefaultData();
     }
 
     private void OnDisable()
@@ -44,7 +45,7 @@ public class OptionMenuUI : MonoBehaviour
 
     private void InitializeMenuUI()
     {
-   
+
         FindTogglesAndPanels();
 
         for (int i = 0; i < toggles.Length; i++)
@@ -106,22 +107,13 @@ public class OptionMenuUI : MonoBehaviour
         switch (index)
         {
             case 0:
-                OpenMessagePanel();
-                break;
-            case 1:
-                OpenFriendsPanel();
-                break;
-            case 2:
                 OpenSettingsPanel();
                 break;
-            case 3:
+            case 1:
                 OpenNoticePanel();
                 break;
-            case 4:
+            case 2:
                 OpenBulletinBoardPanel();
-                break;
-            case 5:
-                OpenAccountPanel();
                 break;
             default:
                 Debug.LogWarning("해당 인덱스에 대한 고유 함수가 없습니다.");
@@ -130,7 +122,7 @@ public class OptionMenuUI : MonoBehaviour
     }
 
     // ----------------------------- 패널 고유 함수 -------------------------------------
-    
+
     // 공지
     void OpenNoticePanel()
     {
@@ -398,6 +390,79 @@ public class OptionMenuUI : MonoBehaviour
             currentPopup = null;
         });
     }
+    [System.Serializable]
+    public class BoardDataList
+    {
+        public List<BoardData> items;
+    }
+    [System.Serializable]
+    public class NoticeDataList
+    {
+        public List<NoticeData> items;
+    }
+    private void InitializeDefaultData()
+    {
+        // 공지 데이터
+        string noticeJson = @"
+        {
+            ""items"": [
+                {
+                    ""noticeID"": 1,
+                    ""title"": ""냥냥원정대 11월 27일 베타테스트 시작!"",
+                    ""content"": ""안녕하세요, 던 드림즈 팀입니다!\n\n냥냥원정대의 우주 탐험을 함께 해주시는 모든 집사님들께 감사드립니다! \n\n 11월 27일, 베타 테스트 출시가 진행되고 있습니다~\n아래에서 이번 베타 테스트 버전의 내용과 앞으로의 계획을 확인해 보세요! \n\n\n 1. 11월 27일 베타 테스트 주요 내용\n\n현재 냥냥원정대의 주요 컨텐츠는 다음과 같습니다!\n\n방치형으로 키우는 냥냥대원 : 다양한 행성에서 자원을 모으고, 치즈를 찾아 모험하세요!\n\n스킬과 무기 수집 : 탐험과 전투를 통해 다양한 무기를 수집하고, 특별한 스킬 조합으로 최강의 팀을 만들어 보세요.\n\n코스튬 시스템 : 테마의 의상을 입혀 나만의 고양이를 꾸며보세요!\n\n펫 시스템 : 모험을 도와줄 귀여운 펫 친구를 만나보세요.\n\n간식 시스템 : 특정 조건을 달성하면 버프가 팡팡!\n\n우주냥 던전 : 각기 다른 스타일의 던전 격파!\n\n미니게임 : 치즈조각을 얻을 수 있는 새로운 재미 요소!\n\n\n 2. 개선할 주요 내용\n\n스토리 확장 : 고양이들의 여정이 더 풍성해질 수 있도록 퀘스트 및 컨텐츠 추가 개발 예정입니다.\n\n다양한 보상 : 더 많은 보상을 제공할 방법을 모색 중입니다.\n\n컨텐츠 반복성 개선: 집사님들이 오래 즐기실 수 있도록 게임 흐름을 다각화할 예정입니다.\n\n광고제거 기능 추가 : 광고 없는 쾌적한 게임 환경을 즐기세요!\n\n\n여러분의 소중한 의견을 언제나 환영합니다! 댓글이나 피드백을 통해 자유롭게 알려주세요. \n\n\n앞으로도 집사님들과 함께 냥냥원정대를 더욱 멋진 게임으로 만들어 나가겠습니다.\n\n\n많은 관심과 응원 부탁드립니다!\n\n감사합니다.\n던 드림즈 팀 드림\n\n\n\n\n\n\n\n\n"",
+                    ""date"": ""2024-11-27""
+                }
+            ]
+        }";
+
+        // 게시판 데이터
+        string boardJson = @"
+{
+    ""items"": [
+        {
+            ""postID"": 1,
+            ""title"": ""초보자를 위한 팁 - 냥냥 관리"",
+            ""content"": ""초반에는 탐험을 성공적으로 수행하기 위해, 대원을 우선적으로 키워보세요. 대원의 냥냥스탯과 스킬/장비 조합이 승패를 좌우할 수 있어요."",
+            ""date"": ""2024-11-27""
+        },
+        {
+            ""postID"": 2,
+            ""title"": ""초보자를 위한 팁 - 장비 수집"",
+            ""content"": ""탐험 중 뽑기를 통해 얻는 무기와 스킬은 최대한 많이 모아서, 조합해 보세요.\n조합에 따라 강력한 시너지를 낼 수 있습니다!"",
+            ""date"": ""2024-11-27""
+        },
+        {
+            ""postID"": 3,
+            ""title"": ""초보자를 위한 팁 - 코스튬"",
+            ""content"": ""귀여운 냥냥대원 꾸미기! 다양한 의상을 획득해 대원을 마음껏 꾸며보세요!"",
+            ""date"": ""2024-11-27""
+        },
+        {
+            ""postID"": 4,
+            ""title"": ""초보자를 위한 팁 - 펫"",
+            ""content"": ""펫은 탐험을 계속하다보면 확률적으로 동료가 되어 함께할 수 있어요! 다양한 맵을 돌며 다양한 펫을 수집해보세요!"",
+            ""date"": ""2024-11-27""
+        },
+        {
+            ""postID"": 5,
+            ""title"": ""초보자를 위한 팁 - 간식"",
+            ""content"": ""초기 자원을 빠르게 모으고 싶다면, 광고를 활용해 간식 버프 효과를 받아보세요!"",
+            ""date"": ""2024-11-27""
+        }
+    ]
+}";
 
 
+        // JSON 데이터를 파싱하고 저장
+        NoticeDataList noticeDataList = JsonUtility.FromJson<NoticeDataList>(noticeJson);
+        SaveLoadManager._instance.SaveNotices(noticeDataList.items);
+
+        // JSON 데이터를 BoardDataList로 파싱
+        BoardDataList boardDataList = JsonUtility.FromJson<BoardDataList>(boardJson);
+        List<BoardData> boardData = boardDataList.items; // BoardDataList에서 items를 추출하여 List<BoardData>로 저장
+
+        // 저장
+        SaveLoadManager._instance.SaveBoards(boardData); // List<BoardData>를 저장
+    }
 }
+
