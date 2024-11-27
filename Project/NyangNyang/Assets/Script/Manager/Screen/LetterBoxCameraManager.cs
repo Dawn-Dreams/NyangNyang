@@ -20,7 +20,6 @@ public class LetterBoxCameraManager : MonoBehaviour
     {
         if (_isEditorInitialize)
         {
-         
             SetLetterBoxCameraResolution();
         }
     }
@@ -49,7 +48,6 @@ public class LetterBoxCameraManager : MonoBehaviour
         {
             rect.height = scaleheight;
             rect.y = (1f - scaleheight) / 2f;
-            Debug.Log(rect);
 
             // 레터박스라서 값 역 조정
             rect.height = (1.0f - rect.height) / 2;
