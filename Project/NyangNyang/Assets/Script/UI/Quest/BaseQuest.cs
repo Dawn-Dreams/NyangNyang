@@ -64,7 +64,7 @@ public class BaseQuest : MonoBehaviour
         {
             // TODO: 새로운 이미지로 변경
             rewardButton.interactable = false;
-            questProgressText.text = "완료(새이미지)";
+            questProgressText.text = "완료";
             return;
         }
 
