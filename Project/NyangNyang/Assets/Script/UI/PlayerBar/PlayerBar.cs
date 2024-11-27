@@ -10,6 +10,7 @@ public class PlayerBar : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI goldText;
     [SerializeField] private TextMeshProUGUI diamondText;
+    [SerializeField] private TextMeshProUGUI cheeseText;
 
     [SerializeField] private TextMeshProUGUI playerLevelText;
 
@@ -28,6 +29,8 @@ public class PlayerBar : MonoBehaviour
         Player.playerCurrency.OnGoldChange += GoldTextChangeHandler;
         DiamondTextChangeHandler(Player.Diamond);
         Player.playerCurrency.OnDiamondChange += DiamondTextChangeHandler;
+        CheeseTextChangeHandler(Player.Cheese);
+        Player.playerCurrency.OnCheeseChange += CheeseTextChangeHandler;
 
         // 레벨(경험치) 변화 핸들러
         ExpChangeHandler(Player.UserLevel);
@@ -53,6 +56,15 @@ public class PlayerBar : MonoBehaviour
         if (diamondText != null)
         {
             diamondText.text = text;
+        }
+    }
+
+    private void CheeseTextChangeHandler(int newCheeseValue)
+    {
+        string text = newCheeseValue.ToString();
+        if (cheeseText != null)
+        {
+            cheeseText.text = text;
         }
     }
 
