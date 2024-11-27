@@ -114,6 +114,8 @@ public class ParallaxScrollingManager : MonoBehaviour
         {
             _backgroundObjects[i].MoveLayerImageObjects();
         }
+        Debug.Log($"BG. {currentIndex}");
+        Debug.Log($"R. {roundAutoManager.currentIndex}");
     }
 
     // 현재 테마 가져오기 함수
@@ -126,6 +128,8 @@ public class ParallaxScrollingManager : MonoBehaviour
     public void ChangeNextBackgroundImage()
     {
         ChangeBackgroundImageFromPrefab(GetCurrentTheme() + 1);
+        roundAutoManager.ChangeToNextSprite();
+
     }
 
     // 특정 인덱스 배경으로 변경하는 함수

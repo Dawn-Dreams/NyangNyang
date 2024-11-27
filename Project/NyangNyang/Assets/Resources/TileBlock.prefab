@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3256930020772856524}
   - component: {fileID: 341151528131175562}
   - component: {fileID: 4445783441881924600}
+  - component: {fileID: 1128525514249587415}
   m_Layer: 5
   m_Name: TileBlock
   m_TagString: Untagged
@@ -159,3 +160,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1128525514249587415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7738798599913100365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5516f63f24f1bff47824bb86d2db3381, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
