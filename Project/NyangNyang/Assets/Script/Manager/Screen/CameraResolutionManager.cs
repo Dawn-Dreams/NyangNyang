@@ -16,14 +16,16 @@ public class CameraResolutionManager : MonoBehaviour
         }
 
     }
+    private void OnValidate()
+    {
+        _isEditorInitialize = true;
+    }
 #endif
-    
+
     public Camera camera;
     void Start()
     {
         SetCameraResolution(); 
-        Debug.Log("갱신 시작");
-        _isEditorInitialize = true;
     }
 
 
@@ -49,6 +51,7 @@ public class CameraResolutionManager : MonoBehaviour
             rect.y = 0;
             rect.height = 1;
         }
+
 
         if (camera)
         {

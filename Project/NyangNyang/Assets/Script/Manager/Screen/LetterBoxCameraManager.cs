@@ -20,19 +20,23 @@ public class LetterBoxCameraManager : MonoBehaviour
     {
         if (_isEditorInitialize)
         {
+         
             SetLetterBoxCameraResolution();
         }
+    }
 
+    private void OnValidate()
+    {
+        _isEditorInitialize = true;
     }
 #endif
     public Camera camera;
     public bool isDownside = false;
 
+
     private void Start()
     {
         SetLetterBoxCameraResolution();
-        Debug.Log("갱신 시작");
-        _isEditorInitialize = true;
     }
 
     void SetLetterBoxCameraResolution()
@@ -45,6 +49,8 @@ public class LetterBoxCameraManager : MonoBehaviour
         {
             rect.height = scaleheight;
             rect.y = (1f - scaleheight) / 2f;
+            Debug.Log(rect);
+
             // 레터박스라서 값 역 조정
             rect.height = (1.0f - rect.height) / 2;
             rect.y = isDownside ? 0 : 1 - rect.height;
@@ -64,6 +70,7 @@ public class LetterBoxCameraManager : MonoBehaviour
             rect.y = 0;
             rect.height = 1;
         }
+        
 
         if (camera)
         {
