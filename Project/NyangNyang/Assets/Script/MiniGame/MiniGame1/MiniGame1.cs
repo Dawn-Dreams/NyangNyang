@@ -390,6 +390,7 @@ public class MiniGame1 : MiniGameBase
         }
         Score += matchedTiles.Count * scorePerTile; // 삭제된 타일 개수 당 점수 추가
         scoreText.text = "Score: " + Score;
+        StartCoroutine(AnimateScoreText());     // text 애니메이션
 
         StartCoroutine(WaitAndDropTiles()); // 애니메이션과 드롭 로직 시작
         matchedTiles.Clear();
@@ -461,7 +462,6 @@ public class MiniGame1 : MiniGameBase
         movingTilesCount--; // 이동이 끝난 후 타일 개수 감소
     }
 
-
     // 삭제 후 새 타일을 생성하는 코루틴
     private IEnumerator SpawnNewTiles()
     {
@@ -481,6 +481,39 @@ public class MiniGame1 : MiniGameBase
         CheckAndRemoveMatches(); // 매칭 체크
 
         yield return new WaitForSeconds(0.1f);
+    }
+
+    private IEnumerator AnimateScoreText()
+    {
+        float animationDuration = 0.3f; // 애니메이션 총 지속 시간
+        float maxScale = 1.3f;          // 텍스트가 커질 최대 스케일
+        Vector3 originalScale = scoreText.transform.localScale; // 원래 스케일
+        Vector3 targetScale = originalScale * maxScale;         // 목표 스케일
+
+        float elapsedTime = 0f;
+
+        // 커지는 애니메이션
+        while (elapsedTime < animationDuration / 2)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / (animationDuration / 2); // 0에서 1로 진행
+            scoreText.transform.localScale = Vector3.Lerp(originalScale, targetScale, t);
+            yield return null;
+        }
+
+        elapsedTime = 0f;
+
+        // 다시 줄어드는 애니메이션
+        while (elapsedTime < animationDuration / 2)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / (animationDuration / 2); // 0에서 1로 진행
+            scoreText.transform.localScale = Vector3.Lerp(targetScale, originalScale, t);
+            yield return null;
+        }
+
+        // 애니메이션 종료 후 스케일을 원래대로 복구
+        scoreText.transform.localScale = originalScale;
     }
 
     public void EndGame1() {

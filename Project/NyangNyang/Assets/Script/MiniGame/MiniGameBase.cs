@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -14,6 +15,11 @@ public abstract class MiniGameBase : MonoBehaviour
     private EventSystem mainSceneEventSystem;  // 원래 씬의 EventSystem 참조용
     public AudioClip bgmSource;        // 각 게임별 배경음악
     private int score;
+
+    public GameObject rewardPopupPrefab;
+
+    private int rewardCheese;
+    private int rewardEXP;
 
     // 점수를 관리하는 속성
     public int Score
@@ -84,20 +90,48 @@ public abstract class MiniGameBase : MonoBehaviour
     protected void ClearGame()
     {
         isGameCleared = true;
-        GameManager.isMiniGameActive = false;
-        AudioManager.Instance.StopMiniGameBGM();
-        AudioManager.Instance.ResumeBGM();
-        //EnableMainSceneEventSystem();  // 미니게임이 종료되면 원래 씬의 EventSystem 활성화
-        RewardCheese(Score);     
-        UnloadMiniGameScene("MiniGame1");
+        RewardCheese(Score);
+        StartCoroutine(ShowRewardPopup(3f));
     }
 
-     protected void EndGame()
+    // 5초 뒤 EndGame 호출을 위한 Coroutine
+    private IEnumerator DelayedEndGame(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        EndGame();
+    }
+
+    protected void EndGame()
     {
         GameManager.isMiniGameActive = false;
         AudioManager.Instance.StopMiniGameBGM();
         AudioManager.Instance.ResumeBGM(); 
         UnloadMiniGameScene("MiniGame1");
+    }
+
+    private IEnumerator ShowRewardPopup(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        // 보상 팝업 생성
+        if (rewardPopupPrefab != null)
+        {
+            GameObject popup = Instantiate(rewardPopupPrefab, transform);
+
+            // 팝업의 RewardPopup 컴포넌트를 가져와 점수 및 치즈 정보를 전달
+            RewardPopUp rewardPopup = popup.GetComponent<RewardPopUp>();
+            if (rewardPopup != null)
+            {
+                rewardPopup.SetValues(rewardCheese, rewardEXP);
+            }
+        }
+        else
+        {
+            Debug.LogError("Reward Popup Prefab이 설정되지 않았습니다!");
+        }
+
+        // 3초 후 EndGame 호출
+        StartCoroutine(DelayedEndGame(3f));
     }
 
 
@@ -116,12 +150,12 @@ public abstract class MiniGameBase : MonoBehaviour
         float weight = CalculateWeight(score);
 
         // 보상 값 계산
-        int rewardValue = Mathf.CeilToInt(baseReward * weight);
+        rewardCheese = Mathf.CeilToInt(baseReward * weight);
+        rewardEXP = (int)score / 1000;
 
         // 플레이어에게 보상 지급
-        //Player.AddCheese(rewardValue);
-        Player.SetShell(0, Player.GetShell(0) + (int)score/1000);
-        Debug.Log($"Score: {score}, Weight: {weight}, Reward: {rewardValue}");
+        Player.Cheese += rewardCheese;
+        Player.SetShell(0, Player.GetShell(0) + rewardEXP);
     }
 
     // 점수에 따른 가중치 계산 함수

@@ -114,8 +114,6 @@ public class ParallaxScrollingManager : MonoBehaviour
         {
             _backgroundObjects[i].MoveLayerImageObjects();
         }
-        Debug.Log($"BG. {currentIndex}");
-        Debug.Log($"R. {roundAutoManager.currentIndex}");
     }
 
     // 현재 테마 가져오기 함수

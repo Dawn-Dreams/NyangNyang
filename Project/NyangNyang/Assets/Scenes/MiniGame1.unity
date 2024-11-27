@@ -375,7 +375,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -0.072917, y: 204}
+  m_AnchoredPosition: {x: -0.072917, y: 240}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &305285738
@@ -1285,7 +1285,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 270, y: 421.76047}
+  m_AnchoredPosition: {x: 270, y: 421.76044}
   m_SizeDelta: {x: 113.082, y: 116.0906}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &735589650
@@ -1919,7 +1919,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -8, y: 584.7604}
+  m_AnchoredPosition: {x: -8, y: 584.7603}
   m_SizeDelta: {x: 288.3522, y: 92.0513}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &950519678
@@ -2918,7 +2918,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -8.1346, y: -747}
+  m_AnchoredPosition: {x: -8.1346, y: -747.00006}
   m_SizeDelta: {x: 128.11, y: 73.092}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1436427707
@@ -3471,6 +3471,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bgmSource: {fileID: 8300000, guid: 4b79a33dd2ccff240a76a000b3b2e5ca, type: 3}
+  rewardPopupPrefab: {fileID: 4885442163149256432}
   gridSizeX: 7
   gridSizeY: 8
   tilePrefab: {fileID: 7738798599913100365, guid: 446de69a475041146b5921dce5760b9d, type: 3}
@@ -4324,6 +4325,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7c921a4819bdc746941e3bce5141785, type: 3}
+--- !u!1 &4885442163149256432 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 287242941814163606, guid: c7c921a4819bdc746941e3bce5141785, type: 3}
+  m_PrefabInstance: {fileID: 4885442163149256431}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &6742874145726903573 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7837505185790053235, guid: 5a3239313df4f5b449c7924826cb73e7, type: 3}
