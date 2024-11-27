@@ -10,9 +10,9 @@ public class RewardPopUp : MonoBehaviour
     public void SetValues(int gold, int exp)
     {
         if (goldText != null)
-            goldText.text = $"{gold} Gold";
+            goldText.text = $"{gold}";
         if (expText != null)
-            expText.text = $"{exp} EXP";
+            expText.text = $"{exp}";
     }
 }
 

@@ -74,7 +74,7 @@ public class DungeonPanel : MenuPanel
         }
 
         // 정식출시 전
-        Player.SetShell(0, Player.GetShell(0) + 1);
+        //Player.SetShell(0, Player.GetShell(0) + 1);
     }
 
     private void InitializeTabs()

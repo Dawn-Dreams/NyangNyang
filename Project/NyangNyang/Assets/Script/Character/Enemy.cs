@@ -59,7 +59,7 @@ public class DummyEnemy
     private void LoadEnemyMonsterAsset()
     {
         _enemyMonsterPrefab = new AddressableHandle<GameObject>().Load("Enemy/" + monsterType);
-        Debug.Log($"{monsterType} - {_enemyMonsterPrefab.obj == null}" );
+        //Debug.Log($"{monsterType} - {_enemyMonsterPrefab.obj == null}" );
         animationManager = GameObject.Instantiate(_enemyMonsterPrefab.obj, dummyGameObject.transform).GetComponent<AnimationManager>();
     }
 

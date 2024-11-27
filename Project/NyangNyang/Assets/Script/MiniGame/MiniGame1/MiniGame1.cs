@@ -32,8 +32,14 @@ public class MiniGame1 : MiniGameBase
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI countdownText;
 
+    [SerializeField] private TMP_Text shuffleCountText;
+    private int shuffleCount = 0; // ShuffleTiles 호출 횟수
+    private const int maxShuffleCount = 3; // 최대 호출 가능 횟수
+
     protected override void StartGameLogic()
     {
+        shuffleCount = 0;
+        shuffleCountText.text = $"{maxShuffleCount - shuffleCount}/{maxShuffleCount}";
         InitializeGrid();
     }
 
@@ -42,7 +48,7 @@ public class MiniGame1 : MiniGameBase
         base.ClearGame();
         isOnGame = false;
         countdownText.gameObject.SetActive(true);
-        countdownText.text = "TIME OVER!!";
+        countdownText.text = "게임 종료!";
         GameManager.isMiniGameActive = false;
         Debug.Log("Game 종료");
     }
@@ -90,6 +96,16 @@ public class MiniGame1 : MiniGameBase
 
     public void ResetGrid()
     {
+        // 호출 횟수 검사
+        if (shuffleCount >= maxShuffleCount)
+        {
+            Debug.LogWarning("ShuffleTiles 호출 제한에 도달했습니다!");
+            return; // 더 이상 호출하지 않음
+        }
+
+        shuffleCount++; // 호출 횟수 증가
+        shuffleCountText.text = $"{maxShuffleCount - shuffleCount}/{maxShuffleCount}";
+        AudioManager.Instance.PlaySFX(4);
         foreach (var tile in tilesList)
         {
             if (tile != null)
@@ -113,6 +129,7 @@ public class MiniGame1 : MiniGameBase
         }
         ShuffleTiles();
         AssignTileIndices(); // 타일 인덱스 초기 설정
+        
     }
 
     private void CreateTile(int x, int y)
@@ -164,7 +181,7 @@ public class MiniGame1 : MiniGameBase
         }
         CheckAndRemoveMatches();
     }
-    private void ShuffleTiles()
+    public void ShuffleTiles()
     {
         // 타일 목록 랜덤
         for (int i = 0; i < tilesList.Count; i++)
@@ -216,6 +233,7 @@ public class MiniGame1 : MiniGameBase
         if (Mathf.Abs(startX - targetX) + Mathf.Abs(startY - targetY) == 1)
         {
             StartCoroutine(SwapTilesCoroutine(startX, startY, targetX, targetY));
+            AudioManager.Instance.PlaySFX(8);
             CheckAndRemoveMatches();
             selectedTile = null;
         }
@@ -391,7 +409,7 @@ public class MiniGame1 : MiniGameBase
         Score += matchedTiles.Count * scorePerTile; // 삭제된 타일 개수 당 점수 추가
         scoreText.text = "Score: " + Score;
         StartCoroutine(AnimateScoreText());     // text 애니메이션
-
+        AudioManager.Instance.PlaySFX(3);       // 삭제 효과음
         StartCoroutine(WaitAndDropTiles()); // 애니메이션과 드롭 로직 시작
         matchedTiles.Clear();
         return true;
@@ -480,7 +498,7 @@ public class MiniGame1 : MiniGameBase
 
         CheckAndRemoveMatches(); // 매칭 체크
 
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.5f);
     }
 
     private IEnumerator AnimateScoreText()

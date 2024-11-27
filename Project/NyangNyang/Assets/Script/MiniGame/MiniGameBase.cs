@@ -16,7 +16,7 @@ public abstract class MiniGameBase : MonoBehaviour
     public AudioClip bgmSource;        // 각 게임별 배경음악
     private int score;
 
-    public GameObject rewardPopupPrefab;
+    public RewardPopUp rewardPopupPrefab;
 
     private int rewardCheese;
     private int rewardEXP;
@@ -50,7 +50,10 @@ public abstract class MiniGameBase : MonoBehaviour
 
     private void OnDestroy()
     {
-
+        Debug.Log($"{rewardCheese}:RewardCheese | {rewardEXP}:EXP");
+        // 플레이어에게 보상 지급
+        Player.Cheese += rewardCheese;
+        Player.SetShell(0, Player.GetShell(0) + rewardEXP);
     }
 
     private void DisableMainSceneEventSystem()
@@ -116,14 +119,11 @@ public abstract class MiniGameBase : MonoBehaviour
         // 보상 팝업 생성
         if (rewardPopupPrefab != null)
         {
-            GameObject popup = Instantiate(rewardPopupPrefab, transform);
+            // 팝업 값 설정
+            rewardPopupPrefab.SetValues(rewardCheese, rewardEXP);
 
-            // 팝업의 RewardPopup 컴포넌트를 가져와 점수 및 치즈 정보를 전달
-            RewardPopUp rewardPopup = popup.GetComponent<RewardPopUp>();
-            if (rewardPopup != null)
-            {
-                rewardPopup.SetValues(rewardCheese, rewardEXP);
-            }
+            // 팝업 활성화
+            rewardPopupPrefab.gameObject.SetActive(true);
         }
         else
         {
@@ -153,9 +153,6 @@ public abstract class MiniGameBase : MonoBehaviour
         rewardCheese = Mathf.CeilToInt(baseReward * weight);
         rewardEXP = (int)score / 1000;
 
-        // 플레이어에게 보상 지급
-        Player.Cheese += rewardCheese;
-        Player.SetShell(0, Player.GetShell(0) + rewardEXP);
     }
 
     // 점수에 따른 가중치 계산 함수
