@@ -61,7 +61,7 @@ public class StageSlider : MonoBehaviour
         if (_gateImages[gateNumber])
         {
             Image image = _gateImages[gateNumber].GetComponent<Image>();
-            image.color = new Color(255, 210, 0);
+            //image.color = new Color(255, 210, 0);
         }
     }
     public void MoveToNextGate(int currentGateNum, int nextGateNum, float moveTime)
