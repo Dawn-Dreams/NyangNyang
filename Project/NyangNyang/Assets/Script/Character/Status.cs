@@ -19,6 +19,7 @@ public class StatusLevelData
     private int HP_DEFAULT_VALUE = 50;
     private int MP_DEFAULT_VALUE = 10;
     private int STR_DEFAULT_VALUE = 5;
+    private int DEF_DEFAULT_VALUE = 3;
     private float ATTACK_SPEED_DEFAULT_VALUE = 0.75f;
     //private static int MAX_ATTACK_SPEED = 10000;
 
@@ -69,7 +70,7 @@ public class StatusLevelData
                 value = STR_DEFAULT_VALUE + statusLevels[(int)StatusLevelType.STR];
                 break;
             case StatusLevelType.DEF:
-                value = statusLevels[(int)StatusLevelType.DEF];
+                value = DEF_DEFAULT_VALUE + statusLevels[(int)StatusLevelType.DEF];
                 break;
             case StatusLevelType.HEAL_HP:
                 value = statusLevels[(int)StatusLevelType.HEAL_HP];
