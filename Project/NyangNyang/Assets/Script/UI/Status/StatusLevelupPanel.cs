@@ -114,17 +114,18 @@ public class StatusLevelupPanel : MonoBehaviour
         int pressTime = 0;
         while (true)
         {
-            if (!_holdButton.isPressed)
-            {
-                SaveLoadManager.GetInstance().SavePlayerStatusLevel(Player.playerStatus.GetStatusLevelData());
-                Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] += pressTime;
-                Player.UpdatePlayerStatusLevelByType(statusLevelType, Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType]);
-                yield break;
-            }
+            //// 유저가 뗐을 때
+            //if (!_holdButton.isPressed)
+            //{
+            //    SaveLoadManager.GetInstance().SavePlayerStatusLevel(Player.playerStatus.GetStatusLevelData());
+            //    Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] += pressTime;
+            //    Player.UpdatePlayerStatusLevelByType(statusLevelType, Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType]);
+            //    yield break;
+            //}
 
             int currentStatusLevel = Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] + pressTime;
             BigInteger goldCost = CalculateGoldCost(statusLevelType, currentStatusLevel, levelUpMultiplyValue);
-            if (Player.Gold >= goldCost)
+            if (Player.Gold >= goldCost && _holdButton.isPressed)
             {
                 Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] += levelUpMultiplyValue;
                 Player.Gold -= goldCost;
@@ -136,6 +137,14 @@ public class StatusLevelupPanel : MonoBehaviour
             }
             else
             {
+                // 유저가 버튼을 뗐을 경우 or 골드 부족 할 경우 발생
+
+                if (pressTime > 0)
+                {
+                    SaveLoadManager.GetInstance().SavePlayerStatusLevel(Player.playerStatus.GetStatusLevelData());
+                    Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] += pressTime;
+                    Player.UpdatePlayerStatusLevelByType(statusLevelType, Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType]);
+                }
                 _holdButton.isPressed = false;
                 yield break;
             }
