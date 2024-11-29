@@ -494,7 +494,7 @@ public class SaveLoadManager : MonoBehaviour
         // StageData
         if (!File.Exists(_playerStageDataFilePath))
         {
-            SavePlayerStageData(new StageData { highestTheme = 1, highestStage = 1 });
+            SavePlayerStageData(new StageData { highestTheme = 1, highestStage = 0 });
         }
         // SnackBuff
         if (!File.Exists(_playerSnackBuffFilePath))
