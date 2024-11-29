@@ -14,7 +14,7 @@ public class DungeonPanel : MenuPanel
     [SerializeField]
     private GameObject[] stageTabs;
     private Button[] startButtons, sweepButtons;
-    private TextMeshProUGUI[] shellTexts, titleTexts;
+    private TextMeshProUGUI[] shellTexts, titleTexts, warningText;
     private ScrollRect[] levelScrollViews;
     private Button[][] levelSelectButtons;
 
@@ -193,7 +193,7 @@ public class DungeonPanel : MenuPanel
     {
         if (Player.GetShell(index) <= 0)
         {
-            Debug.Log($"{shellNames[index]} 조개패가 부족합니다.");
+            WarningText.Instance.Set("조개패가 부족합니다");
             return;
         }
         dungeonManager.StartDungeon(index, TempDungeonStageLevel);
@@ -206,7 +206,7 @@ public class DungeonPanel : MenuPanel
     {
         if (Player.GetShell(index)<=0)
         {
-            Debug.Log($"{shellNames[index]} 조개패가 부족합니다.");
+            WarningText.Instance.Set("조개패가 부족합니다");
             return;
         }
         if (TempDungeonStageLevel < dungeonHighestClearLevel[index])
@@ -216,7 +216,7 @@ public class DungeonPanel : MenuPanel
             GetReward(index);
         }
         else
-            Debug.Log("아직 클리어 되지 않았습니다.");
+            WarningText.Instance.Set("아직 클리어 되지 않았습니다");
     }
 
     private void UpdateShellText(int index)

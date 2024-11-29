@@ -1,0 +1,81 @@
+﻿using System.Collections;
+using UnityEngine;
+using TMPro;
+
+public class WarningText : MonoBehaviour
+{
+    public static WarningText Instance { get; private set; }
+
+    [SerializeField] private TextMeshProUGUI warningText; // 하나의 텍스트
+    [SerializeField] private float animationDuration = 1f; // 애니메이션 전체 지속 시간
+    [SerializeField] private float scaleFactor = 1.15f; // 크기 증가 비율
+
+    private Coroutine currentCoroutine;
+
+    private void Awake()
+    {
+        // 싱글톤 패턴 구현
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {;
+            Destroy(gameObject);
+        }
+    }
+
+    public void Set(string message)
+    {
+        if (warningText == null)
+        {
+            return;
+        }
+
+        warningText.text = message;
+
+        if (currentCoroutine != null)
+        {
+            StopCoroutine(currentCoroutine);
+        }
+
+        currentCoroutine = StartCoroutine(AnimateWarningText());
+    }
+
+    private IEnumerator AnimateWarningText()
+    {
+        warningText.gameObject.SetActive(true);
+
+        float elapsedTime = 0f;
+        float initialScale = warningText.transform.localScale.x;
+        Color originalColor = warningText.color;
+        Vector3 initialPosition = warningText.transform.position;
+
+        float moveDistance = 5f; // 원하는 이동 높이 (UI 상에서의 이동 거리)
+
+        while (elapsedTime < animationDuration)
+        {
+            elapsedTime += Time.deltaTime;
+
+            // 비율에 따라 크기, 투명도, 위치 계산
+            float progress = elapsedTime / animationDuration;
+            float scale = Mathf.Lerp(initialScale, initialScale * scaleFactor, progress); // 점차 커지게
+            float alpha = Mathf.Lerp(originalColor.a, 0f, progress); // 투명도 감소
+            float verticalOffset = Mathf.Lerp(0f, moveDistance, progress); // 위로 이동
+
+            warningText.transform.localScale = Vector3.one * scale;
+            warningText.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
+            warningText.transform.position = initialPosition + new Vector3(0f, verticalOffset, 0f); // 위로 이동
+
+            yield return null;
+        }
+
+        warningText.gameObject.SetActive(false);
+        warningText.transform.localScale = Vector3.one * initialScale;
+        warningText.color = originalColor;
+        warningText.transform.position = initialPosition;
+
+        currentCoroutine = null;
+    }
+
+}
