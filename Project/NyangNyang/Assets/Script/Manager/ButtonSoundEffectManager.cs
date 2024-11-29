@@ -24,10 +24,7 @@ public class ButtonSoundEffectManager : MonoBehaviour
 
     private void PlaySound()
     {
-        if (AudioManager.Instance != null)
-        {
-            AudioManager.Instance.PlaySFX(0);  // 효과음 재생
-        }
+        AudioManager.Instance.PlaySFX("SFX_Pop");  // 효과음 재생
     }
 
     private void OnDestroy()

@@ -1,0 +1,115 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Audio
+  m_EditorClassIdentifier: 
+  m_GroupName: Audio
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 6ebaa25043ddf034f9f0bccff2090d50
+  m_SerializeEntries:
+  - m_GUID: 087363d4276d7a344aea307f51372a1b
+    m_Address: SFX_LevelUP
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 18f3dbc5c2a731b41b5cd3dfb516fc5f
+    m_Address: BGM_Fun
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 321236f942f01ec4f8ff96c2371b16b6
+    m_Address: SFX_Coin1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4b79a33dd2ccff240a76a000b3b2e5ca
+    m_Address: BGM_MiniGame
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 58ad9840e850d6f4e99a3af1b729f4ea
+    m_Address: BGM_Kids
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 65723aec89398044eb33146e981f504e
+    m_Address: SFX_Swoosh
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 65f7dafade5dfe54e9a3c4052b67db6f
+    m_Address: SFX_Explosion
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 675cf2fd6976b744ba97c848a60bd09a
+    m_Address: SFX_Coin2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 79ad12e4afcc63345827476e4e0348ea
+    m_Address: BGM_Funny
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8de9f4e100713ab459fa83452db90e6f
+    m_Address: Assets/Sound/SoundPack/BGM_Energetic.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 985860579d53d8c49a7378fa84dd0b9e
+    m_Address: SFX_MagicSpell
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b4283d18c6df18b4a88c414881e63ad2
+    m_Address: SFX_Pop1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b89af2667620cf44d843bf00de5b752d
+    m_Address: BGM_Game
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c3a69ed4e512e6842a6c563475881c17
+    m_Address: BGM_Adventure
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c449f8b3904ed0948922281590cd8103
+    m_Address: SFX_BigBubble2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d032f7d1a0560e740b0fdae8e815dde4
+    m_Address: SFX_Pop
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e2892cd7d6c9ddb41afd89f6a0fa8f65
+    m_Address: SFX_BigBubble1
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fc3fbe4a5fd916045bdc46763affd856
+    m_Address: BGM_Vampires
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 5f1874fff1b70124d8333b18a2e9b4e8, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: a2ce72d9ee2e5ac4c9e47d81b0ddb880, type: 2}
+    - {fileID: 11400000, guid: 8444a9b3e985e954fbc725a1211ca44f, type: 2}

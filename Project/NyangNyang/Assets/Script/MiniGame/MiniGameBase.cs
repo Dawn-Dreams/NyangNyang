@@ -42,7 +42,7 @@ public abstract class MiniGameBase : MonoBehaviour
         isGameCleared = false;
         Score = initialScore;
         AudioManager.Instance.PauseBGM();
-        AudioManager.Instance.PlayMiniGameBGM();
+        AudioManager.Instance.PlayBGM("BGM_MiniGame");
         baseReward = 100;
         //DisableMainSceneEventSystem();  // 원래 씬의 EventSystem 비활성화
         Debug.Log($"{gameName} 씬이 성공적으로 로드되었습니다.");
@@ -107,8 +107,8 @@ public abstract class MiniGameBase : MonoBehaviour
     protected void EndGame()
     {
         GameManager.isMiniGameActive = false;
-        AudioManager.Instance.StopMiniGameBGM();
-        AudioManager.Instance.ResumeBGM(); 
+        AudioManager.Instance.PauseBGM();
+        AudioManager.Instance.PlayBGM("BGM_Funny"); 
         UnloadMiniGameScene("MiniGame1");
     }
 

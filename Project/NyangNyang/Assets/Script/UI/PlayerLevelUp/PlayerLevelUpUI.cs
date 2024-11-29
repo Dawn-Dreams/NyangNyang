@@ -31,9 +31,9 @@ public class PlayerLevelUpUI : MonoBehaviour
 
         for (int i = 0; i < 12; ++i)
         {
-            newContentIconPool.Add(Instantiate(iconPrefab,iconObjectPool.transform));
+            newContentIconPool.Add(Instantiate(iconPrefab, iconObjectPool.transform));
         }
-        
+
     }
 
     public void UserLevelUp()
@@ -41,7 +41,9 @@ public class PlayerLevelUpUI : MonoBehaviour
         // 레벨업 UI 애니메이션 재생
         levelUpObjectAnimation.gameObject.SetActive(true);
         levelUpObjectAnimation.Play();
-        //AudioManager.Instance.PlaySFX(7);
+
+        if (!GameManager.isMiniGameActive)
+            AudioManager.Instance.PlaySFX("SFX_LevelUP");
 
         // 새로운 컨텐츠가 있다면 좌하단 ! UI
         if (grid.transform.childCount > 0)
@@ -63,7 +65,7 @@ public class PlayerLevelUpUI : MonoBehaviour
         for (int i = 0; i < newContentIconPool.Count; ++i)
         {
             Destroy(newContentIconPool[i].gameObject);
-        }    
+        }
     }
 
     void OnEnable()
@@ -82,7 +84,7 @@ public class PlayerLevelUpUI : MonoBehaviour
     public void CloseLevelUpUI()
     {
         int childCount = grid.transform.childCount;
-        
+
         for (int i = 0; i < childCount; ++i)
         {
             GameObject obj = grid.transform.GetChild(0).gameObject;
@@ -98,7 +100,7 @@ public class PlayerLevelUpUI : MonoBehaviour
         GameObject res = newContentIconPool[^1];
         res.transform.SetParent(grid.transform);
 
-        newContentIconPool.RemoveAt(newContentIconPool.Count-1);
+        newContentIconPool.RemoveAt(newContentIconPool.Count - 1);
 
         res.GetComponent<Image>().sprite = newContentSprite;
         res.GetComponentInChildren<TextMeshProUGUI>().text = newContentName;

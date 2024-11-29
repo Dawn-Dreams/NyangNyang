@@ -15,11 +15,8 @@ public class SceneChangeButton : MonoBehaviour
             _sceneChangeButton = GetComponent<Button>();
             _sceneChangeButton.onClick.AddListener(ChangeScene);
         }
-        // 배경 음악 시작
-        if (AudioManager.Instance != null)
-        {
-            AudioManager.Instance.PlayBGM(0);
-        }
+        AudioManager.Instance.PlayBGM("BGM_Fun");
+
     }
 
     private void OnEnable()
@@ -30,11 +27,8 @@ public class SceneChangeButton : MonoBehaviour
             _sceneChangeButton.onClick.AddListener(ChangeScene);
         }
 
-        // 배경 음악 시작
-        if (AudioManager.Instance != null)
-        {
-            AudioManager.Instance.PlayBGM(0);
-        }
+        AudioManager.Instance.PlayBGM("BGM_Fun");
+
     }
 
     void ChangeScene()
@@ -44,11 +38,9 @@ public class SceneChangeButton : MonoBehaviour
 
     private IEnumerator LoadSceneWithMusicControl(string sceneName)
     {
-        // 배경 음악 멈춤
-        if (AudioManager.Instance != null)
-        {
-            AudioManager.Instance.PauseBGM();
-        }
+
+        AudioManager.Instance.PauseBGM();
+
 
         // 씬을 비동기적으로 로드
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
@@ -63,8 +55,6 @@ public class SceneChangeButton : MonoBehaviour
         // 씬 로드 완료 후 활성화
         operation.allowSceneActivation = true;
 
-        
-        AudioManager.Instance.PlayMainBGM();
 
     }
 }

@@ -1971,6 +1971,7 @@ GameObject:
   - component: {fileID: 982702930}
   - component: {fileID: 982702928}
   - component: {fileID: 982702931}
+  - component: {fileID: 982702932}
   m_Layer: 0
   m_Name: UIcamera
   m_TagString: Untagged
@@ -2006,9 +2007,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.08549222
+    y: 0.00024986267
     width: 1
-    height: 0.82901555
+    height: 0.9995003
   near clip plane: 1
   far clip plane: 2
   field of view: 60
@@ -2057,6 +2058,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 982702928}
+--- !u!81 &982702932
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 982702927}
+  m_Enabled: 1
 --- !u!1 &1027367161
 GameObject:
   m_ObjectHideFlags: 0
@@ -2194,7 +2203,7 @@ Camera:
     x: 0
     y: 0
     width: 1
-    height: 0.08549222
+    height: 0.00024986267
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -3820,9 +3829,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.91450775
+    y: 0.99975014
     width: 1
-    height: 0.08549222
+    height: 0.00024986267
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60

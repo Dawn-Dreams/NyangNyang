@@ -32,8 +32,8 @@ public class SettingsMenu : MonoBehaviour
     void Awake()
     {
         // 초기 설정
-        bgmVolumeSlider.value = AudioManager.Instance.bgmVolume;
-        sfxVolumeSlider.value = AudioManager.Instance.sfxVolume;
+        bgmVolumeSlider.value = AudioManager.Instance.GetBGMVolume();
+        sfxVolumeSlider.value = AudioManager.Instance.GetSFXVolume();
         brightness = Screen.brightness;
         brightnessSlider.value = brightness;
         bgmSoundOnOffToggle.isOn = bgmVolumeSlider.value > 0;
@@ -118,33 +118,33 @@ public class SettingsMenu : MonoBehaviour
     {
         if (bgmSoundOnOffToggle.isOn)
         {
-            AudioManager.Instance.bgmVolume = 0.5f;
+            AudioManager.Instance.SetBGMVolume(0.5f);
         }
         else
         {
-            AudioManager.Instance.bgmVolume = 0.0f;
+            AudioManager.Instance.SetBGMVolume(0.0f);
         }
 
-        bgmVolumeSlider.value = AudioManager.Instance.bgmVolume;
+        bgmVolumeSlider.value = AudioManager.Instance.GetBGMVolume();
     }
 
     public void ToggleSFXSoundOnOff()
     {
         if (sfxSoundOnOffToggle.isOn)
         {
-            AudioManager.Instance.sfxVolume = 0.5f;
+            AudioManager.Instance.SetSFXVolume(0.5f);
         }
         else
         {
-            AudioManager.Instance.sfxVolume = 0.0f;
+            AudioManager.Instance.SetSFXVolume(0.0f);
         }
 
-        sfxVolumeSlider.value = AudioManager.Instance.sfxVolume;
+        sfxVolumeSlider.value = AudioManager.Instance.GetSFXVolume();
     }
 
     public void OnBGMVolumeChanged()
     {
-        AudioManager.Instance.bgmVolume = bgmVolumeSlider.value;
+        AudioManager.Instance.SetBGMVolume(bgmVolumeSlider.value);
         if (bgmVolumeSlider.value != 0.0f)
         {
             bgmSoundOnOffToggle.isOn = true;
@@ -157,7 +157,7 @@ public class SettingsMenu : MonoBehaviour
 
     public void OnSFXVolumeChanged()
     {
-        AudioManager.Instance.sfxVolume = sfxVolumeSlider.value;
+        AudioManager.Instance.SetSFXVolume(sfxVolumeSlider.value);
         if (sfxVolumeSlider.value != 0.0f)
         {
             sfxSoundOnOffToggle.isOn = true;

@@ -69,7 +69,7 @@ public class StageManager : MonoBehaviour
         {
             _instance = this;
         }
-        
+        AudioManager.Instance.PlayBGM("BGM_Funny");
     }
 
     void Start()

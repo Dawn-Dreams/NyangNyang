@@ -105,7 +105,7 @@ public class MiniGame1 : MiniGameBase
 
         shuffleCount++; // 호출 횟수 증가
         shuffleCountText.text = $"{maxShuffleCount - shuffleCount}/{maxShuffleCount}";
-        AudioManager.Instance.PlaySFX(4);
+        AudioManager.Instance.PlaySFX("SFX_MagicSpell");
         foreach (var tile in tilesList)
         {
             if (tile != null)
@@ -233,7 +233,7 @@ public class MiniGame1 : MiniGameBase
         if (Mathf.Abs(startX - targetX) + Mathf.Abs(startY - targetY) == 1)
         {
             StartCoroutine(SwapTilesCoroutine(startX, startY, targetX, targetY));
-            AudioManager.Instance.PlaySFX(8);
+            AudioManager.Instance.PlaySFX("SFX_Swoosh");
             CheckAndRemoveMatches();
             selectedTile = null;
         }
@@ -409,7 +409,7 @@ public class MiniGame1 : MiniGameBase
         Score += matchedTiles.Count * scorePerTile; // 삭제된 타일 개수 당 점수 추가
         scoreText.text = "Score: " + Score;
         StartCoroutine(AnimateScoreText());     // text 애니메이션
-        AudioManager.Instance.PlaySFX(3);       // 삭제 효과음
+        AudioManager.Instance.PlaySFX("SFX_Explosion");       // 삭제 효과음
         StartCoroutine(WaitAndDropTiles()); // 애니메이션과 드롭 로직 시작
         matchedTiles.Clear();
         return true;

@@ -375,7 +375,7 @@ public class SaveLoadManager : MonoBehaviour
     {
         if (rankings == null || rankings.Count == 0)
         {
-            Debug.LogWarning("No ranking data to save.");
+            //Debug.LogWarning("No ranking data to save.");
             return;
         }
 

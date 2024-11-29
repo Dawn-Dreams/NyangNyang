@@ -1,44 +1,40 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class AudioManager : MonoBehaviour
 {
-    public static AudioManager Instance { get; private set; }
+    private static AudioManager _instance;
 
-    public AudioSource bgmSource;
-    public AudioSource miniGamebgmSource;
-    public AudioSource sfxSource;
-    public AudioClip[] bgmClips;
-    public AudioClip[] sfxClips;
-
-    public float bgmVolume
+    public static AudioManager Instance
     {
-        get { return PlayerPrefs.GetFloat("BGMVolume", 1f); }
-        set
+        get
         {
-            PlayerPrefs.SetFloat("BGMVolume", value);
-            bgmSource.volume = value;
-            miniGamebgmSource.volume = value;
+            if (_instance == null)
+            {
+                GameObject audioManagerObject = new GameObject("AudioManager");
+                _instance = audioManagerObject.AddComponent<AudioManager>();
+                //DontDestroyOnLoad(audioManagerObject);
+            }
+            return _instance;
         }
     }
 
-    public float sfxVolume
-    {
-        get { return PlayerPrefs.GetFloat("SFXVolume", 1f); }
-        set
-        {
-            PlayerPrefs.SetFloat("SFXVolume", value);
-            sfxSource.volume = value;
-        }
-    }
+    private AudioSource bgmSource;
+    private AudioSource sfxSource;
 
-    void Awake()
+    private float bgmVolume = 1f;
+    private float sfxVolume = 1f;
+
+    private void Awake()
     {
-        if (Instance == null)
+        if (_instance == null)
         {
-            Instance = this;
-            transform.SetParent(null);
+            _instance = this;
             DontDestroyOnLoad(gameObject);
+
+            bgmSource = gameObject.AddComponent<AudioSource>();
+            sfxSource = gameObject.AddComponent<AudioSource>();
         }
         else
         {
@@ -46,80 +42,91 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    private void Start()
+    // BGM 재생
+    public void PlayBGM(string address)
     {
-        bgmSource.volume = bgmVolume;
-        miniGamebgmSource.volume = bgmVolume;
-        sfxSource.volume = sfxVolume;
-        miniGamebgmSource.clip = bgmClips[2];
-    }
-
-    public void PlayMainBGM()
-    {
-        if (bgmSource.clip != bgmClips[1])
+        Addressables.LoadAssetAsync<AudioClip>(address).Completed += (handle) =>
         {
-            bgmSource.clip = bgmClips[1];
-            bgmSource.Play();
-        }
-
+            if (handle.Status == AsyncOperationStatus.Succeeded)
+            {
+                bgmSource.clip = handle.Result;
+                bgmSource.loop = true;
+                bgmSource.volume = bgmVolume;
+                bgmSource.Play();
+            }
+            else
+            {
+                Debug.LogError($"Failed to load BGM at address: {address}");
+            }
+        };
     }
 
-    // 외부에서 재생할 때
-
-    // 클립으로 재생
-    public void PlayBGM(AudioClip clip)
-    {
-        if (bgmSource.clip != clip)
-        {
-            bgmSource.clip = clip;
-            bgmSource.Play();
-        }
-    }
-
-    // 인덱스로 재생
-    public void PlayBGM(int index)
-    {
-        if (bgmSource.clip != bgmClips[index])
-        {
-            bgmSource.clip = bgmClips[index];
-            bgmSource.Play();
-        }
-    }
-
+    // BGM 일시 정지
     public void PauseBGM()
     {
-        Debug.Log("PauseBGM");
-        bgmSource.Pause();
+        if (bgmSource.isPlaying)
+        {
+            bgmSource.Pause();
+        }
     }
+
+    // BGM 정지
+    public void StopBGM()
+    {
+        if (bgmSource.isPlaying)
+        {
+            bgmSource.Stop();
+        }
+    }
+
+    // BGM 재개
     public void ResumeBGM()
     {
-        Debug.Log("ResumeBGM");
-        bgmSource.Play();
+        if (!bgmSource.isPlaying && bgmSource.clip != null)
+        {
+            bgmSource.Play();
+        }
     }
 
-    // 미니게임은 고정
-    public void PlayMiniGameBGM()
+    // SFX 재생
+    public void PlaySFX(string address)
     {
-        miniGamebgmSource.clip = bgmClips[2];
-        miniGamebgmSource.Play();
+        Addressables.LoadAssetAsync<AudioClip>(address).Completed += (handle) =>
+        {
+            if (handle.Status == AsyncOperationStatus.Succeeded)
+            {
+                sfxSource.PlayOneShot(handle.Result, sfxVolume);
+            }
+            else
+            {
+                Debug.LogError($"Failed to load SFX at address: {address}");
+            }
+        };
     }
 
-    public void StopMiniGameBGM()
+    // BGM 볼륨 설정 및 가져오기
+    public void SetBGMVolume(float volume)
     {
-        miniGamebgmSource.Stop();
+        bgmVolume = Mathf.Clamp01(volume);
+        if (bgmSource != null)
+        {
+            bgmSource.volume = bgmVolume;
+        }
     }
 
-
-    // 효과음 클립으로 재생
-    public void PlaySFX(AudioClip clip)
+    public float GetBGMVolume()
     {
-        sfxSource.PlayOneShot(clip);
+        return bgmVolume;
     }
 
-    // 효과음 인덱스로 재생
-    public void PlaySFX(int index)
+    // SFX 볼륨 설정 및 가져오기
+    public void SetSFXVolume(float volume)
     {
-        sfxSource.clip = sfxClips[index];
-        sfxSource.PlayOneShot(sfxSource.clip);
+        sfxVolume = Mathf.Clamp01(volume);
+    }
+
+    public float GetSFXVolume()
+    {
+        return sfxVolume;
     }
 }
