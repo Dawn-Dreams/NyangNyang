@@ -9,6 +9,9 @@ public class Cat : Character
 {
     public AnimationManager animationManager;
 
+    private Coroutine _healHpOverTimeCoroutine = null;
+    private float _healHPTime = 1.2f;
+
     protected override void Awake()
     {
         //characterID = 0;
@@ -31,10 +34,42 @@ public class Cat : Character
         CurrentHP += hpDifference;
     }
 
+    public override void SetEnemy(Character targetObject)
+    {
+        base.SetEnemy(targetObject);
+
+        if (targetObject == null || !targetObject.gameObject.activeSelf)
+        {
+            if (_healHpOverTimeCoroutine != null)
+            {
+                StopCoroutine(_healHpOverTimeCoroutine);
+                _healHpOverTimeCoroutine = null;
+            }
+            return;
+        }
+        if (_healHpOverTimeCoroutine == null)
+        {
+            _healHpOverTimeCoroutine = StartCoroutine(HealHPOverTime());
+        }
+
+    }
+
     protected override void Attack()
     {
         base.Attack();
         animationManager.PlayAnimation(AnimationManager.AnimationState.ATK1);
+    }
+
+    protected virtual IEnumerator HealHPOverTime()
+    {
+        while (true)
+        {
+            int healHP = (int)status.GetStatusLevelData().CalculateValueFromLevel(StatusLevelType.HEAL_HP);
+            currentHP = BigInteger.Min(currentHP + healHP, maxHP);
+            Debug.Log($"체력 회복 - {currentHP}");
+            
+            yield return new WaitForSeconds(_healHPTime);
+        }
     }
 
 
@@ -55,4 +90,6 @@ public class Cat : Character
         base.Death();
         CombatManager.GetInstance().PlayerCatDeath();
     }
+
+    
 }

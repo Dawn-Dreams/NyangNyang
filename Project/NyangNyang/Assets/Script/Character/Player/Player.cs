@@ -177,6 +177,11 @@ public class Player : MonoBehaviour
             //playerStatus.BuffPlayerStatusDefaultValue(5);
             playerStatus.isPlayerStatus = true;
         }
+
+        if (playerStatus != null)
+        {
+            playerStatus.BuffPlayerStatusDefaultValue();
+        }
     }
     public static void GetCurrencyData()
     {

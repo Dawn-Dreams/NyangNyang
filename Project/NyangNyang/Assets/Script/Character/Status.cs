@@ -16,10 +16,11 @@ public class StatusLevelData
     public int[] statusLevels = new int[(int)StatusLevelType.COUNT];
 
 
-    private int HP_DEFAULT_VALUE = 50;
-    private int MP_DEFAULT_VALUE = 10;
+    private int HP_DEFAULT_VALUE = 30;
+    private int MP_DEFAULT_VALUE = 0;
     private int STR_DEFAULT_VALUE = 5;
-    private int DEF_DEFAULT_VALUE = 3;
+    private int DEF_DEFAULT_VALUE = 0;
+    private int HEAL_HP_DEFAULT_VALUE = 0;
     private float ATTACK_SPEED_DEFAULT_VALUE = 0.75f;
     //private static int MAX_ATTACK_SPEED = 10000;
 
@@ -73,7 +74,7 @@ public class StatusLevelData
                 value = DEF_DEFAULT_VALUE + statusLevels[(int)StatusLevelType.DEF];
                 break;
             case StatusLevelType.HEAL_HP:
-                value = statusLevels[(int)StatusLevelType.HEAL_HP];
+                value = HEAL_HP_DEFAULT_VALUE + statusLevels[(int)StatusLevelType.HEAL_HP];
                 break;
             case StatusLevelType.HEAL_MP:
                 value = statusLevels[(int)StatusLevelType.HEAL_MP];
@@ -183,13 +184,13 @@ public class StatusLevelData
         statusLevels[(int)type] = (int)(statusLevels[(int)type] * mulValue);
     }
 
-    // 플레이어의 스탯의 디폴트 효과를 배로 적용시켜주는 함수
-    public void BuffDefaultValue(int buffValue)
+    // 플레이어의 스탯의 디폴트 효과를 적용시켜주는 함수
+    public void BuffDefaultValue()
     {
-        HP_DEFAULT_VALUE *= buffValue;
-        MP_DEFAULT_VALUE *= buffValue;
-        STR_DEFAULT_VALUE *= buffValue;
-        ATTACK_SPEED_DEFAULT_VALUE = 0.25f;
+        HP_DEFAULT_VALUE = 50;
+        STR_DEFAULT_VALUE = 10;
+        DEF_DEFAULT_VALUE = 1;
+        HEAL_HP_DEFAULT_VALUE = 3;
     }
 }
 
@@ -260,9 +261,10 @@ public class Status
         return levelData;
     }
 
-    public void BuffPlayerStatusDefaultValue(int buffMulValue = 5)
+    public void BuffPlayerStatusDefaultValue()
     {
-        levelData.BuffDefaultValue(buffMulValue);
+        //levelData.BuffDefaultValue(buffMulValue);
+        levelData.BuffDefaultValue();
         UpdateStatus();
     }
 

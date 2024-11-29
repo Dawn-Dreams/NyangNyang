@@ -159,7 +159,7 @@ public class Character : MonoBehaviour
         return currentHP <= 0;
     }
 
-    public void SetEnemy(Character targetObject)
+    public virtual void SetEnemy(Character targetObject)
     {
         if (targetObject == null || !targetObject.gameObject.activeSelf)
         {
