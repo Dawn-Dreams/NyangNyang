@@ -245,7 +245,7 @@ public class SaveLoadManager : MonoBehaviour
     // StageData 불러오기
     public bool LoadPlayerStageData(out int highestTheme, out int highestStage)
     {
-        highestTheme = 1; highestStage = 1;
+        highestTheme = 1; highestStage = 0;
         if (File.Exists(_playerStageDataFilePath))
         {
             string json = File.ReadAllText(_playerStageDataFilePath);

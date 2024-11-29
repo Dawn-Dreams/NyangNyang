@@ -41,7 +41,7 @@ public class PlayerLevelUpUI : MonoBehaviour
         // 레벨업 UI 애니메이션 재생
         levelUpObjectAnimation.gameObject.SetActive(true);
         levelUpObjectAnimation.Play();
-        AudioManager.Instance.PlaySFX(7);
+        //AudioManager.Instance.PlaySFX(7);
 
         // 새로운 컨텐츠가 있다면 좌하단 ! UI
         if (grid.transform.childCount > 0)

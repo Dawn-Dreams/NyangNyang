@@ -75,13 +75,15 @@ public class StageManager : MonoBehaviour
     void Start()
     {
         // 데이터 받기
-        if (Player.playerHighestClearStageData[0] == 0)
+        Player.GetPlayerHighestClearStageData(out int themeData, out int stageData);
+        if (themeData == 0)
         {
-            SaveLoadManager.GetInstance().LoadPlayerStageData(out Player.playerHighestClearStageData[0], out Player.playerHighestClearStageData[1]);
-
+            SaveLoadManager.GetInstance().LoadPlayerStageData(out themeData, out stageData);
         }
-        currentTheme = Player.playerHighestClearStageData[0];
-        currentStage = Player.playerHighestClearStageData[1];
+        currentTheme = themeData;
+        currentStage = stageData;
+        Player.SetPlayerHighestClearStageData(currentTheme, currentStage);
+
         SetNewStage(true);
 
         continuousCombatButton.onClick.AddListener(GoToLastClearStageNextStage);
@@ -191,8 +193,8 @@ public class StageManager : MonoBehaviour
         if (currentTheme > clearTheme || (currentTheme == clearTheme && currentStage > clearStage))
         {
             //DummyServerData.PlayerClearStage(Player.GetUserID(), currentTheme, currentStage);
+            
             SaveLoadManager.GetInstance().SavePlayerStageData(new StageData(){highestTheme =  clearTheme,highestStage = clearStage});
-            Player.playerHighestClearStageData = new int[] { currentTheme, currentStage };
         }
     }
 
@@ -260,6 +262,9 @@ public class StageManager : MonoBehaviour
             stageSlider.ClearGateImages();
         }
 
+        // 최고 스테이지 클리어 했는지 정보 갱신
+        SaveStageClearDataToJson();
+
         if (addStage)
         {
             currentGate = 1;
@@ -288,8 +293,7 @@ public class StageManager : MonoBehaviour
         {
             SetContinuousCombat(false);
         }
-        // 최고 스테이지 클리어 했는지 정보 갱신
-        SaveStageClearDataToJson();
+
 
         SetStageUI();
     }

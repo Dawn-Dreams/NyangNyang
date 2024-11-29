@@ -66,7 +66,6 @@ public class Cat : Character
         {
             int healHP = (int)status.GetStatusLevelData().CalculateValueFromLevel(StatusLevelType.HEAL_HP);
             currentHP = BigInteger.Min(currentHP + healHP, maxHP);
-            Debug.Log($"체력 회복 - {currentHP}");
             
             yield return new WaitForSeconds(_healHPTime);
         }

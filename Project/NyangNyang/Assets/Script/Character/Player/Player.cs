@@ -69,7 +69,7 @@ public class Player : MonoBehaviour
     // 한 스테이지 내에서 반복 전투를 진행하는 것에 대한 변수
     public static bool continuousCombat = false;
     // 최대 클리어 스테이지 정보
-    public static int[] playerHighestClearStageData = new int[2];
+    private static int[] _playerHighestClearStageData = new int[2];
 
    
 
@@ -246,15 +246,21 @@ public class Player : MonoBehaviour
 
     public static void GetPlayerHighestClearStageData(out int themeData, out int stageData)
     {
-        themeData = playerHighestClearStageData[0];
-        stageData = playerHighestClearStageData[1];
+        themeData = _playerHighestClearStageData[0];
+        stageData = _playerHighestClearStageData[1];
+    }
+
+    public static void SetPlayerHighestClearStageData(int newThemeData, int newStageData)
+    {
+        _playerHighestClearStageData[0] = newThemeData;
+        _playerHighestClearStageData[1] = newStageData;
     }
 
     // ================
     // ===========
 
 
-    
+
     // =====================
 
 }
