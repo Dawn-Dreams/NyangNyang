@@ -156,7 +156,7 @@ public class Enemy : Character
 
     // 몬스터 정보에 대한 변수
     public MonsterData monsterDataTemplate;
-    private MonsterData _monsterData;
+    public MonsterData _monsterData;
 
     // 몬스터들의 체력을 나타내는 Slider
     [SerializeField] private List<Slider> sliders;

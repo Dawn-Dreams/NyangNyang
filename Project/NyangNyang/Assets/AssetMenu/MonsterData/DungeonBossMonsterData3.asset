@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8e76add17c440a40ac8b2123626d054, type: 3}
+  m_Name: DungeonBossMonsterData3
+  m_EditorClassIdentifier: 
+  enemyCount: 1
+  monsterTypes: 0e000000
+  monsterStatus:
+    statusLevels: 0200000002000000020000000200000002000000020000000200000002000000020000000200000002000000020000000200000002000000020000000200000002000000020000000200000002000000
+  enemyDropData: {fileID: 11400000, guid: 7fb04559e37a5d3448b165ff059a3569, type: 2}
+  baseHP: 0
+  baseAttack: 0
+  baseDefense: 0

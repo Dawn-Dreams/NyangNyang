@@ -47,6 +47,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - Costume/Pet
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5f6763dd76fda9b4f940faaeb711085b
+    m_Address: Assets/AssetMenu/MonsterData/DungeonBossMonsterData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 610733e2b20b2dd4a8b92a23de41fe04
     m_Address: Enemy/Tempora_B
     m_ReadOnly: 0
@@ -137,11 +142,21 @@ MonoBehaviour:
     m_SerializedLabels:
     - Costume/Pet
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d9e5c8b67c0e4e64589cf8be03bb9640
+    m_Address: Assets/AssetMenu/MonsterData/DungeonBossMonsterData2.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e0a12ceacd3631a4da9f2e86f4cedbe7
     m_Address: Enemy/Puffe
     m_ReadOnly: 0
     m_SerializedLabels:
     - Costume/Pet
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e3a793cb08df14c4dbd72d7091e6d28d
+    m_Address: Assets/AssetMenu/MonsterData/DungeonBossMonsterData3.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f0d2670f454c56342a48f5561818f093
     m_Address: Enemy/IceGolem

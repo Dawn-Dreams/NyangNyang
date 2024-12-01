@@ -43,7 +43,7 @@ public class LevelTriggerManager : MonoBehaviour
 
             if (content.content == null)
             {
-                Debug.Log($"Content is null at index {index}");
+                //Debug.Log($"Content is null at index {index}");
                 continue; // null content´Â °Ç³Ê¶Ù±â
             }
 

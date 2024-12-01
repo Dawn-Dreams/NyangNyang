@@ -19,7 +19,7 @@ public class DungeonBossEnemy : Enemy
     private Coroutine roarSkillCoroutine;     // 포효 스킬 관리 코루틴
 
     // 보스 전용 스킬 또는 패턴을 위한 변수들
-    public float specialAttackCooldown = 10f; // 보스의 특수 공격 쿨다운
+    public float specialAttackCooldown = 5f; // 보스의 특수 공격 쿨다운
     private bool isSpecialAttackReady = true; // 특수 공격이 준비되었는지 여부
 
     protected override void Awake()
@@ -37,9 +37,12 @@ public class DungeonBossEnemy : Enemy
         // 보스 유형 설정
         switch (dungeonIndex)
         {
-            case 0: bossType = BossType.Scarecrow; break;
-            case 1: bossType = BossType.SkillOnly; break;
-            case 2: bossType = BossType.RoaringSkill; break;
+            case 0: bossType = BossType.Scarecrow;
+                _monsterData.monsterTypes = new List<EnemyMonsterType> { EnemyMonsterType.FireGolem };break;
+            case 1: bossType = BossType.SkillOnly; 
+                _monsterData.monsterTypes = new List<EnemyMonsterType> { EnemyMonsterType.IceBear};break;
+            case 2: bossType = BossType.RoaringSkill; 
+                _monsterData.monsterTypes = new List<EnemyMonsterType> { EnemyMonsterType.MegaGolem };break;
             default:
                 Debug.LogError("Invalid index for BossType");
                 return;
