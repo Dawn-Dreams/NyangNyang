@@ -12,6 +12,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy_Krake
       objectReference: {fileID: 0}
+    - target: {fileID: 2975497891117779667, guid: 1701d4e539ef95d41821c5f2886c1448, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 2975497891117779667, guid: 1701d4e539ef95d41821c5f2886c1448, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.03
+      objectReference: {fileID: 0}
     - target: {fileID: 2975497891117779671, guid: 1701d4e539ef95d41821c5f2886c1448, type: 3}
       propertyPath: m_LocalScale.x
       value: 7
