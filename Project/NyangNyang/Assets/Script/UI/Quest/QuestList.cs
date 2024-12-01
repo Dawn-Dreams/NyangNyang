@@ -8,8 +8,9 @@ public class QuestList : MonoBehaviour
 {
     private static List<GameObject> _questListObjects = new List<GameObject>();
     private static Button _currentPressedButton;
-    private static Color _normalColor = new Color(0.647f, 0.392f, 0);
-    private static Color _pressedColor = new Color(1.0f, 1.0f, 1.0f);
+    private static bool isInitialize = false;
+    private static Color _normalColor;
+    private static Color _pressedColor;
 
     private void Awake()
     {
@@ -18,6 +19,14 @@ public class QuestList : MonoBehaviour
 
     public void OnClickSelectQuestListButton(Button pressedButton)
     {
+        if (!isInitialize)
+        {
+            isInitialize = true;
+            ColorBlock colors = pressedButton.colors;
+            _normalColor = colors.normalColor;
+            _pressedColor = colors.pressedColor;
+        }
+
         if (_currentPressedButton)
         {
             _currentPressedButton.interactable = true;
