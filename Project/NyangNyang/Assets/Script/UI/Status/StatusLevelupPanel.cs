@@ -72,6 +72,7 @@ public class StatusLevelupPanel : MonoBehaviour
     private void SetStatusValueText()
     {
         //BigInteger value = ;//.GetLevelFromType(statusLevelType);
+        
         statusValueText.text = Player.playerStatus.GetStatusLevelData().CalculateValueFromLevel(statusLevelType).ToString();
     }
 
@@ -175,7 +176,8 @@ public class StatusLevelupPanel : MonoBehaviour
         statusImage.sprite = statusData.GetSpriteFromType(statusLevelType);
 
         TextMeshProUGUI statusText = transform.Find("StatusTypeText").GetComponent<TextMeshProUGUI>();
-        statusText.text = statusData.GetStringFromType(statusLevelType);
+        statusText.text = //statusData.GetStringFromType(statusLevelType);
+            EnumTranslator.GetStatusTypeText(statusLevelType);
 
         currentLevelText.text = 5.ToString();
 

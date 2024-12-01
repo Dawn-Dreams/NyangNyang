@@ -16,7 +16,8 @@ public class Story_LevelUpStatusQuestData : StoryQuestDataBase
 
     public override void QuestActing(BaseQuest quest, QuestType type)
     {
-        mainQuestTitle = questStatusType.ToString() + " 스탯 레벨" + requireStatusLevel + "달성";
+        
+        mainQuestTitle = "성장\n" + "[" + EnumTranslator.GetStatusTypeText(questStatusType) + "] 스탯 레벨업";
         currentStatusLevel = Player.playerStatus.GetStatusLevelData().statusLevels[(int)questStatusType];
 
         base.QuestActing(quest, QuestType.LevelUpStatus);
