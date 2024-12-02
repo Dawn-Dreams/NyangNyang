@@ -86,7 +86,7 @@ public class MyBigIntegerMath : MonoBehaviour
         {
             return 0.0f;
         }
-        Debug.Log($" {dividendStr } - {divisorStr}");
+
         int dividendInt = int.Parse(dividendStr.Substring(0, precisionDigit));
         int divisorInt = int.Parse(divisorStr.Substring(0, precisionDigit));
 

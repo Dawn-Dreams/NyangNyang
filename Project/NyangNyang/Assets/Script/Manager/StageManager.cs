@@ -82,6 +82,7 @@ public class StageManager : MonoBehaviour
         }
         currentTheme = themeData;
         currentStage = stageData;
+
         Player.SetPlayerHighestClearStageData(currentTheme, currentStage);
 
         SetNewStage(true);
@@ -189,13 +190,7 @@ public class StageManager : MonoBehaviour
     // 서버에 스테이지를 클리어했다는 정보 전송
     void SaveStageClearDataToJson()
     {
-        Player.GetPlayerHighestClearStageData(out var clearTheme, out var clearStage);
-        if (currentTheme > clearTheme || (currentTheme == clearTheme && currentStage > clearStage))
-        {
-            //DummyServerData.PlayerClearStage(Player.GetUserID(), currentTheme, currentStage);
-            
-            SaveLoadManager.GetInstance().SavePlayerStageData(new StageData(){highestTheme =  clearTheme,highestStage = clearStage});
-        }
+        SaveLoadManager.GetInstance().SavePlayerStageData(new StageData() { highestTheme = currentTheme, highestStage = currentStage });
     }
 
     private IEnumerator StartFade(Action FuncAfterStartFade)
@@ -262,8 +257,17 @@ public class StageManager : MonoBehaviour
             stageSlider.ClearGateImages();
         }
 
-        // 최고 스테이지 클리어 했는지 정보 갱신
-        SaveStageClearDataToJson();
+        int playerCurrentHighestTheme = 0;
+        int playerCurrentHighestStage = 0;
+        Player.GetPlayerHighestClearStageData(out playerCurrentHighestTheme, out playerCurrentHighestStage);
+        if (playerCurrentHighestTheme < currentTheme || (playerCurrentHighestTheme == currentTheme && playerCurrentHighestStage < currentStage))
+        {
+            Player.SetPlayerHighestClearStageData(currentTheme, currentStage);
+            // 최고 스테이지 클리어 했는지 정보 갱신
+            SaveStageClearDataToJson();
+        }
+        
+        
 
         if (addStage)
         {

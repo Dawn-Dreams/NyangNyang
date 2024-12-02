@@ -12,8 +12,8 @@ namespace Ricimi
 
         public void Open()
         {
-            AddBackground();
-            gameObject.SetActive(true); // ÆË¾÷ È°¼ºÈ­
+            //AddBackground();
+            gameObject.SetActive(true); // íŒì—… í™œì„±í™”
         }
 
         public void Close()
@@ -36,15 +36,15 @@ namespace Ricimi
             StartCoroutine(RunPopupDeactivate());
         }
 
-        // ÆË¾÷ ºñÈ°¼ºÈ­ Ã³¸® (ºñÆÄ±«)
+        // íŒì—… ë¹„í™œì„±í™” ì²˜ë¦¬ (ë¹„íŒŒê´´)
         private IEnumerator RunPopupDeactivate()
         {
-            yield return new WaitForSeconds(0.5f); // ´İ±â ¾Ö´Ï¸ŞÀÌ¼Ç ÈÄ ´ë±â ½Ã°£
+            yield return new WaitForSeconds(0.5f); // ë‹«ê¸° ì• ë‹ˆë©”ì´ì…˜ í›„ ëŒ€ê¸° ì‹œê°„
             if (m_background != null)
             {
-                m_background.SetActive(false); // ¹è°æ ºñÈ°¼ºÈ­
+                m_background.SetActive(false); // ë°°ê²½ ë¹„í™œì„±í™”
             }
-            gameObject.SetActive(false); // ÆË¾÷ ºñÈ°¼ºÈ­
+            gameObject.SetActive(false); // íŒì—… ë¹„í™œì„±í™”
         }
 
         private void AddBackground()
