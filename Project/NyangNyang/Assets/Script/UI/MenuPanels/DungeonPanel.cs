@@ -129,7 +129,7 @@ public class DungeonPanel : MenuPanel
             buttons[j].onClick.RemoveAllListeners(); // 이전 리스너 제거
             buttons[j].onClick.AddListener(() => OnClickStageLevelButton(tabIndex, level - 1)); // levelIndex는 0부터 시작하므로 level - 1
             buttons[j].interactable = level <= dungeonHighestClearLevel[tabIndex]; // 최고 클리어된 레벨까지만 활성화
-            buttons[j].GetComponentInChildren<TextMeshProUGUI>().text = $"던전 LEVEL {level}"; // 레벨 번호 표시
+            buttons[j].GetComponentInChildren<TextMeshProUGUI>().text = $"레벨 {level}"; // 레벨 번호 표시
         }
         // 조개패 개수 init
         UpdateShellText(tabIndex);
@@ -154,7 +154,7 @@ public class DungeonPanel : MenuPanel
         {
             int level = i + 1; // 레벨은 1부터 시작
             UpdateStageButtons(tabIndex);
-            levelSelectButtons[tabIndex][i].GetComponentInChildren<TextMeshProUGUI>().text = $"던전 LEVEL {level}"; // 레벨 번호 표시
+            levelSelectButtons[tabIndex][i].GetComponentInChildren<TextMeshProUGUI>().text = $"던전 레벨 {level}"; // 레벨 번호 표시
         }
     }
 
@@ -170,7 +170,6 @@ public class DungeonPanel : MenuPanel
         // 배열의 범위 내인지 확인
         if (index < 0 || index >= stageTabs.Length)
         {
-            Debug.LogError($"Index {index} is out of bounds of stageTabs array.");
             return;
         }
 
@@ -186,7 +185,7 @@ public class DungeonPanel : MenuPanel
         TempDungeonStageLevel = levelIndex + 1;
         UpdateLevelSelectButtons(tabIndex);
         dungeonManager.currentDungeonLevel = TempDungeonStageLevel;
-        titleTexts[tabIndex].text = $"{dungeonNames[tabIndex]} - LEVEL {TempDungeonStageLevel}";
+        titleTexts[tabIndex].text = $"{dungeonNames[tabIndex]} - 레벨 {TempDungeonStageLevel}";
     }
 
     private void OnClickStartButton(int index)
@@ -211,8 +210,10 @@ public class DungeonPanel : MenuPanel
         }
         if (TempDungeonStageLevel < dungeonHighestClearLevel[index])
         {
-            Debug.Log("소탕");
+            WarningText.Instance.Set($"<color=#2AEFB7>Level{TempDungeonStageLevel} 소탕 완료!</color>");
             Player.SetShell(index, Player.GetShell(index) - 1); // 티켓 차감
+            dungeonManager.currentDungeonLevel = TempDungeonStageLevel;
+            UpdateShellText(index);
             GetReward(index);
         }
         else
@@ -237,8 +238,8 @@ public class DungeonPanel : MenuPanel
     private void GetReward(int tabIndex)
     {
         // 보상 계산
-        int rewardGold = dungeonHighestClearLevel[tabIndex] * gainGold;
-        int rewardEXP = dungeonHighestClearLevel[tabIndex] * gainEXP;
+        int rewardGold = Mathf.CeilToInt(gainGold * Mathf.Pow(dungeonManager.currentDungeonLevel, 1.2f));
+        int rewardEXP = Mathf.CeilToInt(gainEXP * Mathf.Pow(dungeonManager.currentDungeonLevel, 1.2f));
 
         // 플레이어에게 골드와 경험치 지급
         Player.AddGold(rewardGold);
@@ -252,13 +253,12 @@ public class DungeonPanel : MenuPanel
     {
         if (rewardPopup == null)
         {
-            Debug.LogError("Reward popup is not assigned.");
             return;
         }
 
         // 팝업 텍스트 업데이트
-        goldText.text = $"{rewardGold:N0} 골드 획득!";
-        expText.text = $"{rewardEXP:N0} 경험치 획득!";
+        goldText.text = $"{rewardGold:N0} 골드 획득";
+        expText.text = $"{rewardEXP:N0} 경험치 획득";
 
         // 팝업 활성화
         rewardPopup.SetActive(true);
