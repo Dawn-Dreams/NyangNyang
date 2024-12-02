@@ -17,8 +17,8 @@ public class DungeonManager : MonoBehaviour
     public int currentDungeonLevel;
     private int currentDungeonIndex;
 
-    // 스페셜 스테이지 지속 시간
-    public float playDuration = 10.0f;
+    // 던전 스테이지 지속 시간
+    public float playDuration = 20.0f;
 
     public int baseGoldAmount = 100000;
     private Coroutine goldCoroutine;
@@ -84,7 +84,7 @@ public class DungeonManager : MonoBehaviour
 
             // dungeonHighestClearLevel[0]에 값 할당
             dungeonHighestClearLevel[0] = friendLevel;
-            Debug.Log($"1번 친구의 레벨: {friendLevel}, dungeonHighestClearLevel[0]에 할당 완료.");
+            //Debug.Log($"1번 친구의 레벨: {friendLevel}, dungeonHighestClearLevel[0]에 할당 완료.");
         }
         else
         {
@@ -133,9 +133,9 @@ public class DungeonManager : MonoBehaviour
 
         // 던전 활성화
         GameManager.isDungeonActive = true;
+        DungeonUI.SetActive(true);
 
-        ShowDungeonResultText("START!!", 1);
-
+        // 던전 설정
         for (int i = 0; i < dungeonPanels.Length; i++)
         {
             dungeonPanels[i].SetActive(i == index);
@@ -146,16 +146,56 @@ public class DungeonManager : MonoBehaviour
         enemyInstance = Instantiate(enemyPrefab, new Vector3(10, 40, 0), Quaternion.identity).GetComponent<DungeonBossEnemy>();
 
         // 적 초기화
-        enemyInstance.InitializeBossForDungeon(index, level); // 보스 초기화
-        InitializeClonedCat(catInstance); // 플레이어 캐릭터 초기화
+        enemyInstance.InitializeBossForDungeon(index, level);
+        InitializeClonedCat(catInstance);
 
         currentDungeonIndex = index;
-        DungeonUI.SetActive(true);
 
         Player.SetShell(index, Player.GetShell(index) - 1);
+
+        // 카운트다운 코루틴 시작
+        StartCoroutine(StartDungeonCountdown(index, level));
+    }
+
+    private IEnumerator StartDungeonCountdown(int index, int level)
+    {
+        // 3초 카운트다운
+        for (int i = 3; i > 0; i--)
+        {
+            ShowDungeonResultText($"<color=#FFFFFF>{i}</color>", 1);
+            yield return new WaitForSeconds(1);
+        }
+
+        ShowDungeonResultText($"<color=#98BBFF>시작!</color>", 1);
+
+        
         StartCoroutine(StartCombatAfterDelay(1.0f));
         StartCoroutine(CheckBattleOutcome());
         Invoke("TimeOut", playDuration); // 제한 시간 초과 시 처리
+    }
+
+    // 제한 시간 초과 전 5초 카운트다운
+    private void TimeOut()
+    {
+        if (GameManager.isDungeonActive && !enemyInstance.IsDead())
+        {
+            StartCoroutine(EndDungeonCountdown());
+        }
+    }
+
+    private IEnumerator EndDungeonCountdown()
+    {
+        // 5초 카운트다운
+        for (int i = 5; i > 0; i--)
+        {
+            ShowDungeonResultText($"<color=#FF6F6F>{i}</color>", 1);
+            yield return new WaitForSeconds(1);
+        }
+
+        // 시간 초과 처리
+        ShowDungeonResultText("<color=#FF6F6F>시간 초과..</color>", 2);
+        isSuccess = false;
+        EndDungeonStage();
     }
 
     // 일정 시간 딜레이 후 전투 시작
@@ -210,16 +250,6 @@ public class DungeonManager : MonoBehaviour
         }
     }
 
-    // 제한 시간 초과 시 실패 처리
-    private void TimeOut()
-    {
-        if (GameManager.isDungeonActive && !enemyInstance.IsDead())
-        {
-            ShowDungeonResultText("<color=#E5E1DA>TIMEOUT</color>", 2);
-            isSuccess = false;
-            EndDungeonStage(); // 실패 처리
-        }
-    }
 
     public void EndDungeonStage()
     {
@@ -234,11 +264,11 @@ public class DungeonManager : MonoBehaviour
             if (currentDungeonLevel == dungeonHighestClearLevel[currentDungeonIndex])
             {
                 dungeonHighestClearLevel[currentDungeonIndex]++;
-                ShowDungeonResultText($"<color=#BFECFF>{currentDungeonLevel} CLEAR!!</color>", 2);
+                ShowDungeonResultText($"<color=#BFECFF>레벨{currentDungeonLevel} 최초 클리어!</color>", 2);
             }
             else
             {
-                ShowDungeonResultText($"<color=#BFECFF>CLEAR!!</color>", 2);
+                ShowDungeonResultText($"<color=#BFECFF>클리어!</color>", 2);
             }
 
             var DungeonPanel = FindObjectOfType<DungeonPanel>();
@@ -253,7 +283,7 @@ public class DungeonManager : MonoBehaviour
         {
             catInstance.animationManager.PlayAnimation(AnimationManager.AnimationState.DieB);
             enemyInstance._dummyEnemies[0].animationManager.PlayAnimation(AnimationManager.AnimationState.Victory);
-            ShowDungeonResultText("<color=#E5E1DA>FAIL...</color>", 2);
+            ShowDungeonResultText("<color=#FF6F6F>실패...</color>", 2);
         }
         StopCombatActions();
         SaveFriendLevelForDungeon();
