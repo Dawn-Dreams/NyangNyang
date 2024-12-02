@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [ExecuteAlways]
 public class LetterBoxCameraManager : MonoBehaviour
@@ -29,7 +30,7 @@ public class LetterBoxCameraManager : MonoBehaviour
         _isEditorInitialize = true;
     }
 #endif
-    public Camera camera;
+    [FormerlySerializedAs("camera")] public Camera myCamera;
     public bool isDownside = false;
 
 
@@ -40,8 +41,8 @@ public class LetterBoxCameraManager : MonoBehaviour
 
     void SetLetterBoxCameraResolution()
     {
-        if (camera == null) return;
-        Rect rect = camera.rect;
+        if (myCamera == null) return;
+        Rect rect = myCamera.rect;
         float scaleheight = ((float)Screen.width / Screen.height) / ((float)9 / 16); // (가로 / 세로)
         float scalewidth = 1f / scaleheight;
         if (scaleheight < 1)
@@ -70,9 +71,9 @@ public class LetterBoxCameraManager : MonoBehaviour
         }
         
 
-        if (camera)
+        if (myCamera)
         {
-            camera.rect = rect;
+            myCamera.rect = rect;
         }
     }
 }

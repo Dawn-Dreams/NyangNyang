@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [ExecuteAlways]
 public class CameraResolutionManager : MonoBehaviour
@@ -22,7 +23,7 @@ public class CameraResolutionManager : MonoBehaviour
     }
 #endif
 
-    public Camera camera;
+    [FormerlySerializedAs("camera")] public Camera myCamera;
     void Start()
     {
         SetCameraResolution(); 
@@ -32,8 +33,8 @@ public class CameraResolutionManager : MonoBehaviour
 
     void SetCameraResolution()
     {
-        if (camera == null) return;
-        Rect rect = camera.rect;
+        if (myCamera == null) return;
+        Rect rect = myCamera.rect;
         float scaleheight = ((float)Screen.width / Screen.height) / ((float)9 / 16); // (가로 / 세로)
 
         float scalewidth = 1f / scaleheight;
@@ -53,9 +54,9 @@ public class CameraResolutionManager : MonoBehaviour
         }
 
 
-        if (camera)
+        if (myCamera)
         {
-            camera.rect = rect;
+            myCamera.rect = rect;
         }
     }
 }
