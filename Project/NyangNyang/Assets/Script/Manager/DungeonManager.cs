@@ -73,6 +73,7 @@ public class DungeonManager : MonoBehaviour
     }
     public void LoadAndAssignDungeonLevel()
     {
+        // 원래 있던 json사용하느라 이름이 친구
         // SaveLoadManager를 통해 친구 데이터 로드
         List<FriendData> friends = SaveLoadManager._instance.LoadFriends();
 

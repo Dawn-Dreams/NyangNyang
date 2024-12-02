@@ -99,7 +99,8 @@ public class MiniGame1 : MiniGameBase
         // 호출 횟수 검사
         if (shuffleCount >= maxShuffleCount)
         {
-            Debug.LogWarning("ShuffleTiles 호출 제한에 도달했습니다!");
+            WarningText.Instance.moveDistance = 1;
+            WarningText.Instance.Set("셔플 한도를 초과했습니다!");
             return; // 더 이상 호출하지 않음
         }
 
