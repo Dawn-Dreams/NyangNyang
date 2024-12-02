@@ -83,22 +83,6 @@
       "name": "학살자",
       "grade": 3,
       "effect": null
-    },
-    {
-      "id": 999,
-      "name": "[ G M ]",
-      "grade": 4,
-      "effect": [
-        {
-          "type": "HP",
-          "value": 1000
-        },
-        {
-          "type": "STR",
-          "value":  2000
-        }
-
-      ]
-    }
+    } 
   ]
 }
