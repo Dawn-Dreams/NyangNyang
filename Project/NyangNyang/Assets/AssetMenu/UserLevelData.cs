@@ -63,7 +63,8 @@ public class UserLevelData : ScriptableObject
     public UserLevelData SetUserLevelData(int getCurrentLevel, BigInteger getExp = default(BigInteger))
     {
         currentLevel = getCurrentLevel;
-        currentExp = getExp;
+        
+        currentExp = BigInteger.Max(getExp, 0); ;
 
         if (OnExpChange != null)
         {
