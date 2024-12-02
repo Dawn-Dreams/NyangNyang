@@ -46,6 +46,12 @@ public class MyBigIntegerMath : MonoBehaviour
 
     public static float DivideToFloat(BigInteger dividend, BigInteger divisor, int precisionDigit = 5)
     {
+        bool isNegativeValue = dividend < 0;
+        if (isNegativeValue)
+        {
+            dividend *= -1;
+        }
+
         // BigInteger.Divide 는 BigInteger만 반환하므로,
         // slider 등에서 사용하기 위해 float를 반환하는 함수 제작
         // dividend와 divisor 의 앞 {precisionDigit} 자리 만큼의 숫자들 끼리만 연산을 진행
@@ -76,12 +82,22 @@ public class MyBigIntegerMath : MonoBehaviour
             }
         }
 
+        if (dividendStr == "0" || divisorStr == "0")
+        {
+            return 0.0f;
+        }
+        Debug.Log($" {dividendStr } - {divisorStr}");
         int dividendInt = int.Parse(dividendStr.Substring(0, precisionDigit));
         int divisorInt = int.Parse(divisorStr.Substring(0, precisionDigit));
 
         if (divisorInt == 0)
         {
             return 0.0f;
+        }
+
+        if (isNegativeValue)
+        {
+            dividendInt *= -1;
         }
 
         return (float)dividendInt / divisorInt;
