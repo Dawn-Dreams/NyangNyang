@@ -24,7 +24,7 @@
     },
     {
       "id": 2,
-      "name": "타이틀2",
+      "name": "초보자",
       "grade": 1,
       "effect": [
         {
@@ -44,56 +44,44 @@
     },
     {
       "id": 3,
-      "name": "타이틀3",
+      "name": "돈이 있는",
       "grade": 1,
       "effect": null
     },
     {
       "id": 4,
-      "name": "타이틀4",
+      "name": "백만장자",
       "grade": 2,
       "effect": null
     },
     {
       "id": 5,
-      "name": "타이틀5",
-      "grade": 2,
+      "name": "억만장자",
+      "grade": 3,
       "effect": null
     },
     {
       "id": 6,
-      "name": "타이틀6",
-      "grade": 3,
+      "name": "갑부",
+      "grade": 4,
       "effect": null
     },
     {
       "id": 7,
-      "name": "타이틀7",
-      "grade": 3,
+      "name": "싸움꾼",
+      "grade": 1,
       "effect": null
     },
     {
       "id": 8,
-      "name": "타이틀8",
+      "name": "전투광",
       "grade": 2,
       "effect": null
     },
     {
       "id": 9,
-      "name": "타이틀9",
-      "grade": 1,
-      "effect": null
-    },
-    {
-      "id": 10,
-      "name": "타이틀10",
-      "grade": 2,
-      "effect": null
-    },
-    {
-      "id": 11,
-      "name": "타이틀11",
-      "grade": 0,
+      "name": "학살자",
+      "grade": 3,
       "effect": null
     },
     {
