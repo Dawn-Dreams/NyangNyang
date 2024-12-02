@@ -86,6 +86,11 @@ public class PlayerTitleUI : MonoBehaviour
 
         for (int i = 0; i < titleInfo.Length; ++i)
         {
+            // GM 타이틀, 예외 처리
+            if (titleInfo[i].id == 999)
+            {
+                continue;
+            }
             PlayerTitleElement titleElement = Instantiate(titleElementPrefab, titleListContentTransform);
             titleElement.SetTitle(titleInfo[i]);
             _titleElements.Add(titleInfo[i].id, titleElement);
