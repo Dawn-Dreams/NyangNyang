@@ -85,6 +85,8 @@ public class Cat : Character
             animationManager.PlayAnimation(AnimationManager.AnimationState.DieB);
             Debug.Log("CatDeathAnim");
         }
+        if (!GameManager.isMiniGameActive ||!GameManager.isDungeonActive)
+            AudioManager.Instance.PlaySFX("SFX_Lose2");
         Debug.Log("CatDeath");
         base.Death();
         CombatManager.GetInstance().PlayerCatDeath();

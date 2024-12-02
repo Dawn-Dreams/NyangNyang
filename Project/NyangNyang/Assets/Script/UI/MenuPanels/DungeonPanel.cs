@@ -240,6 +240,8 @@ public class DungeonPanel : MenuPanel
         // 보상 계산
         int rewardGold = Mathf.CeilToInt(gainGold * Mathf.Pow(dungeonManager.currentDungeonLevel, 1.2f));
         int rewardEXP = Mathf.CeilToInt(gainEXP * Mathf.Pow(dungeonManager.currentDungeonLevel, 1.2f));
+        
+        AudioManager.Instance.PlaySFX("SFX_Gain");
 
         // 플레이어에게 골드와 경험치 지급
         Player.AddGold(rewardGold);

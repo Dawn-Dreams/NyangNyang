@@ -30,7 +30,7 @@ public class MiniGame1 : MiniGameBase
 
     public Slider timerSlider;
     public TextMeshProUGUI scoreText;
-    public TextMeshProUGUI countdownText;
+    [SerializeField] private TextMeshProUGUI countdownText;
 
     [SerializeField] private TMP_Text shuffleCountText;
     private int shuffleCount = 0; // ShuffleTiles 호출 횟수
@@ -55,7 +55,7 @@ public class MiniGame1 : MiniGameBase
 
     private void Start()
     {
-        base.Initialize("MiniGame1", 0,0);
+        base.Initialize("MiniGame1", 0, 0);
         StartCoroutine(CountdownAndStartGame());
     }
 
@@ -65,7 +65,11 @@ public class MiniGame1 : MiniGameBase
 
         for (int i = 3; i > 0; i--)
         {
-            countdownText.text = i.ToString(); // 텍스트 업데이트
+            if (countdownText != null)
+            {
+                countdownText.text = i.ToString(); // 텍스트 업데이트
+            }
+
             yield return new WaitForSeconds(1); // 1초 대기
         }
 
@@ -99,8 +103,9 @@ public class MiniGame1 : MiniGameBase
         // 호출 횟수 검사
         if (shuffleCount >= maxShuffleCount)
         {
-            WarningText.Instance.moveDistance = 1;
-            WarningText.Instance.Set("셔플 한도를 초과했습니다!");
+           
+            WarningTextMiniGame.Instance.moveDistance = 1;
+            WarningTextMiniGame.Instance.Set("셔플 한도를 초과했습니다!");
             return; // 더 이상 호출하지 않음
         }
 
@@ -130,7 +135,7 @@ public class MiniGame1 : MiniGameBase
         }
         ShuffleTiles();
         AssignTileIndices(); // 타일 인덱스 초기 설정
-        
+
     }
 
     private void CreateTile(int x, int y)
@@ -535,7 +540,8 @@ public class MiniGame1 : MiniGameBase
         scoreText.transform.localScale = originalScale;
     }
 
-    public void EndGame1() {
+    public void EndGame1()
+    {
         base.EndGame();
     }
 }

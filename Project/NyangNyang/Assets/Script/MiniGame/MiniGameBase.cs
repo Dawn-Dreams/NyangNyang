@@ -148,7 +148,7 @@ public abstract class MiniGameBase : MonoBehaviour
     {
         // 점수에 따른 가중치 계산
         float weight = CalculateWeight(score);
-
+        
         // 보상 값 계산
         rewardCheese = Mathf.CeilToInt(baseReward * weight);
         rewardEXP = (int)score / 1000;
