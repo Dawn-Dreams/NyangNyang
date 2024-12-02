@@ -199,7 +199,7 @@ public class DungeonManager : MonoBehaviour
             }
 
             // 플레이어가 죽으면 실패
-            if (catInstance != null && catInstance.IsDead())
+            else if (catInstance != null && catInstance.IsDead())
             {
                 isSuccess = false;
                 EndDungeonStage();
@@ -213,7 +213,7 @@ public class DungeonManager : MonoBehaviour
     // 제한 시간 초과 시 실패 처리
     private void TimeOut()
     {
-        if (GameManager.isDungeonActive)
+        if (GameManager.isDungeonActive && !enemyInstance.IsDead())
         {
             ShowDungeonResultText("<color=#E5E1DA>TIMEOUT</color>", 2);
             isSuccess = false;

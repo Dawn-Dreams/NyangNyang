@@ -122,7 +122,7 @@ public class DungeonBossEnemy : Enemy
     }
     public override BigInteger TakeDamage(BigInteger damage, bool isAOESkill = false)
     {
-        BigInteger reducedDamage = damage * 9 / 10; // 대미지 90%만 받음
+        BigInteger reducedDamage = damage;  //대미지 90%만 받음 -> 수정
 
         currentHP -= reducedDamage;
         if (currentHP < 0)
