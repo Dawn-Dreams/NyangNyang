@@ -52,9 +52,6 @@ public class PlayerCostume : Player
         }
     }
 
-    void Awake()
-    {
-    }
 
     public static void OnAwake_CallInGameManager()
     {
@@ -76,6 +73,16 @@ public class PlayerCostume : Player
         playerOwningCostume[CatCostumePart.FurSkin] = data.furSkinOwningCostume;
         playerOwningCostume[CatCostumePart.Pet] = data.petOwningCostume;
         playerOwningCostume[CatCostumePart.Emotion] = data.emotionOwningCostume;
+    }
+
+    public static void OnStart_ApplyCostumeToPlayerCat_CallInGameMgr()
+    {
+        for (int i = 0; i < (int)CatCostumePart.Count; ++i)
+        {
+            CatCostumePart part = (CatCostumePart)i;
+            _playerCatCostume.ChangeCatCostume(part, playerCurrentEquipCostumes[part]);
+        }
+        
     }
 
     public static void SaveToJson()

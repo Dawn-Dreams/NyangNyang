@@ -36,4 +36,8 @@ public class GameManager : MonoBehaviour
         PlayerCostume.OnAwake_CallInGameManager();
     }
 
+    private void Start()
+    {
+        PlayerCostume.OnStart_ApplyCostumeToPlayerCat_CallInGameMgr();
+    }
 }
