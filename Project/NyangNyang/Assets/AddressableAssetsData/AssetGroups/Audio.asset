@@ -27,6 +27,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1dd47b7915d4c7f4fb8b0ccca3fbc53f
+    m_Address: SFX_Gain
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 321236f942f01ec4f8ff96c2371b16b6
     m_Address: SFX_Coin1
     m_ReadOnly: 0
@@ -39,6 +44,16 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 58ad9840e850d6f4e99a3af1b729f4ea
     m_Address: BGM_Kids
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5a92cb9be26adfe4b9c876ecb1170908
+    m_Address: SFX_GameStart
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 61aa7ed883b4d33409996b9f90365ea1
+    m_Address: SFX_Lose1
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -72,6 +87,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9e50744787dd6264f8bb60ec6e565a0c
+    m_Address: SFX_Lose3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b4283d18c6df18b4a88c414881e63ad2
     m_Address: SFX_Pop1
     m_ReadOnly: 0
@@ -94,6 +114,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d032f7d1a0560e740b0fdae8e815dde4
     m_Address: SFX_Pop
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d551b3b2351d2bf4c9d0aef7e017e32c
+    m_Address: SFX_Lose2
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
