@@ -129,7 +129,7 @@ public class DungeonPanel : MenuPanel
             buttons[j].onClick.RemoveAllListeners(); // 이전 리스너 제거
             buttons[j].onClick.AddListener(() => OnClickStageLevelButton(tabIndex, level - 1)); // levelIndex는 0부터 시작하므로 level - 1
             buttons[j].interactable = level <= dungeonHighestClearLevel[tabIndex]; // 최고 클리어된 레벨까지만 활성화
-            buttons[j].GetComponentInChildren<TextMeshProUGUI>().text = $"레벨 {level}"; // 레벨 번호 표시
+            buttons[j].GetComponentInChildren<TextMeshProUGUI>().text = $"던전 레벨 {level}"; // 레벨 번호 표시
         }
         // 조개패 개수 init
         UpdateShellText(tabIndex);
