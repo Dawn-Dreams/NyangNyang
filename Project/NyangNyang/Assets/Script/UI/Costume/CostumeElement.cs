@@ -94,7 +94,8 @@ public class CostumeElement : MonoBehaviour
         _costumeIndex = index;
 
         // 이름 변경
-        SetNameText(CostumeManager.GetInstance().GetCostumeName(_costumePart, _costumeIndex));
+        //SetNameText(CostumeManager.GetInstance().GetCostumeName(_costumePart, _costumeIndex));
+        SetNameText(EnumTranslator.GetCostumeText(_costumePart, _costumeIndex));
 
         // 프리뷰 스프라이트 설정
         if (_previewSprite != null)
