@@ -148,6 +148,10 @@ public class DungeonManager : MonoBehaviour
         // 적 초기화
         enemyInstance.InitializeBossForDungeon(index, level);
         InitializeClonedCat(catInstance);
+        
+        // 윤석 12.02 - 던전 고양이 캐릭터 FurSkin 적용
+        catInstance.GetComponent<Costume>().ChangeCatCostume(CatCostumePart.FurSkin,
+            PlayerCostume.playerCurrentEquipCostumes[CatCostumePart.FurSkin]);
 
         currentDungeonIndex = index;
 
