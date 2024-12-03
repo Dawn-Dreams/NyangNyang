@@ -39,8 +39,8 @@ public class UserLevelData : ScriptableObject
             levelUpCount += 1;
             currentUserExp -= currentRequireExp;
         }
-
-        SetUserLevelData(currentLevel + levelUpCount, currentUserExp - currentExp);
+        
+        SetUserLevelData(currentLevel + levelUpCount, currentUserExp);
 
         if (levelUpCount > 0)
         {
