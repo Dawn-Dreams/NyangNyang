@@ -48,6 +48,7 @@ public class ChangeStageUI : MonoBehaviour
 
     private void Start()
     {
+        AssetLoad();
         _hideUI = GetComponent<HideUi>();
         //_hideUI.OnShowAction = OnEnable;
         changeStageButton.onClick.AddListener(ChangeStage);
@@ -62,7 +63,6 @@ public class ChangeStageUI : MonoBehaviour
     public void MapOpen()
     {
         SetInitialData();
-        AssetLoad();
     }
 
     void OnDisable()
@@ -74,12 +74,13 @@ public class ChangeStageUI : MonoBehaviour
     {
         _curStartThemeNum =
             (stageManager.GetCurrentTheme() - 1) / stageManager.maxStageCount * stageManager.maxStageCount + 1;
+
+        SelectThemeStepButton(0);
         SelectThemeNumberButton((stageManager.GetCurrentTheme() - 1) % stageManager.maxStageCount);
         SelectStageNumberButton(stageManager.GetCurrentStage());
 
         RenewalStageButtonTypeInCurrentTheme();
     }
-
 
     private void OnStartThemeNumberButtonAddListener()
     {
@@ -105,12 +106,6 @@ public class ChangeStageUI : MonoBehaviour
             themeNumberTexts[i].text = (_curStartThemeNum + i).ToString();
         }
 
-        // 테마 이미지 및 이름 변경
-        themeNameText.text = _themeNames[themeStepButtonNumber % themeNumberObject.Length];
-        themeImage.sprite = _stageSprites[themeStepButtonNumber % themeNumberObject.Length + 1];
-
-        
-
         SelectThemeNumberButton(0);
     }
 
@@ -133,6 +128,11 @@ public class ChangeStageUI : MonoBehaviour
 
         _curSelectThemeNum = buttonNumberID;
         themeNumberImages[_curSelectThemeNum].sprite = themeNumberSelectSprite;
+
+        // 테마 이미지 및 이름 변경
+        themeNameText.text = _themeNames[buttonNumberID];
+        themeImage.sprite = _stageSprites[buttonNumberID+1];
+
 
         RenewalStageButtonTypeInCurrentTheme();
 

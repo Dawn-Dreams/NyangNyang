@@ -50,10 +50,14 @@ public class ThemeButton : MonoBehaviour
 
         int themeStep = ((startThemeNum - 1) / _stageBundle);
 
-        Sprite themeBGSprite = _stageSprites[themeStep % _stageBundle + 1];
-        themeButtonImage.sprite = themeBGSprite;
+        //Sprite themeBGSprite = _stageSprites[themeStep % _stageBundle + 1];
+        //themeButtonImage.sprite = themeBGSprite;
+        Color newColor = Color.Lerp(Color.green, Color.red, (float)themeStep / 20);
+        newColor.a = 100.0f / 255;
+        themeButtonImage.color = newColor;
 
-        themeNameText.text = _themeNames[themeStep % _stageBundle];
+        //themeNameText.text = _themeNames[themeStep % _stageBundle];
+        themeNameText.text = "난이도 " + (themeStep+1);
 
         themeNumberBundleText.text = "(" + startThemeNum + " ~ " + (startThemeNum + _stageBundle - 1) + ")";
     }
