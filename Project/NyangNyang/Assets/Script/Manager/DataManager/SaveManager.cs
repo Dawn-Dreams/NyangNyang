@@ -592,12 +592,12 @@ public struct StageData
 public struct SnackBuffRemainTimeJsonData
 {
     public SnackType type;
-    public string time;
+    public long time;
 
     public SnackBuffRemainTimeJsonData(SnackType type, DateTime time)
     {
         this.type = type;
-        this.time = time.ToString("yyyy/MM/dd tt hh:mm:ss");
+        this.time = time.ToFileTime();
     }
 
 }

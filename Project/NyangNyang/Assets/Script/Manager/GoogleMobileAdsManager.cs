@@ -78,7 +78,7 @@ public class GoogleMobileAdsManager : MonoBehaviour
                 RegisterEventHandlers(_rewardedAd);
             });
 
-
+        MobileAds.RaiseAdEventsOnUnityMainThread = true; 
     }
 
     public void ShowRewardedAd(Action<Reward> rewardAction)

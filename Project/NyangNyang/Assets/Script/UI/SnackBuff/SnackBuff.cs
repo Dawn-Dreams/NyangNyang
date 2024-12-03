@@ -117,18 +117,20 @@ public class SnackBuff : MonoBehaviour
         if (_currentSnackBuffLevel < _userMaxSnackBuffLevel)
         {
             SetSnackBuffAdViewCount(_snackBuffAdViewCount + 1);
-
         }
 
-        string buffEndDateTimeString = DateTime.Now.AddMinutes(120).ToString("yyyy/MM/dd tt hh:mm:ss");
+        long buffEndDateTimeString = DateTime.UtcNow.AddMinutes(120).ToFileTime();
+        Debug.Log(DateTime.Now.AddMinutes(120));
         SetActiveSnackBuffDataFromServer(_currentPickSnackPanel.snackType, buffEndDateTimeString);
     }
 
-    public void SetActiveSnackBuffDataFromServer(SnackType snackType, string buffEndDateTimeString)
+    public void SetActiveSnackBuffDataFromServer(SnackType snackType, long buffEndDateTimeLong)
     {
         _snackPanelDict[snackType].eatingImageObject.SetActive(true);
 
-        DateTime buffEndDateTime = DateTime.Parse(buffEndDateTimeString);
+
+        DateTime buffEndDateTime = DateTime.FromFileTime(buffEndDateTimeLong);
+        Debug.Log(buffEndDateTime);
         _buffRemainTime.Add(snackType, buffEndDateTime);
 
         // 해당 간식 버프 적용
