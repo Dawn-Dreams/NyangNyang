@@ -262,11 +262,11 @@ public class Status
         levelData.BuffDefaultValue();
         UpdateStatus();
     }
-
-    public void UpdateStatusLevelByType(StatusLevelType type, int newLevel)
+    
+    public void UpdateStatusLevelByType(StatusLevelType type, int newLevel, bool showCombatPowerChangeUI = true)
     {
         levelData.statusLevels[(int)type] = newLevel;
-        UpdateSpecificStatus(type);
+        UpdateSpecificStatus(type, showCombatPowerChangeUI);
     }
 
     // 모든 스테이터스 정보 업데이트
@@ -348,7 +348,7 @@ public class Status
         UpdateStatus();
     }
 
-    public void UpdateSpecificStatus(StatusLevelType type)
+    public void UpdateSpecificStatus(StatusLevelType type, bool showCombatPowerChangeUI = false)
     {
         if (OnStatusLevelChange != null)
         {
@@ -410,7 +410,7 @@ public class Status
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
 
-        if (isPlayerStatus)
+        if (isPlayerStatus && showCombatPowerChangeUI)
         {
             CombatPowerManager.GetInstance()
                 .ChangeCurrentCombatPower(GetCurrentAttackPower(), GetCurrentDefencePower());

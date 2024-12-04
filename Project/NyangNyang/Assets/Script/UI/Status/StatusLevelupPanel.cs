@@ -152,7 +152,7 @@ public class StatusLevelupPanel : MonoBehaviour
             BigInteger goldCost = CalculateGoldCost(statusLevelType, currentStatusLevel, canLevelUpMultiplyValue);
             if (Player.Gold >= goldCost && _holdButton.isPressed && !IsStatusMaxLevel())
             {
-                Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] += canLevelUpMultiplyValue;
+                Player.playerStatus.UpdateStatusLevelByType(statusLevelType ,Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] + canLevelUpMultiplyValue, false);
                 Player.Gold -= goldCost;
                 pressTime += 1;
                 int statusLevel = (Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType]);
@@ -165,6 +165,7 @@ public class StatusLevelupPanel : MonoBehaviour
 
                 if (pressTime > 0)
                 {
+                    Player.playerStatus.UpdateStatusLevelByType(statusLevelType, Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType], true);
                     SaveLoadManager.GetInstance().SavePlayerStatusLevel(Player.playerStatus.GetStatusLevelData());
                     Player.UpdatePlayerStatusLevelByType(statusLevelType, Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType]);
                 }
