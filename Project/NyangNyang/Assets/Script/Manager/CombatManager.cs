@@ -86,7 +86,8 @@ public class CombatManager : MonoBehaviour
 
     IEnumerator SetStagePlayerDie()
     {
-        Debug.Log("고양이 사망, 여기에서 사운드 + 사망 UI 출력");
+        if (!GameManager.isMiniGameActive || !GameManager.isDungeonActive)
+            AudioManager.Instance.PlaySFX("SFX_Lose2");
         yield return new WaitForSeconds(3.0f);
 
         StageManager.GetInstance().PlayerDie();

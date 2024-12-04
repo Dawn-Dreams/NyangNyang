@@ -22,8 +22,6 @@ public class MiniGame1 : MiniGameBase
     public float slideDuration = 0.3f;
     private List<Tile> matchedTiles = new List<Tile>(); // 삭제할 타일들을 저장할 리스트
 
-    private bool isOnGame = true;
-
     public float gameTime = 60.0f; // 기본 60초 제한시간
     private float tempTimer = 0.0f; // 현재 시간
     private int scorePerTile = 10; // 타일 하나 당 점수
@@ -46,7 +44,6 @@ public class MiniGame1 : MiniGameBase
     protected override void EndGameLogic()
     {
         base.ClearGame();
-        isOnGame = false;
         countdownText.gameObject.SetActive(true);
         countdownText.text = "게임 종료!";
         GameManager.isMiniGameActive = false;
@@ -75,7 +72,6 @@ public class MiniGame1 : MiniGameBase
 
         countdownText.gameObject.SetActive(false); // 카운트다운 숨기기
         StartGameLogic(); // 게임 시작 로직 호출
-        isOnGame = true;
         tempTimer = 0.0f;
         timerSlider.maxValue = gameTime;
         timerSlider.value = gameTime;
