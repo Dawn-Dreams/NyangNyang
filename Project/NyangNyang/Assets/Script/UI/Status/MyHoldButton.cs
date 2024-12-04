@@ -25,10 +25,6 @@ public class MyHoldButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (!isActive)
-        {
-            return;
-        }
         isPressed = false;
     }
 
@@ -39,10 +35,6 @@ public class MyHoldButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (!isActive)
-        {
-            return;
-        }
         isPressed = false;
     }
 }

@@ -71,16 +71,16 @@ public class StatusLevelupPanel : MonoBehaviour
         CheckIsMaxLevel();
     }
 
-    private void CheckIsMaxLevel()
+    private bool CheckIsMaxLevel()
     {
         if (statusLevelType == StatusLevelType.ATTACK_SPEED && Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] >= StatusLevelData.MAX_ATTACK_SPEED_LEVEL)
         {
-            _holdButton.isActive = false;
             _holdButton.isPressed = false;
-            
             levelUpButton.interactable = false;
-            return;
+            return true;
         }
+
+        return false;
     }
 
     // currentStatusLevel로부터 결과 값 적용시키는 함수
@@ -114,7 +114,7 @@ public class StatusLevelupPanel : MonoBehaviour
 
     void SetGoldCostText(BigInteger playerGold)
     {
-        if (statusLevelType == StatusLevelType.ATTACK_SPEED && Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] >= StatusLevelData.MAX_ATTACK_SPEED_LEVEL)
+        if (CheckIsMaxLevel())
         {
             goldCostText.text = "최대 레벨";
             goldCostText.color = Color.black;
@@ -123,6 +123,7 @@ public class StatusLevelupPanel : MonoBehaviour
 
         BigInteger currentStatusLevel = Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType];
         BigInteger goldCost = CalculateGoldCost(startGoldCost, _statusLevelUpCostDict[statusLevelType], currentStatusLevel);
+        string goldCostString = MyBigIntegerMath.GetAbbreviationFromBigInteger(goldCost);
         if (playerGold >= goldCost)
         {
             goldCostText.color = new Color(0, 0, 255);
@@ -131,12 +132,12 @@ public class StatusLevelupPanel : MonoBehaviour
         {
             goldCostText.color = new Color(255, 0, 0);
         }
-        goldCostText.text = goldCost.ToString();
+        goldCostText.text = goldCostString;
     }
 
     void OnClickLevelUpButton()
     {
-        if (_levelUpCoroutine == null)
+        if (_levelUpCoroutine == null && !CheckIsMaxLevel())
         {
             _levelUpCoroutine = StartCoroutine(LevelUpStatus());
         }
@@ -168,10 +169,11 @@ public class StatusLevelupPanel : MonoBehaviour
                     Player.UpdatePlayerStatusLevelByType(statusLevelType, Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType]);
                 }
                 _holdButton.isPressed = false;
+                _levelUpCoroutine = null;
                 yield break;
             }
 
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.1f);
         }
 
     }
