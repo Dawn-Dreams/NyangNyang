@@ -18,8 +18,8 @@ public class StatusLevelData
     private int STR_DEFAULT_VALUE = 5;
     private int DEF_DEFAULT_VALUE = 0;
     private int HEAL_HP_DEFAULT_VALUE = 0;
-    private float ATTACK_SPEED_DEFAULT_VALUE = 0.75f;
-    //private static int MAX_ATTACK_SPEED = 10000;
+    private float ATTACK_SPEED_DEFAULT_VALUE = 1.5f;
+    public static int MAX_ATTACK_SPEED_LEVEL = 75000;
 
     public StatusLevelData(int hpLevel, int mpLevel, int strLevel, int defenceLevel = 0, int healHpLevel = 0, int healMpLevel = 0, int critLevel = 0, int attackSpeedLevel = 0, int goldAcquisition = 0, int expAcquisition = 0)
     {
@@ -30,7 +30,7 @@ public class StatusLevelData
         statusLevels[(int)StatusLevelType.HEAL_HP] = healHpLevel;
         statusLevels[(int)StatusLevelType.HEAL_MP] = healMpLevel;
         statusLevels[(int)StatusLevelType.CRIT] = critLevel;
-        statusLevels[(int)StatusLevelType.ATTACK_SPEED] = attackSpeedLevel;
+        statusLevels[(int)StatusLevelType.ATTACK_SPEED] = Mathf.Min(attackSpeedLevel, MAX_ATTACK_SPEED_LEVEL) ;
         statusLevels[(int)StatusLevelType.GOLD] = goldAcquisition;
         statusLevels[(int)StatusLevelType.EXP] = expAcquisition;
     }
@@ -44,7 +44,7 @@ public class StatusLevelData
         statusLevels[(int)StatusLevelType.HEAL_HP] = otherData.statusLevels[(int)StatusLevelType.HEAL_HP];
         statusLevels[(int)StatusLevelType.HEAL_MP] = otherData.statusLevels[(int)StatusLevelType.HEAL_MP];
         statusLevels[(int)StatusLevelType.CRIT] = otherData.statusLevels[(int)StatusLevelType.CRIT];
-        statusLevels[(int)StatusLevelType.ATTACK_SPEED] = otherData.statusLevels[(int)StatusLevelType.ATTACK_SPEED];
+        statusLevels[(int)StatusLevelType.ATTACK_SPEED] = Mathf.Min(otherData.statusLevels[(int)StatusLevelType.ATTACK_SPEED], MAX_ATTACK_SPEED_LEVEL) ;
         statusLevels[(int)StatusLevelType.GOLD] = otherData.statusLevels[(int)StatusLevelType.GOLD];
         statusLevels[(int)StatusLevelType.EXP] = otherData.statusLevels[(int)StatusLevelType.EXP];
     }
@@ -81,11 +81,10 @@ public class StatusLevelData
                 return (float)statusLevels[(int)StatusLevelType.CRIT] / 100;
                 //break;
             case StatusLevelType.ATTACK_SPEED:
-                // TODO <- 회의 필요 // 0 ~ 10000 레벨을 마스터로 1 ~ 0.25
-                //value = 0.25f + Mathf.Lerp(1.0f, MAX_ATTACK_SPEED, MAX_ATTACK_SPEED - statusLevels[(int)StatusLevelType.ATTACK_SPEED]) * 0.75f;
-                return ATTACK_SPEED_DEFAULT_VALUE;
-                //return 1f;
-                //break;
+                // 0 ~ 75000 레벨을 마스터로 1.5f ~ 0.75f 가 되도록
+                return ATTACK_SPEED_DEFAULT_VALUE - (float)statusLevels[(int)StatusLevelType.ATTACK_SPEED]/ 100000;
+            //return 1f;
+            //break;
             case StatusLevelType.GOLD:
                 // 기본 1%, 레벨당 0.1% 추가
                 //value = 1.0f + 0.1f * statusLevels[(int)StatusLevelType.GOLD];
@@ -135,9 +134,8 @@ public class StatusLevelData
                 return (float)statusLevel / 100;
             //break;
             case StatusLevelType.ATTACK_SPEED:
-                // TODO <- 회의 필요 // 0 ~ 10000 레벨을 마스터로 1 ~ 0.25
-                //value = 0.25f + Mathf.Lerp(1.0f, MAX_ATTACK_SPEED, MAX_ATTACK_SPEED - statusLevels[(int)StatusLevelType.ATTACK_SPEED]) * 0.75f;
-                return ATTACK_SPEED_DEFAULT_VALUE;
+                // 0 ~ 75000 레벨을 마스터로 1.5f ~ 0.75f 가 되도록
+                return ATTACK_SPEED_DEFAULT_VALUE - (float)statusLevel / 100000;
             //return 1f;
             //break;
             case StatusLevelType.GOLD:

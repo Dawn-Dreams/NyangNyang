@@ -6,10 +6,16 @@ using UnityEngine.EventSystems;
 
 public class MyHoldButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
+    public bool isActive = true;
     public bool isPressed = false;
     public Action onPressStartEvent = null;
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (!isActive)
+        {
+            return;
+        }
+
         isPressed = true;
         if (onPressStartEvent != null)
         {
@@ -19,6 +25,10 @@ public class MyHoldButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        if (!isActive)
+        {
+            return;
+        }
         isPressed = false;
     }
 
@@ -29,6 +39,10 @@ public class MyHoldButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (!isActive)
+        {
+            return;
+        }
         isPressed = false;
     }
 }
