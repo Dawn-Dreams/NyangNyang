@@ -57,7 +57,58 @@ public class SkillManager : MonoBehaviour
        
          */
         skillDatas = SaveDataManager.GetInstance().LoadSkills();
+        
+        for (int i = 0; i < 25; ++i)
+        {
+            MatchSkillFromSkillData(i);
+        }
+    }
 
+    public void MatchSkillDataFromSkill(int id)
+    {
+        skillDatas[id].count = skills[id].GetCount();
+        skillDatas[id].isLock = skills[id].GetIsLock();
+        skillDatas[id].effect = skills[id].GetEffect();
+        skillDatas[id].level = skills[id].GetLevel();
+        skillDatas[id].coin = skills[id].GetCoin();
+    }
+
+    public void MatchSkillFromSkillData(int id)
+    {
+        switch (skillDatas[id].type)
+        {
+            case "Active":
+                {
+                    skills[id] = new ActiveSkill(skillDatas[id].ID, skillDatas[id].name, skillDatas[id].count, skillDatas[id].type, skillDatas[id].isLock, skillDatas[id].effect, skillDatas[id].level, skillDatas[id].coin, skillDatas[id].ment);
+
+                    break;
+                }
+            case "Recover":
+                {
+                    skills[id] = new RecoverHPSkill(skillDatas[id].ID, skillDatas[id].name, skillDatas[id].count, skillDatas[id].type, skillDatas[id].isLock, skillDatas[id].effect, skillDatas[id].level, skillDatas[id].coin, skillDatas[id].ment);
+                    break;
+                }
+            case "Defence":
+                {
+                    skills[id] = new DefenseUpSkill(skillDatas[id].ID, skillDatas[id].name, skillDatas[id].count, skillDatas[id].type, skillDatas[id].isLock, skillDatas[id].effect, skillDatas[id].level, skillDatas[id].coin, skillDatas[id].ment);
+                    break;
+                }
+            case "Attack":
+                {
+                    skills[id] = new AttackUpSkill(skillDatas[id].ID, skillDatas[id].name, skillDatas[id].count, skillDatas[id].type, skillDatas[id].isLock, skillDatas[id].effect, skillDatas[id].level, skillDatas[id].coin, skillDatas[id].ment);
+                    break;
+                }
+            case "CoolTime":
+                {
+                    skills[id] = new CoolTimeDownSkill(skillDatas[id].ID, skillDatas[id].name, skillDatas[id].count, skillDatas[id].type, skillDatas[id].isLock, skillDatas[id].effect, skillDatas[id].level, skillDatas[id].coin, skillDatas[id].ment);
+                    break;
+                }
+            case "Health":
+                {
+                    skills[id] = new HealthUpSkill(skillDatas[id].ID, skillDatas[id].name, skillDatas[id].count, skillDatas[id].type, skillDatas[id].isLock, skillDatas[id].effect, skillDatas[id].level, skillDatas[id].coin, skillDatas[id].ment);
+                    break;
+                }
+        }
     }
 
     public Skill GetSkill(int id)
@@ -91,10 +142,10 @@ public class SkillManager : MonoBehaviour
     public int LevelUpSkill(int id)
     {
         Skill skill = GetSkill(id);
-        if ( skill != null && skill.GetLevel() < 10 && skill.GetPossession() >= levelUpNeeds[skill.GetLevel()-1] )
+        if ( skill != null && skill.GetLevel() < 10 && skill.GetCount() >= levelUpNeeds[skill.GetLevel()-1] )
         {
-            skill.SetPossession(-levelUpNeeds[skill.GetLevel() - 1]);
-            skill.SetLevelUpCost(levelUpCosts[skill.GetLevel() - 1]);
+            skill.SetCount(-levelUpNeeds[skill.GetLevel() - 1]);
+            skill.SetCoin(levelUpCosts[skill.GetLevel() - 1]);
             skill.AddLevel(1);
             return skill.GetLevel();
         }
@@ -106,7 +157,7 @@ public class SkillManager : MonoBehaviour
         Skill skill = GetSkill(id);
         if ( skill != null )
         {
-            skill.SetPossession(count);
+            skill.SetCount(count);
 
             // 11.12 이윤석 - 스킬 획득 퀘스트
             if (QuestManager.GetInstance().OnUserGetSkill != null)

@@ -35,11 +35,11 @@ public class SkillMgrUI : MonoBehaviour
                 if (skill.HasSkill())
                 {
                     // 임시 코드
-                    SkillManager.GetInstance().GetSkill(i).SetIsLockToTrue();
+                    SkillManager.GetInstance().GetSkill(i).SetIsLockToFALSE();
                     skillList[i].GetComponent<WeaponUnlock>().Unlock();
                 }
-                sliders[i].value = (float)skill.GetPossession() / 5 >= 1 ? 1 : (float)skill.GetPossession() / 5;
-                texts[i].text = skill.GetPossession().ToString() + "/5";
+                sliders[i].value = (float)skill.GetCount() / 5 >= 1 ? 1 : (float)skill.GetCount() / 5;
+                texts[i].text = skill.GetCount().ToString() + "/5";
             }
         }
     }
@@ -50,8 +50,8 @@ public class SkillMgrUI : MonoBehaviour
         if (skill != null)
         {
             skillList[id].Unlock();
-            sliders[id].value = (float)skill.GetPossession() / 5 >= 1 ? 1 : (float)skill.GetPossession() / 5;
-            texts[id].text = skill.GetPossession().ToString() + "/5";
+            sliders[id].value = (float)skill.GetCount() / 5 >= 1 ? 1 : (float)skill.GetCount() / 5;
+            texts[id].text = skill.GetCount().ToString() + "/5";
         }
     }
 }

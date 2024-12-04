@@ -123,9 +123,9 @@ public class SkillDetailUI : MonoBehaviour
                 }
                 else if (result != -1) {
                     wLevelTxt.text = choosedSkill.GetLevel() + "/10";
-                    int count = choosedSkill.GetPossession();
+                    int count = choosedSkill.GetCount();
 
-                    int coin = choosedSkill.GetLevelUpCost();
+                    int coin = choosedSkill.GetCoin();
                     skillCoinTxt.text = coin.ToString();
 
                     int num = SkillManager.GetInstance().GetLevelUpCostPerLevel(choosedSkill.GetLevel() - 1);
@@ -184,8 +184,8 @@ public class SkillDetailUI : MonoBehaviour
         {
             // 레벨이 max가 아닌 경우
             wLevelTxt.text = choosedSkill.GetLevel() + "/10";
-            skillCoinTxt.text = choosedSkill.GetLevelUpCost().ToString();
-            int count = choosedSkill.GetPossession();
+            skillCoinTxt.text = choosedSkill.GetCoin().ToString();
+            int count = choosedSkill.GetCount();
             int num = SkillManager.GetInstance().GetLevelUpCostPerLevel(choosedSkill.GetLevel() - 1);
             wPossessionTxt.text = count + "/" + num;
             wPossessionSlider.value = (float)count / num >= 1 ? 1 : (float)count / num;

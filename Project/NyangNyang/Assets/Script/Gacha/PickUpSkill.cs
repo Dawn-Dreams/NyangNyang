@@ -56,9 +56,9 @@ public class PickUpSkill : MonoBehaviour
         int num = SkillManager.GetInstance().GetLevelUpCostPerLevel(skill.GetLevel() - 1);
 
         Slider slider = _obj.transform.Find("Slider").GetComponent<Slider>();
-        slider.value = (float)skill.GetPossession() / num >= 1 ? 1 : (float)skill.GetPossession() / num;
+        slider.value = (float)skill.GetCount() / num >= 1 ? 1 : (float)skill.GetCount() / num;
 
         Text text = _obj.transform.Find("possession").GetComponent<Text>();
-        text.text = skill.GetPossession().ToString() + "/" + num;
+        text.text = skill.GetCount().ToString() + "/" + num;
     }
 }
