@@ -38,6 +38,7 @@ public class DungeonPanel : MenuPanel
         InitializeManagers();
         InitializeUIComponents();
         SetActiveTab(0); // 기본 탭 선택
+        OnClickStageLevelButton(0, dungeonManager.dungeonHighestClearLevel[0]-1);
     }
 
     private void InitializeManagers()
@@ -123,6 +124,11 @@ public class DungeonPanel : MenuPanel
     private void InitializeLevelButtonInteractions(int tabIndex, Button[] buttons)
     {
         dungeonHighestClearLevel[tabIndex]= dungeonManager.dungeonHighestClearLevel[tabIndex];
+
+        TempDungeonStageLevel = dungeonManager.dungeonHighestClearLevel[tabIndex];
+        dungeonManager.currentDungeonLevel = TempDungeonStageLevel;
+
+        UpdateLevelSelectButtons(0);
         for (int j = 0; j < buttons.Length; j++)
         {
             int level = j + 1; // 레벨은 1부터 시작하므로 j + 1로 설정

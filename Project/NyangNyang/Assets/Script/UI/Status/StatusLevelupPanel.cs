@@ -20,6 +20,8 @@ public class StatusLevelupPanel : MonoBehaviour
         { StatusLevelType.GOLD, 100000 }, { StatusLevelType.EXP, 100000 }
     };
 
+    private static int _attackSpeedMaxLevel = 50;
+
 [SerializeField]
     private StatusLevelType statusLevelType;
     [SerializeField] 
@@ -47,10 +49,10 @@ public class StatusLevelupPanel : MonoBehaviour
     {
         Player.playerCurrency.OnGoldChange += SetGoldCostText;
         Player.playerStatus.OnStatusLevelChange += Initialize; // += Initialize;
-        Initialize(statusLevelType);
-
         _holdButton = levelUpButton.gameObject.GetComponent<MyHoldButton>();
         _holdButton.onPressStartEvent = OnClickLevelUpButton;
+        Initialize(statusLevelType);
+
         //levelUpButton.onClick.AddListener(OnClickLevelUpButton);
     }
 
@@ -66,14 +68,34 @@ public class StatusLevelupPanel : MonoBehaviour
         SetGoldCostText(Player.Gold);
         SetStatusLevelText();
         SetStatusValueText();
+        CheckIsMaxLevel();
+    }
+
+    private bool CheckIsMaxLevel()
+    {
+        if (statusLevelType == StatusLevelType.ATTACK_SPEED && Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] >= StatusLevelData.MAX_ATTACK_SPEED_LEVEL)
+        {
+            _holdButton.isPressed = false;
+            levelUpButton.interactable = false;
+            return true;
+        }
+
+        return false;
     }
 
     // currentStatusLevel로부터 결과 값 적용시키는 함수
     private void SetStatusValueText()
     {
         //BigInteger value = ;//.GetLevelFromType(statusLevelType);
+        float value = Player.playerStatus.GetStatusLevelData().CalculateValueFromLevel(statusLevelType);
+        if (statusLevelType == StatusLevelType.ATTACK_SPEED)
+        {
+            value = (float)Math.Truncate(value * 100)/100;
+        }
         
-        statusValueText.text = Player.playerStatus.GetStatusLevelData().CalculateValueFromLevel(statusLevelType).ToString();
+        
+        statusValueText.text = value.ToString();
+        
     }
 
     BigInteger CalculateGoldCost(int startCost, float multiplyValue, BigInteger currentLevel)
@@ -92,8 +114,16 @@ public class StatusLevelupPanel : MonoBehaviour
 
     void SetGoldCostText(BigInteger playerGold)
     {
+        if (CheckIsMaxLevel())
+        {
+            goldCostText.text = "최대 레벨";
+            goldCostText.color = Color.black;
+            return;
+        }
+
         BigInteger currentStatusLevel = Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType];
         BigInteger goldCost = CalculateGoldCost(startGoldCost, _statusLevelUpCostDict[statusLevelType], currentStatusLevel);
+        string goldCostString = MyBigIntegerMath.GetAbbreviationFromBigInteger(goldCost);
         if (playerGold >= goldCost)
         {
             goldCostText.color = new Color(0, 0, 255);
@@ -102,38 +132,31 @@ public class StatusLevelupPanel : MonoBehaviour
         {
             goldCostText.color = new Color(255, 0, 0);
         }
-        goldCostText.text = goldCost.ToString();
+        goldCostText.text = goldCostString;
     }
 
     void OnClickLevelUpButton()
     {
-        _levelUpCoroutine = StartCoroutine(LevelUpStatus());
-        //LevelUpStatus();
+        if (_levelUpCoroutine == null && !CheckIsMaxLevel())
+        {
+            _levelUpCoroutine = StartCoroutine(LevelUpStatus());
+        }
     }
     IEnumerator LevelUpStatus()
     {
         int pressTime = 0;
         while (true)
         {
-            //// 유저가 뗐을 때
-            //if (!_holdButton.isPressed)
-            //{
-            //    SaveLoadManager.GetInstance().SavePlayerStatusLevel(Player.playerStatus.GetStatusLevelData());
-            //    Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] += pressTime;
-            //    Player.UpdatePlayerStatusLevelByType(statusLevelType, Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType]);
-            //    yield break;
-            //}
-
             int currentStatusLevel = Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] + pressTime;
-            BigInteger goldCost = CalculateGoldCost(statusLevelType, currentStatusLevel, levelUpMultiplyValue);
-            if (Player.Gold >= goldCost && _holdButton.isPressed)
+            int canLevelUpMultiplyValue = CalcCanLevelUpMultiplyValue(levelUpMultiplyValue);
+            BigInteger goldCost = CalculateGoldCost(statusLevelType, currentStatusLevel, canLevelUpMultiplyValue);
+            if (Player.Gold >= goldCost && _holdButton.isPressed && !IsStatusMaxLevel())
             {
-                Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] += levelUpMultiplyValue;
+                Player.playerStatus.UpdateStatusLevelByType(statusLevelType ,Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] + canLevelUpMultiplyValue, false);
                 Player.Gold -= goldCost;
-                pressTime += levelUpMultiplyValue;
-                int statusLevel = (Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] + levelUpMultiplyValue);
-                statusValueText.text = Player.playerStatus.GetStatusLevelData()
-                    .CalculateValueFromLevelForText(statusLevelType, statusLevel).ToString();
+                pressTime += 1;
+                int statusLevel = (Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType]);
+                SetStatusValueText();
                 currentLevelText.text = statusLevel.ToString();
             }
             else
@@ -142,17 +165,47 @@ public class StatusLevelupPanel : MonoBehaviour
 
                 if (pressTime > 0)
                 {
+                    Player.playerStatus.UpdateStatusLevelByType(statusLevelType, Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType], true);
                     SaveLoadManager.GetInstance().SavePlayerStatusLevel(Player.playerStatus.GetStatusLevelData());
-                    Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] += pressTime;
                     Player.UpdatePlayerStatusLevelByType(statusLevelType, Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType]);
                 }
                 _holdButton.isPressed = false;
+                _levelUpCoroutine = null;
                 yield break;
             }
 
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.1f);
         }
 
+    }
+
+    private int CalcCanLevelUpMultiplyValue(int initLevelUpMulValue)
+    {
+        // 공격속도
+        if (statusLevelType == StatusLevelType.ATTACK_SPEED &&
+            Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] + initLevelUpMulValue >=
+            StatusLevelData.MAX_ATTACK_SPEED_LEVEL)
+        {
+            return StatusLevelData.MAX_ATTACK_SPEED_LEVEL -
+                   Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType];
+        }
+
+        return initLevelUpMulValue;
+    }
+
+    bool IsStatusMaxLevel()
+    {
+        // 현재 스탯이 최고 레벨인지 파악하는 함수
+
+        // 공격속도
+        if (statusLevelType == StatusLevelType.ATTACK_SPEED &&
+            Player.playerStatus.GetStatusLevelData().statusLevels[(int)statusLevelType] >=
+            StatusLevelData.MAX_ATTACK_SPEED_LEVEL)
+        {
+            return true;
+        }
+
+        return false;
     }
     public static BigInteger CalculateGoldCost(StatusLevelType type, BigInteger currentLevel, int levelUpMultiplyValue)
     {

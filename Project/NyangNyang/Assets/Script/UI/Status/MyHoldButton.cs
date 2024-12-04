@@ -6,10 +6,16 @@ using UnityEngine.EventSystems;
 
 public class MyHoldButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler
 {
+    public bool isActive = true;
     public bool isPressed = false;
     public Action onPressStartEvent = null;
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (!isActive)
+        {
+            return;
+        }
+
         isPressed = true;
         if (onPressStartEvent != null)
         {
