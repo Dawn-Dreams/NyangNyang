@@ -53,9 +53,9 @@ public class Weapon
         isLock = false;
     }
 
-    public void AddWeapon(int count)
+    public void AddWeapon(int _count)
     {
-        count += count;
+        count += _count;
     }
 
     public bool HasWeapon()

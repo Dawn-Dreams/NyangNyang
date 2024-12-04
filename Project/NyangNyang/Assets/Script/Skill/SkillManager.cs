@@ -61,6 +61,7 @@ public class SkillManager : MonoBehaviour
         for (int i = 0; i < 25; ++i)
         {
             MatchSkillFromSkillData(i);
+            skillDic[skills[i].GetName()] = i;
         }
     }
 
@@ -71,6 +72,8 @@ public class SkillManager : MonoBehaviour
         skillDatas[id].effect = skills[id].GetEffect();
         skillDatas[id].level = skills[id].GetLevel();
         skillDatas[id].coin = skills[id].GetCoin();
+
+        SaveDataManager.GetInstance().SaveSkills(skillDatas);
     }
 
     public void MatchSkillFromSkillData(int id)

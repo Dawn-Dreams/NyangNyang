@@ -66,7 +66,8 @@ public class WeaponManager : MonoBehaviour
         for ( int i  = 0; i < 32; ++i)
         {
             MatchWeaponFromWeaponData(i);
-        }
+            weaponDic[weapons[i].GetName()] = i;
+        }     
     }
     
     public void MatchWeaponDataFromWeapon(int id)
@@ -76,6 +77,8 @@ public class WeaponManager : MonoBehaviour
         weaponDatas[id].effect = weapons[id].GetEffect();
         weaponDatas[id].level = weapons[id].GetLevel();
         weaponDatas[id].coin = weapons[id].GetCoin();
+
+        SaveDataManager.GetInstance().SaveWeapons(weaponDatas);
     }
 
     public void MatchWeaponFromWeaponData(int id)
@@ -96,14 +99,15 @@ public class WeaponManager : MonoBehaviour
     {
         if ( id >= 0 && id < weapons.Length )
         {
-            return null;
+            return weapons[id];
         }
-        return weapons[id];
+        return null;
     }
 
     public Weapon GetWeapon(string name)
     {
         int id;
+
         if(weaponDic.TryGetValue(name, out id))
         {
             return weapons[id];
@@ -135,7 +139,10 @@ public class WeaponManager : MonoBehaviour
         Weapon weapon = GetWeapon(id);
         if (weapon != null)
         {
-            weapon.AddWeapon(count);
+            Debug.Log("무기 뽑기 중");
+            Debug.Log(weapon.GetCount());
+            weapons[id].AddWeapon(count);
+            Debug.Log(weapon.GetCount());
 
             // 11.12 이윤석 - 무기 획득 퀘스트
             if (QuestManager.GetInstance().OnUserObtainWeapon != null)
@@ -145,31 +152,35 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
-    //public bool CombineWeapon(int id)
-    //{
-    //    if ( id >= 0 && id < weapons.Length - 1 )
-    //    {
-    //        Weapon weapon = GetWeapon(id);
-    //        if ( weapon != null )
-    //        {
-    //            weapon.AddWeapon(-5);
+    public bool CombineWeapon(int id)
+    {
+        if (id >= 0 && id < weapons.Length - 1)
+        {
+            Weapon weapon = GetWeapon(id);
+            if (weapon != null)
+            {
+                weapon.AddWeapon(-5);
 
-    //            weapon = GetWeapon(id + 1);
+                MatchWeaponDataFromWeapon(id);
 
-    //            // 11.12 이윤석 - 무기 합성 퀘스트
-    //            if (QuestManager.GetInstance().OnUserWeaponCombine != null)
-    //            {
-    //                QuestManager.GetInstance().OnUserWeaponCombine(1);
-    //            }
+                weapon = GetWeapon(id + 1);
 
-    //            if (weapon != null)
-    //            {
-    //                weapon.SetIsLockToFALSE();
-    //                weapon.AddWeapon(1);
-    //            }
-    //        }
-    //        return true;
-    //    }
-    //    return false;
-    //}
+                // 11.12 이윤석 - 무기 합성 퀘스트
+                if (QuestManager.GetInstance().OnUserWeaponCombine != null)
+                {
+                    QuestManager.GetInstance().OnUserWeaponCombine(1);
+                }
+
+                if (weapon != null)
+                {
+                    weapon.SetIsLockToFALSE();
+                    weapon.AddWeapon(1);
+
+                    MatchWeaponDataFromWeapon(id + 1);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 }

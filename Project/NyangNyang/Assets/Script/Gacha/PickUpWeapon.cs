@@ -39,7 +39,7 @@ public class PickUpWeapon : MonoBehaviour
         {
             // TODO: child 속의 내용 작성하기 뽑기에서 나온 결과물로**
             int id = 0; // return으로 id 알려주기
-
+            
             SetPickUPWeapon(id, child.gameObject);
         }
 
@@ -50,6 +50,7 @@ public class PickUpWeapon : MonoBehaviour
         img.sprite = WeaponManager.GetInstance().GetSprite(id);
         _obj.GetComponent<WeaponUnlock>().Unlock();
         WeaponManager.GetInstance().AddWeaponCount(id, 1);
+        WeaponManager.GetInstance().MatchWeaponDataFromWeapon(id);
 
         Weapon weapon = WeaponManager.GetInstance().GetWeapon(id);
 

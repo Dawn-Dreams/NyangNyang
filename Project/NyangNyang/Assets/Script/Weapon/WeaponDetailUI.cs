@@ -54,7 +54,6 @@ public class WeaponDetailUI : MonoBehaviour
         {  
             // 선택된 장비 정보 받아오기
             choosedWeapon = WeaponManager.GetInstance().GetWeapon(_obj.name);
-
             // 장비 정보가 잘 불려온 경우
             if ( choosedWeapon != null )
             {
@@ -66,29 +65,29 @@ public class WeaponDetailUI : MonoBehaviour
         }
     }
 
-    //// 다음 단계로의 장비로 합성하는 함수
-    //public void OnClickedMerge()
-    //{
-    //    // 다음 단계로의 merge 과정
-    //    if (choosedWeapon != null && choosedWeapon.GetWeaponCount() >= 5)
-    //    {
-    //        if (WeaponManager.GetInstance().CombineWeapon(choosedWeapon.GetID()))
-    //        {
-    //            // Debug.Log("성공");
-    //            UpdatePossessionUI();
-    //        }
-    //        else
-    //        {
-    //            // TODO: 최고 단계라는 팝업 띄우기
-    //            // Debug.Log("최고 단계");
-    //        }
-    //    }
-    //    else
-    //    {
-    //        // TODO: 개수 부족 팝업 띄우기
-    //        // Debug.Log("개수 부족");
-    //    }
-    //}
+    // 다음 단계로의 장비로 합성하는 함수
+    public void OnClickedMerge()
+    {
+        // 다음 단계로의 merge 과정
+        if (choosedWeapon != null && choosedWeapon.GetCount() >= 5)
+        {
+            if (WeaponManager.GetInstance().CombineWeapon(choosedWeapon.GetID()))
+            {
+                // Debug.Log("성공");
+                UpdatePossessionUI();
+            }
+            else
+            {
+                // TODO: 최고 단계라는 팝업 띄우기
+                // Debug.Log("최고 단계");
+            }
+        }
+        else
+        {
+            // TODO: 개수 부족 팝업 띄우기
+            // Debug.Log("개수 부족");
+        }
+    }
 
     //// 장비 Lv 올리는 함수
     //public void OnClickedEnhance()
