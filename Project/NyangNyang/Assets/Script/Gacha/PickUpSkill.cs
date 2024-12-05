@@ -9,6 +9,71 @@ public class PickUpSkill : MonoBehaviour
     public GameObject AllContent;
     public GameObject OneContent;
 
+    // 스킬 ID: 0 ~ 24 (액티브: 0 ~ 4, 패시브: 5 ~ 24)
+    private const int TotalSkills = 25;
+
+    // 확률 테이블 (레벨별 확률)
+    private Dictionary<int, float[]> probabilityTable;
+
+    private void Awake()
+    {
+        InitializeProbabilityTable();
+
+    }
+    // 확률 테이블 초기화
+    private void InitializeProbabilityTable()
+    {
+        probabilityTable = new Dictionary<int, float[]>();
+
+        // 레벨별 확률 설정 (임의값, 필요시 조정 가능)
+        for (int level = 1; level <= 12; level++)
+        {
+            probabilityTable[level] = new float[TotalSkills];
+
+            for (int i = 0; i < TotalSkills; i++)
+            {
+                if (i < 5) probabilityTable[level][i] = 0.01f / level; // Active skills
+                else probabilityTable[level][i] = 0.05f / level; // Passive skills
+            }
+        }
+    }
+
+    // 스킬 뽑기 함수
+    public int DrawSkill(int level)
+    {
+        if (!probabilityTable.ContainsKey(level))
+        {
+            Debug.LogError("Invalid level provided for skill draw.");
+            return -1;
+        }
+
+        float[] probabilities = probabilityTable[level];
+        float totalProbability = 0;
+
+        // 확률 합계 계산
+        foreach (float prob in probabilities)
+        {
+            totalProbability += prob;
+        }
+
+        // 랜덤 값 생성
+        float randomValue = UnityEngine.Random.Range(0f, totalProbability);
+        float cumulativeProbability = 0f;
+
+        // 랜덤 값에 따라 스킬 선택
+        for (int i = 0; i < probabilities.Length; i++)
+        {
+            cumulativeProbability += probabilities[i];
+            if (randomValue <= cumulativeProbability)
+            {
+                return i;
+            }
+        }
+
+        // 오류 처리
+        Debug.LogError("Failed to draw skill due to probability calculation error.");
+        return -1;
+    }
 
     private void OnDisable()
     {
@@ -23,7 +88,7 @@ public class PickUpSkill : MonoBehaviour
         OneContent.SetActive(true);
 
         // TODO: OneContent 속의 내용 작성하기 뽑기에서 나온 결과물로**
-        int id = 0;
+        int id = DrawSkill(1);
 
         SetPickUPSkill(id, OneContent);
 
@@ -38,7 +103,7 @@ public class PickUpSkill : MonoBehaviour
         foreach (Transform child in _allT)
         {
             // TODO: child 속의 내용 작성하기 뽑기에서 나온 결과물로**
-            int id = 0;
+            int id = DrawSkill(1);
 
             SetPickUPSkill(id, child.gameObject);
         }

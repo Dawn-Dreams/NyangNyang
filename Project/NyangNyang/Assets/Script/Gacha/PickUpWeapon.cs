@@ -15,16 +15,72 @@ public class PickUpWeapon : MonoBehaviour
         AllContent.SetActive(false);
         OneContent.SetActive(false);
     }
+    // 무기 ID: 0 ~ 31
+    private const int TotalWeapons = 32;
 
-    private int GetPickUpWeapon(int _lv)
+    // 확률 테이블 (레벨별 확률)
+    private Dictionary<int, float[]> probabilityTable;
+
+    private void Awake()
     {
-        int result = 0;
+        InitializeProbabilityTable();
 
-
-
-        return result;
     }
+    // 확률 테이블 초기화
+    private void InitializeProbabilityTable()
+    {
+        probabilityTable = new Dictionary<int, float[]>();
 
+        // 레벨별 확률 설정 (임의값, 필요시 조정 가능)
+        for (int level = 1; level <= 10; level++)
+        {
+            probabilityTable[level] = new float[TotalWeapons];
+
+            for (int i = 0; i < TotalWeapons; i++)
+            {
+                if (i < 8) probabilityTable[level][i] = 0.02f / level; // Normal
+                else if (i < 16) probabilityTable[level][i] = 0.03f / level; // Magic
+                else if (i < 24) probabilityTable[level][i] = 0.04f / level; // Rare
+                else probabilityTable[level][i] = 0.05f / level; // Unique ~ Galaxy
+            }
+        }
+    }
+    // 무기 뽑기 함수
+    public int DrawWeapon(int level)
+    {
+        if (!probabilityTable.ContainsKey(level))
+        {
+            Debug.LogError("Invalid level provided for weapon draw.");
+            return -1;
+        }
+
+        float[] probabilities = probabilityTable[level];
+        float totalProbability = 0;
+
+        // 확률 합계 계산
+        foreach (float prob in probabilities)
+        {
+            totalProbability += prob;
+        }
+
+        // 랜덤 값 생성
+        float randomValue = UnityEngine.Random.Range(0f, totalProbability);
+        float cumulativeProbability = 0f;
+
+        // 랜덤 값에 따라 무기 선택
+        for (int i = 0; i < probabilities.Length; i++)
+        {
+            cumulativeProbability += probabilities[i];
+            if (randomValue <= cumulativeProbability)
+            {
+                return i;
+            }
+        }
+
+        // 오류 처리
+        Debug.LogError("Failed to draw weapon due to probability calculation error.");
+        return -1;
+    }
     public void ShowPickUpWeapon()
     {
         // 한 개 뽑기
@@ -32,7 +88,7 @@ public class PickUpWeapon : MonoBehaviour
         OneContent.SetActive(true);
 
         // TODO: OneContent 속의 내용 작성하기 뽑기에서 나온 결과물로**
-        int id = 0;
+        int id = DrawWeapon(1);
 
         SetPickUPWeapon(id, OneContent);
     }
@@ -47,8 +103,8 @@ public class PickUpWeapon : MonoBehaviour
         foreach (Transform child in _allT)
         {
             // TODO: child 속의 내용 작성하기 뽑기에서 나온 결과물로**
-            int id = 0; // return으로 id 알려주기
-            
+            int id = DrawWeapon(2); // return으로 id 알려주기
+
             SetPickUPWeapon(id, child.gameObject);
         }
 
