@@ -25,8 +25,8 @@ public class WeaponManager : MonoBehaviour
     {
         // TODO: 서버에서 데이터 받아오기
         // 이후는 일부러 연결 안 해둠 어차피 서버 연결 시 사라질 부분
-        /*
         
+        /*
         weaponDatas[0] = new WeaponInfo { ID = 0, name = "낡은 횃불", count = 1, grade = "Normal", subGrade = "A", isLock = false, effect = 0f, level = 1, coin = 0, ment = "\"겨우 불씨를 붙인 나무 조각. 바람이 불면 금방 꺼질 것 같다.\"" };
         weaponDatas[1] = new WeaponInfo { ID = 1, name = "평범한 횃불", count = 0, grade = "Normal", subGrade = "B", isLock = true, effect = 0f, level = 1, coin = 0, ment = "\"불꽃이 안정적으로 타오른다. 어둠을 밝혀주는 데 충분하다.\"" };
         weaponDatas[2] = new WeaponInfo { ID = 2, name = "정교한 횃불", count = 0, grade = "Normal", subGrade = "C", isLock = true, effect = 0f, level = 1, coin = 0, ment = "\"정교하게 만든 횃불. 오래 사용해도 불꽃이 꺼지지 않는다.\"" };
@@ -60,7 +60,10 @@ public class WeaponManager : MonoBehaviour
         weaponDatas[30] = new WeaponInfo { ID = 30, name = "정교한 톱", count = 0, grade = "Galaxy", subGrade = "C", isLock = true, effect = 0f, level = 1, coin = 0, ment = "\"예리한 톱날이 달린 고급 톱. 작업이 빠르고 정교하다.\"" };
         weaponDatas[31] = new WeaponInfo { ID = 31, name = "전설의 톱", count = 0, grade = "Galaxy", subGrade = "D", isLock = true, effect = 0f, level = 1, coin = 0, ment = "\"황금빛으로 빛나는 톱. 단 한 번에 모든 것을 자를 수 있다.\"" };
         
-         */
+         
+        SaveDataManager.GetInstance().SaveWeapons(weaponDatas); 
+
+        */
         weaponDatas = SaveDataManager.GetInstance().LoadWeapons();
 
         for ( int i  = 0; i < 32; ++i)

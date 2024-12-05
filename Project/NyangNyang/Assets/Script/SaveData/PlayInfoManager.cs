@@ -12,7 +12,7 @@ public class PlayInfoManager : MonoBehaviour
 
     private int[] LevelList = new int[12] { 0, 150, 300, 550, 1000, 2000, 4000, 10000, 20000, 40000, 40000, 40000 };
 
-    private void Start()
+    private void Awake()
     {
         if ( instance == null)
         {
@@ -24,8 +24,8 @@ public class PlayInfoManager : MonoBehaviour
 
     private void InitializedPlayInfo()
     {
-        /*
-         
+        //info = new PlayInfo();
+
         //info.weaponGachaCount = 0;
         //info.weaponGachaLevel = 1;
 
@@ -39,8 +39,8 @@ public class PlayInfoManager : MonoBehaviour
         //info.currentSkillID = -1;
 
         //SaveDataManager.GetInstance().SavePlayInfo(info);
-        
-         */
+
+
 
         info = SaveDataManager.GetInstance().LoadPlayInfo();
 
