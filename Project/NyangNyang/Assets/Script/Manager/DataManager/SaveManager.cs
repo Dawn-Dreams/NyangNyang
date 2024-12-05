@@ -353,20 +353,20 @@ public class SaveLoadManager : MonoBehaviour
     #endregion
 
     #region Friend
-    public void SaveFriends(List<FriendData> friends)
+    public void SaveFriends(List<DungeonData> friends)
     {
-        string json = JsonUtility.ToJson(new Wrapper<FriendData> { items = friends });
+        string json = JsonUtility.ToJson(new Wrapper<DungeonData> { items = friends });
         File.WriteAllText(_friendFilePath, json);
     }
 
-    public List<FriendData> LoadFriends()
+    public List<DungeonData> LoadDungeonData()
     {
         if (File.Exists(_friendFilePath))
         {
             string json = File.ReadAllText(_friendFilePath);
-            return JsonUtility.FromJson<Wrapper<FriendData>>(json).items;
+            return JsonUtility.FromJson<Wrapper<DungeonData>>(json).items;
         }
-        return new List<FriendData>();
+        return new List<DungeonData>();
     }
     #endregion
 
@@ -536,7 +536,7 @@ public class SaveLoadManager : MonoBehaviour
         }
         if (!File.Exists(_friendFilePath))
         {
-            SaveFriends(new List<FriendData>());
+            SaveFriends(new List<DungeonData>());
         }
         if (!File.Exists(_rankingFilePath))
         {

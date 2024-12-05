@@ -73,30 +73,27 @@ public class DungeonManager : MonoBehaviour
     }
     public void LoadAndAssignDungeonLevel()
     {
-        // 원래 있던 json사용하느라 이름이 친구
-        // SaveLoadManager를 통해 친구 데이터 로드
-        List<FriendData> friends = SaveLoadManager._instance.LoadFriends();
+        // SaveLoadManager를 통해 데이터 로드
+        List<DungeonData> dungeonData = SaveLoadManager._instance.LoadDungeonData();
 
-        if (friends != null && friends.Count > 0)
+        if (dungeonData != null && dungeonData.Count > 0)
         {
-            // 1번 친구의 레벨을 가져옴
-            int friendLevel = friends[0].friendLevel;
+            int dungeonLevel = dungeonData[0].dungeonLevel;
 
             // dungeonHighestClearLevel[0]에 값 할당
-            dungeonHighestClearLevel[0] = friendLevel;
-            //Debug.Log($"1번 친구의 레벨: {friendLevel}, dungeonHighestClearLevel[0]에 할당 완료.");
+            dungeonHighestClearLevel[0] = dungeonLevel;
         }
         else
         {
-            Debug.Log("로드된 친구 데이터가 없습니다. dungeonHighestClearLevel[0]을 기본값으로 유지합니다.");
+            Debug.Log("dungeonHighestClearLevel[0]을 기본값으로 유지합니다.");
         }
     }
 
-    private void SaveFriendLevelForDungeon()
+    private void SaveLevelForDungeon()
     {
-        FriendData myFriend = new FriendData(0, "Me", dungeonHighestClearLevel[0]);
-        List<FriendData> friendsList = new List<FriendData> { myFriend };
-        SaveLoadManager.GetInstance().SaveFriends(friendsList);
+        DungeonData myDungeon = new DungeonData(0, "Me", dungeonHighestClearLevel[0]);
+        List<DungeonData> dungeonLevelList = new List<DungeonData> { myDungeon };
+        SaveLoadManager.GetInstance().SaveFriends(dungeonLevelList);
 
     }
     private void InitializeClonedCat(Cat clone)
@@ -290,7 +287,7 @@ public class DungeonManager : MonoBehaviour
             ShowDungeonResultText("<color=#FF6F6F>실패...</color>", 2);
         }
         StopCombatActions();
-        SaveFriendLevelForDungeon();
+        SaveLevelForDungeon();
         StartCoroutine(DestroyObjectsWithDelay(3.0f));
     }
 

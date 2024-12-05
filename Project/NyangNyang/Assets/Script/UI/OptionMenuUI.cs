@@ -38,7 +38,7 @@ public class OptionMenuUI : MonoBehaviour
         // 데이터를 저장합니다.
         SaveLoadManager._instance.SaveNotices(SaveLoadManager._instance.LoadNotices());
         SaveLoadManager._instance.SaveMails(SaveLoadManager._instance.LoadMails());
-        SaveLoadManager._instance.SaveFriends(SaveLoadManager._instance.LoadFriends());
+        SaveLoadManager._instance.SaveFriends(SaveLoadManager._instance.LoadDungeonData());
         SaveLoadManager._instance.SaveRankings(SaveLoadManager._instance.LoadRankings());
         SaveLoadManager._instance.SaveBoards(SaveLoadManager._instance.LoadBoards());
     }
@@ -245,7 +245,7 @@ public class OptionMenuUI : MonoBehaviour
     void OpenFriendsPanel()
     {
         // 친구 데이터 로드
-        List<FriendData> friendList = SaveLoadManager._instance.LoadFriends();
+        List<DungeonData> friendList = SaveLoadManager._instance.LoadDungeonData();
         GameObject contentObj = GameObject.Find("FriendUI/Viewport/Content");
 
         // 기존 UI 요소 제거
@@ -256,7 +256,7 @@ public class OptionMenuUI : MonoBehaviour
 
         if (friendList.Count > 0)
         {
-            foreach (FriendData friendData in friendList)
+            foreach (DungeonData friendData in friendList)
             {
                 GameObject friendButton = Instantiate(friendButtonPrefab, contentObj.transform);
 
@@ -265,9 +265,9 @@ public class OptionMenuUI : MonoBehaviour
                 TMP_Text friendUserNameText = friendButton.transform.Find("FriendUserName").GetComponent<TMP_Text>();
                 TMP_Text friendUserLevelText = friendButton.transform.Find("FriendUserLevel").GetComponent<TMP_Text>();
 
-                friendUserIDText.text = friendData.friendUID.ToString();
-                friendUserNameText.text = friendData.friendName;
-                friendUserLevelText.text = friendData.friendLevel.ToString();
+                friendUserIDText.text = friendData.UID.ToString();
+                friendUserNameText.text = friendData.Name;
+                friendUserLevelText.text = friendData.dungeonLevel.ToString();
 
                 // 버튼 이벤트 추가
                 Button buttonComponent = friendButton.GetComponent<Button>();
@@ -301,7 +301,7 @@ public class OptionMenuUI : MonoBehaviour
 
 
     // 친구 버튼 팝업 메서드
-    void ShowFriendProfilePopup(FriendData friendData)
+    void ShowFriendProfilePopup(DungeonData friendData)
     {
         // 기존 팝업 닫기
         if (currentPopup != null)
@@ -318,9 +318,9 @@ public class OptionMenuUI : MonoBehaviour
         TMP_Text levelText = currentPopup.transform.Find("LevelText").GetComponent<TMP_Text>();
         Button closeButton = currentPopup.transform.Find("CloseButton").GetComponent<Button>();
 
-        nameText.text = $"{friendData.friendName}";
-        idText.text = $"ID : {friendData.friendUID}";
-        levelText.text = $"{friendData.friendLevel} Level";
+        nameText.text = $"{friendData.Name}";
+        idText.text = $"ID : {friendData.UID}";
+        levelText.text = $"{friendData.dungeonLevel} Level";
 
         // 닫기 버튼 이벤트 설정
         closeButton.onClick.AddListener(() =>

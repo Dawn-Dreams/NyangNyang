@@ -47,17 +47,17 @@ public class MailData
 }
 
 [System.Serializable]
-public class FriendData
+public class DungeonData
 {
-    public int friendUID;
-    public string friendName;
-    public int friendLevel;
+    public int UID;
+    public string Name;
+    public int dungeonLevel;
 
-    public FriendData(int uid, string name, int level)
+    public DungeonData(int uid, string name, int level)
     {
-        this.friendUID = uid;
-        this.friendName = name;
-        this.friendLevel = level;
+        this.UID = uid;
+        this.Name = name;
+        this.dungeonLevel = level;
     }
 }
 
