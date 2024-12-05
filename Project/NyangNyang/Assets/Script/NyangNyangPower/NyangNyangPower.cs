@@ -19,21 +19,36 @@ public class NyangNyangPower : MonoBehaviour
     [SerializeField]
     public TextMeshProUGUI nyangPowerTxt;
 
+    private int[] LevelList = new int[12] { 0, 150, 300, 550, 1000, 2000, 4000, 10000, 20000, 40000, 40000, 40000 };
+
     private void Start()
     {
+
+        nyangnyangLevel = PlayInfoManager.GetInstance().GetInfo().nyangnyangLevel;
+        nyangnyangPower = PlayInfoManager.GetInstance().GetInfo().nyangnyangCount;
         UpdateNyangNyangSlider();
     }
 
     public void OnClickedNyangNyangButton()
     {
         nyangnyangPower += nyangnyangLevel;
+        PlayInfoManager.GetInstance().SetNyangNyangCount();
+        nyangnyangLevel = PlayInfoManager.GetInstance().GetInfo().nyangnyangLevel;
         UpdateNyangNyangSlider();
     }
 
     public void UpdateNyangNyangSlider()
     {
-        nyangSliderValue.value = nyangnyangPower / 1000/*레벨에 따른 총량 값*/;
-        nyangPowerTxt.text = nyangnyangPower + "/" + 1000/*레벨에 따른 총량 값*/;
+        if ( nyangnyangLevel < 12)
+        {
+            nyangSliderValue.value = (float)nyangnyangPower / (float)LevelList[nyangnyangLevel]/*레벨에 따른 총량 값*/;
+            nyangPowerTxt.text = nyangnyangPower + "/" + LevelList[nyangnyangLevel]/*레벨에 따른 총량 값*/;
+        }
+        else
+        {
+            nyangSliderValue.value = 1;
+            nyangPowerTxt.text = "MAX" + nyangnyangPower;
+        }
     }
 
     public bool CanUseNyangNyangPower(int amount)

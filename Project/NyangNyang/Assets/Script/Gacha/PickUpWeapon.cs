@@ -32,7 +32,7 @@ public class PickUpWeapon : MonoBehaviour
         probabilityTable = new Dictionary<int, float[]>();
 
         // 레벨별 확률 설정 (임의값, 필요시 조정 가능)
-        for (int level = 1; level <= 10; level++)
+        for (int level = 1; level <= 12; level++)
         {
             probabilityTable[level] = new float[TotalWeapons];
 
@@ -88,8 +88,8 @@ public class PickUpWeapon : MonoBehaviour
         OneContent.SetActive(true);
 
         // TODO: OneContent 속의 내용 작성하기 뽑기에서 나온 결과물로**
-        int id = DrawWeapon(1);
-
+        int id = DrawWeapon(PlayInfoManager.GetInstance().GetInfo().weaponGachaLevel);
+        PlayInfoManager.GetInstance().SetWeaponGachaCount(1);
         SetPickUPWeapon(id, OneContent);
     }
 
@@ -100,10 +100,11 @@ public class PickUpWeapon : MonoBehaviour
         AllContent.SetActive(true);
 
         Transform _allT = AllContent.transform;
+        PlayInfoManager.GetInstance().SetWeaponGachaCount(10);
         foreach (Transform child in _allT)
         {
             // TODO: child 속의 내용 작성하기 뽑기에서 나온 결과물로**
-            int id = DrawWeapon(2); // return으로 id 알려주기
+            int id = DrawWeapon(PlayInfoManager.GetInstance().GetInfo().weaponGachaLevel); // return으로 id 알려주기
 
             SetPickUPWeapon(id, child.gameObject);
         }

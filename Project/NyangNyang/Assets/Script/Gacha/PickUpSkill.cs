@@ -88,8 +88,9 @@ public class PickUpSkill : MonoBehaviour
         OneContent.SetActive(true);
 
         // TODO: OneContent 속의 내용 작성하기 뽑기에서 나온 결과물로**
-        int id = DrawSkill(1);
+        int id = DrawSkill(PlayInfoManager.GetInstance().GetInfo().skillGachaLevel);
 
+        PlayInfoManager.GetInstance().SetSkillGachaCount(1);
         SetPickUPSkill(id, OneContent);
 
     }
@@ -100,10 +101,11 @@ public class PickUpSkill : MonoBehaviour
         AllContent.SetActive(true);
 
         Transform _allT = AllContent.transform;
+        PlayInfoManager.GetInstance().SetSkillGachaCount(10);
         foreach (Transform child in _allT)
         {
             // TODO: child 속의 내용 작성하기 뽑기에서 나온 결과물로**
-            int id = DrawSkill(1);
+            int id = DrawSkill(PlayInfoManager.GetInstance().GetInfo().skillGachaLevel);
 
             SetPickUPSkill(id, child.gameObject);
         }
