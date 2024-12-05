@@ -49,7 +49,8 @@ public class PickUpSkill : MonoBehaviour
         Image img = _obj.transform.Find("Image").GetComponent<Image>();
         img.sprite = SkillManager.GetInstance().GetSprite(id);
         _obj.GetComponent<WeaponUnlock>().Unlock();
-        SkillManager.GetInstance().AddSkillPossession(id, 1);
+        SkillManager.GetInstance().AddSkillCount(id, 1);
+        SkillManager.GetInstance().MatchSkillDataFromSkill(id);
 
         Skill skill = SkillManager.GetInstance().GetSkill(id);
 

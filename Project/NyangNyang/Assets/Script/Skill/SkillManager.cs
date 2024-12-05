@@ -155,7 +155,7 @@ public class SkillManager : MonoBehaviour
         return -1;
     }
 
-    public void AddSkillPossession(int id, int count)
+    public void AddSkillCount(int id, int count)
     {
         Skill skill = GetSkill(id);
         if ( skill != null )

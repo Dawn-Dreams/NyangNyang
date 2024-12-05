@@ -32,7 +32,7 @@ public abstract class Skill
 
     // 소지량 관련
     public int GetCount() => count;
-    public void SetCount(int count) => count += count;
+    public void SetCount(int _count) => count += _count;
     public bool HasSkill() => count > 0;
 
     // 레벨 관련
