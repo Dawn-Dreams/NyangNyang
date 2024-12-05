@@ -20,7 +20,6 @@ public class StatusLevelupPanel : MonoBehaviour
         { StatusLevelType.GOLD, 100000 }, { StatusLevelType.EXP, 100000 }
     };
 
-    private static int _attackSpeedMaxLevel = 50;
 
 [SerializeField]
     private StatusLevelType statusLevelType;
