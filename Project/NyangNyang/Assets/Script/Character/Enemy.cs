@@ -142,7 +142,7 @@ public class Enemy : Character
 
     [SerializeField] private GameObject[] dummyEnemyObj;
     public List<DummyEnemy> _dummyEnemies;
-    private List<EnemyMonsterType> _dummyEnemyMonsterTypes;
+    public List<EnemyMonsterType> _dummyEnemyMonsterTypes;
 
     public int initialNumOfDummyEnemy = 0;
 
@@ -157,7 +157,7 @@ public class Enemy : Character
     // 몬스터 정보에 대한 변수
     public MonsterData monsterDataTemplate;
     public MonsterData _monsterData;
-
+    private int monsterTypeIndex;
     // 몬스터들의 체력을 나타내는 Slider
     [SerializeField] private List<Slider> sliders;
 
@@ -261,7 +261,22 @@ public class Enemy : Character
         // 한마리 (보스의 경우)
         if (numOfEnemy == 1)
         {
-            return new List<EnemyMonsterType>() { monsterDataMonsterTypes[^1] };
+            if (isIndependent)
+            {
+                switch (monsterTypeIndex)
+                {
+                    case 0:
+                        return new List<EnemyMonsterType>() { EnemyMonsterType.FireGolem };
+                    case 1:
+                        return new List<EnemyMonsterType>() { EnemyMonsterType.IceBear };
+                    case 2:
+                        return new List<EnemyMonsterType>() { EnemyMonsterType.Scopionto };
+                    default:
+                        return new List<EnemyMonsterType>() { EnemyMonsterType.Null };
+                }
+            }
+            else
+                return new List<EnemyMonsterType>() { monsterDataMonsterTypes[^1] };
         }
 
         // 최초 스테이지일 경우
