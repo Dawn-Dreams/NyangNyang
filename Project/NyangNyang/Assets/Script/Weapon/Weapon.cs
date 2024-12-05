@@ -63,12 +63,13 @@ public class Weapon
         return count > 0;
     }
 
-    //public int LevelUP()
-    //{
-    //    level++;
-    //    // 밸런스 패치 필요
-    //    return coin + level * (grade * 10 + subGrade);
-    //}
+    public int SetLevel()
+    {
+        level++;
+        coin += level;
+        // 밸런스 패치 필요
+        return coin + level;
+    }
 
     //public int StatusUpgrade()
     //{

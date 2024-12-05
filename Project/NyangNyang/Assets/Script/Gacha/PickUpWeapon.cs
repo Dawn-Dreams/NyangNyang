@@ -16,6 +16,15 @@ public class PickUpWeapon : MonoBehaviour
         OneContent.SetActive(false);
     }
 
+    private int GetPickUpWeapon(int _lv)
+    {
+        int result = 0;
+
+
+
+        return result;
+    }
+
     public void ShowPickUpWeapon()
     {
         // ÇÑ °³ »Ì±â

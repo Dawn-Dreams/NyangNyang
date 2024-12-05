@@ -13,8 +13,8 @@ public class SkillManager : MonoBehaviour
     public Sprite[] sprites;
 
     // 밸런스 패치 필요
-    private int[] levelUpCosts = new int[9] { 5000, 10000, 50000, 100000, 250000, 500000, 1000000, 2500000, 5000000};
-    private int[] levelUpNeeds = new int[9] { 5, 10, 20, 20, 30, 50, 100, 500, 1000 };
+    private int[] SkillCostPerLevelList = new int[9] { 5000, 10000, 50000, 100000, 250000, 500000, 1000000, 2500000, 5000000};
+    private int[] SkillLevelList = new int[9] { 5, 10, 20, 20, 30, 50, 100, 500, 1000 };
 
     private void Awake()
     {
@@ -145,11 +145,12 @@ public class SkillManager : MonoBehaviour
     public int LevelUpSkill(int id)
     {
         Skill skill = GetSkill(id);
-        if ( skill != null && skill.GetLevel() < 10 && skill.GetCount() >= levelUpNeeds[skill.GetLevel()-1] )
+        if ( skill != null && skill.GetCount() >= SkillLevelList[skill.GetLevel() - 1] )
         {
-            skill.SetCount(-levelUpNeeds[skill.GetLevel() - 1]);
-            skill.SetCoin(levelUpCosts[skill.GetLevel() - 1]);
+            skill.SetCount(-SkillLevelList[skill.GetLevel() - 1]);
+            skill.SetCoin(SkillCostPerLevelList[skill.GetLevel() - 1]);
             skill.AddLevel(1);
+            MatchSkillDataFromSkill(id);
             return skill.GetLevel();
         }
         return -1;
@@ -172,9 +173,9 @@ public class SkillManager : MonoBehaviour
 
     public int GetLevelUpCostPerLevel(int level)
     {
-        if ( level >= 0 && level < levelUpCosts.Length)
+        if ( level >= 0 && level < SkillCostPerLevelList.Length)
         {
-            return levelUpNeeds[level];
+            return SkillLevelList[level];
         }
         return -1;
     }

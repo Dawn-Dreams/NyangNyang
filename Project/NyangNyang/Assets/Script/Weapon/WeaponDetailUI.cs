@@ -89,40 +89,40 @@ public class WeaponDetailUI : MonoBehaviour
         }
     }
 
-    //// 장비 Lv 올리는 함수
-    //public void OnClickedEnhance()
-    //{
-    //    if ( choosedWeapon != null && !choosedWeapon.GetIsLock() && choosedWeapon.GetLevel() < 100)
-    //    {
-    //        if ( Player.Gold >= int.Parse(weaponCoinTxt.text))
-    //        {
-    //            Player.Gold -= int.Parse(weaponCoinTxt.text);
-    //            // LevelUpWeapon 함수가 int 값으로 다음 단계에 필요한 코인의 양 return 함.
-    //            int num = WeaponManager.GetInstance().LevelUpWeapon(choosedWeapon.GetID());
-    //            // TODO: 능력치 증가 로직 만들기
-    //            WeaponManager.GetInstance().EnhanceEffectWeapon(choosedWeapon.GetID());
-    //            eCurStatusTxt.text = choosedWeapon.GetCurStatus().ToString();
-    //            eNextStatusTxt.text = choosedWeapon.GetNextStatus().ToString();
-    //            if ( choosedWeapon.GetLevel() == 100)
-    //            {
-    //                UpdateMaxLevelUI();
-    //            }
-    //            else
-    //            {
-    //                weaponCoinTxt.text = num.ToString();
-    //                wLevelTxt.text = choosedWeapon.GetLevel() + "/100";
-    //            }
-    //        }
-    //        else
-    //        {
-    //            Debug.Log("돈이 부족합니다.");
-    //        }
-    //    }
-    //    else
-    //    {
-    //        Debug.Log("레벨 업에 실패했습니다.");
-    //    }
-    //}
+    // 장비 Lv 올리는 함수
+    public void OnClickedEnhance()
+    {
+        if (choosedWeapon != null && !choosedWeapon.GetIsLock() && choosedWeapon.GetLevel() < 100)
+        {
+            if (Player.Gold >= int.Parse(weaponCoinTxt.text))
+            {
+                Player.Gold -= int.Parse(weaponCoinTxt.text);
+                // LevelUpWeapon 함수가 int 값으로 다음 단계에 필요한 코인의 양 return 함.
+                int num = WeaponManager.GetInstance().LevelUpWeapon(choosedWeapon.GetID());
+                // TODO: 능력치 증가 로직 만들기
+                //WeaponManager.GetInstance().EnhanceEffectWeapon(choosedWeapon.GetID());
+                //eCurStatusTxt.text = choosedWeapon.GetCurStatus().ToString();
+                //eNextStatusTxt.text = choosedWeapon.GetNextStatus().ToString();
+                if (choosedWeapon.GetLevel() == 100)
+                {
+                    UpdateMaxLevelUI();
+                }
+                else
+                {
+                    weaponCoinTxt.text = num.ToString();
+                    wLevelTxt.text = choosedWeapon.GetLevel() + "/100";
+                }
+            }
+            else
+            {
+                Debug.Log("돈이 부족합니다.");
+            }
+        }
+        else
+        {
+            Debug.Log("레벨 업에 실패했습니다.");
+        }
+    }
 
     // 이전 무기의 디테일 창으로 넘어가는 함수
     public void OnClickedShowPreviousWeapon()

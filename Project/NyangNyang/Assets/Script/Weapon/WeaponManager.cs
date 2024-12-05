@@ -115,15 +115,17 @@ public class WeaponManager : MonoBehaviour
         return null;
     }
 
-    //public int LevelUpWeapon(int id)
-    //{
-    //    Weapon weapon = GetWeapon(id);
-    //    if ( weapon != null && weapon.HasWeapon() && weapon.GetLevel() < 100 )
-    //    {
-    //        return weapon.LevelUP();
-    //    }
-    //    return 1000;
-    //}
+    public int LevelUpWeapon(int id)
+    {
+        Weapon weapon = GetWeapon(id);
+        if (weapon != null && weapon.HasWeapon() && weapon.GetLevel() < 100)
+        {
+            int c = weapon.SetLevel();
+            MatchWeaponDataFromWeapon(id);
+            return c;
+        }
+        return 1000;
+    }
 
     //public void EnhanceEffectWeapon(int id)
     //{
@@ -139,10 +141,7 @@ public class WeaponManager : MonoBehaviour
         Weapon weapon = GetWeapon(id);
         if (weapon != null)
         {
-            Debug.Log("무기 뽑기 중");
-            Debug.Log(weapon.GetCount());
             weapons[id].AddWeapon(count);
-            Debug.Log(weapon.GetCount());
 
             // 11.12 이윤석 - 무기 획득 퀘스트
             if (QuestManager.GetInstance().OnUserObtainWeapon != null)
