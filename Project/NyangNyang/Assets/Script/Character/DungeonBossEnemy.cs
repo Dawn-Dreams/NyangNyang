@@ -12,12 +12,12 @@ public class DungeonBossEnemy : Enemy
     {
         Scarecrow,       // 허수아비
         SkillOnly,       // 스킬로만 데미지
-        RoaringSkill     // N초 간격 포효 스킬
+        Normal     // N초 간격 포효 스킬
     }
 
     [SerializeField] private BossType bossType;
     [SerializeField] private int roarInterval;
-    private int bossLevel;
+    private int bossLevel=1;
     private Coroutine roarSkillCoroutine;     // 포효 스킬 관리 코루틴
 
     // 보스 전용 스킬 또는 패턴을 위한 변수들
@@ -31,8 +31,24 @@ public class DungeonBossEnemy : Enemy
         healthBarSlider = FindObjectOfType<Slider>();
         textMeshPro = FindObjectOfType<TextMeshProUGUI>();
         isIndependent = true;
-
     }
+
+    //// 팩토리 메서드
+    //public static DungeonBossEnemy CreateBoss(DungeonBossEnemy prefab, UnityEngine.Vector3 position, UnityEngine.Quaternion rotation, int dungeonIndex, int dungeonLevel)
+    //{
+    //    SetMonsterType(dungeonIndex);
+    //    DungeonBossEnemy instance = Instantiate(prefab, position, rotation);
+    //    instance.InitializeBossForDungeon(dungeonIndex, dungeonLevel);
+    //    DungeonBossEnemy boss = instance.GetComponent<DungeonBossEnemy>();
+
+    //    if (boss == null)
+    //    {
+    //        Debug.LogError("Prefab does not have a DungeonBossEnemy component!");
+    //        return null;
+    //    }
+
+    //    return boss;
+    //}
 
     public void InitializeBossForDungeon(int dungeonIndex, int dungeonLevel)
     {
@@ -41,24 +57,18 @@ public class DungeonBossEnemy : Enemy
         {
             case 0: // Scarecrow - 기존 체력 증가폭 유지
                 bossType = BossType.Scarecrow;
-                _monsterData.monsterTypes[0] = EnemyMonsterType.FireGolem;
-                _dummyEnemyMonsterTypes[0] = EnemyMonsterType.FireGolem;
                 maxHP = new BigInteger(1000 * (dungeonLevel + 1) * (dungeonLevel + 1));
                 currentHP = maxHP;
                 break;
 
             case 1: // SkillOnly - 체력 증가폭 작게 설정
                 bossType = BossType.SkillOnly;
-                _monsterData.monsterTypes[0] = EnemyMonsterType.IceBear;
-                _dummyEnemyMonsterTypes[0] = EnemyMonsterType.IceBear;
                 maxHP = new BigInteger(500 * (dungeonLevel + 1) * (dungeonLevel + 1));
                 currentHP = maxHP;
                 break;
 
-            case 2: // RoaringSkill - 중간 체력 증가폭 설정
-                bossType = BossType.RoaringSkill;
-                _monsterData.monsterTypes[0] = EnemyMonsterType.MegaGolem;
-                _dummyEnemyMonsterTypes[0] = EnemyMonsterType.MegaGolem;
+            case 2: // Normal - 중간 체력 증가폭 설정
+                bossType = BossType.Normal;
                 maxHP = new BigInteger(800 * (dungeonLevel + 1) * (dungeonLevel + 1));
                 currentHP = maxHP;
                 break;
@@ -107,6 +117,7 @@ public class DungeonBossEnemy : Enemy
 
             if (enemyObject && enemyObject.gameObject.activeSelf)
             {
+                Debug.Log($"던전보스 공격 데미지:{damage}");
                 enemyObject.TakeDamage(damage);
             }
 
@@ -139,6 +150,10 @@ public class DungeonBossEnemy : Enemy
         }
         else
             base.Attack();
+        foreach (var dummyEnemy in _dummyEnemies)
+        {
+            dummyEnemy.EnemyPlayAnimation(AnimationManager.AnimationState.ATK1);
+        }
     }
 
     BigInteger CalculateDamage(int level)
@@ -151,7 +166,7 @@ public class DungeonBossEnemy : Enemy
         multiplier = Math.Round(multiplier, 5);
         damage = MyBigIntegerMath.MultiplyWithFloat(initialDamage, (float)multiplier, 5);
 
-        Debug.Log($"레벨:{level}, 데미지 멀티플라이어:{multiplier}, 결과 데미지:{damage}");
+        
         return damage;
     }
 
@@ -178,7 +193,7 @@ public class DungeonBossEnemy : Enemy
 
     protected override void Death()
     {
-        if (bossType == BossType.RoaringSkill && roarSkillCoroutine != null)
+        if (bossType == BossType.Normal && roarSkillCoroutine != null)
         {
             StopCoroutine(roarSkillCoroutine);
         }

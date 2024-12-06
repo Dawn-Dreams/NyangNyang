@@ -261,21 +261,6 @@ public class Enemy : Character
         // 한마리 (보스의 경우)
         if (numOfEnemy == 1)
         {
-            if (isIndependent)
-            {
-                switch (monsterTypeIndex)
-                {
-                    case 0:
-                        return new List<EnemyMonsterType>() { EnemyMonsterType.FireGolem };
-                    case 1:
-                        return new List<EnemyMonsterType>() { EnemyMonsterType.IceBear };
-                    case 2:
-                        return new List<EnemyMonsterType>() { EnemyMonsterType.Scopionto };
-                    default:
-                        return new List<EnemyMonsterType>() { EnemyMonsterType.Null };
-                }
-            }
-            else
                 return new List<EnemyMonsterType>() { monsterDataMonsterTypes[^1] };
         }
 
@@ -490,6 +475,10 @@ public class Enemy : Character
         this.maxHP = newMaxHP;
         this.currentHP = newMaxHP; // 최대 체력을 변경할 때, 현재 체력도 최대 체력으로 설정
         ChangeHealthBar(); // 체력바 업데이트
+    }
+
+    public void SetMonsterType(int monsterIndex) {
+        this.monsterTypeIndex = monsterIndex;
     }
 }
 

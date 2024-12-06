@@ -92,7 +92,7 @@ public class SaveLoadManager : MonoBehaviour
     //
     private string _noticeFilePath;
     private string _mailFilePath;
-    private string _friendFilePath;
+    private string _dungeonFilePath;
     private string _rankingFilePath;
     private string _boardFilePath;
 
@@ -115,7 +115,7 @@ public class SaveLoadManager : MonoBehaviour
             
             _noticeFilePath = Path.Combine(basePath, "Notices.json");
             _mailFilePath = Path.Combine(basePath, "Mails.json");
-            _friendFilePath = Path.Combine(basePath, "Friends.json");
+            _dungeonFilePath = Path.Combine(basePath, "Dungeon.json");
             _rankingFilePath = Path.Combine(basePath, "Rankings.json");
             _boardFilePath = Path.Combine(basePath, "Boards.json");
             CreateIfFileNotExist();
@@ -352,18 +352,18 @@ public class SaveLoadManager : MonoBehaviour
     }
     #endregion
 
-    #region Friend
-    public void SaveFriends(List<DungeonData> friends)
+    #region Dungeon
+    public void SaveDungeonLevel(List<DungeonData> dungeon)
     {
-        string json = JsonUtility.ToJson(new Wrapper<DungeonData> { items = friends });
-        File.WriteAllText(_friendFilePath, json);
+        string json = JsonUtility.ToJson(new Wrapper<DungeonData> { items = dungeon });
+        File.WriteAllText(_dungeonFilePath, json);
     }
 
     public List<DungeonData> LoadDungeonData()
     {
-        if (File.Exists(_friendFilePath))
+        if (File.Exists(_dungeonFilePath))
         {
-            string json = File.ReadAllText(_friendFilePath);
+            string json = File.ReadAllText(_dungeonFilePath);
             return JsonUtility.FromJson<Wrapper<DungeonData>>(json).items;
         }
         return new List<DungeonData>();
@@ -534,9 +534,9 @@ public class SaveLoadManager : MonoBehaviour
         {
             SaveMails(new List<MailData>());
         }
-        if (!File.Exists(_friendFilePath))
+        if (!File.Exists(_dungeonFilePath))
         {
-            SaveFriends(new List<DungeonData>());
+            SaveDungeonLevel(new List<DungeonData>());
         }
         if (!File.Exists(_rankingFilePath))
         {

@@ -26,7 +26,7 @@ public class DungeonManager : MonoBehaviour
 
     // 임시 객체로 사용할 cat과 enemy 프리팹
     public Cat catPrefab;
-    public DungeonBossEnemy enemyPrefab;
+    public DungeonBossEnemy[] enemyPrefab;
     private Cat catInstance;
     private DungeonBossEnemy enemyInstance;
 
@@ -78,22 +78,26 @@ public class DungeonManager : MonoBehaviour
 
         if (dungeonData != null && dungeonData.Count > 0)
         {
-            int dungeonLevel = dungeonData[0].dungeonLevel;
+            int dungeonLevel1 = dungeonData[0].dungeonLevel1;
+            int dungeonLevel2 = dungeonData[0].dungeonLevel2;
+            int dungeonLevel3 = dungeonData[0].dungeonLevel3;
 
-            // dungeonHighestClearLevel[0]에 값 할당
-            dungeonHighestClearLevel[0] = dungeonLevel;
+            // dungeonHighestClearLevel에 값 할당
+            dungeonHighestClearLevel[0] = dungeonLevel1;
+            dungeonHighestClearLevel[1] = dungeonLevel2;
+            dungeonHighestClearLevel[2] = dungeonLevel3;
         }
         else
         {
-            Debug.Log("dungeonHighestClearLevel[0]을 기본값으로 유지합니다.");
+            Debug.Log("dungeonHighestClearLevel을 기본값으로 유지합니다.");
         }
     }
 
     private void SaveLevelForDungeon()
     {
-        DungeonData myDungeon = new DungeonData(0, "Me", dungeonHighestClearLevel[0]);
+        DungeonData myDungeon = new DungeonData(dungeonHighestClearLevel[0], dungeonHighestClearLevel[1], dungeonHighestClearLevel[2]);
         List<DungeonData> dungeonLevelList = new List<DungeonData> { myDungeon };
-        SaveLoadManager.GetInstance().SaveFriends(dungeonLevelList);
+        SaveLoadManager.GetInstance().SaveDungeonLevel(dungeonLevelList);
 
     }
     private void InitializeClonedCat(Cat clone)
@@ -140,9 +144,10 @@ public class DungeonManager : MonoBehaviour
 
         // 프리팹 인스턴스 생성
         catInstance = Instantiate(catPrefab, new Vector3(-10, 40, 0), Quaternion.identity).GetComponent<Cat>();
-        enemyInstance = Instantiate(enemyPrefab, new Vector3(10, 40, 0), Quaternion.identity).GetComponent<DungeonBossEnemy>();
-
-        // 적 초기화
+        enemyInstance = Instantiate(enemyPrefab[index], new Vector3(10, 40, 0), Quaternion.identity).GetComponent<DungeonBossEnemy>();
+        //enemyInstance = DungeonBossEnemy.CreateBoss(enemyPrefab, new Vector3(10, 40, 0), Quaternion.identity, index, level);
+        
+        // 초기화
         enemyInstance.InitializeBossForDungeon(index, level);
         InitializeClonedCat(catInstance);
         

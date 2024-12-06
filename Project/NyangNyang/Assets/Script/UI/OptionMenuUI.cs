@@ -38,7 +38,7 @@ public class OptionMenuUI : MonoBehaviour
         // 데이터를 저장합니다.
         SaveLoadManager._instance.SaveNotices(SaveLoadManager._instance.LoadNotices());
         SaveLoadManager._instance.SaveMails(SaveLoadManager._instance.LoadMails());
-        SaveLoadManager._instance.SaveFriends(SaveLoadManager._instance.LoadDungeonData());
+        SaveLoadManager._instance.SaveDungeonLevel(SaveLoadManager._instance.LoadDungeonData());
         SaveLoadManager._instance.SaveRankings(SaveLoadManager._instance.LoadRankings());
         SaveLoadManager._instance.SaveBoards(SaveLoadManager._instance.LoadBoards());
     }
@@ -260,18 +260,18 @@ public class OptionMenuUI : MonoBehaviour
             {
                 GameObject friendButton = Instantiate(friendButtonPrefab, contentObj.transform);
 
-                // 텍스트 설정
-                TMP_Text friendUserIDText = friendButton.transform.Find("FriendUserID").GetComponent<TMP_Text>();
-                TMP_Text friendUserNameText = friendButton.transform.Find("FriendUserName").GetComponent<TMP_Text>();
-                TMP_Text friendUserLevelText = friendButton.transform.Find("FriendUserLevel").GetComponent<TMP_Text>();
+                //// 텍스트 설정
+                //TMP_Text friendUserIDText = friendButton.transform.Find("FriendUserID").GetComponent<TMP_Text>();
+                //TMP_Text friendUserNameText = friendButton.transform.Find("FriendUserName").GetComponent<TMP_Text>();
+                //TMP_Text friendUserLevelText = friendButton.transform.Find("FriendUserLevel").GetComponent<TMP_Text>();
 
-                friendUserIDText.text = friendData.UID.ToString();
-                friendUserNameText.text = friendData.Name;
-                friendUserLevelText.text = friendData.dungeonLevel.ToString();
+                //friendUserIDText.text = friendData.UID.ToString();
+                //friendUserNameText.text = friendData.Name;
+                //friendUserLevelText.text = friendData.dungeonLevel1.ToString();
 
-                // 버튼 이벤트 추가
-                Button buttonComponent = friendButton.GetComponent<Button>();
-                buttonComponent.onClick.AddListener(() => ShowFriendProfilePopup(friendData));
+                //// 버튼 이벤트 추가
+                //Button buttonComponent = friendButton.GetComponent<Button>();
+                //buttonComponent.onClick.AddListener(() => ShowFriendProfilePopup(friendData));
             }
         }
         else
@@ -301,33 +301,33 @@ public class OptionMenuUI : MonoBehaviour
 
 
     // 친구 버튼 팝업 메서드
-    void ShowFriendProfilePopup(DungeonData friendData)
+    void ShowFriendProfilePopup(DungeonData dungeonData)
     {
-        // 기존 팝업 닫기
-        if (currentPopup != null)
-        {
-            Destroy(currentPopup);
-        }
+        //// 기존 팝업 닫기
+        //if (currentPopup != null)
+        //{
+        //    Destroy(currentPopup);
+        //}
 
-        // 팝업 생성
-        currentPopup = Instantiate(friendProfilePopupPrefab, transform);
+        //// 팝업 생성
+        //currentPopup = Instantiate(friendProfilePopupPrefab, transform);
 
-        // 프로필 팝업 데이터 설정
-        TMP_Text nameText = currentPopup.transform.Find("NameText").GetComponent<TMP_Text>();
-        TMP_Text idText = currentPopup.transform.Find("IDText").GetComponent<TMP_Text>();
-        TMP_Text levelText = currentPopup.transform.Find("LevelText").GetComponent<TMP_Text>();
-        Button closeButton = currentPopup.transform.Find("CloseButton").GetComponent<Button>();
+        //// 프로필 팝업 데이터 설정
+        //TMP_Text nameText = currentPopup.transform.Find("NameText").GetComponent<TMP_Text>();
+        //TMP_Text idText = currentPopup.transform.Find("IDText").GetComponent<TMP_Text>();
+        //TMP_Text levelText = currentPopup.transform.Find("LevelText").GetComponent<TMP_Text>();
+        //Button closeButton = currentPopup.transform.Find("CloseButton").GetComponent<Button>();
 
-        nameText.text = $"{friendData.Name}";
-        idText.text = $"ID : {friendData.UID}";
-        levelText.text = $"{friendData.dungeonLevel} Level";
+        //nameText.text = $"{dungeonData.Name}";
+        //idText.text = $"ID : {dungeonData.UID}";
+        //levelText.text = $"{dungeonData.dungeonLevel1} Level";
 
-        // 닫기 버튼 이벤트 설정
-        closeButton.onClick.AddListener(() =>
-        {
-            Destroy(currentPopup);
-            currentPopup = null;
-        });
+        //// 닫기 버튼 이벤트 설정
+        //closeButton.onClick.AddListener(() =>
+        //{
+        //    Destroy(currentPopup);
+        //    currentPopup = null;
+        //});
     }
 
     // 우편 팝업 열기 메서드

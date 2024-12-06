@@ -49,15 +49,15 @@ public class MailData
 [System.Serializable]
 public class DungeonData
 {
-    public int UID;
-    public string Name;
-    public int dungeonLevel;
+    public int dungeonLevel1;
+    public int dungeonLevel2;
+    public int dungeonLevel3;
 
-    public DungeonData(int uid, string name, int level)
+    public DungeonData(int level1, int level2, int level3)
     {
-        this.UID = uid;
-        this.Name = name;
-        this.dungeonLevel = level;
+        this.dungeonLevel1 = level1;
+        this.dungeonLevel2 = level2;
+        this.dungeonLevel3 = level3;
     }
 }
 
