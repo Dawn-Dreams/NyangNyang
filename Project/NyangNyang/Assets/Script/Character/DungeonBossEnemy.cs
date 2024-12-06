@@ -150,10 +150,12 @@ public class DungeonBossEnemy : Enemy
         }
         else
             base.Attack();
-        foreach (var dummyEnemy in _dummyEnemies)
-        {
-            dummyEnemy.EnemyPlayAnimation(AnimationManager.AnimationState.ATK1);
-        }
+        Debug.Log($"던전보스 공격");
+
+        //foreach (var dummyEnemy in _dummyEnemies)
+        //{
+        //    dummyEnemy.EnemyPlayAnimation(AnimationManager.AnimationState.ATK1);
+        //}
     }
 
     BigInteger CalculateDamage(int level)

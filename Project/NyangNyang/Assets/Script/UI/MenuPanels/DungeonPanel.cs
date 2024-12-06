@@ -39,6 +39,8 @@ public class DungeonPanel : MenuPanel
         InitializeUIComponents();
         SetActiveTab(0); // 기본 탭 선택
         OnClickStageLevelButton(0, dungeonManager.dungeonHighestClearLevel[0]-1);
+        OnClickStageLevelButton(1, dungeonManager.dungeonHighestClearLevel[1]-1);
+        OnClickStageLevelButton(2, dungeonManager.dungeonHighestClearLevel[2]-1);
     }
 
     private void InitializeManagers()
@@ -169,6 +171,9 @@ public class DungeonPanel : MenuPanel
         SetActiveTab(index);
         titleTexts[index].text = $"{dungeonNames[index]}";
         UpdateShellText(index);
+        OnClickStageLevelButton(0, dungeonManager.dungeonHighestClearLevel[0] - 1);
+        OnClickStageLevelButton(1, dungeonManager.dungeonHighestClearLevel[1] - 1);
+        OnClickStageLevelButton(2, dungeonManager.dungeonHighestClearLevel[2] - 1);
     }
 
     private void SetActiveTab(int index)

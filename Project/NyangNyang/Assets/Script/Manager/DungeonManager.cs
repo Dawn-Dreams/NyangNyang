@@ -23,6 +23,7 @@ public class DungeonManager : MonoBehaviour
     public int baseGoldAmount = 100000;
     private Coroutine goldCoroutine;
     private bool isSuccess;
+    private bool gameFinish;
 
     // 임시 객체로 사용할 cat과 enemy 프리팹
     public Cat catPrefab;
@@ -69,7 +70,7 @@ public class DungeonManager : MonoBehaviour
             Debug.LogError("DungeonResultText를 찾을 수 없습니다.");
         }
 
-        
+        gameFinish = false;
     }
     public void LoadAndAssignDungeonLevel()
     {
@@ -146,11 +147,11 @@ public class DungeonManager : MonoBehaviour
         catInstance = Instantiate(catPrefab, new Vector3(-10, 40, 0), Quaternion.identity).GetComponent<Cat>();
         enemyInstance = Instantiate(enemyPrefab[index], new Vector3(10, 40, 0), Quaternion.identity).GetComponent<DungeonBossEnemy>();
         //enemyInstance = DungeonBossEnemy.CreateBoss(enemyPrefab, new Vector3(10, 40, 0), Quaternion.identity, index, level);
-        
+
         // 초기화
         enemyInstance.InitializeBossForDungeon(index, level);
         InitializeClonedCat(catInstance);
-        
+
         // 윤석 12.02 - 던전 고양이 캐릭터 FurSkin 적용
         catInstance.GetComponent<Costume>().ChangeCatCostume(CatCostumePart.FurSkin,
             PlayerCostume.playerCurrentEquipCostumes[CatCostumePart.FurSkin]);
@@ -174,7 +175,7 @@ public class DungeonManager : MonoBehaviour
 
         ShowDungeonResultText($"<color=#98BBFF>시작!</color>", 1);
 
-        
+
         StartCoroutine(StartCombatAfterDelay(1.0f));
         StartCoroutine(CheckBattleOutcome());
         Invoke("TimeOut", playDuration); // 제한 시간 초과 시 처리
@@ -183,6 +184,12 @@ public class DungeonManager : MonoBehaviour
     // 제한 시간 초과 전 5초 카운트다운
     private void TimeOut()
     {
+        if (!GameManager.isDungeonActive || gameFinish)
+        {
+            Debug.Log("던전이 이미 종료 상태입니다.");
+            return;
+        }
+
         if (GameManager.isDungeonActive && !enemyInstance.IsDead())
         {
             StartCoroutine(EndDungeonCountdown());
@@ -191,6 +198,8 @@ public class DungeonManager : MonoBehaviour
 
     private IEnumerator EndDungeonCountdown()
     {
+        if (gameFinish)
+            yield break;
         // 5초 카운트다운
         for (int i = 5; i > 0; i--)
         {
@@ -223,7 +232,7 @@ public class DungeonManager : MonoBehaviour
             EndDungeonStage();
             yield break;
         }
-
+        StopCombatActions();
         catInstance.isIndependent = true;
         enemyInstance.isIndependent = true;
         catInstance.SetEnemy(enemyInstance);
@@ -234,12 +243,13 @@ public class DungeonManager : MonoBehaviour
     // 전투 결과 체크
     private IEnumerator CheckBattleOutcome()
     {
-        while (GameManager.isDungeonActive)
+        while (GameManager.isDungeonActive && !gameFinish)
         {
             // 적군이 죽으면 클리어
             if (enemyInstance != null && enemyInstance.IsDead())
             {
                 isSuccess = true;
+                gameFinish = true;
                 EndDungeonStage();
                 yield break;
             }
@@ -248,6 +258,7 @@ public class DungeonManager : MonoBehaviour
             else if (catInstance != null && catInstance.IsDead())
             {
                 isSuccess = false;
+                gameFinish = true;
                 EndDungeonStage();
                 yield break;
             }
@@ -260,9 +271,12 @@ public class DungeonManager : MonoBehaviour
     public void EndDungeonStage()
     {
         LoadAndAssignDungeonLevel();
-        if (goldCoroutine != null)
-            StopCoroutine(goldCoroutine);
-
+        if (gameFinish)
+        {
+            StopCoroutine(CheckBattleOutcome());
+            StopCoroutine(EndDungeonCountdown());
+        }
+        gameFinish = true;
         // 성공 처리
         if (isSuccess)
         {
@@ -327,6 +341,7 @@ public class DungeonManager : MonoBehaviour
         }
         DungeonUI.SetActive(false);
 
+        gameFinish = false;
         GameManager.isDungeonActive = false;
     }
 
