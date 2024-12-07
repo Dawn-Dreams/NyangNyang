@@ -24,6 +24,13 @@ public class SaveDataManager : MonoBehaviour
         playFilePath = Path.Combine(Application.persistentDataPath, "play.json");
     }
 
+    private void Start()
+    {
+        WeaponManager.GetInstance().InitializedWeapons();
+        SkillManager.GetInstance().InitializedSkills();
+        PlayInfoManager.GetInstance().InitializedPlayInfo();
+    }
+
     public static SaveDataManager GetInstance() { return instance; }
 
     public void SaveWeapons(WeaponInfo[] weapons)
@@ -73,7 +80,7 @@ public class SaveDataManager : MonoBehaviour
         PlayData playData = new PlayData { info = _info };
         string json = JsonUtility.ToJson(playData, true);
         File.WriteAllText(playFilePath, json);
-        Debug.Log($"PlayInfo saved to {playFilePath}");
+        // Debug.Log($"PlayInfo saved to {playFilePath}");
     }
 
     public PlayInfo LoadPlayInfo()

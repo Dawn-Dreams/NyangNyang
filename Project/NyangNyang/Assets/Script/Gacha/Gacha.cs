@@ -18,7 +18,7 @@ public class Gacha : MonoBehaviour
 
     public AnimationCurve AnimationCurve;
 
-    private bool m_spinning = false;
+    public bool m_spinning = false;
 
     public type curType;
 
@@ -32,14 +32,29 @@ public class Gacha : MonoBehaviour
 
     public void OnClickedDrawButton(int n)
     {
-        if ( Player.Gold >= cost * n)
+        if ( !m_spinning)
         {
-            BeforePanel.SetActive(true);
-            AfterPanel.SetActive(false);
+            if ( Player.Gold >= cost * n )
+            {
+                BeforePanel.SetActive(true);
+                AfterPanel.SetActive(false);
 
-            Spin(n);
+               
 
-            Player.Gold -= cost * n;
+                Spin(n);
+
+                Player.Gold -= cost * n;
+            }
+            else
+            {
+                AlertManager.GetInstance().SetText("돈이 부족합니다.");
+                // Debug.Log("돈이 부족합니다.");
+            }
+        }
+        else
+        {
+            AlertManager.GetInstance().SetText("뽑기 중입니다.");
+            // Debug.Log("뽑기 중입니다");
         }
     }
 
@@ -51,7 +66,6 @@ public class Gacha : MonoBehaviour
 
     private IEnumerator DoSpin(int n)
     {
-
         m_spinning = true;
 
         yield return new WaitForSeconds(1f);
@@ -71,10 +85,11 @@ public class Gacha : MonoBehaviour
         }
 
         Wheel.transform.eulerAngles = new Vector3(0.0f, 0.0f, maxAngle + startAngle);
-        m_spinning = false;
+        
 
         yield return new WaitForSeconds(1f);
 
+        m_spinning = false;
         BeforePanel.SetActive(false);
         AfterPanel.SetActive(true);
 

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayInfoManager : MonoBehaviour
 {
+
+    public NyangNyangPower nyang;
+
     private static PlayInfoManager instance;
 
     public static PlayInfoManager GetInstance() { return instance; }
@@ -19,34 +22,20 @@ public class PlayInfoManager : MonoBehaviour
             instance = this;
         }
 
-        InitializedPlayInfo();
+        // InitializedPlayInfo();
     }
 
-    private void InitializedPlayInfo()
+    public void InitializedPlayInfo()
     {
-        //info = new PlayInfo();
 
-        //info.weaponGachaCount = 0;
-        //info.weaponGachaLevel = 1;
-
-        //info.skillGachaCount = 0;
-        //info.skillGachaLevel = 1;
-
-        //info.nyangnyangCount = 0;
-        //info.nyangnyangLevel = 1;
-
-        //info.currentWeaponID = 0;
-        //info.currentSkillID = -1;
-
-        //SaveDataManager.GetInstance().SavePlayInfo(info);
-
+        // ResetData();
 
 
         info = SaveDataManager.GetInstance().LoadPlayInfo();
 
         StartCoroutine(SaveData());
 
-        Debug.Log(info.weaponGachaCount);
+        nyang.InitializedNyangNyang();
     }
 
     IEnumerator SaveData()
@@ -113,5 +102,24 @@ public class PlayInfoManager : MonoBehaviour
         {
             info.nyangnyangLevel += 1;
         }
+    }
+
+    public void ResetData()
+    {
+        info = new PlayInfo();
+
+        info.weaponGachaCount = 0;
+        info.weaponGachaLevel = 1;
+
+        info.skillGachaCount = 0;
+        info.skillGachaLevel = 1;
+
+        info.nyangnyangCount = 0;
+        info.nyangnyangLevel = 1;
+
+        info.currentWeaponID = 0;
+        info.currentSkillID = -1;
+
+        SaveDataManager.GetInstance().SavePlayInfo(info);
     }
 }
