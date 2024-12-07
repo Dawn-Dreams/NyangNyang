@@ -184,9 +184,9 @@ public class DungeonManager : MonoBehaviour
     // 제한 시간 초과 전 5초 카운트다운
     private void TimeOut()
     {
-        if (!GameManager.isDungeonActive || gameFinish)
+        if (gameFinish)
         {
-            Debug.Log("던전이 이미 종료 상태입니다.");
+            Debug.Log("게임이 이미 종료되었습니다.");
             return;
         }
 
@@ -200,12 +200,19 @@ public class DungeonManager : MonoBehaviour
     {
         if (gameFinish)
             yield break;
+
         // 5초 카운트다운
         for (int i = 5; i > 0; i--)
         {
+            if (gameFinish)
+                yield break;
             ShowDungeonResultText($"<color=#FF6F6F>{i}</color>", 1);
             yield return new WaitForSeconds(1);
         }
+
+        // 게임이 종료되었는지 다시 확인
+        if (gameFinish)
+            yield break;
 
         // 시간 초과 처리
         ShowDungeonResultText("<color=#FF6F6F>시간 초과..</color>", 2);
