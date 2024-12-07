@@ -225,6 +225,11 @@ public class Player : MonoBehaviour
         Player.Gold += addGoldValue;
     }
 
+    public void AddDiamondFromIAP(int addDiaValue)
+    {
+        Player.Diamond += addDiaValue;
+    }
+
     public static void AddShells(int[] addShellValues)
     {
         
