@@ -115,12 +115,14 @@ public class WeaponDetailUI : MonoBehaviour
             }
             else
             {
-                Debug.Log("돈이 부족합니다.");
+                AlertManager.GetInstance().SetText("돈이 부족합니다.");
+                // Debug.Log("돈이 부족합니다.");
             }
         }
         else
         {
-            Debug.Log("레벨 업에 실패했습니다.");
+            AlertManager.GetInstance().SetText("레벨업에 실패했습니다.");
+            // Debug.Log("레벨 업에 실패했습니다.");
         }
     }
 

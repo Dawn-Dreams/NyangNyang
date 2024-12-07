@@ -21,7 +21,7 @@ public class NyangNyangPower : MonoBehaviour
 
     private int[] LevelList = new int[12] { 0, 150, 300, 550, 1000, 2000, 4000, 10000, 20000, 40000, 40000, 40000 };
 
-    private void Start()
+    public void InitializedNyangNyang()
     {
 
         nyangnyangLevel = PlayInfoManager.GetInstance().GetInfo().nyangnyangLevel;
@@ -55,6 +55,7 @@ public class NyangNyangPower : MonoBehaviour
     {
         if ( nyangnyangPower < amount )
         {
+            AlertManager.GetInstance().SetText("냥냥력이 부족합니다!");
             return false;
         }
         return true;

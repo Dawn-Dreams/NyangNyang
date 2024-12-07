@@ -46,7 +46,7 @@ public abstract class Skill
     public void SetEffect(float _amount) => effect = _amount;
     public float GetEffect() => effect;
 
-    public string GetType() => type;
+    public string GetSkillType() => type;
 
     // Lock ฐüทร
     public bool GetIsLock() => isLock;
