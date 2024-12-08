@@ -17,7 +17,7 @@ public class DungeonBossEnemy : Enemy
 
     [SerializeField] private BossType bossType;
     [SerializeField] private int roarInterval;
-    private int bossLevel=1;
+    private int bossLevel = 1;
     private Coroutine roarSkillCoroutine;     // 포효 스킬 관리 코루틴
 
     // 보스 전용 스킬 또는 패턴을 위한 변수들
@@ -71,8 +71,8 @@ public class DungeonBossEnemy : Enemy
         Debug.Log($"보스 체력 설정 level:{bossLevel} maxHP:{maxHP}, currentHP:{currentHP}, _dummyEnemyMonsterTypes:{_dummyEnemyMonsterTypes[0]}");
     }
 
-    // 보스 전용 특수 공격 메서드
-    private void SpecialAttack()
+    // 2번 보스 전용 특수 공격 메서드
+    private void SkillBossAttack()
     {
         if (isSpecialAttackReady)
         {
@@ -112,8 +112,21 @@ public class DungeonBossEnemy : Enemy
     private IEnumerator SpecialAttackCooldown()
     {
         yield return new WaitForSeconds(specialAttackCooldown);
-        
+
         isSpecialAttackReady = true;
+    }
+
+    // 3번 보스 전용 특수 공격 메서드
+    private void NormalBossAttack()
+    {
+        BigInteger damage = CalculateDamage(bossLevel); // 던전 레벨 사용
+
+        if (enemyObject && enemyObject.gameObject.activeSelf)
+        {
+            Debug.Log($"던전보스 공격 데미지:{damage}");
+            enemyObject.TakeDamage(damage);
+            StartCoroutine(AnimationBoss());
+        }
     }
 
     // 공격 메서드 오버라이딩
@@ -128,10 +141,12 @@ public class DungeonBossEnemy : Enemy
         // 스킬로만 데미지를 주는 보스는 일반 공격 대신 특수 공격
         else if (bossType == BossType.SkillOnly)
         {
-            SpecialAttack();
+            SkillBossAttack();
         }
         else
-            base.Attack();
+            NormalBossAttack();
+
+        Debug.Log($"Cat HP :{enemyObject.CurrentHP}");
     }
 
     BigInteger CalculateDamage(int level)
@@ -140,11 +155,11 @@ public class DungeonBossEnemy : Enemy
         BigInteger initialDamage = damage;
 
         // 제곱근 기반 공격력 상승 (sqrt(level))
-        double multiplier = Math.Sqrt(level*0.2f);
+        double multiplier = Math.Sqrt(level * 0.2f);
         multiplier = Math.Round(multiplier, 5);
         damage = MyBigIntegerMath.MultiplyWithFloat(initialDamage, (float)multiplier, 5);
 
-        
+
         return damage;
     }
 
