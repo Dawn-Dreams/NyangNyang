@@ -20,7 +20,6 @@ public class PlayerCostume : Player
                 return;
             }
             _playerOwningCostume = value;
-            SaveToJson();
 
             // 보유중인 코스튬 변화에 대한 델리게이트 실행
             if (OnOwningCostumeChange != null)

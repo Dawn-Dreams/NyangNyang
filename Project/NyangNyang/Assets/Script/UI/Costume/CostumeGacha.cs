@@ -69,6 +69,7 @@ public class CostumeGacha : MonoBehaviour
 
         // 지급
         PlayerCostume.playerOwningCostume[gachaCostumePart].Add(finalRewardCostumeIndex);
+        PlayerCostume.SaveToJson();
 
         costumeRewardPanel.SetActive(true);
         //costumeImage
