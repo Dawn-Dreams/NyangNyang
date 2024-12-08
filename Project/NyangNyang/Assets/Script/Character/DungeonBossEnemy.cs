@@ -126,6 +126,7 @@ public class DungeonBossEnemy : Enemy
         {
             Debug.Log($"던전보스 공격 데미지:{damage}");
             enemyObject.TakeDamage(damage);
+           
             SpawnParticleEffect(particlePrefab);
             StartCoroutine(AnimationBoss());
         }
@@ -143,7 +144,7 @@ public class DungeonBossEnemy : Enemy
         // 현재 적으로 설정된 고양이 위치에서 파티클 생성
         GameObject particleInstance = Instantiate(particlePrefab, enemyObject.gameObject.transform.position, UnityEngine.Quaternion.identity);
 
-        // 파티클 자동 삭제 (예: 2초 후 제거)
+        // 파티클 자동 삭제
         Destroy(particleInstance, 1f);
     }
     // 공격 메서드 오버라이딩
@@ -172,7 +173,14 @@ public class DungeonBossEnemy : Enemy
         BigInteger initialDamage = damage;
 
         // 제곱근 기반 공격력 상승 (sqrt(level))
-        double multiplier = Math.Sqrt(level * 0.2f);
+        double multiplier;
+        if(bossType == BossType.SkillOnly)
+            multiplier = Math.Sqrt(level * 0.5f);
+        else if (bossType == BossType.Normal)
+            multiplier = Math.Sqrt(level * 0.3f);
+        else
+            multiplier = 0;
+
         multiplier = Math.Round(multiplier, 5);
         damage = MyBigIntegerMath.MultiplyWithFloat(initialDamage, (float)multiplier, 5);
 
@@ -199,15 +207,5 @@ public class DungeonBossEnemy : Enemy
         }
 
         return reducedDamage;
-    }
-
-    protected override void Death()
-    {
-        if (bossType == BossType.Normal && roarSkillCoroutine != null)
-        {
-            StopCoroutine(roarSkillCoroutine);
-        }
-
-        base.Death();
     }
 }

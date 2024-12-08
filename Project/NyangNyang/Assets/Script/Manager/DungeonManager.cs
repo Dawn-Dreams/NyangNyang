@@ -304,7 +304,6 @@ public class DungeonManager : MonoBehaviour
                 DungeonPanel.OnStageCleared(currentDungeonIndex, dungeonHighestClearLevel[currentDungeonIndex]);
             }
             catInstance.animationManager.PlayAnimation(AnimationManager.AnimationState.Victory);
-            enemyInstance._dummyEnemies[0].animationManager.PlayAnimation(AnimationManager.AnimationState.DieA);
         }
         else
         {
