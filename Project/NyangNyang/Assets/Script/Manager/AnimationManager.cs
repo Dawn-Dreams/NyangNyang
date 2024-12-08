@@ -91,7 +91,7 @@ public class AnimationManager : MonoBehaviour
     {
         if (animator != null)
         {
-            animator.SetInteger("animation", (int)AnimationState.IdleA);
+            animator.SetInteger("animation", (int)AnimationState.IdleB);
         }
     }
 }

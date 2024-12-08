@@ -33,23 +33,6 @@ public class DungeonBossEnemy : Enemy
         isIndependent = true;
     }
 
-    //// 팩토리 메서드
-    //public static DungeonBossEnemy CreateBoss(DungeonBossEnemy prefab, UnityEngine.Vector3 position, UnityEngine.Quaternion rotation, int dungeonIndex, int dungeonLevel)
-    //{
-    //    SetMonsterType(dungeonIndex);
-    //    DungeonBossEnemy instance = Instantiate(prefab, position, rotation);
-    //    instance.InitializeBossForDungeon(dungeonIndex, dungeonLevel);
-    //    DungeonBossEnemy boss = instance.GetComponent<DungeonBossEnemy>();
-
-    //    if (boss == null)
-    //    {
-    //        Debug.LogError("Prefab does not have a DungeonBossEnemy component!");
-    //        return null;
-    //    }
-
-    //    return boss;
-    //}
-
     public void InitializeBossForDungeon(int dungeonIndex, int dungeonLevel)
     {
         // 보스 유형 설정
@@ -80,32 +63,12 @@ public class DungeonBossEnemy : Enemy
 
 
         bossLevel = dungeonLevel;
-        
+        foreach (var dummyEnemy in _dummyEnemies)
+        {
+            dummyEnemy.EnemyPlayAnimation(AnimationManager.AnimationState.IdleA);
+        }
 
         Debug.Log($"보스 체력 설정 level:{bossLevel} maxHP:{maxHP}, currentHP:{currentHP}, _dummyEnemyMonsterTypes:{_dummyEnemyMonsterTypes[0]}");
-    }
-
-    private void StartRoarSkill()
-    {
-        if (roarSkillCoroutine != null) StopCoroutine(roarSkillCoroutine);
-        roarSkillCoroutine = StartCoroutine(RoarSkill());
-    }
-
-    private IEnumerator RoarSkill()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(roarInterval);
-            Debug.Log("Roar Skill 발동!");
-            // 포효 스킬 발동 로직 (예: 플레이어 기절, 스킬 데미지)
-            ApplyRoarEffect();
-        }
-    }
-
-    private void ApplyRoarEffect()
-    {
-        // 포효 스킬 효과 구현
-        Debug.Log("플레이어에게 포효 스킬 효과 적용");
     }
 
     // 보스 전용 특수 공격 메서드
@@ -119,15 +82,28 @@ public class DungeonBossEnemy : Enemy
             {
                 Debug.Log($"던전보스 공격 데미지:{damage}");
                 enemyObject.TakeDamage(damage);
-
-                foreach (var dummyEnemy in _dummyEnemies)
-                {
-                    dummyEnemy.EnemyPlayAnimation(AnimationManager.AnimationState.ATK1);
-                }
+                StartCoroutine(AnimationBoss());
             }
 
             isSpecialAttackReady = false;
             StartCoroutine(SpecialAttackCooldown());
+        }
+    }
+
+    private IEnumerator AnimationBoss()
+    {
+        foreach (var dummyEnemy in _dummyEnemies)
+        {
+            // ATK1 애니메이션 실행
+            dummyEnemy.EnemyPlayAnimation(AnimationManager.AnimationState.ATK1);
+        }
+        // 0.5초 동안 대기
+        yield return new WaitForSeconds(0.5f);
+
+        foreach (var dummyEnemy in _dummyEnemies)
+        {
+            // Idle 애니메이션 실행
+            dummyEnemy.EnemyPlayAnimation(AnimationManager.AnimationState.IdleA);
         }
     }
 
@@ -136,6 +112,7 @@ public class DungeonBossEnemy : Enemy
     private IEnumerator SpecialAttackCooldown()
     {
         yield return new WaitForSeconds(specialAttackCooldown);
+        
         isSpecialAttackReady = true;
     }
 
