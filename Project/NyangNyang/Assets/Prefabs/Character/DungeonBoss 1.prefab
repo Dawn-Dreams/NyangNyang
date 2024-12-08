@@ -460,6 +460,7 @@ MonoBehaviour:
   - {fileID: 0}
   bossType: 0
   roarInterval: 3
+  particlePrefab: {fileID: 3223031359271505891, guid: 155410a7086d1d34ca48c448dfc33156, type: 3}
 --- !u!1 &6818543340773110406
 GameObject:
   m_ObjectHideFlags: 0

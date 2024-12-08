@@ -23,6 +23,8 @@ public class DungeonBossEnemy : Enemy
     // 보스 전용 스킬 또는 패턴을 위한 변수들
     static private float specialAttackCooldown = 5f; // 보스의 특수 공격 쿨다운
     private bool isSpecialAttackReady = true; // 특수 공격이 준비되었는지 여부
+    // 보스 유형별 파티클 프리팹
+    [SerializeField] private GameObject particlePrefab;
 
     protected override void Awake()
     {
@@ -77,11 +79,11 @@ public class DungeonBossEnemy : Enemy
         if (isSpecialAttackReady)
         {
             BigInteger damage = CalculateDamage(bossLevel); // 던전 레벨 사용
-
             if (enemyObject && enemyObject.gameObject.activeSelf)
             {
                 Debug.Log($"던전보스 공격 데미지:{damage}");
                 enemyObject.TakeDamage(damage);
+                SpawnParticleEffect(particlePrefab);
                 StartCoroutine(AnimationBoss());
             }
 
@@ -120,15 +122,30 @@ public class DungeonBossEnemy : Enemy
     private void NormalBossAttack()
     {
         BigInteger damage = CalculateDamage(bossLevel); // 던전 레벨 사용
-
         if (enemyObject && enemyObject.gameObject.activeSelf)
         {
             Debug.Log($"던전보스 공격 데미지:{damage}");
             enemyObject.TakeDamage(damage);
+            SpawnParticleEffect(particlePrefab);
             StartCoroutine(AnimationBoss());
         }
     }
 
+    // 파티클 실행 메서드
+    private void SpawnParticleEffect(GameObject particlePrefab)
+    {
+        if (particlePrefab == null)
+        {
+            Debug.LogWarning("파티클 프리팹이 설정되지 않았습니다.");
+            return;
+        }
+
+        // 현재 적으로 설정된 고양이 위치에서 파티클 생성
+        GameObject particleInstance = Instantiate(particlePrefab, enemyObject.gameObject.transform.position, UnityEngine.Quaternion.identity);
+
+        // 파티클 자동 삭제 (예: 2초 후 제거)
+        Destroy(particleInstance, 1f);
+    }
     // 공격 메서드 오버라이딩
     protected override void Attack()
     {
