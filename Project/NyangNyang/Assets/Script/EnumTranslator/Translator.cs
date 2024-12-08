@@ -87,6 +87,17 @@ public class EnumTranslator
             { EmotionCostumeType.Ggyu, "뀨" },
         };
 
+    private static Dictionary<CatCostumePart, string> catCostumePartDescription =
+        new Dictionary<CatCostumePart, string>()
+        {
+            { CatCostumePart.Body, "몸" },
+            { CatCostumePart.Head, "머리" },
+            { CatCostumePart.Hand_R, "손" },
+            { CatCostumePart.FurSkin, "털색" },
+            { CatCostumePart.Pet, "펫" },
+            { CatCostumePart.Emotion, "표정" },
+        };
+
     public static string GetStatusTypeText(StatusLevelType type)
     {
         if (!statusTypeDescription.ContainsKey(type))
@@ -97,6 +108,15 @@ public class EnumTranslator
         return statusTypeDescription[type];
     }
 
+    public static string GetCatCostumePartText(CatCostumePart part)
+    {
+        if (!catCostumePartDescription.ContainsKey(part))
+        {
+            return "NULL";
+        }
+
+        return catCostumePartDescription[part];
+    }
     public static string GetCostumeText(CatCostumePart part, int index)
     {
         string retStr = "";
