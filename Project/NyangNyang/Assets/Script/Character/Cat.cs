@@ -56,8 +56,14 @@ public class Cat : Character
 
     protected override void Attack()
     {
-        base.Attack();
         animationManager.PlayAnimation(AnimationManager.AnimationState.ATK1);
+        StartCoroutine(DelayedBaseAttack());    // 12.08 공격 모션 보다 대미지가 앞서 딜레이 추가
+    }
+
+    private IEnumerator DelayedBaseAttack()
+    {
+        yield return new WaitForSeconds(0.6f);
+        base.Attack();
     }
 
     protected virtual IEnumerator HealHPOverTime()
