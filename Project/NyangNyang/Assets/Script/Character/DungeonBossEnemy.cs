@@ -119,6 +119,11 @@ public class DungeonBossEnemy : Enemy
             {
                 Debug.Log($"던전보스 공격 데미지:{damage}");
                 enemyObject.TakeDamage(damage);
+
+                foreach (var dummyEnemy in _dummyEnemies)
+                {
+                    dummyEnemy.EnemyPlayAnimation(AnimationManager.AnimationState.ATK1);
+                }
             }
 
             isSpecialAttackReady = false;
@@ -150,12 +155,6 @@ public class DungeonBossEnemy : Enemy
         }
         else
             base.Attack();
-        Debug.Log($"던전보스 공격");
-
-        //foreach (var dummyEnemy in _dummyEnemies)
-        //{
-        //    dummyEnemy.EnemyPlayAnimation(AnimationManager.AnimationState.ATK1);
-        //}
     }
 
     BigInteger CalculateDamage(int level)
