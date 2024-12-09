@@ -304,11 +304,11 @@ public class DungeonManager : MonoBehaviour
                 DungeonPanel.OnStageCleared(currentDungeonIndex, dungeonHighestClearLevel[currentDungeonIndex]);
             }
             catInstance.animationManager.PlayAnimation(AnimationManager.AnimationState.Victory);
+            enemyInstance._dummyEnemies[0].animationManager.PlayAnimation(AnimationManager.AnimationState.DieA);
         }
         else
         {
             catInstance.animationManager.PlayAnimation(AnimationManager.AnimationState.DieB);
-            enemyInstance._dummyEnemies[0].animationManager.PlayAnimation(AnimationManager.AnimationState.Victory);
             ShowDungeonResultText("<color=#FF6F6F>실패...</color>", 2);
         }
         StopCombatActions();
