@@ -83,7 +83,7 @@ public class DungeonBossEnemy : Enemy
                 Debug.Log($"던전보스 공격 데미지:{damage}");
                 enemyObject.TakeDamage(damage);
                 SpawnParticleEffect(particlePrefab);
-                StartCoroutine(AnimationBoss());
+                StartCoroutine(AnimationBoss(AnimationManager.AnimationState.ATK1));
             }
 
             isSpecialAttackReady = false;
@@ -91,12 +91,12 @@ public class DungeonBossEnemy : Enemy
         }
     }
 
-    private IEnumerator AnimationBoss()
+    private IEnumerator AnimationBoss(AnimationManager.AnimationState anim)
     {
         foreach (var dummyEnemy in _dummyEnemies)
         {
             // ATK1 애니메이션 실행
-            dummyEnemy.EnemyPlayAnimation(AnimationManager.AnimationState.ATK1);
+            dummyEnemy.EnemyPlayAnimation(anim);
         }
         // 0.5초 동안 대기
         yield return new WaitForSeconds(0.5f);
@@ -127,7 +127,7 @@ public class DungeonBossEnemy : Enemy
             enemyObject.TakeDamage(damage);
            
             SpawnParticleEffect(particlePrefab);
-            StartCoroutine(AnimationBoss());
+            StartCoroutine(AnimationBoss(AnimationManager.AnimationState.ATK1));
         }
     }
 
@@ -190,6 +190,8 @@ public class DungeonBossEnemy : Enemy
     public override BigInteger TakeDamage(BigInteger damage, bool isAOESkill = false)
     {
         BigInteger reducedDamage = damage;  //대미지 90%만 받음 -> 수정
+
+        StartCoroutine(AnimationBoss(AnimationManager.AnimationState.Damage));
 
         currentHP -= reducedDamage;
         if (currentHP < 0)
