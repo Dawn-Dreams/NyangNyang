@@ -11,7 +11,7 @@ public class Cat : Character
 
     private Coroutine _healHpOverTimeCoroutine = null;
     private float _healHPTime = 1.2f;
-
+    [SerializeField] private GameObject particlePrefab;
     protected override void Awake()
     {
         //characterID = 0;
@@ -63,6 +63,7 @@ public class Cat : Character
     private IEnumerator DelayedBaseAttack()
     {
         yield return new WaitForSeconds(0.6f);
+        SpawnParticleEffect(particlePrefab);
         base.Attack();
     }
 
@@ -96,5 +97,30 @@ public class Cat : Character
         CombatManager.GetInstance().PlayerCatDeath();
     }
 
-    
+    // 파티클 실행 메서드
+    private void SpawnParticleEffect(GameObject particlePrefab)
+    {
+        if (particlePrefab == null)
+        {
+            Debug.LogWarning("파티클 프리팹이 설정되지 않았습니다.");
+            return;
+        }
+
+        // 위치 오프셋 설정 (X: 왼쪽, Y: 위, Z: 카메라 방향으로 이동)
+        UnityEngine.Vector3 offset = new UnityEngine.Vector3(-2.0f, 2.0f, -10.0f);
+
+        // 생성 위치 계산
+        UnityEngine.Vector3 spawnPosition = enemyObject.gameObject.transform.position + offset;
+
+        // 파티클 생성
+        GameObject particleInstance = Instantiate(particlePrefab, spawnPosition, UnityEngine.Quaternion.identity);
+
+        // 파티클 크기 1.5배 조정
+        particleInstance.transform.localScale *= 1.5f;
+
+        // 파티클 자동 삭제
+        Destroy(particleInstance, 1f);
+    }
+
+
 }

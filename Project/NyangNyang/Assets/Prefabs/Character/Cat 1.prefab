@@ -1342,6 +1342,7 @@ MonoBehaviour:
   cameraShake: {fileID: 0}
   isIndependent: 0
   animationManager: {fileID: 5924976559847362780}
+  particlePrefab: {fileID: 8680598818964007281, guid: dcd90c4976197424b9958a7c54b6bb8c, type: 3}
 --- !u!114 &7369132229985192134
 MonoBehaviour:
   m_ObjectHideFlags: 0
