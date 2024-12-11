@@ -17,7 +17,7 @@ public class Story_StageClearQuestData : StoryQuestDataBase
 
     public override void QuestActing(BaseQuest quest, QuestType type)
     {
-        mainQuestTitle = targetTheme + " - " + targetStage + " 스테이지 클리어";
+        mainQuestTitle = "[스테이지 클리어]\n" + targetTheme + " - " + targetStage + " 스테이지 클리어";
         Player.GetPlayerHighestClearStageData(out _currentClearTheme, out _currentClearStage);
 
         base.QuestActing(quest, QuestType.StageClear);

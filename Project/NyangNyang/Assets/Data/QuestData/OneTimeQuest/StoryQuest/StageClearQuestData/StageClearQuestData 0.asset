@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd7d5beff0183b642a53bab634ce90c1, type: 3}
   m_Name: StageClearQuestData 0
   m_EditorClassIdentifier: 
-  mainQuestTitle: "1 - 2 \uC2A4\uD14C\uC774\uC9C0 \uD074\uB9AC\uC5B4"
+  mainQuestTitle: "[\uC2A4\uD14C\uC774\uC9C0 \uD074\uB9AC\uC5B4]"
   subQuestTitle: 
   rewardCount: 10
   questType: 7
