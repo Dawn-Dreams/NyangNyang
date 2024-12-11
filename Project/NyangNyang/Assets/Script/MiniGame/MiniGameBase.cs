@@ -19,7 +19,7 @@ public abstract class MiniGameBase : MonoBehaviour
     public RewardPopUp rewardPopupPrefab;
 
     private int rewardCheese;
-    private int rewardEXP;
+    private int rewardShells;
 
     // 점수를 관리하는 속성
     public int Score
@@ -50,10 +50,12 @@ public abstract class MiniGameBase : MonoBehaviour
 
     private void OnDestroy()
     {
-        Debug.Log($"{rewardCheese}:RewardCheese | {rewardEXP}:EXP");
+        Debug.Log($"{rewardCheese}:RewardCheese | {rewardShells}:Shells");
         // 플레이어에게 보상 지급
         Player.Cheese += rewardCheese;
-        Player.SetShell(0, Player.GetShell(0) + rewardEXP);
+        Player.SetShell(0, Player.GetShell(0) + rewardShells);
+        Player.SetShell(1, Player.GetShell(1) + rewardShells);
+        Player.SetShell(2, Player.GetShell(2) + rewardShells);
     }
 
     private void DisableMainSceneEventSystem()
@@ -120,7 +122,7 @@ public abstract class MiniGameBase : MonoBehaviour
         if (rewardPopupPrefab != null)
         {
             // 팝업 값 설정
-            rewardPopupPrefab.SetValues(rewardCheese, rewardEXP);
+            rewardPopupPrefab.SetValues(rewardCheese, rewardShells);
 
             // 팝업 활성화
             rewardPopupPrefab.gameObject.SetActive(true);
@@ -151,7 +153,7 @@ public abstract class MiniGameBase : MonoBehaviour
         
         // 보상 값 계산
         rewardCheese = Mathf.CeilToInt(baseReward * weight);
-        rewardEXP = (int)score / 1000;
+        rewardShells = (int)score / 1000;
 
     }
 

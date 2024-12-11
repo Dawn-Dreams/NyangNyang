@@ -2249,9 +2249,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.08549222
+    y: 0.099999994
     width: 1
-    height: 0.82901555
+    height: 0.8
   near clip plane: 1
   far clip plane: 2
   field of view: 60
@@ -2299,7 +2299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fc09e4e60c0b0d4bbc101afbc26e8b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camera: {fileID: 982702928}
+  myCamera: {fileID: 982702928}
 --- !u!1 &1027367161
 GameObject:
   m_ObjectHideFlags: 0
@@ -2405,7 +2405,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fd403f75f364ba45b81d330f9216aa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camera: {fileID: 1073563820}
+  myCamera: {fileID: 1073563820}
   isDownside: 1
 --- !u!20 &1073563820
 Camera:
@@ -2437,7 +2437,7 @@ Camera:
     x: 0
     y: 0
     width: 1
-    height: 0.08549222
+    height: 0.099999994
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
@@ -4195,7 +4195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fd403f75f364ba45b81d330f9216aa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camera: {fileID: 1801083640}
+  myCamera: {fileID: 1801083640}
   isDownside: 0
 --- !u!20 &1801083640
 Camera:
@@ -4225,9 +4225,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0.91450775
+    y: 0.9
     width: 1
-    height: 0.08549222
+    height: 0.099999994
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
