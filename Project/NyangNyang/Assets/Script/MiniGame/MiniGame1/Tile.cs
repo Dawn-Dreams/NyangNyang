@@ -16,7 +16,7 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUp
     private Image image;  // 타일의 이미지 컴포넌트
     private Vector2 startDragPosition;
     private Animator animator;
-
+    [SerializeField] private GameObject particlePrefab;
     private void Awake()
     {
         image = GetComponent<Image>();
@@ -134,11 +134,16 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUp
         }
 
         // 애니메이션 완료 후 타일 비활성화
+        //SpawnParticleEffect(particlePrefab);
+        StartCoroutine(DestroyTile());
+    }
+
+    public IEnumerator DestroyTile() {
+        yield return new WaitForSeconds(0.5f);
         gameObject.transform.localScale = Vector3.zero;
         gameObject.SetActive(false);
         Destroy(gameObject, 0.5f);
     }
-
     public IEnumerator MoveDownByCells(int cells)
     {
         if (animator != null)
@@ -160,6 +165,22 @@ public class Tile : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUp
         // 최종 위치 설정
         transform.localPosition = endPos;
         y -= cells; // 타일의 y 좌표 업데이트
+    }
+
+    // 파티클 실행 메서드
+    private void SpawnParticleEffect(GameObject particlePrefab)
+    {
+        if (particlePrefab == null)
+        {
+            Debug.LogWarning("파티클 프리팹이 설정되지 않았습니다.");
+            return;
+        }
+
+        // 현재 적으로 설정된 고양이 위치에서 파티클 생성
+        GameObject particleInstance = Instantiate(particlePrefab, gameObject.transform.position, UnityEngine.Quaternion.identity);
+
+        // 파티클 자동 삭제
+        Destroy(particleInstance, 1f);
     }
 
 }

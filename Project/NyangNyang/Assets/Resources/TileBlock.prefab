@@ -139,6 +139,7 @@ MonoBehaviour:
   y: 0
   tileType: {fileID: 0}
   isMerged: 0
+  particlePrefab: {fileID: 7275548786892498063, guid: 5bc9a0bf98f67d240a936bf476ba2082, type: 3}
 --- !u!95 &4445783441881924600
 Animator:
   serializedVersion: 5
