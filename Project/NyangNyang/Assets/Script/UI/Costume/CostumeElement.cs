@@ -92,6 +92,14 @@ public class CostumeElement : MonoBehaviour
     {
         _costumePart = catCostumePart;
         _costumeIndex = index;
+        //12.13 펫을 5마리로 감축
+        if (_costumePart == CatCostumePart.Pet)
+        {
+            if (index != 0)
+            {
+                _costumeIndex = (_costumeIndex-1) * 5 + 1;
+            }
+        }
 
         // 이름 변경
         //SetNameText(CostumeManager.GetInstance().GetCostumeName(_costumePart, _costumeIndex));

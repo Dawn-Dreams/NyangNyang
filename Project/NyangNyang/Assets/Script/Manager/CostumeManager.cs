@@ -181,7 +181,9 @@ public class CostumeManager : MonoBehaviour
                 retVal = (int)CatFurSkin.Count;
                 break;
             case CatCostumePart.Pet:
-                retVal = (int)EnemyMonsterType.Count;
+                // Pet은 행성별 1개체씩만 있도록 변경
+                // Null , A B C D E , Count
+                retVal = 6;//(int)EnemyMonsterType.Count;
                 break;
             case CatCostumePart.Emotion:
                 retVal = (int)EmotionCostumeType.Count;

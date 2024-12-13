@@ -68,7 +68,13 @@ public class CostumeGacha : MonoBehaviour
         int finalRewardCostumeIndex = Random.Range(0, currentNotOwningCostumeAtPart.Count);
 
         // 지급
+        // 12.13 펫을 5마리로 감축
+        if (gachaCostumePart == CatCostumePart.Pet)
+        {
+            finalRewardCostumeIndex = finalRewardCostumeIndex % 5 + 1;
+        }
         PlayerCostume.playerOwningCostume[gachaCostumePart].Add(finalRewardCostumeIndex);
+
         PlayerCostume.SaveToJson();
 
         costumeRewardPanel.SetActive(true);
