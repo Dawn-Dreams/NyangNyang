@@ -116,8 +116,7 @@ public abstract class QuestDataBase : ScriptableObject
     // 퀘스트가 반복 가능한 퀘스트인지
     public bool IsRewardRepeatable()
     {
-        //return CanRepeatReward;
-        return questCategory == QuestCategory.Repeat;
+        return questCategory == QuestCategory.Repeat; // 추가 시 ||
     }
 
     public bool IsGetReward()

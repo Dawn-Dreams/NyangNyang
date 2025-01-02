@@ -19,7 +19,7 @@ public class KillMonsterTypeQuestDataBase : AchievementQuestData
 
     public override void QuestActing(BaseQuest quest, QuestType type)
     {
-        mainQuestTitle = $"\n펫 [{targetMonsterType}]";
+        mainQuestTitle = $"\n펫 [{EnumTranslator.GetCostumeText(CatCostumePart.Pet, (int)targetMonsterType) }]";
         base.QuestActing(quest, type);
     }
 

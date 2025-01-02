@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d2dda0edf4c540428935d3246921983, type: 3}
   m_Name: KillKrakeQuestData
   m_EditorClassIdentifier: 
-  mainQuestTitle: .
-  subQuestTitle: "\uD06C\uB77C\uCF04 1000\uB9C8\uB9AC \uC0AC\uB0E5"
+  mainQuestTitle: "\uD3AB [\uC2A4\uB124\uC77C\uB85C]"
+  subQuestTitle: "\uC2A4\uB124\uC77C\uB85C 1000\uB9C8\uB9AC \uCC98\uCE58"
   rewardCount: 300
   questType: 13
   questCategory: 3

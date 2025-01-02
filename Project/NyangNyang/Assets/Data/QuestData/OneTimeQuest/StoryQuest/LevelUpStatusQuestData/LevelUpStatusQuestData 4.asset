@@ -15,7 +15,7 @@ MonoBehaviour:
   mainQuestTitle: 
   subQuestTitle: 
   rewardCount: 10
-  questType: 3
+  questType: 6
   questCategory: 4
   rewardType: 1
   sendQuestDataToServerDelayTime: 5
